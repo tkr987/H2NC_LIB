@@ -45,8 +45,9 @@ void NyaDesign::DrawSkill(int x, int y)
 
 	for (int i = 0; i < 4; i++) {
 		nya_string_->Write("design_font", x, y + 50 * (i+1), "Åô");
-//		nya_string_->Write("design_font", x + 50, y + 50 * (i+1), skill_name_[0]);
+		nya_string_->Write("design_font", x + 50, y + 50 * (i+1), skill_name_[i]);
 	}
+
 }
 
 void NyaDesign::AddEXP(int x)
@@ -57,8 +58,7 @@ void NyaDesign::AddEXP(int x)
 
 void NyaDesign::Run(void)
 {
-	//DrawSkill(100, 100);
-	nya_string_->Write("design_font", 100, 100, "Åô");
+	DrawSkill(100, 100);
 }
 
 void NyaDesign::SetSkillSelect(int n)

@@ -4,7 +4,7 @@
 #include "NyaString.h"
 #include "NyaWindow.h"
 
-
+#define __DEBUG__
 #define FPS_MAX 50
 
 
@@ -61,7 +61,7 @@ void NyaWindow::Run(void)
 
 		nya_design_->Run();
 		nya_string_->Run();
-//		DebugPrint::Run();
+		DebugPrint::Run();
 
 
 		ScreenFlip();
@@ -85,11 +85,11 @@ void NyaWindow::FpsUpdater(void)
 
 
 #ifdef __DEBUG__
-	DebugPrint::SetData(615, 220, "frames_: %d", fpsall++);
-	if (ave_frame_ != 0) {
-		DebugPrint::SetData(690, 535, "fps[%.1f]", 1000.0 / (double)ave_frame_);
-		DebugPrint::SetData(690, 555, "loop[%dms]", ave_ltime_);
-		DebugPrint::SetData(690, 575, "wait[%dms]", ave_wtime_);
+//	DebugPrint::SetData(615, 220, "frames_: %d", fpsall++);
+	if (frame_ave_ != 0) {
+		DebugPrint::SetData(1180, 660, "fps[%.1f]", 1000.0 / (double)frame_ave_);
+		DebugPrint::SetData(1180, 680, "loop[%dms]", ltime_ave_);
+		DebugPrint::SetData(1180, 700, "wait[%dms]", wtime_ave_);
 	}
 #else
 	if (frame_ave_ != 0)

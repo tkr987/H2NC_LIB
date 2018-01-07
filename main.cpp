@@ -42,14 +42,12 @@ void Target2(int inst, int lv);
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 
-	H2NLIB::NyaWindow *nya_window = new H2NLIB::NyaWindow();
-	TeemoDesign *teemo_design = new TeemoDesign();
-	
-	
+	H2NLIB::NyaWindow *nya_window = new H2NLIB::NyaWindow();	
 	nya_window->Init();
 
 
-	//teemo_design->Create();
+	TeemoDesign *teemo_design = new TeemoDesign();
+	teemo_design->Create();
 
 	
 	nya_window->Run();

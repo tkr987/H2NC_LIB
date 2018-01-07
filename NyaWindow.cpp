@@ -32,7 +32,7 @@ int NyaWindow::Init(void)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v51");		// タイトル
+	SetMainWindowText("H2NC++LIB v52");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化
@@ -58,10 +58,12 @@ void NyaWindow::Run(void)
 
 		FpsUpdater();
 
+
 		nya_design_->Run();
 		nya_string_->Run();
-		DebugPrint::Run();
-		
+//		DebugPrint::Run();
+
+
 		ScreenFlip();
 	}
 

@@ -11,13 +11,15 @@ namespace H2NLIB {
 
 	class NyaDesign {
 	private:
-		unsigned int user_exp_;
-		unsigned int user_lv_;
-		unsigned int skill_exp_[4];
-		unsigned int skill_lv_[4];
-		string skill_name_[4];
-		unsigned int skill_select_;
-		NyaString* nya_string_;
+		static unsigned int user_exp_;
+		static unsigned int user_lv_;
+		static unsigned int skill_exp_[4];
+		static unsigned int skill_lv_[4];
+		static string skill_name_[4];
+		static unsigned int skill_select_;
+		static NyaString* nya_string_;
+		void DrawSkill(int, int);
+		void Init(void);
 	public:
 		NyaDesign();
 		~NyaDesign();

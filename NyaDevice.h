@@ -56,10 +56,10 @@ namespace H2NLIB {
 		}
 	};
 
-	class Device {
+	class NyaDevice {
 	public:
-		Device();
-		~Device();
+		NyaDevice();
+		~NyaDevice();
 		void Run(void);
 	private:
 		static std::list<ShotToken> list_unused_;

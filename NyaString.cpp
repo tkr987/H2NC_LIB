@@ -20,7 +20,7 @@ NyaString::~NyaString()
 
 void NyaString::Init(std::string style_name, int font_size, int font_thick)
 {
-	int style = CreateFontToHandle( style_name.c_str(), font_size, font_thick) ;
+	int style = CreateFontToHandle( style_name.c_str(), font_size, font_thick);
 	map_string_style_.insert(make_pair(style_name, style));
 }
 

@@ -1,14 +1,14 @@
-#include "Device.h"
+#include "NyaDevice.h"
 
 using namespace H2NLIB;
 
-Device::Device()
+NyaDevice::NyaDevice()
 {
 
 }
 
 
-Device::~Device()
+NyaDevice::~NyaDevice()
 {
 
 }
@@ -21,7 +21,7 @@ Device::~Device()
 @note
  íeê∂ê¨êîÇ™å¿äEÇ…ìûíBÇµÇΩÇ∆Ç´ÇÕâΩÇ‡ÇµÇ»Ç¢
 **/
-int Device::UserAttack(DevicePropertyX* dpx)
+int NyaDevice::UserAttack(DevicePropertyX* dpx)
 {
 
 	//ñ¢äÆê¨
@@ -71,7 +71,7 @@ int Device::UserAttack(DevicePropertyX* dpx)
 //	return 0;
 }
 
-void Device::Run(void)
+void NyaDevice::Run(void)
 {
 
 

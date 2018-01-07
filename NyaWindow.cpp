@@ -123,3 +123,4 @@ void NyaWindow::FpsUpdater(void)
 	frame_[frame_count_] = GetNowCount() - prev_time_;
 	prev_time_ = GetNowCount();
 }
+

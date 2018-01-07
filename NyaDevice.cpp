@@ -2,6 +2,8 @@
 
 using namespace H2NLIB;
 
+// no bug
+
 NyaDevice::NyaDevice()
 {
 

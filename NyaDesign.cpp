@@ -11,6 +11,8 @@ string NyaDesign::skill_name_[4];
 unsigned int NyaDesign::skill_select_;
 NyaString* NyaDesign::nya_string_;
 
+// no bug
+
 NyaDesign::NyaDesign()
 {
 	static bool first_call = true;

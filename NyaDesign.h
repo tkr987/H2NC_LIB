@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-
+// no bug
 
 namespace H2NLIB {
 
@@ -19,7 +19,6 @@ namespace H2NLIB {
 		static unsigned int skill_select_;
 		static NyaString* nya_string_;
 		void DrawSkill(int, int);
-		void Init(void);
 	public:
 		NyaDesign();
 		~NyaDesign();

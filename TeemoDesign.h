@@ -1,5 +1,7 @@
 #pragma once
 
+// no bug
+
 namespace H2NLIB
 {
 	class NyaDesign;

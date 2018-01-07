@@ -4,6 +4,8 @@
 
 using namespace H2NLIB;
 
+// no bug
+
 TeemoDesign::TeemoDesign()
 {
 	nya_design_ = new NyaDesign;

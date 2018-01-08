@@ -1,13 +1,14 @@
 #include "NyaString.h"
 
+//////////////////////////
+// ビルドできるファイル
+//////////////////////////
+
 using namespace std;
 using namespace H2NLIB;
 
 std::deque<StringData> NyaString::deque_string_data_;
 std::map<string, int> NyaString::map_string_style_;
-
-// no bug
-
 
 NyaString::NyaString()
 {

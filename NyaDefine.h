@@ -15,3 +15,10 @@ namespace eOBJECT {
 		sizeof_enum
 	};
 };
+
+namespace eGRAPHIC {
+	enum DRAW {
+		TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8,
+		TYPE1B, TYPE2B, TYPE3B, TYPE4B, TYPE5B, TYPE6B, TYPE7B, TYPE8B,
+	};
+};

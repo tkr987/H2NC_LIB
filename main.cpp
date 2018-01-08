@@ -24,7 +24,8 @@
 // 2018”N
 #include "DxLib.h"
 #include "NyaWindow.h"
-#include "TeemoDesign.h"
+
+void TeemoDesign(void);
 
 //int Title(int inst);
 //void Target1(int inst, int lv);
@@ -46,15 +47,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	nya_window->Init();
 
 
-	TeemoDesign *teemo_design = new TeemoDesign();
-	teemo_design->Create();
-
+	TeemoDesign();
 	
 	nya_window->Run();
 
 
 	delete nya_window;
-	delete teemo_design;
 
 	return 0;
 

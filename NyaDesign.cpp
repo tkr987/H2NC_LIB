@@ -20,7 +20,7 @@ NyaDesign::NyaDesign()
 	// インスタンス
 	nya_string_ = new NyaString();
 
-
+	// 初期化するのは1回だけ
 	if (first_call) {
 		user_exp_ = 0;
 		user_lv_ = 0;
@@ -31,7 +31,7 @@ NyaDesign::NyaDesign()
 		skill_name_[2] = "Skill C";
 		skill_name_[3] = "Skill V";
 		skill_select_ = 0;
-		nya_string_->Init("design_font", 40, 2);
+		nya_string_->Init("design_font", 30, 2);
 		first_call = false;
 	}
 }
@@ -46,8 +46,11 @@ void NyaDesign::DrawSkill(int x, int y)
 {
 
 	for (int i = 0; i < 4; i++) {
-		nya_string_->Write("design_font", x, y + 50 * (i+1), "☆");
-		nya_string_->Write("design_font", x + 50, y + 50 * (i+1), skill_name_[i]);
+		nya_string_->Write("design_font", x, y + 100 * (i+1), "☆");
+		nya_string_->Write("design_font", x + 50, y + 100 * (i+1), skill_name_[i]);
+	}
+	for (int i = 0; i < 4; i++) {
+		nya_string_->Write("design_font", x, y + 100 * (i+1) + 50, "□□□□");
 	}
 
 }

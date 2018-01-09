@@ -15,6 +15,8 @@ namespace H2NLIB {
 	// DXLIB ’Êí•`‰æŠÖ”‚ğ—˜—p
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	struct GraphicPropertyX1 {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
@@ -24,6 +26,8 @@ namespace H2NLIB {
 	// DXLIB LR”½“]•`‰æŠÖ”‚ğ—˜—p
 	// int DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	struct GraphicPropertyX2 {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
@@ -33,6 +37,8 @@ namespace H2NLIB {
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚ğ—˜—p
 	// int DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
 	struct GraphicPropertyX3 {
+		int file_div_;
+		int file_id_;
 		int pos_x1_;
 		int pos_y1_;
 		int pos_x2_;
@@ -44,6 +50,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚ğ—˜—p
 	// int DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
 	struct GraphicPropertyX4 {
+		int file_div_;
+		int file_id_;
 		int pos_cx_;
 		int pos_cy_;
 		double draw_angle_;
@@ -56,6 +64,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚ğ—˜—p
 	// int DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	struct GraphicPropertyX5 {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		int pos_cx_;
@@ -70,6 +80,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚ğ—˜—p
 	// int DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	struct GraphicPropertyX6 {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		int pos_cx_;
@@ -85,6 +97,8 @@ namespace H2NLIB {
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚ğ—˜—p
 	// int DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
 	struct GraphicPropertyX7 {
+		int file_div_;
+		int file_id_;
 		int pos_x1_;
 		int pos_x2_;
 		int pos_x3_;
@@ -100,6 +114,8 @@ namespace H2NLIB {
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚ğ—˜—p
 	// int DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
 	struct GraphicPropertyX8 {
+		int file_div_;
+		int file_id_;
 		int pos_dx_;
 		int pos_dy_;
 		int pos_sx_;
@@ -115,6 +131,8 @@ namespace H2NLIB {
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	struct GraphicPropertyX1b {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
@@ -126,6 +144,8 @@ namespace H2NLIB {
 	// DXLIB LR”½“]•`‰æŠÖ”‚ğ—˜—p
 	// int DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	struct GraphicPropertyX2b {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
@@ -137,6 +157,8 @@ namespace H2NLIB {
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚ğ—˜—p
 	// int DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
 	struct GraphicPropertyX3b {
+		int file_div_;
+		int file_id_;
 		int pos_x1_;
 		int pos_y1_;
 		int pos_x2_;
@@ -150,6 +172,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚ğ—˜—p
 	// int DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
 	struct GraphicPropertyX4b {
+		int file_div_;
+		int file_id_;
 		int pos_cx_;
 		int pos_cy_;
 		double draw_angle_;
@@ -164,6 +188,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚ğ—˜—p
 	// int DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	struct GraphicPropertyX5b {
+		int file_div_;
+		int file_id_;
 		int pos_x_;
 		int pos_y_;
 		int pos_cx_;
@@ -177,8 +203,13 @@ namespace H2NLIB {
 		eOBJECT::GROUP group_type_;
 	};
 
-	struct GraphicToken {
-
+	struct GraphicFileSet {
+		int div_max_;
+		int div_x_;
+		int div_y_;
+		int size_x_;
+		int size_y_;
+		std::vector<int> div_vector_;
 	};
 
 	struct DrawDequeSet {
@@ -201,11 +232,14 @@ namespace H2NLIB {
 	public:
 		NyaGraphic();
 		~NyaGraphic();
+		int LoadFile(std::string file_pass);
+		int LoadFile(int, int, int, int, std::string);
 		void Run(void);
 	private:
-		double swing_x_;
-		double swing_y_;
+		int swing_x_;
+		int swing_y_;
 		void Draw(int, int, int);
+		static std::vector<GraphicFileSet> file_vector_;
 		static std::vector<DrawDequeSet> layer_vector_;
 	};
 

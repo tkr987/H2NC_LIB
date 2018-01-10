@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "DebugPrint.h"
 #include "NyaDesign.h"
+#include "NyaGraphic.h"
 #include "NyaString.h"
 #include "NyaWindow.h"
 
@@ -20,6 +21,7 @@ NyaWindow::NyaWindow()
 NyaWindow::~NyaWindow()
 {
 	delete nya_design_;
+	delete nya_graphic_;
 	delete nya_string_;
 	DxLib_End();
 }
@@ -42,6 +44,7 @@ int NyaWindow::Init(void)
 
 	// インスタンス
 	nya_design_ = new NyaDesign();
+	nya_graphic_ = new NyaGraphic();
 	nya_string_ = new NyaString();
 
 	// 描画先グラフィック領域の指定
@@ -52,13 +55,23 @@ int NyaWindow::Init(void)
 
 void NyaWindow::Run(void)
 {
+	GraphicPropertyX1 gpx1;
+
+	gpx1.file_div_ = 0;
+	gpx1.file_id_ = nya_graphic_->LoadFile("data/img_target/Target1Picorna.png");
+	gpx1.flag_trans_ = true;
+	gpx1.object_group_ = eOBJECT::GROUP::USER;
+	gpx1.pos_x_ = 300;
+	gpx1.pos_y_ = 300;
+
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
 		
 		ClearDrawScreen();
 
 		FpsUpdater();
 
-
+		nya_graphic_->Draw(&gpx1);
+		nya_graphic_->Run();
 		nya_design_->Run();
 		nya_string_->Run();
 		DebugPrint::Run();

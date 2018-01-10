@@ -1,8 +1,5 @@
 #include "NyaString.h"
 
-//////////////////////////
-// ビルドできるファイル
-//////////////////////////
 
 using namespace std;
 using namespace H2NLIB;

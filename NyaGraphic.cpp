@@ -3,11 +3,6 @@
 #include "NyaGraphic.h"
 
 
-///////////////////////////////////////
-// 未完成なのでビルドできないファイル
-///////////////////////////////////////
-
-
 using namespace std;
 using namespace H2NLIB;
 
@@ -17,6 +12,13 @@ std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::GROUP::sizeof_enum)
 
 NyaGraphic::NyaGraphic()
 {
+	static bool first_call = true;
+
+	if (first_call) {
+		swing_x_ = 0;
+		swing_y_ = 0;
+		first_call = false;
+	}
 
 }
 
@@ -48,6 +50,58 @@ int NyaGraphic::LoadFile(std::string file_pass)
 
 	file_vector_.push_back(file_set);
 	return (int)(file_vector_.size() - 1);
+}
+
+
+/**
+画像描画関数1
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx1_deque_.push_back(*gpx);
+}
+
+
+/**
+画像描画関数2
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx2_deque_.push_back(*gpx);
+}
+
+
+/**
+画像描画関数3
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx3_deque_.push_back(*gpx);
+}
+
+
+/**
+画像描画関数4
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx4_deque_.push_back(*gpx);
 }
 
 
@@ -86,10 +140,11 @@ int NyaGraphic::LoadFile(int xnum, int ynum, int xsize, int ysize, std::string f
 	return (int)(file_vector_.size() - 1);
 }
 
+
 void NyaGraphic::Run(void)
 {
 
-	Draw(eOBJECT::USER, swing_x_, swing_y_);
+	DrawAll(eOBJECT::USER, true);
 
 
 }
@@ -99,11 +154,30 @@ void NyaGraphic::Run(void)
 @brief 描画関数
 @param layer 描画するレイヤー
 */
-void NyaGraphic::Draw(int layer, int swing_x, int swing_y)
+void NyaGraphic::DrawAll(int layer, bool swing)
 {
 	DrawDequeSet draw_deque_set;
 	GraphicPropertyX1* gpx1;
 	GraphicPropertyX2* gpx2;
+	GraphicPropertyX3* gpx3;
+	GraphicPropertyX4* gpx4;
+	GraphicPropertyX5* gpx5;
+	GraphicPropertyX6* gpx6;
+	GraphicPropertyX7* gpx7;
+	GraphicPropertyX8* gpx8;
+	GraphicPropertyX1b* gpx1b;
+	GraphicPropertyX2b* gpx2b;
+	GraphicPropertyX3b* gpx3b;
+	GraphicPropertyX4b* gpx4b;
+	GraphicPropertyX5b* gpx5b;
+	int swing_x = 0;
+	int swing_y = 0;
+
+
+	if (swing) {
+		swing_x = swing_x_;
+		swing_y = swing_y_;
+	}
 
 	
 	draw_deque_set = layer_vector_.at(layer);
@@ -115,102 +189,110 @@ void NyaGraphic::Draw(int layer, int swing_x, int swing_y)
 	}
 	while (!draw_deque_set.gpx2_deque_.empty()) {
 		gpx2 = &draw_deque_set.gpx2_deque_.front();
-		DrawGraph(gpx2->pos_x_ + swing_x, gpx2->pos_y_ + swing_y, 
-			file_vector_[gpx2->file_id_].div_vector_.at(gpx2->file_div_), gpx2->flag_trans_);
 		DrawTurnGraph(gpx2->pos_x_ + swing_x, gpx2->pos_y_ + swing_y,
-				file_vector_[gpx2->file_id_].div_vector_[gpx2->file_div_], gpx2->flag_trans_);
-		draw_deque_set.gpx1_deque_.pop_front();
+			file_vector_[gpx2->file_id_].div_vector_[gpx2->file_div_], gpx2->flag_trans_);
+		draw_deque_set.gpx2_deque_.pop_front();
+	}
+	while (!draw_deque_set.gpx3_deque_.empty()) {
+		gpx3 = &draw_deque_set.gpx3_deque_.front();
+		DrawExtendGraph(gpx3->pos_x1_ + swing_x, gpx3->pos_y1_+ swing_y,
+			gpx3->pos_x2_ + swing_x, gpx3->pos_y2_ + swing_y, 
+			file_vector_[gpx3->file_id_].div_vector_[gpx3->file_div_], gpx3->flag_trans_);
+		draw_deque_set.gpx3_deque_.pop_front();
+	}
+	while (!draw_deque_set.gpx4_deque_.empty()) {
+		gpx4 = &draw_deque_set.gpx4_deque_.front();
+		DrawRotaGraph(gpx4->pos_cx_ + swing_x, gpx4->pos_cy_ + swing_y, gpx4->extend_rate_, gpx4->draw_angle_,
+			file_vector_[gpx4->file_id_].div_vector_[gpx4->file_div_], gpx4->flag_trans_, gpx4->flag_turn_);
+		draw_deque_set.gpx4_deque_.pop_front();
+	}
+	while (!draw_deque_set.gpx5_deque_.empty()) {
+		gpx5 = &draw_deque_set.gpx5_deque_.front();
+		DrawRotaGraph2(gpx5->pos_x_ + swing_x, gpx5->pos_y_ + swing_y, 
+			gpx5->pos_cx_ + swing_x, gpx5->pos_cy_ + swing_y, gpx5->extend_rate_, gpx5->draw_angle_, 
+			file_vector_[gpx5->file_id_].div_vector_[gpx5->file_div_], gpx5->flag_trans_, gpx5->flag_turn_);
+		draw_deque_set.gpx5_deque_.pop_front();
+	}
+	while (!draw_deque_set.gpx6_deque_.empty()) {
+		gpx6 = &draw_deque_set.gpx6_deque_.front();
+		DrawRotaGraph3(gpx6->pos_x_ + swing_x, gpx6->pos_y_ + swing_y, 
+			gpx6->pos_cx_ + swing_x, gpx6->pos_cy_ + swing_y, gpx6->extend_ratex_, gpx6->extend_ratey_, gpx6->draw_angle_,
+			file_vector_[gpx6->file_id_].div_vector_[gpx6->file_div_], gpx6->flag_trans_, gpx6->flag_turn_);
+		draw_deque_set.gpx6_deque_.pop_front();
+	}
+	while (!draw_deque_set.gpx7_deque_.empty()) {
+		gpx7 = &draw_deque_set.gpx7_deque_.front();
+		DrawModiGraph(
+			gpx7->pos_x1_ + swing_x, gpx7->pos_y1_ + swing_y, gpx7->pos_x2_ + swing_x, gpx7->pos_y2_ + swing_y, 
+			gpx7->pos_x3_ + swing_x, gpx7->pos_y3_ + swing_y, gpx7->pos_x4_ + swing_x, gpx7->pos_y4_ + swing_y,
+			file_vector_[gpx7->file_id_].div_vector_[gpx7->file_div_], gpx7->flag_trans_);
+		draw_deque_set.gpx7_deque_.pop_front();
+	}
+	while (!draw_deque_set.gpx8_deque_.empty()) {
+		gpx8 = &draw_deque_set.gpx8_deque_.front();
+		DrawRectGraph(gpx8->pos_dx_ + swing_x, gpx8->pos_dy_ + swing_y, 
+			gpx8->pos_sx_ + swing_x, gpx8->pos_sy_ + swing_y, gpx8->val_width_, gpx8->val_height_, 
+			file_vector_[gpx8->file_id_].div_vector_[gpx8->file_div_], gpx8->flag_trans_, gpx8->flag_turn_);
+		draw_deque_set.gpx7_deque_.pop_front();
 	}
 
+	if (!draw_deque_set.gpx1b_deque_.empty()) {
+		gpx1b = &draw_deque_set.gpx1b_deque_.front();
+		SetDrawBlendMode(gpx1b->blend_mode_, gpx1b->blend_alpha_);
+	}
+	while (!draw_deque_set.gpx1b_deque_.empty()) {
+		gpx1b = &draw_deque_set.gpx1b_deque_.front();
+		DrawGraph(gpx1b->pos_x_ + swing_x, gpx1b->pos_y_ + swing_y, 
+			file_vector_[gpx1b->file_id_].div_vector_[gpx1b->file_div_], gpx1b->flag_trans_);
+		draw_deque_set.gpx1b_deque_.pop_front();
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (!draw_deque_set.gpx2b_deque_.empty()) {
+		gpx2b = &draw_deque_set.gpx2b_deque_.front();
+		SetDrawBlendMode(gpx2b->blend_mode_, gpx2b->blend_alpha_);
+	}
+	while (!draw_deque_set.gpx2b_deque_.empty()) {
+		gpx2b = &draw_deque_set.gpx2b_deque_.front();
+		DrawTurnGraph(gpx2b->pos_x_ + swing_x, gpx2b->pos_y_ + swing_y,
+			file_vector_[gpx2b->file_id_].div_vector_[gpx2b->file_div_], gpx2b->flag_trans_);
+		draw_deque_set.gpx2b_deque_.pop_front();
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (!draw_deque_set.gpx3b_deque_.empty()) {
+		gpx3b = &draw_deque_set.gpx3b_deque_.front();
+		SetDrawBlendMode(gpx3b->blend_mode_, gpx3b->blend_alpha_);
+	}
+	while (!draw_deque_set.gpx3_deque_.empty()) {
+		gpx3b = &draw_deque_set.gpx3b_deque_.front();
+		DrawExtendGraph(gpx3b->pos_x1_ + swing_x, gpx3b->pos_y1_+ swing_y,
+			gpx3b->pos_x2_ + swing_x, gpx3b->pos_y2_ + swing_y, 
+			file_vector_[gpx3b->file_id_].div_vector_[gpx3b->file_div_], gpx3b->flag_trans_);
+		draw_deque_set.gpx3b_deque_.pop_front();
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (!draw_deque_set.gpx4b_deque_.empty()) {
+		gpx4b = &draw_deque_set.gpx4b_deque_.front();
+		SetDrawBlendMode(gpx4b->blend_mode_, gpx4b->blend_alpha_);
+	}
+	while (!draw_deque_set.gpx4b_deque_.empty()) {
+		gpx4b = &draw_deque_set.gpx4b_deque_.front();
+		DrawRotaGraph(gpx4b->pos_cx_ + swing_x, gpx4b->pos_cy_ + swing_y, gpx4b->extend_rate_, gpx4b->draw_angle_,
+			file_vector_[gpx4b->file_id_].div_vector_[gpx4b->file_div_], gpx4b->flag_trans_, gpx4b->flag_turn_);
+		draw_deque_set.gpx4b_deque_.pop_front();
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	if (!draw_deque_set.gpx5b_deque_.empty()) {
+		gpx5b = &draw_deque_set.gpx5b_deque_.front();
+		SetDrawBlendMode(gpx5b->blend_mode_, gpx5b->blend_alpha_);
+	}
+	while (!draw_deque_set.gpx5_deque_.empty()) {
+		gpx5b = &draw_deque_set.gpx5b_deque_.front();
+		DrawRotaGraph2(gpx5b->pos_x_ + swing_x, gpx5b->pos_y_ + swing_y, 
+			gpx5b->pos_cx_ + swing_x, gpx5b->pos_cy_ + swing_y, gpx5b->extend_rate_, gpx5b->draw_angle_, 
+			file_vector_[gpx5b->file_id_].div_vector_[gpx5b->file_div_], gpx5b->flag_trans_, gpx5b->flag_turn_);
+		draw_deque_set.gpx5b_deque_.pop_front();
+	}
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	//for (unsigned int i = 0; i < id_draw_[layer]; i++) {
-
-	//#ifdef __DEBUG__
-	//	debug_imgnum++;
-	//#endif
-
-	//	// 描画処理
-	//	itoken = &vec_itoken_[layer][i];
-	//	switch (vec_itoken_[layer][i].draw_type_) {
-	//	case eGRAPHIC::DRAW::TYPE1:
-	//		DrawGraph(itoken->param1_.x_ + swing_x, itoken->param1_.y_ + swing_y,
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param1_.flag_trans_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE2:
-	//		DrawTurnGraph(itoken->param2_.pos_x_ + swing_x, itoken->param2_.pos_y_ + swing_y,
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param2_.flag_trans_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE3:
-	//		DrawExtendGraph(itoken->param3_.pos_x1_ + swing_x, itoken->param3_.pos_y1_+ swing_y,
-	//			itoken->param3_.pos_x2_ + swing_x, itoken->param3_.pos_y2_ + swing_y, 
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param3_.flag_trans_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE4:
-	//		DrawRotaGraph(itoken->param4_.pos_cx_ + swing_x, itoken->param4_.pos_cy_ + swing_y,
-	//			itoken->param4_.extend_rate_, itoken->param4_.draw_angle_,
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param4_.flag_trans_, itoken->param4_.flag_turn_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE5:
-	//		DrawRotaGraph2(itoken->param5_.pos_x_ + swing_x, itoken->param5_.pos_y_ + swing_y, 
-	//			itoken->param5_.pos_cx_ + swing_x, itoken->param5_.pos_cy_ + swing_y,
-	//			itoken->param5_.extend_rate_, itoken->param5_.draw_angle_, 
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param5_.flag_trans_, itoken->param5_.flag_turn_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE6:
-	//		DrawRotaGraph3(itoken->param6_.pos_x_ + swing_x, itoken->param6_.pos_y_ + swing_y, 
-	//			itoken->param6_.pos_cx_ + swing_x, itoken->param6_.pos_cy_ + swing_y,
-	//			itoken->param6_.extend_ratex_, itoken->param6_.extend_ratey_, itoken->param6_.draw_angle_,
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param6_.flag_trans_, itoken->param6_.flag_turn_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE7:
-	//		DrawModiGraph(itoken->param7_.pos_x1_ + swing_x, itoken->param7_.pos_y1_ + swing_y, 
-	//			itoken->param7_.pos_x2_ + swing_x, itoken->param7_.pos_y2_ + swing_y,
-	//			itoken->param7_.pos_x3_ + swing_x, itoken->param7_.pos_y3_ + swing_y, 
-	//			itoken->param7_.pos_x4_ + swing_x, itoken->param7_.pos_y4_ + swing_y,
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param7_.flag_trans_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE8:
-	//		DrawRectGraph(itoken->param8_.pos_dx_ + swing_x, itoken->param8_.pos_dy_ + swing_y, 
-	//			itoken->param8_.pos_sx_ + swing_x, itoken->param8_.pos_sy_ + swing_y,
-	//			itoken->param8_.val_width_, itoken->param8_.val_height_, 
-	//			vec_iload_[itoken->id_].file_[itoken->div_],itoken->param8_.flag_trans_, itoken->param8_.flag_turn_);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE1B:
-	//		SetDrawBlendMode(itoken->param1b_.blend_mode_, itoken->param1b_.blend_alpha_);
-	//		DrawGraph(itoken->param1b_.pos_x_ + swing_x, itoken->param1b_.pos_y_ + swing_y,
-	//		vec_iload_[itoken->id_].file_[itoken->div_], itoken->param1b_.flag_trans_);
-	//		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE2B:
-	//		SetDrawBlendMode(itoken->param2b_.blend_mode_, itoken->param2b_.blend_alpha_);
-	//		DrawTurnGraph(itoken->param2b_.pos_x_ + swing_x, itoken->param2b_.pos_y_ + swing_y, 
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param2b_.flag_trans_);
-	//		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE3B:
-	//		SetDrawBlendMode(itoken->param3b_.blend_mode_, itoken->param3b_.blend_alpha_);
-	//		DrawExtendGraph(itoken->param3b_.pos_x1_ + swing_x, itoken->param3b_.pos_y1_ + swing_y, 
-	//			itoken->param3b_.pos_x2_ + swing_x, itoken->param3b_.pos_y2_ + swing_y, 
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param3b_.flag_trans_);
-	//		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE4B:
-	//		SetDrawBlendMode(itoken->param4b_.blend_mode_, itoken->param4b_.blend_alpha_);
-	//		DrawRotaGraph(itoken->param4b_.pos_cx_ + swing_x, itoken->param4b_.pos_cy_,
-	//			itoken->param4b_.extend_rate_, itoken->param4b_.draw_angle_,
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param4b_.flag_trans_, itoken->param4b_.flag_turn_);
-	//		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//		break;
-	//	case eGRAPHIC::DRAW::TYPE5B:
-	//		SetDrawBlendMode(itoken->param5b_.blend_mode_, itoken->param5b_.blend_alpha_);
-	//		DrawRotaGraph2(itoken->param5b_.pos_x_ + swing_x, itoken->param5b_.pos_y_ + swing_y, 
-	//			itoken->param5b_.pos_cx_ + swing_x, itoken->param5b_.pos_cy_ + swing_y,
-	//			itoken->param5b_.extend_rate_, itoken->param5b_.draw_angle_, 
-	//			vec_iload_[itoken->id_].file_[itoken->div_], itoken->param5b_.flag_trans_, itoken->param5b_.flag_turn_);
-	//		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//	default:
-	//		break;
-	//	}
-	//}
 }
 

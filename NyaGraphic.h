@@ -20,7 +20,7 @@ namespace H2NLIB {
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚ğ—˜—p
@@ -31,7 +31,7 @@ namespace H2NLIB {
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚ğ—˜—p
@@ -44,7 +44,7 @@ namespace H2NLIB {
 		int pos_x2_;
 		int pos_y2_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚ğ—˜—p
@@ -58,7 +58,7 @@ namespace H2NLIB {
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚ğ—˜—p
@@ -74,7 +74,7 @@ namespace H2NLIB {
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚ğ—˜—p
@@ -91,7 +91,7 @@ namespace H2NLIB {
 		double extend_ratey_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚ğ—˜—p
@@ -108,7 +108,7 @@ namespace H2NLIB {
 		int pos_y3_;
 		int pos_y4_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚ğ—˜—p
@@ -124,7 +124,7 @@ namespace H2NLIB {
 		int val_height_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ’Êí•`‰æŠÖ”‚ğ—˜—p
@@ -138,7 +138,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚ğ—˜—p
@@ -151,7 +151,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚ğ—˜—p
@@ -166,7 +166,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚ğ—˜—p
@@ -182,7 +182,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚ğ—˜—p
@@ -200,7 +200,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP group_type_;
+		eOBJECT::GROUP object_group_;
 	};
 
 	struct GraphicFileSet {
@@ -232,13 +232,17 @@ namespace H2NLIB {
 	public:
 		NyaGraphic();
 		~NyaGraphic();
+		void Draw(GraphicPropertyX1*);
+		void Draw(GraphicPropertyX2*);
+		void Draw(GraphicPropertyX3*);
+		void Draw(GraphicPropertyX4*);
 		int LoadFile(std::string file_pass);
 		int LoadFile(int, int, int, int, std::string);
 		void Run(void);
 	private:
 		int swing_x_;
 		int swing_y_;
-		void Draw(int, int, int);
+		void DrawAll(int, bool);
 		static std::vector<GraphicFileSet> file_vector_;
 		static std::vector<DrawDequeSet> layer_vector_;
 	};

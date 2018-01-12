@@ -52,59 +52,6 @@ int NyaGraphic::LoadFile(std::string file_pass)
 	return (int)(file_vector_.size() - 1);
 }
 
-
-/**
-画像描画関数1
-@param *gpx プロパティ
-@return なし
-@note
-DXLIB DrawGraph() に対応。
-**/
-void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
-{
-	layer_vector_[gpx->object_group_].gpx1_deque_.push_back(*gpx);
-}
-
-
-/**
-画像描画関数2
-@param *gpx プロパティ
-@return なし
-@note
-DXLIB DrawGraph() に対応。
-**/
-void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
-{
-	layer_vector_[gpx->object_group_].gpx2_deque_.push_back(*gpx);
-}
-
-
-/**
-画像描画関数3
-@param *gpx プロパティ
-@return なし
-@note
-DXLIB DrawGraph() に対応。
-**/
-void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
-{
-	layer_vector_[gpx->object_group_].gpx3_deque_.push_back(*gpx);
-}
-
-
-/**
-画像描画関数4
-@param *gpx プロパティ
-@return なし
-@note
-DXLIB DrawGraph() に対応。
-**/
-void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
-{
-	layer_vector_[gpx->object_group_].gpx4_deque_.push_back(*gpx);
-}
-
-
 /**
 分割画像ロード関数
 @param xnum x軸方向分割数
@@ -141,6 +88,57 @@ int NyaGraphic::LoadFile(int xnum, int ynum, int xsize, int ysize, std::string f
 }
 
 
+/**
+画像描画関数1
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx1_deque_.push_back(*gpx);
+}
+
+
+/**
+画像描画関数2
+@param *gpx プロパティ
+@return なし
+@note
+ DXLIB DrawTurnGraph() に対応。
+ **/
+void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx2_deque_.push_back(*gpx);
+}
+
+
+/**
+画像描画関数3
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawExtendGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx3_deque_.push_back(*gpx);
+}
+
+/**
+画像描画関数4
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawRotaGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx4_deque_.push_back(*gpx);
+}
+
+
 void NyaGraphic::Run(void)
 {
 
@@ -151,9 +149,10 @@ void NyaGraphic::Run(void)
 
 
 /**
-@brief 描画関数
+@brief 全てのグラフィックデータを描画する関数
 @param layer 描画するレイヤー
-*/
+@param swing 振動幅
+**/
 void NyaGraphic::DrawAll(int layer, bool swing)
 {
 	DrawDequeSet draw_deque_set;

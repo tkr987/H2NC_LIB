@@ -1,7 +1,9 @@
 #include "DxLib.h"
 #include "DebugPrint.h"
 #include "NyaDesign.h"
+#include "NyaPosition.h"
 #include "NyaString.h"
+#include "NyaUser.h"
 #include "NyaWindow.h"
 
 #define __DEBUG__
@@ -20,6 +22,7 @@ NyaWindow::NyaWindow()
 NyaWindow::~NyaWindow()
 {
 	delete nya_design_;
+	delete nya_posision_;
 	delete nya_string_;
 	DxLib_End();
 }
@@ -41,8 +44,13 @@ int NyaWindow::Init(void)
 	SetUseDivGraphFlag(false);				// グラフィック描画分割方法
 
 	// インスタンス
-	nya_design_ = new NyaDesign();
-	nya_string_ = new NyaString();
+	nya_design_ = new NyaDesign;
+	nya_posision_ = new NyaPosition;
+	nya_string_ = new NyaString;
+	
+	// test
+	ppx_ = nya_posision_->Create();
+	ppx_->x_ = 100;
 
 	// 描画先グラフィック領域の指定
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -59,8 +67,11 @@ void NyaWindow::Run(void)
 		FpsUpdater();
 
 		nya_design_->Run();
+		nya_posision_->Run();
 		nya_string_->Run();
 		DebugPrint::Run();
+
+		ppx_->x_ += 1;
 
 
 		ScreenFlip();

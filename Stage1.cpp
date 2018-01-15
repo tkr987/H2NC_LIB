@@ -331,7 +331,7 @@ void Stage1::Load(int lv, int rand, long frame)
 void Stage1::Run(void)
 {
 	double move_speed = 0.5;
-	int user_star;
+	//int user_star;
 
 	// –¢Š®¬
 

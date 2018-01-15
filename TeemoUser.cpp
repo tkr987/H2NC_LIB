@@ -1,12 +1,23 @@
-#include "NyaPosition.h"
+#include "NyaAttack.h"
+#include "TeemoUser.h"
 
+using namespace H2NLIB;
 
-void TeemoUser(void)
+TeemoUser::TeemoUser()
 {
-	
+	apx_ = new AttackPropertyX;
+}
+
+
+TeemoUser::~TeemoUser()
+{
+	delete apx_;
+}
 
 
 
-
+void TeemoUser::Run(void)
+{
 
 }
+

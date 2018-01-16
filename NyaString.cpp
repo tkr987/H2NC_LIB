@@ -4,8 +4,8 @@
 using namespace std;
 using namespace H2NLIB;
 
-deque<StringData> NyaString::deque_string_data_;
-map<string, int> NyaString::map_string_style_;
+deque<StringSet> NyaString::deque_string_set_;
+map<string, int> NyaString::map_font_;
 
 NyaString::NyaString()
 {
@@ -18,72 +18,80 @@ NyaString::~NyaString()
 
 }
 
-void NyaString::Init(std::string style_name, int font_size, int font_thick)
+void NyaString::SetFont(std::string font_name, int font_size, int font_thick)
 {
-	int style = CreateFontToHandle( style_name.c_str(), font_size, font_thick);
-	map_string_style_.insert(make_pair(style_name, style));
+	int font = CreateFontToHandle( font_name.c_str(), font_size, font_thick);
+	map_font_.insert(make_pair(font_name, font));
 }
 
 
-void NyaString::Write(string style, int x, int y, string str)
+void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y, string str)
 {
-	StringData sd;
+	StringSet ss;
 
-	sd.pos_x_ = x;
-	sd.pos_y_ = y;
-	sd.str_ = str;
-	sd.style_ = map_string_style_.at(style);
-	sd.type_i_ = false;
-	sd.type_d_ = false;
-	deque_string_data_.push_back(sd);
+	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	ss.font_ = map_font_.at(font);
+	ss.x_ = x;
+	ss.y_ = y;
+	get<0>(ss.write_double_) = false;
+	get<0>(ss.write_int_) = false;
+	get<0>(ss.write_string_) = true;
+	get<1>(ss.write_string_) = str;
+
+	deque_string_set_.push_back(ss);
 }
 
 
-void NyaString::Write(string style, int x, int y, string str, int val)
+void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y, string str, int value)
 {
-	StringData sd;
+	StringSet ss;
 
-	sd.pos_x_ = x;
-	sd.pos_y_ = y;
-	sd.str_ = str;
-	sd.style_ = map_string_style_.at(style);
-	sd.type_i_ = true;
-	sd.type_d_ = false;
-	sd.val_i_ = val;
-	deque_string_data_.push_back(sd);
+	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	ss.font_ = map_font_.at(font);
+	ss.x_ = x;
+	ss.y_ = y;
+	get<0>(ss.write_double_) = false;
+	get<0>(ss.write_int_) = true;
+	get<1>(ss.write_int_) = str;
+	get<2>(ss.write_int_) = value;
+	get<0>(ss.write_string_) = false;
+
+	deque_string_set_.push_back(ss);
 }
 
 
-void NyaString::Write(string style, int x, int y, string str, double val)
+void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y, string str, double value)
 {
-	StringData sd;
+	StringSet ss;
 
-	sd.pos_x_ = x;
-	sd.pos_y_ = y;
-	sd.str_ = str;
-	sd.style_ = map_string_style_.at(style);
-	sd.type_i_ = false;
-	sd.type_d_ = true;
-	sd.val_d_ = val;
-	deque_string_data_.push_back(sd);
+	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	ss.font_ = map_font_.at(font);
+	ss.x_ = x;
+	ss.y_ = y;
+	get<0>(ss.write_double_) = true;
+	get<1>(ss.write_double_) = str;
+	get<2>(ss.write_double_) = value;
+	get<0>(ss.write_int_) = false;
+	get<0>(ss.write_string_) = false;
+
+	deque_string_set_.push_back(ss);
 }
 
 
 void NyaString::Run(void)
 {
-	StringData sd;
-	int color = GetColor(255, 255, 255);
+	StringSet ss;
 
-	while (!deque_string_data_.empty()) {
-		sd = deque_string_data_.front();
-		if (sd.type_i_) {
-			DrawFormatStringToHandle(sd.pos_x_, sd.pos_y_, color, sd.style_, sd.str_.c_str(), sd.val_i_);
-		} else if (sd.type_d_) {
-			DrawFormatStringToHandle(sd.pos_x_, sd.pos_y_, color, sd.style_, sd.str_.c_str(), sd.val_d_);
+	while (!deque_string_set_.empty()) {
+		ss = deque_string_set_.front();
+		if (get<0>(ss.write_double_)) {
+			DrawFormatStringToHandle(ss.x_, ss.y_, ss.color_, ss.font_, get<1>(ss.write_double_).c_str(), get<2>(ss.write_double_));
+		} else if (get<0>(ss.write_int_)) {
+			DrawFormatStringToHandle(ss.x_, ss.y_, ss.color_, ss.font_, get<1>(ss.write_int_).c_str(), get<2>(ss.write_int_));
 		} else {
-			DrawStringToHandle(sd.pos_x_, sd.pos_y_, sd.str_.c_str(), color, sd.style_);
+			DrawStringToHandle(ss.x_, ss.y_, get<1>(ss.write_string_).c_str(), ss.color_, ss.font_);
 		}
-		deque_string_data_.pop_front();
+		deque_string_set_.pop_front();
 	}
 }
 

@@ -142,7 +142,7 @@ void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 void NyaGraphic::Run(void)
 {
 
-	DrawAll(eOBJECT::USER, true);
+	DrawAll(eOBJECT::GROUP::USER, true);
 
 
 }

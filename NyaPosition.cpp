@@ -1,4 +1,5 @@
 #include <cmath>
+#include <tuple>
 #include "NyaPosition.h"
 #include "NyaString.h"
 
@@ -15,7 +16,7 @@ NyaPosition::NyaPosition()
 
 	if (first_call) {
 		nya_string_ = new NyaString;
-		nya_string_->Init("position-font", 10, 2);
+		nya_string_->SetFont("position-font", 10, 2);
 		first_call = false;
 	}
 }
@@ -51,23 +52,23 @@ void NyaPosition::Delete(PositionPropertyX* ppx)
 
 void NyaPosition::Run(void)
 {
+	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+
 	auto it = create_list_.begin();
-	nya_string_->Write("position-font", 50, 50, "posision_x = %d", (int)it->x_);
+	nya_string_->Write("position-font", white, 50, 50, "posision_x = %d", (int)it->x_);
 }
 
 
 
 void NyaPosition::CollisionType1(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
 {
-	PositionPropertyX* ppx1;
-	PositionPropertyX* ppx2;
 
-	for (auto it = collision_vector_[object_group1].begin(); it != collision_vector_[object_group1].end(); ++it) {	
-		for (auto it = collision_vector_[object_group2].begin(); it != collision_vector_[object_group2].end(); ++it) {
+	for (auto it1 = collision_vector_[object_group1].begin(); it1 != collision_vector_[object_group1].end(); ++it1) {	
+		for (auto it2 = collision_vector_[object_group2].begin(); it2 != collision_vector_[object_group2].end(); ++it2) {
 
-			if (pow(ppx1->x_ - ppx2->x_, 2.0) + pow(ppx1->y_ - ppx2->y_, 2.0) < pow(ppx1->range_ + ppx2->range_, 2.0)) {
-				ppx1->health_now_ -= ppx2->pow_;
-				ppx2->health_now_ -= ppx1->pow_;
+			if (pow((*it1)->x_ - (*it2)->x_, 2.0) + pow((*it1)->y_ - (*it2)->y_, 2.0) < pow((*it1)->range_ + (*it2)->range_, 2.0)) {
+				(*it1)->health_now_ -= (*it2)->pow_;
+				(*it1)->health_now_ -= (*it2)->pow_;
 			}
 		}
 	}

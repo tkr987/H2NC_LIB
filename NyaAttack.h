@@ -1,19 +1,29 @@
 #pragma once
 
+
 #include "NyaDefine.h"
-#include "NyaGraphic.h"
-#include "NyaPosition.h"
 #include <list>
 
 
 namespace H2NLIB {
 
+	struct GraphicPropertyX4;
+	struct PositionPropertyX;
+	class NyaGraphic;
+	class NyaPosition;
+	class NyaString;
+
 	struct Bullet {
+		double draw_angle_;
+		double draw_rotate_;
+		int limit_min_x_;
+		int limit_max_x_;
+		int limit_min_y_;
+		int limit_max_y_;
 		double move_angle_;
 		double move_x_;
 		double move_y_;
-		GraphicPropertyX4 gpx4_;
-		PositionPropertyX ppx_;
+		PositionPropertyX* ppx_;
 	};
 
 	struct AttackPropertyX {
@@ -23,7 +33,6 @@ namespace H2NLIB {
 		double graphic_rotate_;				//!< 画像回転角度
 		double move_angle_;					//!< 移動角度
 		double move_speed_;					//!< 移動速度
-		eOBJECT::GROUP object_group_;		//!< オブジェクトグループ
 	};
 
 	class NyaAttack {
@@ -31,14 +40,20 @@ namespace H2NLIB {
 		NyaAttack();
 		~NyaAttack();
 		void Create(AttackPropertyX*);
-		void SettingBullet(eOBJECT::GROUP, double, double);
+		void SettingBullet(eOBJECT::GROUP object_group, double pow, double range, int limit_min_x, int limit_max_x, int limit_min_y, int limit_max_y);
+		void SettingCollision(int collision_type, eOBJECT::GROUP group1, eOBJECT::GROUP group2);
 		void SettingEffect(void);
-		void SettingGraphic(eOBJECT::GROUP, int, int);
+		void SettingGraphic(eOBJECT::GROUP object_group, int file_id, int file_div, double extend_rate, bool flag_trans, bool flag_turn);
 		void Init(int);
 		void Run(void);
+	private:
+		GraphicPropertyX4* gpx4_bullet_;
+		NyaGraphic* nya_graphic_;
+		NyaPosition* nya_position_;
+		NyaString* nya_string_;
 		static std::list<Bullet> create_list_[eOBJECT::GROUP::sizeof_enum];
 		static std::list<Bullet> wait_list_;
-	private:
+		void Calculate(eOBJECT::GROUP group);
 		double RadToAngle(double x) { return (x * 180.0 / 3.1415); }
 		double AngleToRad(double x) { return (x * 3.1415 / 180.0); }
 	};

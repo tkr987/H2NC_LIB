@@ -27,7 +27,7 @@ namespace H2NLIB {
 	public:
 		NyaString();
 		~NyaString();
-		void SetFont(std::string, int, int);
+		void SettingFont(std::string, int, int);
 		void Run(void);
 		void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str);
 		void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, int value);

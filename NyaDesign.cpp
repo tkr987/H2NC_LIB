@@ -36,9 +36,9 @@ NyaDesign::NyaDesign()
 		skill_name_[2] = "Skill C";
 		skill_name_[3] = "Skill V";
 		skill_select_ = 0;
-		nya_string_->SetFont("design_exp_font", 18, 2);
-		nya_string_->SetFont("design_skill_font", 30, 2);
-		nya_string_->SetFont("design_input_font", 50, 2);
+		nya_string_->SettingFont("design_exp_font", 18, 2);
+		nya_string_->SettingFont("design_skill_font", 30, 2);
+		nya_string_->SettingFont("design_input_font", 50, 2);
 		first_call = false;
 	}
 }

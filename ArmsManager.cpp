@@ -247,7 +247,7 @@ void ArmsManager::DeleteAll(eOBJECT::GROUP group)
 		if (8 < (list_used_[group].size() / 200)) {
 			imgfile_div = 8;
 		} else {
-			imgfile_div = (list_used_[group].size() / 200);
+			imgfile_div = ((int)list_used_[group].size() / 200);
 		}
 		eparam1.extend_rate_ = 1.0;
 		eparam1.group_ = eOBJECT::GROUP::TARGET_ARMS_EFFECT;

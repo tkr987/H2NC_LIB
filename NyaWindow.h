@@ -3,6 +3,7 @@
 
 namespace H2NLIB {
 
+	class NyaAttack;
 	class NyaDesign;
 	class NyaGraphic;
 	class NyaInput;
@@ -19,6 +20,7 @@ namespace H2NLIB {
 		~NyaWindow();
 	private:
 		bool set_user_;
+		NyaAttack* nya_attack_;
 		NyaDesign* nya_design_;
 		NyaGraphic* nya_graphic_;
 		NyaInput* nya_input_;

@@ -1,13 +1,13 @@
 #pragma once
 
 #include <list>
+#include <tuple>
 #include <vector>
 #include "NyaDefine.h"
 
 namespace H2NLIB {
 
 	class NyaPosition;
-	class NyaString;
 
 	struct PositionPropertyX {
 		double health_now_;
@@ -23,14 +23,14 @@ namespace H2NLIB {
 	public:
 		NyaPosition();
 		~NyaPosition();
-		void Collision(PositionPropertyX*);
+		void Collide(PositionPropertyX*);
 		PositionPropertyX* Create(void);
 		void Delete(PositionPropertyX*);
+		void SettingCollision(int collision_type, eOBJECT::GROUP group1, eOBJECT::GROUP group2);
 		void Run(void);
 	private:
-		static int collision_type_[eOBJECT::GROUP::sizeof_enum];
+		static std::vector<std::tuple<int, eOBJECT::GROUP, eOBJECT::GROUP>> collision_group_vector_;
 		static std::vector<PositionPropertyX*> collision_vector_[eOBJECT::GROUP::sizeof_enum];
-		NyaString* nya_string_;
 		static std::list<PositionPropertyX> create_list_;
 		void CollisionType1(eOBJECT::GROUP, eOBJECT::GROUP);
 	};

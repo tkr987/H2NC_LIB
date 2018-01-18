@@ -142,9 +142,8 @@ void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 void NyaGraphic::Run(void)
 {
 
-	DrawAll(eOBJECT::GROUP::USER, true);
-
-
+	DrawAll(eOBJECT::GROUP::USER1, true);
+	DrawAll(eOBJECT::GROUP::USER_ATTACK1, true);
 }
 
 
@@ -232,7 +231,7 @@ void NyaGraphic::DrawAll(int layer, bool swing)
 		DrawRectGraph(gpx8->pos_dx_ + swing_x, gpx8->pos_dy_ + swing_y, 
 			gpx8->pos_sx_ + swing_x, gpx8->pos_sy_ + swing_y, gpx8->val_width_, gpx8->val_height_, 
 			file_vector_[gpx8->file_id_].div_vector_[gpx8->file_div_], gpx8->flag_trans_, gpx8->flag_turn_);
-		draw_deque_set.gpx7_deque_.pop_front();
+		draw_deque_set.gpx8_deque_.pop_front();
 	}
 
 	if (!draw_deque_set.gpx1b_deque_.empty()) {

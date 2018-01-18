@@ -1,5 +1,6 @@
 #include "DxLib.h"
 #include "DebugPrint.h"
+#include "NyaAttack.h"
 #include "NyaDesign.h"
 #include "NyaGraphic.h"
 #include "NyaInput.h"
@@ -23,6 +24,7 @@ NyaWindow::NyaWindow()
 
 NyaWindow::~NyaWindow()
 {
+	delete nya_attack_;
 	delete nya_design_;
 	delete nya_graphic_;
 	delete nya_posision_;
@@ -38,7 +40,7 @@ int NyaWindow::Init(void)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v55");		// タイトル
+	SetMainWindowText("H2NC++LIB v56");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化
@@ -50,11 +52,14 @@ int NyaWindow::Init(void)
 	set_user_ = false;
 
 	// インスタンス
+	nya_attack_ = new NyaAttack;
 	nya_design_ = new NyaDesign;
 	nya_graphic_ = new NyaGraphic;
 	nya_input_ = new NyaInput;
 	nya_posision_ = new NyaPosition;
 	nya_string_ = new NyaString;
+
+	nya_attack_->Init(1000);
 
 	// 描画先グラフィック領域の指定
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -70,12 +75,15 @@ void NyaWindow::Run(void)
 
 		FpsUpdater();
 
+		nya_attack_->Run();
 		nya_graphic_->Run();
 		nya_input_->Run();
 		nya_posision_->Run();
 		nya_string_->Run();
-		if (set_user_)
-			nya_user_->Run();
+		if (set_user_) {
+			nya_user_->Action();
+			nya_user_->Draw();
+		}
 
 		nya_design_->Run();
 		DebugPrint::Run();

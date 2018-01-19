@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\NH2">
+      <UniqueIdentifier>{5a2cc4c0-28d8-4b0a-8511-3db282359e6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NH2T">
+      <UniqueIdentifier>{5f1c4590-b8aa-4d9c-b9be-31edc96f7a8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\NH2T">
+      <UniqueIdentifier>{4815cac9-0e77-44c4-ad40-ad09ed100c43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NH2">
+      <UniqueIdentifier>{c9ffd2ff-c983-48da-b1fd-1ffc34b8e17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\NH3">
+      <UniqueIdentifier>{30ebb004-e712-4b0e-b599-cf39eb8e5153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NH3">
+      <UniqueIdentifier>{ea514283-6074-4e26-ae8f-9568a0b4ef97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\LIB">
+      <UniqueIdentifier>{8c4001ca-2baf-4940-9d6b-39186dd0af63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\LIB">
+      <UniqueIdentifier>{db12c604-e011-4db4-9a77-d5571f6afb57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TEEMO">
+      <UniqueIdentifier>{67d2fc42-f115-4a43-ba82-639cd8f0c81d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Target.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="ImgManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="ImgUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="PosManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="DesignManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmsUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="ArmsManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="DesignUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="User1.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="PosUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugPrint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target1Anello.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target1Erythro.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target1Sipho.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target2Colti.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target2.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target2Seadma.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3Asfar.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3Corona.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3Arena.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Sample.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3Bunya.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3Filo.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target3Rhabdo.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss3OXA48.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss4MDRTB.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target4.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target4Retro.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target4Caulimo.cpp">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target4Hepadna.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target4Borna.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target4Denso.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="User1b.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target1Denso.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="StageContinue.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSound.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="StageTarget.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Target1Virga.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Target1Picorna.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss1MRAB.cpp">
+      <Filter>ソース ファイル\NH2T</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaDesign.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaWindow.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaString.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaDevice.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="TeemoDesign.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaGraphic.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaPosition.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaInput.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="TeemoUser.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaAttack.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Target.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DefineNH.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TargetBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Target0Sample.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="ImgUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="PosManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="DesignManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmsUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="ArmsManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="User1.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="PosUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="DesignUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyUpdater.h">
+      <Filter>ヘッダー ファイル\NH3</Filter>
+    </ClInclude>
+    <ClInclude Include="Target1Anello.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target1Erythro.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target1Sipho.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="ImgManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="Target2Colti.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target2Seadma.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3Asfar.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3Corona.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>ヘッダー ファイル\NH2</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3Arena.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3Bunya.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3Filo.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3Rhabdo.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss3OXA48.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Result.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss4MDRTB.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target3.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Target4.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Target4Retro.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target4Caulimo.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target4Hepadna.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target4Borna.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target4Denso.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target1Denso.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Title.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="User1b.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="StageContinue.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="StageTarget.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Target1Picorna.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Target1Virga.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss1MRAB.h">
+      <Filter>ヘッダー ファイル\NH2T</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Design.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDesign.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugPrint.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDebugPrint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaString.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaWindow.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDevice.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaGraphic.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDefine.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaInput.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaPosition.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaUser.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="TeemoUser.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaAttack.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

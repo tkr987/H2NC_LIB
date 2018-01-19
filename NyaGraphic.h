@@ -8,6 +8,8 @@
 
 namespace H2NLIB {
 
+	class NyaString;
+
 	///////////////////////////////////
 	// ここからパラメータ設定用構造体
 	///////////////////////////////////
@@ -242,6 +244,7 @@ namespace H2NLIB {
 	private:
 		int swing_x_;
 		int swing_y_;
+		NyaString* nya_string_;
 		void DrawAll(int, bool);
 		static std::vector<GraphicFileSet> file_vector_;
 		static std::vector<DrawDequeSet> layer_vector_;

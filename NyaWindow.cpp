@@ -54,12 +54,12 @@ int NyaWindow::Init(void)
 	// インスタンス
 	nya_attack_ = new NyaAttack;
 	nya_design_ = new NyaDesign;
-	nya_graphic_ = new NyaGraphic;
-	nya_input_ = new NyaInput;
-	nya_posision_ = new NyaPosition;
+//	nya_graphic_ = new NyaGraphic;
+//	nya_input_ = new NyaInput;
+//	nya_posision_ = new NyaPosition;
 	nya_string_ = new NyaString;
 
-	nya_attack_->Init(1000);
+//	nya_attack_->Init(1000);
 
 	// 描画先グラフィック領域の指定
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -75,14 +75,14 @@ void NyaWindow::Run(void)
 
 		FpsUpdater();
 
-		nya_attack_->Run();
-		nya_graphic_->Run();
-		nya_input_->Run();
-		nya_posision_->Run();
+//		nya_attack_->Run();
+//		nya_graphic_->Run();
+//		nya_input_->Run();
+//		nya_posision_->Run();
 		nya_string_->Run();
 		if (set_user_) {
-			nya_user_->Action();
-			nya_user_->Draw();
+	//		nya_user_->Action();
+	//		nya_user_->Draw();
 		}
 
 		nya_design_->Run();

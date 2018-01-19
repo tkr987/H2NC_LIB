@@ -1,5 +1,6 @@
 #include <tuple>
 #include "NyaAttack.h"
+#include "NyaDefine.h"
 #include "NyaGraphic.h"
 #include "NyaInput.h"
 #include "NyaPosition.h"
@@ -40,6 +41,13 @@ void TeemoUser::Init(void)
 {
 	graphic_file_attack_ = nya_graphic_->LoadFile("attack.png");
 
+	apx_teemo_->graphic_angle_ = 0;
+	apx_teemo_->graphic_rotate_ = 0;
+	apx_teemo_->move_angle_ = 0;
+	apx_teemo_->move_speed_ = 2;
+	nya_attack_->SettingBullet(eOBJECT::GROUP::USER_ATTACK1, 1.0, 1.0, 0, 1000, 0, 1000);
+	nya_attack_->SettingGraphic(eOBJECT::GROUP::USER_ATTACK1, graphic_file_attack_, 0, 1.0, true, false);
+
 	gpx4_teemo_->draw_angle_ = 0;
 	gpx4_teemo_->extend_rate_ = 1.0;
 	gpx4_teemo_->file_div_ = 0;
@@ -56,13 +64,6 @@ void TeemoUser::Init(void)
 	ppx_teemo_->x_ = 100;
 	ppx_teemo_->y_ = 500;
 
-	apx_teemo_->graphic_angle_ = 0;
-	apx_teemo_->graphic_rotate_ = 0;
-	apx_teemo_->move_angle_ = 0;
-	apx_teemo_->move_speed_ = 2;
-
-	nya_attack_->SettingBullet(eOBJECT::GROUP::USER_ATTACK1, 1.0, 1.0, 0, 1000, 0, 1000);
-	nya_attack_->SettingGraphic(eOBJECT::GROUP::USER_ATTACK1, graphic_file_attack_, 0, 1.0, true, false);
 	nya_string_->SettingFont("teemo", 10, 2);
 }
 
@@ -92,7 +93,7 @@ void TeemoUser::Action(void)
 	if (nya_input_->GetKeyFlagNow(eINPUT::KEY::Q) && count_ % 10 == 0) {
 		apx_teemo_->create_x_ = ppx_teemo_->x_;
 		apx_teemo_->create_y_ = ppx_teemo_->y_;
-//		nya_attack_->Create(apx_teemo_);
+		nya_attack_->Create(apx_teemo_);
 	}
 
 	count_++;

@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "NyaDefine.h"
 #include "NyaGraphic.h"
+#include "NyaString.h"
+#include <tuple>
 
 
 using namespace std;
@@ -17,6 +19,8 @@ NyaGraphic::NyaGraphic()
 	if (first_call) {
 		swing_x_ = 0;
 		swing_y_ = 0;
+		nya_string_ = new NyaString;
+		nya_string_->SettingFont("image", 15, 2);
 		first_call = false;
 	}
 
@@ -170,6 +174,7 @@ void NyaGraphic::DrawAll(int layer, bool swing)
 	GraphicPropertyX5b* gpx5b;
 	int swing_x = 0;
 	int swing_y = 0;
+	int count = 0;
 
 
 	if (swing) {
@@ -203,7 +208,14 @@ void NyaGraphic::DrawAll(int layer, bool swing)
 		DrawRotaGraph(gpx4->pos_cx_ + swing_x, gpx4->pos_cy_ + swing_y, gpx4->extend_rate_, gpx4->draw_angle_,
 			file_vector_[gpx4->file_id_].div_vector_[gpx4->file_div_], gpx4->flag_trans_, gpx4->flag_turn_);
 		draw_deque_set.gpx4_deque_.pop_front();
+		count++;
 	}
+
+
+	tuple<int, int, int> color = make_tuple(255, 255, 255);
+	nya_string_->Write("image=", color, 50, 50, "%d", count);
+
+
 	while (!draw_deque_set.gpx5_deque_.empty()) {
 		gpx5 = &draw_deque_set.gpx5_deque_.front();
 		DrawRotaGraph2(gpx5->pos_x_ + swing_x, gpx5->pos_y_ + swing_y, 

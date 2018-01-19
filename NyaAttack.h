@@ -52,7 +52,7 @@ namespace H2NLIB {
 		GraphicPropertyX4* gpx4_setting_graphic_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
-		NyaString* nya_string_;
+		static NyaString* nya_string_;
 		static std::list<Bullet> create_list_[eOBJECT::GROUP::sizeof_enum];
 		static std::list<Bullet> wait_list_;
 		void Calculate(eOBJECT::GROUP group);

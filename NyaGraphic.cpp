@@ -10,7 +10,7 @@ using namespace H2NLIB;
 
 std::vector<GraphicFileSet> NyaGraphic::file_vector_;
 std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::GROUP::sizeof_enum);
-
+NyaString* NyaGraphic::nya_string_;
 
 NyaGraphic::NyaGraphic()
 {

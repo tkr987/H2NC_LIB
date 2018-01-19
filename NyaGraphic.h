@@ -245,7 +245,7 @@ namespace H2NLIB {
 		int count_;
 		int swing_x_;
 		int swing_y_;
-		NyaString* nya_string_;
+		static NyaString* nya_string_;
 		void DrawAll(int, bool);
 		static std::vector<GraphicFileSet> file_vector_;
 		static std::vector<DrawDequeSet> layer_vector_;

@@ -27,6 +27,8 @@ namespace H2NLIB {
 	};
 
 	struct AttackPropertyX {
+		double collision_pow_;				//!< 攻撃力
+		double collision_range_;			//!< 衝突範囲
 		double create_x_;					//!< 生成x座標
 		double create_y_;					//!< 生成y座標	
 		double graphic_angle_;				//!< 画像角度(ラジアン)
@@ -40,14 +42,14 @@ namespace H2NLIB {
 		NyaAttack();
 		~NyaAttack();
 		void Create(AttackPropertyX*);
-		void SettingBullet(eOBJECT::GROUP object_group, double pow, double range, int limit_min_x, int limit_max_x, int limit_min_y, int limit_max_y);
-		void SettingCollision(int collision_type, eOBJECT::GROUP group1, eOBJECT::GROUP group2);
 		void SettingEffect(void);
-		void SettingGraphic(eOBJECT::GROUP object_group, int file_id, int file_div, double extend_rate, bool flag_trans, bool flag_turn);
+		void SettingGraphic(int file_id, int file_div);
+		void SettingGroup(eOBJECT::GROUP);
 		void Init(int);
 		void Run(void);
 	private:
-		GraphicPropertyX4* gpx4_bullet_;
+		eOBJECT::GROUP setting_group_;
+		GraphicPropertyX4* gpx4_setting_graphic_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		NyaString* nya_string_;

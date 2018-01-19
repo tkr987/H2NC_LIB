@@ -242,6 +242,7 @@ namespace H2NLIB {
 		int LoadFile(int, int, int, int, std::string);
 		void Run(void);
 	private:
+		int count_;
 		int swing_x_;
 		int swing_y_;
 		NyaString* nya_string_;

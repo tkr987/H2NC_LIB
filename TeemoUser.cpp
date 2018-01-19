@@ -21,7 +21,34 @@ TeemoUser::TeemoUser()
 	nya_input_ = new NyaInput;
 	nya_position_ = new NyaPosition;
 	nya_string_ = new NyaString;
-	Init();
+
+
+	apx_teemo_->collision_pow_ = 1;
+	apx_teemo_->collision_range_ = 1;
+	apx_teemo_->graphic_angle_ = 0;
+	apx_teemo_->graphic_rotate_ = 0;
+	apx_teemo_->move_angle_ = 0;
+	apx_teemo_->move_speed_ = 2;
+	nya_attack_->SettingGraphic(nya_graphic_->LoadFile("attack.png"), 0);
+	nya_attack_->SettingGroup(eOBJECT::GROUP::USER_ATTACK1);
+
+	gpx4_teemo_->draw_angle_ = 0;
+	gpx4_teemo_->extend_rate_ = 1.0;
+	gpx4_teemo_->file_div_ = 0;
+	gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("teemo.png");
+	gpx4_teemo_->flag_trans_ = true;
+	gpx4_teemo_->flag_turn_ = false;
+	gpx4_teemo_->object_group_ = eOBJECT::GROUP::USER1;
+
+	ppx_teemo_->health_max_ = 1;
+	ppx_teemo_->health_now_ = 1;
+	ppx_teemo_->object_group_ = eOBJECT::GROUP::USER1;
+	ppx_teemo_->pow_ = 1;
+	ppx_teemo_->range_ = 1;
+	ppx_teemo_->x_ = 100;
+	ppx_teemo_->y_ = 500;
+
+	nya_string_->SettingFont("teemo", 10, 2);
 }
 
 
@@ -39,14 +66,14 @@ TeemoUser::~TeemoUser()
 
 void TeemoUser::Init(void)
 {
-	graphic_file_attack_ = nya_graphic_->LoadFile("attack.png");
-
+	apx_teemo_->collision_pow_ = 1;
+	apx_teemo_->collision_range_ = 1;
 	apx_teemo_->graphic_angle_ = 0;
 	apx_teemo_->graphic_rotate_ = 0;
 	apx_teemo_->move_angle_ = 0;
 	apx_teemo_->move_speed_ = 2;
-	nya_attack_->SettingBullet(eOBJECT::GROUP::USER_ATTACK1, 1.0, 1.0, 0, 1000, 0, 1000);
-	nya_attack_->SettingGraphic(eOBJECT::GROUP::USER_ATTACK1, graphic_file_attack_, 0, 1.0, true, false);
+	nya_attack_->SettingGraphic(nya_graphic_->LoadFile("attack.png"), 0);
+	nya_attack_->SettingGroup(eOBJECT::GROUP::USER_ATTACK1);
 
 	gpx4_teemo_->draw_angle_ = 0;
 	gpx4_teemo_->extend_rate_ = 1.0;
@@ -72,10 +99,6 @@ void TeemoUser::Action(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	//if (count_ == 0){}
-
-	// ˆÚ“®
-
 	if (nya_input_->GetKeyFlagNow(eINPUT::KEY::RIGHT)) {
 		ppx_teemo_->x_ += 5;
 	} else if (nya_input_->GetKeyFlagNow(eINPUT::KEY::LEFT)) {
@@ -89,8 +112,7 @@ void TeemoUser::Action(void)
 	nya_string_->Write("teemo", white, 300, 300, "teemo x = %d", (int)ppx_teemo_->x_);
 	nya_string_->Write("teemo", white, 300, 320, "teemo y = %d", (int)ppx_teemo_->y_);
 
-	// UŒ‚
-	if (nya_input_->GetKeyFlagNow(eINPUT::KEY::Q) && count_ % 10 == 0) {
+	if (nya_input_->GetKeyFlagNow(eINPUT::KEY::Q) == true && count_ % 10 == 0) {
 		apx_teemo_->create_x_ = ppx_teemo_->x_;
 		apx_teemo_->create_y_ = ppx_teemo_->y_;
 		nya_attack_->Create(apx_teemo_);

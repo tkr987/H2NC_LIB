@@ -30,7 +30,7 @@ void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y
 	StringSet ss;
 
 	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	ss.font_ = map_font_.at(font);
+	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
 	ss.x_ = x;
 	ss.y_ = y;
 	get<0>(ss.write_double_) = false;
@@ -47,7 +47,7 @@ void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y
 	StringSet ss;
 
 	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	ss.font_ = map_font_.at(font);
+	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
 	ss.x_ = x;
 	ss.y_ = y;
 	get<0>(ss.write_double_) = false;
@@ -65,7 +65,7 @@ void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y
 	StringSet ss;
 
 	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	ss.font_ = map_font_.at(font);
+	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
 	ss.x_ = x;
 	ss.y_ = y;
 	get<0>(ss.write_double_) = true;

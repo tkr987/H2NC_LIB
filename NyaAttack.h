@@ -11,7 +11,6 @@ namespace H2NLIB {
 	struct PositionPropertyX;
 	class NyaGraphic;
 	class NyaPosition;
-	class NyaString;
 
 	struct Bullet {
 		double draw_angle_;
@@ -45,14 +44,12 @@ namespace H2NLIB {
 		void SettingEffect(void);
 		void SettingGraphic(int file_id, int file_div);
 		void SettingGroup(eOBJECT::GROUP);
-		void Init(int);
 		void Run(void);
 	private:
 		eOBJECT::GROUP setting_group_;
 		GraphicPropertyX4* gpx4_setting_graphic_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
-		static NyaString* nya_string_;
 		static std::list<Bullet> create_list_[eOBJECT::GROUP::sizeof_enum];
 		static std::list<Bullet> wait_list_;
 		void Calculate(eOBJECT::GROUP group);

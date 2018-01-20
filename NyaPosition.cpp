@@ -11,17 +11,13 @@ list<PositionPropertyX> NyaPosition::create_list_;
 
 NyaPosition::NyaPosition()
 {
-	static bool first_call = true;
 
-	if (first_call) {
-
-		first_call = false;
-	}
 }
 
 
 NyaPosition::~NyaPosition()
 {
+
 }
 
 

@@ -27,9 +27,7 @@ NyaWindow::~NyaWindow()
 	delete nya_attack_;
 	delete nya_design_;
 	delete nya_graphic_;
-	delete nya_input_;
 	delete nya_posision_;
-	delete nya_string_;
 	DxLib_End();
 }
 
@@ -48,22 +46,18 @@ int NyaWindow::Init(void)
 		return -1;							//
 	SetAlwaysRunFlag(true);					// 非アクティブ状態でも動作させる
 	SetUseDivGraphFlag(false);				// グラフィック描画分割方法
+	SetDrawScreen(DX_SCREEN_BACK);			// 描画先グラフィック領域の指定
+
+	// コンストラクタでDXLIB関数を利用する可能性があるので
+	// DXLIB初期化後にインスタンスを生成する必要がある。
+	nya_attack_ = new NyaAttack;
+	nya_design_ = new NyaDesign;
+	nya_graphic_ = new NyaGraphic;
+	nya_posision_ = new NyaPosition;
 
 	// 変数初期化
 	set_user_ = false;
 
-	// インスタンス
-	nya_attack_ = new NyaAttack;
-	nya_design_ = new NyaDesign;
-	nya_graphic_ = new NyaGraphic;
-	nya_input_ = new NyaInput;
-	nya_posision_ = new NyaPosition;
-	nya_string_ = new NyaString;
-
-	nya_attack_->Init(1000);
-
-	// 描画先グラフィック領域の指定
-	SetDrawScreen(DX_SCREEN_BACK);
 	return 0;
 }
 
@@ -74,20 +68,20 @@ void NyaWindow::Run(void)
 		
 		ClearDrawScreen();
 
-		FpsUpdater();
-
 		nya_attack_->Run();
+		nya_design_->Run();
 		nya_graphic_->Run();
-		nya_input_->Run();
 		nya_posision_->Run();
-		nya_string_->Run();
 		if (set_user_) {
 			nya_user_->Action();
 			nya_user_->Draw();
 		}
 
-		nya_design_->Run();
+		NyaInput::Run();
+		NyaString::Run();
 		DebugPrint::Run();
+
+		FpsUpdater();
 
 		ScreenFlip();
 	}
@@ -100,6 +94,11 @@ void NyaWindow::SetUser(NyaUser* user)
 	set_user_ = true;
 }
 
+/**
+@param FPS更新関数
+@note
+ 若干50fpsの安定性に欠ける気がする...
+**/
 void NyaWindow::FpsUpdater(void)
 {
 

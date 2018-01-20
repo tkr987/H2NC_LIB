@@ -18,9 +18,7 @@ TeemoUser::TeemoUser()
 	ppx_teemo_ = new PositionPropertyX;
 	nya_attack_ = new NyaAttack;
 	nya_graphic_ = new NyaGraphic;
-	nya_input_ = new NyaInput;
 	nya_position_ = new NyaPosition;
-	nya_string_ = new NyaString;
 
 
 	apx_teemo_->collision_pow_ = 1;
@@ -48,7 +46,7 @@ TeemoUser::TeemoUser()
 	ppx_teemo_->x_ = 100;
 	ppx_teemo_->y_ = 500;
 
-	nya_string_->SettingFont("teemo", 10, 2);
+	NyaString::SettingFont("teemo", 10, 2);
 }
 
 
@@ -59,7 +57,6 @@ TeemoUser::~TeemoUser()
 	delete ppx_teemo_;
 	delete nya_attack_;
 	delete nya_graphic_;
-	delete nya_input_;
 	delete nya_position_;
 }
 
@@ -91,7 +88,7 @@ void TeemoUser::Init(void)
 	ppx_teemo_->x_ = 100;
 	ppx_teemo_->y_ = 500;
 
-	nya_string_->SettingFont("teemo", 10, 2);
+	NyaString::SettingFont("teemo", 10, 2);
 }
 
 
@@ -99,20 +96,20 @@ void TeemoUser::Action(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	if (nya_input_->GetKeyFlagNow(eINPUT::KEY::RIGHT)) {
+	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::RIGHT)) {
 		ppx_teemo_->x_ += 5;
-	} else if (nya_input_->GetKeyFlagNow(eINPUT::KEY::LEFT)) {
+	} else if (NyaInput::GetKeyFlagNow(eINPUT::KEY::LEFT)) {
 		ppx_teemo_->x_ -= 5;
-	} else if (nya_input_->GetKeyFlagNow(eINPUT::KEY::UP)) {
+	} else if (NyaInput::GetKeyFlagNow(eINPUT::KEY::UP)) {
 		ppx_teemo_->y_ -= 5;
-	} else if (nya_input_->GetKeyFlagNow(eINPUT::KEY::DOWN)) {
+	} else if (NyaInput::GetKeyFlagNow(eINPUT::KEY::DOWN)) {
 		ppx_teemo_->y_ += 5;
 	}
 
-	nya_string_->Write("teemo", white, 300, 300, "teemo x = %d", (int)ppx_teemo_->x_);
-	nya_string_->Write("teemo", white, 300, 320, "teemo y = %d", (int)ppx_teemo_->y_);
+	NyaString::Write("teemo", white, 300, 300, "teemo x = %d", (int)ppx_teemo_->x_);
+	NyaString::Write("teemo", white, 300, 320, "teemo y = %d", (int)ppx_teemo_->y_);
 
-	if (nya_input_->GetKeyFlagNow(eINPUT::KEY::Q) == true && count_ % 10 == 0) {
+	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::Q) == true && count_ % 10 == 0) {
 		apx_teemo_->create_x_ = ppx_teemo_->x_;
 		apx_teemo_->create_y_ = ppx_teemo_->y_;
 		nya_attack_->Create(apx_teemo_);

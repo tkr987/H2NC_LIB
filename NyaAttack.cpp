@@ -11,7 +11,6 @@ using namespace std;
 list<Bullet> NyaAttack::create_list_[eOBJECT::GROUP::sizeof_enum];
 list<Bullet> NyaAttack::wait_list_;
 
-NyaString* NyaAttack::nya_string_;
 
 NyaAttack::NyaAttack()
 {
@@ -20,10 +19,15 @@ NyaAttack::NyaAttack()
 	gpx4_setting_graphic_ = new GraphicPropertyX4;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	nya_string_ = new NyaString;
 
 	if (first_call) {
-		nya_string_->SettingFont("attack", 15, 2);
+		NyaString::SettingFont("attack", 15, 2);
+		wait_list_.resize(10000);
+		for (auto it = wait_list_.begin(); it != wait_list_.end(); ++it) {
+			it->ppx_ = nya_position_->Create();
+			it->ppx_->health_max_ = 1;
+			it->ppx_->health_now_ = 1;
+		}
 		first_call = false;
 	}
 }
@@ -34,7 +38,6 @@ NyaAttack::~NyaAttack()
 	delete gpx4_setting_graphic_;
 	delete nya_graphic_;
 	delete nya_position_;
-	delete nya_string_;
 }
 
 void NyaAttack::Create(AttackPropertyX* apx)
@@ -58,17 +61,6 @@ void NyaAttack::Create(AttackPropertyX* apx)
 	it->ppx_->y_ = apx->create_y_;
 
 	wait_list_.splice(create_list_[setting_group_].begin(), wait_list_, it);
-}
-
-
-void NyaAttack::Init(int size)
-{
-	wait_list_.resize(size);
-	for (auto it = wait_list_.begin(); it != wait_list_.end(); ++it) {
-		it->ppx_ = nya_position_->Create();
-		it->ppx_->health_max_ = 1;
-		it->ppx_->health_now_ = 1;
-	}
 }
 
 void NyaAttack::Run(void)
@@ -111,7 +103,7 @@ void NyaAttack::Calculate(eOBJECT::GROUP group)
 		count++;
 	}
 
-	nya_string_->Write("attack", color, 50, 70, "(50, 70) attack-count = %d", count);
+	NyaString::Write("attack", color, 50, 70, "(50, 70) attack-count = %d", count);
 }
 
 void NyaAttack::SettingEffect(void)

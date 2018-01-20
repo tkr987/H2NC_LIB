@@ -10,7 +10,6 @@ using namespace H2NLIB;
 
 std::vector<GraphicFileSet> NyaGraphic::file_vector_;
 std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::GROUP::sizeof_enum);
-NyaString* NyaGraphic::nya_string_;
 
 NyaGraphic::NyaGraphic()
 {
@@ -19,8 +18,7 @@ NyaGraphic::NyaGraphic()
 	if (first_call) {
 		swing_x_ = 0;
 		swing_y_ = 0;
-		nya_string_ = new NyaString;
-		nya_string_->SettingFont("image", 15, 2);
+		NyaString::SettingFont("image", 15, 2);
 		first_call = false;
 	}
 
@@ -150,7 +148,7 @@ void NyaGraphic::Run(void)
 	DrawAll(eOBJECT::GROUP::USER_ATTACK1, true);
 
 	tuple<int, int, int> color = make_tuple(255, 255, 255);
-	nya_string_->Write("image", color, 50, 90, "(50, 90) image = %d", count_);
+	NyaString::Write("image", color, 50, 90, "(50, 90) image = %d", count_);
 }
 
 

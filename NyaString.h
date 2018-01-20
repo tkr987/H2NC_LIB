@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 #include <tuple>
-#include "DxLib.h"
 
 
 namespace H2NLIB {
@@ -27,11 +26,11 @@ namespace H2NLIB {
 	public:
 		NyaString();
 		~NyaString();
-		void SettingFont(std::string, int, int);
-		void Run(void);
-		void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str);
-		void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, int value);
-		void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, double value);
+		static void Run(void);
+		static void SettingFont(std::string, int, int);
+		static void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str);
+		static void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, int value);
+		static void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, double value);
 	private:
 		static std::deque<StringSet> deque_string_set_;
 		static std::map<std::string, int> map_font_;

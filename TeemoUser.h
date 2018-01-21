@@ -21,6 +21,7 @@ public:
 	void Draw(void);
 private:
 	long count_;
+	int hoge_;
 	H2NLIB::AttackPropertyX* apx_teemo_;
 	H2NLIB::GraphicPropertyX4* gpx4_teemo_;
 	H2NLIB::PositionPropertyX* ppx_teemo_;

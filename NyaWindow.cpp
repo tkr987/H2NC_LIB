@@ -10,7 +10,7 @@
 #include "NyaWindow.h"
 
 #define __DEBUG__
-#define FPS_MAX 50
+#define FPS_MAX 60
 
 
 using namespace H2NLIB;
@@ -97,7 +97,6 @@ void NyaWindow::SetUser(NyaUser* user)
 /**
 @param FPS更新関数
 @note
- 若干50fpsの安定性に欠ける気がする...
 **/
 void NyaWindow::FpsUpdater(void)
 {
@@ -109,7 +108,7 @@ void NyaWindow::FpsUpdater(void)
 	static	int ltime_[FPS_MAX] = {};			//loop時間
 	static	int wtime_[FPS_MAX] = {};			//wait時間
 	static	int prev_time_ = 0;					//1フレーム前の時間
-	static	int frame_count_ = 0;				//現在のフレーム(0～49)
+	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
 	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
 
 

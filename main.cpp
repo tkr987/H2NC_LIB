@@ -49,6 +49,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	nya_window->Init();
 
 	H2NLIB::NyaUser* teemo_user_ = new TeemoUser;
+	
 	nya_window->SetUser(teemo_user_);
 
 	TeemoDesign();

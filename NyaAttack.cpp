@@ -74,7 +74,7 @@ void NyaAttack::Calculate(eOBJECT::GROUP group)
 	tuple<int, int, int> color = make_tuple(255, 255, 255);
 	list<Bullet>::iterator it_delete;
 
-	for (auto it = create_list_[group].begin(); it != create_list_[group].end(); ++it) {
+	for (list<Bullet>::iterator it = create_list_[group].begin(); it != create_list_[group].end(); ++it) {
 
 		// 移動処理＆衝突判定処理
 		it->ppx_->x_ += it->move_x_;
@@ -90,6 +90,9 @@ void NyaAttack::Calculate(eOBJECT::GROUP group)
 		gpx4_setting_graphic_->object_group_ = eOBJECT::GROUP::USER_ATTACK1;
 		gpx4_setting_graphic_->pos_cx_ = (int)it->ppx_->x_;
 		gpx4_setting_graphic_->pos_cy_ = (int)it->ppx_->y_;
+
+		gpx4_setting_graphic_->file_div_ = 0;
+
 		nya_graphic_->Draw(gpx4_setting_graphic_);
 
 		// 表示限界の画面サイズ
@@ -103,7 +106,7 @@ void NyaAttack::Calculate(eOBJECT::GROUP group)
 		count++;
 	}
 
-	NyaString::Write("attack", color, 50, 70, "(50, 70) attack-count = %d", count);
+	NyaString::Write("attack", color, 50, 70, "(50, 70) gpx4_setting_gra->file_id = %d", gpx4_setting_graphic_->file_id_);
 }
 
 void NyaAttack::SettingEffect(void)

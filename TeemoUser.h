@@ -3,13 +3,13 @@
 #include "NyaUser.h"
 
 namespace H2NLIB {
-	class NyaAttack;
+	struct DevicePropertyX;
+	struct GraphicPropertyX4;
+	struct PositionPropertyX;
+	class NyaDevice;
 	class NyaGraphic;
 	class NyaPosition;
 	class NyaString;
-	struct AttackPropertyX;
-	struct GraphicPropertyX4;
-	struct PositionPropertyX;
 }
 
 
@@ -19,15 +19,14 @@ public:
 	~TeemoUser();
 	void Action(void);
 	void Draw(void);
+	void Init(void);
 private:
 	long count_;
-	int hoge_;
-	H2NLIB::AttackPropertyX* apx_teemo_;
-	H2NLIB::GraphicPropertyX4* gpx4_teemo_;
-	H2NLIB::PositionPropertyX* ppx_teemo_;
-	H2NLIB::NyaAttack* nya_attack_;
+	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
-	void Init(void);
+	H2NLIB::DevicePropertyX* dpx_teemo_;
+	H2NLIB::GraphicPropertyX4* gpx4_teemo_;
+	H2NLIB::PositionPropertyX* ppx_teemo_;
 };
 

@@ -23,7 +23,7 @@ namespace H2NLIB {
 	public:
 		NyaPosition();
 		~NyaPosition();
-		void Collide(PositionPropertyX*);
+		void Collide(PositionPropertyX* ppx);
 		PositionPropertyX* Create(void);
 		void Delete(PositionPropertyX*);
 		void SettingCollision(int collision_type, eOBJECT::GROUP group1, eOBJECT::GROUP group2);

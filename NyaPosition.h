@@ -1,38 +1,40 @@
 #pragma once
 
 #include <list>
-#include <tuple>
 #include <vector>
+#include <utility>
 #include "NyaDefine.h"
+
 
 namespace H2NLIB {
 
-	class NyaPosition;
-
-	struct PositionPropertyX {
-		double health_now_;
+	struct PositionHandleX {
 		double health_max_;
+		double health_now_;
 		double pow_;
 		double range_;
 		double x_;
+		double x_pre_;
 		double y_;
-		eOBJECT::GROUP object_group_;
+		double y_pre_;
 	};
 
 	class NyaPosition {
 	public:
 		NyaPosition();
 		~NyaPosition();
-		void Collide(PositionPropertyX* ppx);
-		PositionPropertyX* Create(void);
-		void Delete(PositionPropertyX*);
-		void SettingCollision(int collision_type, eOBJECT::GROUP group1, eOBJECT::GROUP group2);
+		void Collide(PositionHandleX* phx, eOBJECT::GROUP group);
+		PositionHandleX* Create(void);
+		void SettingCollision(eOBJECT::GROUP group1, eOBJECT::GROUP group2);
+		void SettingCollisionHighAccuracy(eOBJECT::GROUP group);
 		void Run(void);
 	private:
-		static std::vector<std::tuple<int, eOBJECT::GROUP, eOBJECT::GROUP>> collision_group_vector_;
-		static std::vector<PositionPropertyX*> collision_vector_[eOBJECT::GROUP::sizeof_enum];
-		static std::list<PositionPropertyX> create_list_;
-		void CollisionType1(eOBJECT::GROUP, eOBJECT::GROUP);
+		static std::vector<std::pair<eOBJECT::GROUP, eOBJECT::GROUP>> collision_group_vector_;
+		static std::vector<eOBJECT::GROUP> collision_high_accuracy_group_vector_;
+		static std::vector<PositionHandleX*> collision_vector_[eOBJECT::GROUP::sizeof_enum];
+		static std::list<PositionHandleX> create_list_;
+		void Collision(eOBJECT::GROUP, eOBJECT::GROUP);
+		void CollisionHighAccuracy(eOBJECT::GROUP, eOBJECT::GROUP);
 	};
 
 

@@ -6,6 +6,7 @@
 #include "NyaInput.h"
 #include "NyaPosition.h"
 #include "NyaString.h"
+#include "NyaTarget.h"
 #include "NyaUser.h"
 #include "NyaWindow.h"
 
@@ -68,10 +69,14 @@ void NyaWindow::Run(void)
 		
 		ClearDrawScreen();
 
-		nya_device_->Run();
 		nya_design_->Run();
+		nya_device_->Run();
 		nya_graphic_->Run();
 		nya_posision_->Run();
+		if (set_target_) {
+			nya_target_->Action();
+			nya_target_->Draw();
+		}
 		if (set_user_) {
 			nya_user_->Action();
 			nya_user_->Draw();
@@ -86,6 +91,12 @@ void NyaWindow::Run(void)
 		ScreenFlip();
 	}
 
+}
+
+void NyaWindow::SetTarget(NyaTarget* target)
+{
+	nya_target_ = target;
+	set_target_ = true;
 }
 
 void NyaWindow::SetUser(NyaUser* user)

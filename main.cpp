@@ -23,9 +23,11 @@
 
 // 2018”N
 #include "DxLib.h"
+#include "NyaTarget.h"
 #include "NyaUser.h"
 #include "NyaWindow.h"
 #include "TeemoUser.h"
+#include "TeemoTarget.h"
 
 void TeemoDesign(void);
 
@@ -48,16 +50,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	H2NLIB::NyaWindow *nya_window = new H2NLIB::NyaWindow();	
 	nya_window->Init();
 
-	H2NLIB::NyaUser* teemo_user_ = new TeemoUser;
-	
-	nya_window->SetUser(teemo_user_);
+	H2NLIB::NyaUser* teemo_user = new TeemoUser;
+	H2NLIB::NyaTarget* teemo_target = new TeemoTarget;
+
+	nya_window->SetUser(teemo_user);
+	nya_window->SetTarget(teemo_target);
 
 	TeemoDesign();
 	
 	nya_window->Run();
 
 
-	delete teemo_user_;
+	delete teemo_target;
+	delete teemo_user;
 	delete nya_window;
 	return 0;
 

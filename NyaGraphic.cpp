@@ -38,8 +38,18 @@ NyaGraphic::~NyaGraphic()
 int NyaGraphic::LoadFile(std::string file_pass)
 {
 	int graphic_id;
+	int vector_index;
 	int graphic_xsize, graphic_ysize;
 	static GraphicFileSet file_set;
+
+	vector_index = 0;
+	for (auto it = file_vector_.begin(); it != file_vector_.end(); ++it) {
+
+		if (it->file_pass_ == file_pass) {
+			return vector_index;
+		}
+		vector_index++;
+	}
 
 	graphic_id = LoadGraph(file_pass.c_str());
 	GetGraphSize(graphic_id, &graphic_xsize, &graphic_ysize);
@@ -49,6 +59,7 @@ int NyaGraphic::LoadFile(std::string file_pass)
 	file_vector_.back().div_vector_.push_back(graphic_id);
 	file_vector_.back().div_x_ = 0;
 	file_vector_.back().div_y_ = 0;
+	file_vector_.back().file_pass_ = file_pass;
 	file_vector_.back().size_x_ = graphic_xsize;
 	file_vector_.back().size_y_ = graphic_ysize;
 
@@ -153,8 +164,8 @@ void NyaGraphic::Run(void)
 	NyaString::Write("image", color, 50, 90, "(50, 90) image = %d", (int)layer_vector_.at(eOBJECT::GROUP::USER_ATTACK1).gpx4_deque_.size());
 	NyaString::Write("image", color, 50, 190, "(50, 190) file_vec.size = %d", (int)file_vector_.size());
 
-	DrawAll(eOBJECT::GROUP::USER1, true);
-	DrawAll(eOBJECT::GROUP::USER_ATTACK1, true);
+	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
+		DrawAll((eOBJECT::GROUP)group, true);
 }
 
 

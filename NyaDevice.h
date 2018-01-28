@@ -9,27 +9,24 @@
 namespace H2NLIB {
 
 	struct GraphicPropertyX4;
-	struct PositionPropertyX;
+	struct PositionHandleX;
 	class NyaGraphic;
 	class NyaPosition;
 
 	struct Bullet {
 		double draw_angle_;
-		double draw_rotate_;
 		double move_angle_;
 		double move_x_;
 		double move_y_;
 		int setting_id_;
-		PositionPropertyX* ppx_;
+		PositionHandleX* phx_;
 	};
 
 	struct DeviceSetting {
-		int graphic_id_;
-		int graphic_div_;
-		double graphic_extend_;
-		double graphic_rotate_;
-		bool graphic_trans_;
-		bool graphic_turn_;
+		int graphic_file_id_;
+		int graphic_file_div_;
+		double graphic_draw_extend_;
+		double graphic_draw_rotate_;
 		double position_collide_pow_;
 		double position_collide_range_;
 		eOBJECT::GROUP object_group_;
@@ -55,7 +52,7 @@ namespace H2NLIB {
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		static std::vector<DeviceSetting> setting_vector_;
-		static std::list<Bullet> create_list_[eOBJECT::GROUP::sizeof_enum];
+		static std::list<Bullet> attack_list_[eOBJECT::GROUP::sizeof_enum];
 		static std::list<Bullet> wait_list_;
 		void Calculate(eOBJECT::GROUP group);
 		double RadToAngle(double x) { return (x * 180.0 / 3.1415); }

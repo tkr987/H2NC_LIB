@@ -1,7 +1,8 @@
 #pragma once
 
-#include <vector>
 #include <deque>
+#include <string>
+#include <vector>
 #include "NyaDefine.h"
 
 
@@ -209,6 +210,7 @@ namespace H2NLIB {
 		int div_y_;
 		int size_x_;
 		int size_y_;
+		std::string file_pass_;
 		std::vector<int> div_vector_;
 	};
 

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "NyaUser.h"
+#include "NyaTarget.h"
+
 
 namespace H2NLIB {
 	struct DevicePropertyX;
@@ -13,10 +14,10 @@ namespace H2NLIB {
 }
 
 
-class TeemoUser : public H2NLIB::NyaUser {
+class TeemoTarget : public H2NLIB::NyaTarget {
 public:
-	TeemoUser();
-	~TeemoUser();
+	TeemoTarget();
+	~TeemoTarget();
 	void Action(void);
 	void Draw(void);
 	void Init(void);

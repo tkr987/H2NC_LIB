@@ -19,7 +19,9 @@ TeemoUser::TeemoUser()
 	nya_device_ = new NyaDevice;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	nya_position_->SettingCollision(eOBJECT::GROUP::USER_ATTACK1, eOBJECT::GROUP::TARGET1);
+//	nya_position_->SettingCollision(eOBJECT::GROUP::USER_ATTACK1, eOBJECT::GROUP::TARGET1);
+//	nya_position_->SettingCollision(eOBJECT::GROUP::USER1, eOBJECT::GROUP::TARGET_ATTACK1);
+	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
 
 	// gpx 設定
 	gpx4_teemo_ = new GraphicPropertyX4;
@@ -95,13 +97,13 @@ void TeemoUser::Action(void)
 		nya_device_->Attack(dpx_teemo_);
 	}
 	
-	nya_position_->Collide(phx_teemo_, eOBJECT::GROUP::USER1);
+	nya_position_->Collision(phx_teemo_, eOBJECT::GROUP::USER1);
 
 
 	count_++;
 
 	// デバッグ
-	NyaString::Write("teemo_font", white, 50, 70, "(50, 70) teemo health = %d", (int)phx_teemo_->health_now_);
+	NyaString::Write("teemo_font", white, 50, 70, "(50, 70) teemo health = %3.3lf", phx_teemo_->health_now_);
 	NyaString::Write("teemo_font", white, 50, 110, "(50, 110) teemo x = %d", (int)phx_teemo_->x_);
 	NyaString::Write("teemo_font", white, 50, 130, "(50, 130) teemo y = %d", (int)phx_teemo_->y_);
 }

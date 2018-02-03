@@ -94,7 +94,7 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 		// Õ“Ë”»’èˆ—
 		it->phx_->pow_ = setting_vector_[it->setting_id_].position_collide_pow_;
 		it->phx_->range_ = setting_vector_[it->setting_id_].position_collide_range_;
-		nya_position_->Collide(it->phx_, group);
+		nya_position_->Collision(it->phx_, group);
 
 		// ˆÚ“®ˆ—
 		it->phx_->x_pre_ = it->phx_->x_;

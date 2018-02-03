@@ -162,7 +162,7 @@ void NyaGraphic::Run(void)
 {
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
 	NyaString::Write("image", color, 50, 90, "(50, 90) image = %d", (int)layer_vector_.at(eOBJECT::GROUP::USER_ATTACK1).gpx4_deque_.size());
-	NyaString::Write("image", color, 50, 190, "(50, 190) file_vec.size = %d", (int)file_vector_.size());
+	NyaString::Write("image", color, 50, 230, "(50, 230) file_vec.size = %d", (int)file_vector_.size());
 
 	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
 		DrawAll((eOBJECT::GROUP)group, true);

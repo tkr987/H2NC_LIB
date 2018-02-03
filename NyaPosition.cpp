@@ -1,10 +1,12 @@
 #include <cmath>
+#include <tuple>
 #include "NyaPosition.h"
 #include "NyaString.h"
 
 using namespace std;
 using namespace H2NLIB;
 
+int NyaPosition::d_ = 0;
 vector<pair<eOBJECT::GROUP, eOBJECT::GROUP>> NyaPosition::collision_group_vector_;
 vector<eOBJECT::GROUP> NyaPosition::collision_high_accuracy_group_vector_;
 vector<PositionHandleX*> NyaPosition::collision_vector_[eOBJECT::GROUP::sizeof_enum];
@@ -12,7 +14,12 @@ list<PositionHandleX> NyaPosition::create_list_;
 
 NyaPosition::NyaPosition()
 {
+	static bool first_call = true;
 
+	if (first_call) {
+		NyaString::SettingFont("debug", 10, 2);
+		first_call = false;
+	}
 }
 
 
@@ -22,7 +29,7 @@ NyaPosition::~NyaPosition()
 }
 
 
-void NyaPosition::Collide(PositionHandleX* phx, eOBJECT::GROUP group)
+void NyaPosition::Collision(PositionHandleX* phx, eOBJECT::GROUP group)
 {
 	collision_vector_[group].push_back(phx);
 }
@@ -41,19 +48,36 @@ void NyaPosition::Run(void)
 {
 	vector<eOBJECT::GROUP>::iterator find_it1;
 	vector<eOBJECT::GROUP>::iterator find_it2;
+	tuple<int, int, int> color = make_tuple(255, 255, 255);
 
+	NyaString::Write("debug", color, 50, 150, "[50, 150] collision_group_vector = %d", (int)collision_group_vector_.size());
+	NyaString::Write("debug", color, 50, 170, "[50, 170] collision_vector[TARGET_ATTACK1] = %d", (int)collision_vector_[eOBJECT::GROUP::TARGET_ATTACK1].size());
+	NyaString::Write("debug", color, 50, 190, "[50, 190] collision_vector[USER1] = %d", (int)collision_vector_[eOBJECT::GROUP::USER1].size());
+
+	// 衝突判定
+	//d_ = 0;
+	//for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
+
+	//	find_it1 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->first);
+	//	find_it2 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->second);
+	//	if (find_it1 != collision_high_accuracy_group_vector_.end()) {
+	//	//	JudgeCollisionHighAccuracy(it->first, it->second);		
+	//	} else if (find_it2 != collision_high_accuracy_group_vector_.end()){
+	//	//	JudgeCollisionHighAccuracy(it->second, it->first);
+	//	}else{
+	//		JudgeCollision(it->first, it->second);
+	//	}
+	//}
+	JudgeCollision(eOBJECT::GROUP::USER1, eOBJECT::GROUP::TARGET_ATTACK1);
+	NyaString::Write("debug", color, 50, 210, "[50, 210] NyaPosition::d_ = %d", d_);
+
+	// 配列のクリア
 	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
+		collision_vector_[it->first].clear();
+		collision_vector_[it->second].clear();
+	}
 
-		find_it1 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->first);
-		find_it2 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->second);
-		if (find_it1 != collision_high_accuracy_group_vector_.end()) {
-			CollisionHighAccuracy(it->first, it->second);		
-		} else if (find_it2 != collision_high_accuracy_group_vector_.end()){
-			CollisionHighAccuracy(it->second, it->first);
-		}else{
-			Collision(it->first, it->second);
-		}
-	}	
+
 }
 
 /**
@@ -73,7 +97,7 @@ void NyaPosition::SettingCollision(eOBJECT::GROUP group1, eOBJECT::GROUP group2)
 	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
 		if (it->first == group1 && it->second == group2)
 			return;
-		if (it->second == group2 && it->first == group1)
+		if (it->first == group2 && it->second == group1)
 			return;
 	}
 
@@ -103,7 +127,7 @@ void NyaPosition::SettingCollisionHighAccuracy(eOBJECT::GROUP group)
 	collision_high_accuracy_group_vector_.push_back(group);
 }
 
-void NyaPosition::Collision(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
+void NyaPosition::JudgeCollision(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
 {
 
 	for (auto it1 = collision_vector_[object_group1].begin(); it1 != collision_vector_[object_group1].end(); ++it1) {	
@@ -111,17 +135,19 @@ void NyaPosition::Collision(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_
 			
 			// pow()してるのでabs()は不要
 			if (pow((*it1)->x_ - (*it2)->x_, 2.0) + pow((*it1)->y_ - (*it2)->y_, 2.0) < pow((*it1)->range_ + (*it2)->range_, 2.0)) {
-				(*it1)->health_now_ -= (*it2)->pow_;
-				(*it2)->health_now_ -= (*it1)->pow_;
+				//(*it1)->health_now_ -= (*it2)->pow_;
+				//(*it2)->health_now_ -= (*it1)->pow_;
+				(*it1)->health_now_ -= 1.0;
+				(*it2)->health_now_ -= 1;
+
+				d_ ++;
 			}
 		}
 	}
-	collision_vector_[object_group1].clear();
-	collision_vector_[object_group2].clear();
 }
 
 
-void NyaPosition::CollisionHighAccuracy(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
+void NyaPosition::JudgeCollisionHighAccuracy(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
 {
 	double a, b, c;
 	double distance;

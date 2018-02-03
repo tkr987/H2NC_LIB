@@ -20,7 +20,7 @@ TeemoTarget::TeemoTarget()
 	nya_device_ = new NyaDevice;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
+//	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
 //	nya_position_->SettingCollisionHighAccuracy(eOBJECT::GROUP::TARGET_ATTACK1);
 
 

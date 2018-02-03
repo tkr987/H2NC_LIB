@@ -30,7 +30,6 @@ namespace H2NLIB {
 		void SettingCollisionHighAccuracy(eOBJECT::GROUP group);
 		void Run(void);
 	private:
-		static int d_;
 		static std::vector<std::pair<eOBJECT::GROUP, eOBJECT::GROUP>> collision_group_vector_;
 		static std::vector<eOBJECT::GROUP> collision_high_accuracy_group_vector_;
 		static std::vector<PositionHandleX*> collision_vector_[eOBJECT::GROUP::sizeof_enum];

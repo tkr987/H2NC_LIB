@@ -75,6 +75,26 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 	tuple<int, int, int> color = make_tuple(255, 255, 255);
 	list<Bullet>::iterator it_delete;
 
+	///////////////
+	// 削除処理
+	///////////////
+	for (list<Bullet>::iterator it = attack_list_[group].begin(); it != attack_list_[group].end(); ++it) {
+
+		// 表示サイズの境界を超えた
+		if ((int)it->phx_->x_ < 0 || 1000 < (int)it->phx_->x_ || (int)it->phx_->y_ < 0 || 700 < (int)it->phx_->y_) {
+			it_delete = --it;
+			attack_list_[group].splice(wait_list_.begin(), attack_list_[group], ++it_delete);
+		}
+		// オブジェクトと衝突するなどして弾オブジェクトのヘルスがゼロになった
+		if (it->phx_->health_now_ <= 0) {
+			it_delete = --it;
+			attack_list_[group].splice(wait_list_.begin(), attack_list_[group], ++it_delete);
+		}
+	}
+
+	////////////////////
+	// 色々な処理
+	////////////////////
 	gpx4.flag_trans_ = true;
 	gpx4.flag_turn_ = false;
 	for (list<Bullet>::iterator it = attack_list_[group].begin(); it != attack_list_[group].end(); ++it) {
@@ -90,7 +110,6 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 		gpx4.pos_cy_ = (int)it->phx_->y_;
 		nya_graphic_->Draw(&gpx4);
 
-
 		// 衝突判定処理
 		it->phx_->pow_ = setting_vector_[it->setting_id_].position_collide_pow_;
 		it->phx_->range_ = setting_vector_[it->setting_id_].position_collide_range_;
@@ -101,17 +120,5 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 		it->phx_->y_pre_ = it->phx_->y_;
 		it->phx_->x_ += it->move_x_;
 		it->phx_->y_ += it->move_y_;
-
-
-		// 表示限界の画面サイズ
-		if ((int)it->phx_->x_ < 0 || 1000 < (int)it->phx_->x_ || (int)it->phx_->y_ < 0 || 700 < (int)it->phx_->y_) {
-			it_delete = --it;
-			attack_list_[group].splice(wait_list_.begin(), attack_list_[group], ++it_delete);
-		}
-		if (it->phx_->health_now_ <= 0) {
-			it_delete = --it;
-			attack_list_[group].splice(wait_list_.begin(), attack_list_[group], ++it_delete);
-		}
-
 	}
 }

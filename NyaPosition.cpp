@@ -6,7 +6,6 @@
 using namespace std;
 using namespace H2NLIB;
 
-int NyaPosition::d_ = 0;
 vector<pair<eOBJECT::GROUP, eOBJECT::GROUP>> NyaPosition::collision_group_vector_;
 vector<eOBJECT::GROUP> NyaPosition::collision_high_accuracy_group_vector_;
 vector<PositionHandleX*> NyaPosition::collision_vector_[eOBJECT::GROUP::sizeof_enum];
@@ -56,20 +55,18 @@ void NyaPosition::Run(void)
 
 	// 衝突判定
 	//d_ = 0;
-	//for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
+	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
 
-	//	find_it1 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->first);
-	//	find_it2 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->second);
-	//	if (find_it1 != collision_high_accuracy_group_vector_.end()) {
-	//	//	JudgeCollisionHighAccuracy(it->first, it->second);		
-	//	} else if (find_it2 != collision_high_accuracy_group_vector_.end()){
-	//	//	JudgeCollisionHighAccuracy(it->second, it->first);
-	//	}else{
-	//		JudgeCollision(it->first, it->second);
-	//	}
-	//}
-	JudgeCollision(eOBJECT::GROUP::USER1, eOBJECT::GROUP::TARGET_ATTACK1);
-	NyaString::Write("debug", color, 50, 210, "[50, 210] NyaPosition::d_ = %d", d_);
+		find_it1 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->first);
+		find_it2 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->second);
+		if (find_it1 != collision_high_accuracy_group_vector_.end()) {
+		//	JudgeCollisionHighAccuracy(it->first, it->second);		
+		} else if (find_it2 != collision_high_accuracy_group_vector_.end()){
+		//	JudgeCollisionHighAccuracy(it->second, it->first);
+		}else{
+			JudgeCollision(it->first, it->second);
+		}
+	}
 
 	// 配列のクリア
 	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
@@ -135,12 +132,8 @@ void NyaPosition::JudgeCollision(eOBJECT::GROUP object_group1, eOBJECT::GROUP ob
 			
 			// pow()してるのでabs()は不要
 			if (pow((*it1)->x_ - (*it2)->x_, 2.0) + pow((*it1)->y_ - (*it2)->y_, 2.0) < pow((*it1)->range_ + (*it2)->range_, 2.0)) {
-				//(*it1)->health_now_ -= (*it2)->pow_;
-				//(*it2)->health_now_ -= (*it1)->pow_;
-				(*it1)->health_now_ -= 1.0;
-				(*it2)->health_now_ -= 1;
-
-				d_ ++;
+				(*it1)->health_now_ -= (*it2)->pow_;
+				(*it2)->health_now_ -= (*it1)->pow_;
 			}
 		}
 	}

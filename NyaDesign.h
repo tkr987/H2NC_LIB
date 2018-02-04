@@ -23,9 +23,11 @@ namespace H2NLIB {
 		static unsigned int skill_lv_[4];
 		static unsigned int skill_select_;
 		static string skill_name_[4];
+		void DrawBlack(int x, int y);
 		void DrawLv(int x, int y);
 		void DrawSkill(int x, int y);
 		void DrawInput(int x, int y);
+		void UpdateFPS(int x, int y);
 	};
 
 }

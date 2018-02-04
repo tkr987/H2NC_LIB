@@ -5,6 +5,7 @@ namespace H2NLIB {
 
 	class NyaDevice;
 	class NyaDesign;
+	class NyaEffect;
 	class NyaGraphic;
 	class NyaInput;
 	class NyaPosition;
@@ -24,11 +25,11 @@ namespace H2NLIB {
 		bool set_user_;
 		NyaDesign* nya_design_;
 		NyaDevice* nya_device_;
+		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_posision_;
 		NyaTarget* nya_target_;
 		NyaUser* nya_user_;
-		void FpsUpdater(void);
 	};
 
 }

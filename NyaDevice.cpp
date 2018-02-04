@@ -58,8 +58,8 @@ void NyaDevice::Attack(DevicePropertyX* dpx)
 
 void NyaDevice::Run(void)
 {
-	Calculate(eOBJECT::GROUP::USER_ATTACK1);
-	Calculate(eOBJECT::GROUP::TARGET_ATTACK1);
+	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
+		Calculate((eOBJECT::GROUP)group);
 }
 
 int NyaDevice::LoadSetting(DeviceSetting* setting)

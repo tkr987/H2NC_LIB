@@ -1,7 +1,12 @@
 #include <tuple>
+#include "DxLib.h"
 #include "NyaDesign.h"
 #include "NyaInput.h"
 #include "NyaString.h"
+
+#define FPS_MAX 60
+#define __DEBUG__
+
 
 using namespace H2NLIB;
 
@@ -33,9 +38,11 @@ NyaDesign::NyaDesign()
 		skill_name_[3] = "Skill V";
 		skill_select_ = 0;
 		NyaString::SettingFont("design_exp_font", 18, 2);
+		NyaString::SettingFont("design_fps_font", 14, 2);
 		NyaString::SettingFont("design_lv_font", 60, 6);
 		NyaString::SettingFont("design_skill_font", 30, 2);
 		NyaString::SettingFont("design_input_font", 50, 2);
+
 		first_call = false;
 	}
 }
@@ -54,9 +61,11 @@ void NyaDesign::AddEXP(int x)
 
 void NyaDesign::Run(void)
 {
+	DrawBlack(850, 0);
 	DrawSkill(875, 110);
 	DrawLv(875, 515);
 	DrawInput(875, 600);
+	UpdateFPS(1180, 660);
 }
 
 void NyaDesign::SetSkillSelect(int n)
@@ -67,6 +76,12 @@ void NyaDesign::SetSkillSelect(int n)
 void NyaDesign::SetSkillName(int x, string name)
 {
 	skill_name_[x] = name;
+}
+
+void NyaDesign::DrawBlack(int x, int y) {
+	static int color = GetColor(16, 16, 16);
+
+	DrawBox(x, y, 1279, 719, color , true) ;
 }
 
 void NyaDesign::DrawInput(int x, int y)
@@ -126,3 +141,60 @@ void NyaDesign::DrawSkill(int x, int y)
 	}
 }
 
+/**
+@param FPS更新関数
+**/
+void NyaDesign::UpdateFPS(int x, int y)
+{
+
+	static	int frame_ave_ = 0;					//フレームレート平均
+	static	int wtime_ave_ = 0;					//wait時間平均
+	static	int ltime_ave_ = 0;					//loop時間平均
+	static	int frame_[FPS_MAX] = {};			//フレームレート
+	static	int ltime_[FPS_MAX] = {};			//loop時間
+	static	int wtime_[FPS_MAX] = {};			//wait時間
+	static	int prev_time_ = 0;					//1フレーム前の時間
+	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
+	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
+	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+
+
+#ifdef __DEBUG__
+	if (frame_ave_ != 0) {
+		NyaString::Write("design_fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
+		NyaString::Write("design_fps_font", white, x, y + 20, "loop[%d ms]", ltime_ave_);
+		NyaString::Write("design_fps_font", white, x, y + 40, "wait[%d ms]", wtime_ave_);
+	}
+#else
+	if (frame_ave_ != 0)
+		DebugPrint::SetData(1200, 700, "fps[%.1f]", 1000.0 / (double)frame_ave_);
+#endif
+
+
+	frame_count_ = ++all_frame_count_ % FPS_MAX;
+	/*平均算出*/
+	if (frame_count_ == FPS_MAX - 1)
+	{
+		frame_ave_ = 0;
+		ltime_ave_ = 0;
+		wtime_ave_ = 0;
+		for (int i = 0; i < FPS_MAX; i++)
+		{
+			frame_ave_ += frame_[i];
+			ltime_ave_ += ltime_[i];
+			wtime_ave_ += wtime_[i];
+		}
+		frame_ave_ = frame_ave_ / FPS_MAX;
+		ltime_ave_ = ltime_ave_ / FPS_MAX;
+		wtime_ave_ = wtime_ave_ / FPS_MAX;
+	}
+
+	ltime_[frame_count_] = GetNowCount() - prev_time_;
+	/*wait処理*/
+	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
+	if (0 < wtime_[frame_count_])
+		Sleep(wtime_[frame_count_]);
+	frame_[frame_count_] = GetNowCount() - prev_time_;
+	prev_time_ = GetNowCount();
+}

@@ -4,6 +4,7 @@
 #include "NyaString.h"
 #include <tuple>
 
+#define __DEBUG__
 
 using namespace std;
 using namespace H2NLIB;
@@ -18,7 +19,7 @@ NyaGraphic::NyaGraphic()
 	if (first_call) {
 		swing_x_ = 0;
 		swing_y_ = 0;
-		NyaString::SettingFont("image", 15, 2);
+		NyaString::SettingFont("debug_image_font", 15, 2);
 		first_call = false;
 	}
 
@@ -31,8 +32,8 @@ NyaGraphic::~NyaGraphic()
 }
 
 /**
-画像ロード関数
-@param filepass ファイルパス
+@brief 画像ロード関数
+@param file_pass ファイルパス
 @return 画像ファイルの識別ID
 **/
 int NyaGraphic::LoadFile(std::string file_pass)
@@ -67,41 +68,40 @@ int NyaGraphic::LoadFile(std::string file_pass)
 }
 
 /**
-分割画像ロード関数
-@param xnum x軸方向分割数
-@param ynum y軸方向分割数
-@param xsize x軸方向分割サイズ
-@param ysize y軸方向分割サイズ
-@param filename ファイル名
+@brief 分割画像ロード関数
+@param div_x x軸方向分割数
+@param div_y y軸方向分割数
+@param size_x x軸方向分割サイズ
+@param size_y y軸方向分割サイズ
+@param file_pass ファイルパス
 @return 画像ファイルの識別ID (ロード失敗のとき-1)
 @note 
  xnum と ynum には自然数を入力する。
  xnum * ynum が512以上になる値はロードできない。
 **/
-int NyaGraphic::LoadFile(int xnum, int ynum, int xsize, int ysize, std::string file_pass)
+int NyaGraphic::LoadFile(int div_x, int div_y, int size_x, int size_y, string file_pass)
 {
-	GraphicFileSet file_set;
+	static GraphicFileSet file_set;
 	static int file_id[512] = {};
 
-	if (512 <= xnum * ynum)
+	if (512 <= div_x * div_y)
 		return -1;
-	if (xnum <= 0 || ynum <= 0)
+	if (size_x <= 0 || size_y <= 0)
 		return -1;
 
-	file_set.div_max_ = xnum * ynum - 1;
-	LoadDivGraph(file_pass.c_str(), xnum * ynum, xnum, ynum, xsize, ysize, file_id);
-	for (int i = 0; i< xnum * ynum; i++)
-		file_set.div_vector_.push_back(file_id[i]);
-	file_set.div_x_ = xnum - 1;
-	file_set.div_y_ = ynum - 1;
-	file_set.size_x_ = xsize;
-	file_set.size_y_ = ysize;
-	
 	file_vector_.push_back(file_set);
-	return (int)(file_vector_.size() - 1);
+	LoadDivGraph(file_pass.c_str(), div_x * div_y, div_x, div_y, size_x, size_y, file_id);
+	for (int i = 0; i < div_x * div_y; i++)
+		file_vector_.back().div_vector_.push_back(file_id[i]);
 
-
-	return 0;
+	file_vector_.back().div_max_ = div_x * div_y - 1;
+	file_vector_.back().div_x_ = size_x;
+	file_vector_.back().div_y_ = size_y;
+	file_vector_.back().file_pass_ = file_pass;
+	file_vector_.back().size_x_ = size_x;
+	file_vector_.back().size_y_ = size_y;
+	
+	return ((int)file_vector_.size() - 1);
 }
 
 
@@ -152,20 +152,48 @@ DXLIB DrawRotaGraph() に対応。
 **/
 void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 {
-	GraphicPropertyX4 gpx4 = *gpx;
+	layer_vector_.at(gpx->object_group_).gpx4_deque_.push_back(*gpx);
+}
 
-	layer_vector_.at(gpx->object_group_).gpx4_deque_.push_back(gpx4);
+
+/**
+画像描画関数5
+@param *gpx セットするプロパティ
+@return なし
+@note
+DXLIB DrawRotaGraph() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX5 *gpx)
+{
+	layer_vector_.at(gpx->object_group_).gpx5_deque_.push_back(*gpx);
+}
+
+
+/**
+画像描画関数1b
+@param *gpx プロパティ
+@return なし
+@note
+DXLIB DrawGraph(), DXLIB SetDrawBlendMode() に対応。
+ただし、重い処理なので多用するときは注意。
+**/
+void NyaGraphic::Draw(GraphicPropertyX1b *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx1b_deque_.push_back(*gpx);
 }
 
 
 void NyaGraphic::Run(void)
 {
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
-	NyaString::Write("image", color, 50, 90, "(50, 90) image = %d", (int)layer_vector_.at(eOBJECT::GROUP::USER_ATTACK1).gpx4_deque_.size());
-	NyaString::Write("image", color, 50, 230, "(50, 230) file_vec.size = %d", (int)file_vector_.size());
 
 	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
 		DrawAll((eOBJECT::GROUP)group, true);
+
+#ifdef __DEBUG__
+	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
+#endif
+
 }
 
 
@@ -189,6 +217,7 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, bool swing)
 	GraphicPropertyX3b* gpx3b;
 	GraphicPropertyX4b* gpx4b;
 	GraphicPropertyX5b* gpx5b;
+	GraphicPropertyX6b* gpx6b;
 
 	int swing_x = 0;
 	int swing_y = 0;
@@ -257,62 +286,56 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, bool swing)
 			file_vector_[gpx8->file_id_].div_vector_[gpx8->file_div_], gpx8->flag_trans_, gpx8->flag_turn_);
 		layer_vector_.at(layer).gpx8_deque_.pop_front();
 	}
-	if (!layer_vector_.at(layer).gpx1b_deque_.empty()) {
-		gpx1b = &layer_vector_.at(layer).gpx1b_deque_.front();
-		SetDrawBlendMode(gpx1b->blend_mode_, gpx1b->blend_alpha_);
-	}
 	while (!layer_vector_.at(layer).gpx1b_deque_.empty()) {
 		gpx1b = &layer_vector_.at(layer).gpx1b_deque_.front();
+		SetDrawBlendMode(gpx1b->blend_mode_, gpx1b->blend_alpha_);
 		DrawGraph(gpx1b->pos_x_ + swing_x, gpx1b->pos_y_ + swing_y, 
 			file_vector_[gpx1b->file_id_].div_vector_[gpx1b->file_div_], gpx1b->flag_trans_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx1b_deque_.pop_front();
-	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	if (!layer_vector_.at(layer).gpx2b_deque_.empty()) {
-		gpx2b = &layer_vector_.at(layer).gpx2b_deque_.front();
-		SetDrawBlendMode(gpx2b->blend_mode_, gpx2b->blend_alpha_);
 	}
 	while (!layer_vector_.at(layer).gpx2b_deque_.empty()) {
 		gpx2b = &layer_vector_.at(layer).gpx2b_deque_.front();
+		SetDrawBlendMode(gpx2b->blend_mode_, gpx2b->blend_alpha_);
 		DrawTurnGraph(gpx2b->pos_x_ + swing_x, gpx2b->pos_y_ + swing_y,
 			file_vector_[gpx2b->file_id_].div_vector_[gpx2b->file_div_], gpx2b->flag_trans_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx2b_deque_.pop_front();
-	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	if (!layer_vector_.at(layer).gpx3b_deque_.empty()) {
-		gpx3b = &layer_vector_.at(layer).gpx3b_deque_.front();
-		SetDrawBlendMode(gpx3b->blend_mode_, gpx3b->blend_alpha_);
 	}
 	while (!layer_vector_.at(layer).gpx3b_deque_.empty()) {
 		gpx3b = &layer_vector_.at(layer).gpx3b_deque_.front();
+		SetDrawBlendMode(gpx3b->blend_mode_, gpx3b->blend_alpha_);
 		DrawExtendGraph(gpx3b->pos_x1_ + swing_x, gpx3b->pos_y1_+ swing_y,
 			gpx3b->pos_x2_ + swing_x, gpx3b->pos_y2_ + swing_y, 
 			file_vector_[gpx3b->file_id_].div_vector_[gpx3b->file_div_], gpx3b->flag_trans_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx3b_deque_.pop_front();
-	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	if (!layer_vector_.at(layer).gpx4b_deque_.empty()) {
-		gpx4b = &layer_vector_.at(layer).gpx4b_deque_.front();
-		SetDrawBlendMode(gpx4b->blend_mode_, gpx4b->blend_alpha_);
 	}
 	while (!layer_vector_.at(layer).gpx4b_deque_.empty()) {
 		gpx4b = &layer_vector_.at(layer).gpx4b_deque_.front();
+		SetDrawBlendMode(gpx4b->blend_mode_, gpx4b->blend_alpha_);
 		DrawRotaGraph(gpx4b->pos_cx_ + swing_x, gpx4b->pos_cy_ + swing_y, gpx4b->extend_rate_, gpx4b->draw_angle_,
 			file_vector_[gpx4b->file_id_].div_vector_[gpx4b->file_div_], gpx4b->flag_trans_, gpx4b->flag_turn_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx4b_deque_.pop_front();
-	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	if (!layer_vector_.at(layer).gpx5b_deque_.empty()) {
-		gpx5b = &layer_vector_.at(layer).gpx5b_deque_.front();
-		SetDrawBlendMode(gpx5b->blend_mode_, gpx5b->blend_alpha_);
 	}
 	while (!layer_vector_.at(layer).gpx5b_deque_.empty()) {
 		gpx5b = &layer_vector_.at(layer).gpx5b_deque_.front();
+		SetDrawBlendMode(gpx5b->blend_mode_, gpx5b->blend_alpha_);
 		DrawRotaGraph2(gpx5b->pos_x_ + swing_x, gpx5b->pos_y_ + swing_y, 
 			gpx5b->pos_cx_ + swing_x, gpx5b->pos_cy_ + swing_y, gpx5b->extend_rate_, gpx5b->draw_angle_, 
 			file_vector_[gpx5b->file_id_].div_vector_[gpx5b->file_div_], gpx5b->flag_trans_, gpx5b->flag_turn_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx5b_deque_.pop_front();
 	}
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	while (!layer_vector_.at(layer).gpx6b_deque_.empty()) {
+		gpx6b = &layer_vector_.at(layer).gpx6b_deque_.front();
+		SetDrawBlendMode(gpx6b->blend_mode_, gpx6b->blend_alpha_);
+		DrawRotaGraph3(gpx6b->pos_x_ + swing_x, gpx6b->pos_y_ + swing_y, 
+			gpx6b->pos_cx_ + swing_x, gpx6b->pos_cy_ + swing_y, gpx6b->extend_ratex_, gpx6b->extend_ratey_, gpx6b->draw_angle_,
+			file_vector_[gpx6b->file_id_].div_vector_[gpx6b->file_div_], gpx6b->flag_trans_, gpx6b->flag_turn_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		layer_vector_.at(layer).gpx6b_deque_.pop_front();
+	}
 }
 

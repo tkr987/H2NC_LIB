@@ -47,22 +47,16 @@ void NyaPosition::Run(void)
 {
 	vector<eOBJECT::GROUP>::iterator find_it1;
 	vector<eOBJECT::GROUP>::iterator find_it2;
-	tuple<int, int, int> color = make_tuple(255, 255, 255);
-
-	NyaString::Write("debug", color, 50, 150, "[50, 150] collision_group_vector = %d", (int)collision_group_vector_.size());
-	NyaString::Write("debug", color, 50, 170, "[50, 170] collision_vector[TARGET_ATTACK1] = %d", (int)collision_vector_[eOBJECT::GROUP::TARGET_ATTACK1].size());
-	NyaString::Write("debug", color, 50, 190, "[50, 190] collision_vector[USER1] = %d", (int)collision_vector_[eOBJECT::GROUP::USER1].size());
 
 	// Õ“Ë”»’è
-	//d_ = 0;
 	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
 
 		find_it1 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->first);
 		find_it2 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->second);
 		if (find_it1 != collision_high_accuracy_group_vector_.end()) {
-		//	JudgeCollisionHighAccuracy(it->first, it->second);		
+			JudgeCollisionHighAccuracy(it->first, it->second);		
 		} else if (find_it2 != collision_high_accuracy_group_vector_.end()){
-		//	JudgeCollisionHighAccuracy(it->second, it->first);
+			JudgeCollisionHighAccuracy(it->second, it->first);
 		}else{
 			JudgeCollision(it->first, it->second);
 		}

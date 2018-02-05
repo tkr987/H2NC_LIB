@@ -10,14 +10,14 @@ namespace H2NLIB {
 
 
 	struct PositionHandleX {
+		double collision_pow_;
+		double collision_range_;
 		double health_max_;
 		double health_now_;
-		double pow_;
-		double range_;
-		double x_;
-		double x_pre_;
-		double y_;
-		double y_pre_;
+		double grid_x_;
+		double grid_x_pre_;
+		double grid_y_;
+		double grid_y_pre_;
 	};
 
 	class NyaPosition {

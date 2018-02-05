@@ -19,8 +19,8 @@ namespace H2NLIB {
 
 	struct EffectPropertyX {
 		int setting_id_;
-		int pos_x_;
-		int pos_y_;
+		int grid_x_;
+		int grid_y_;
 	};
 
 

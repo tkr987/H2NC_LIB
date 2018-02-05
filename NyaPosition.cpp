@@ -125,9 +125,9 @@ void NyaPosition::JudgeCollision(eOBJECT::GROUP object_group1, eOBJECT::GROUP ob
 		for (auto it2 = collision_vector_[object_group2].begin(); it2 != collision_vector_[object_group2].end(); ++it2) {
 			
 			// pow()‚µ‚Ä‚é‚Ì‚Åabs()‚Í•s—v
-			if (pow((*it1)->x_ - (*it2)->x_, 2.0) + pow((*it1)->y_ - (*it2)->y_, 2.0) < pow((*it1)->range_ + (*it2)->range_, 2.0)) {
-				(*it1)->health_now_ -= (*it2)->pow_;
-				(*it2)->health_now_ -= (*it1)->pow_;
+			if (pow((*it1)->grid_x_ - (*it2)->grid_x_, 2.0) + pow((*it1)->grid_y_ - (*it2)->grid_y_, 2.0) < pow((*it1)->collision_range_ + (*it2)->collision_range_, 2.0)) {
+				(*it1)->health_now_ -= (*it2)->collision_pow_;
+				(*it2)->health_now_ -= (*it1)->collision_pow_;
 			}
 		}
 	}
@@ -142,26 +142,26 @@ void NyaPosition::JudgeCollisionHighAccuracy(eOBJECT::GROUP object_group1, eOBJE
 	for (auto it1 = collision_vector_[object_group1].begin(); it1 != collision_vector_[object_group1].end(); ++it1) {	
 		for (auto it2 = collision_vector_[object_group2].begin(); it2 != collision_vector_[object_group2].end(); ++it2) {
 
-			a = ((*it1)->y_ - (*it1)->y_pre_) /  ((*it1)->x_ - (*it1)->x_pre_);
+			a = ((*it1)->grid_y_ - (*it1)->grid_y_pre_) /  ((*it1)->grid_x_ - (*it1)->grid_x_pre_);
 			b = -1;
-			c = (*it1)->y_pre_ - ((*it1)->x_pre_ * ((*it1)->y_ - (*it1)->y_pre_)) / ((*it1)->x_ - (*it1)->x_pre_);
+			c = (*it1)->grid_y_pre_ - ((*it1)->grid_x_pre_ * ((*it1)->grid_y_ - (*it1)->grid_y_pre_)) / ((*it1)->grid_x_ - (*it1)->grid_x_pre_);
 
-			distance = abs(((a * (*it2)->x_) + (b * (*it2)->y_) + c)) / sqrt(pow(a,2) + pow(b,2));
+			distance = abs(((a * (*it2)->grid_x_) + (b * (*it2)->grid_y_) + c)) / sqrt(pow(a,2) + pow(b,2));
 
 
-			if ((*it2)->x_ < (*it1)->x_ && (*it2)->x_ < (*it1)->x_pre_)
+			if ((*it2)->grid_x_ < (*it1)->grid_x_ && (*it2)->grid_x_ < (*it1)->grid_x_pre_)
 				continue;
-			if ((*it1)->x_ < (*it2)->x_ && (*it1)->x_pre_ < (*it2)->x_)
+			if ((*it1)->grid_x_ < (*it2)->grid_x_ && (*it1)->grid_x_pre_ < (*it2)->grid_x_)
 				continue;
-			if ((*it2)->y_ < (*it1)->y_ && (*it2)->y_ < (*it1)->y_pre_)
+			if ((*it2)->grid_y_ < (*it1)->grid_y_ && (*it2)->grid_y_ < (*it1)->grid_y_pre_)
 				continue;
-			if ((*it1)->y_ < (*it2)->y_ && (*it1)->y_pre_ < (*it2)->y_)
+			if ((*it1)->grid_y_ < (*it2)->grid_y_ && (*it1)->grid_y_pre_ < (*it2)->grid_y_)
 				continue;
 
-			if(distance < (*it1)->range_+ (*it2)->range_) {
+			if(distance < (*it1)->collision_range_+ (*it2)->collision_range_) {
 	
-				(*it1)->health_now_ -= (*it2)->pow_;
-				(*it2)->health_now_ -= (*it1)->pow_;
+				(*it1)->health_now_ -= (*it2)->collision_pow_;
+				(*it2)->health_now_ -= (*it1)->collision_pow_;
 			}
 		}
 	}

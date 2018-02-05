@@ -152,6 +152,7 @@ DXLIB DrawRotaGraph() ‚É‘Î‰žB
 **/
 void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 {
+	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
 	layer_vector_.at(gpx->object_group_).gpx4_deque_.push_back(*gpx);
 }
 
@@ -165,6 +166,7 @@ DXLIB DrawRotaGraph() ‚É‘Î‰žB
 **/
 void NyaGraphic::Draw(GraphicPropertyX5 *gpx)
 {
+	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
 	layer_vector_.at(gpx->object_group_).gpx5_deque_.push_back(*gpx);
 }
 

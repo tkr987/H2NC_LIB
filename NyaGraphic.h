@@ -272,9 +272,11 @@ namespace H2NLIB {
 		int count_;
 		int swing_x_;
 		int swing_y_;
-		void DrawAll(eOBJECT::GROUP, bool);
 		static std::vector<GraphicFileSet> file_vector_;
 		static std::vector<DrawDequeSet> layer_vector_;
+		void DrawAll(eOBJECT::GROUP, bool);
+		double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
+		double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
 	};
 
 }

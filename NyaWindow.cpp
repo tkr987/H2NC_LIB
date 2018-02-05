@@ -43,7 +43,7 @@ int NyaWindow::Init(void)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v58");		// タイトル
+	SetMainWindowText("H2NC++LIB v59");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化

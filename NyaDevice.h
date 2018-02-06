@@ -28,11 +28,11 @@ namespace H2NLIB {
 	};
 
 	struct DeviceSetting {
-		double draw_extend_;
-		double draw_rotate_;
-		double collision_pow_;
-		double collision_range_;
-		eOBJECT::GROUP object_group_;
+		double draw_extend_;				//!< •`‰æŠg‘å—¦
+		double draw_rotate_;				//!< •`‰æŠp‘¬“x
+		double collision_pow_;				//!< Õ“ËŽž‚ÌUŒ‚—Í
+		double collision_range_;			//!< Õ“Ë”ÍˆÍ
+		eOBJECT::GROUP object_group_;		//!< ƒIƒuƒWƒFƒNƒg‚ÌƒOƒ‹[ƒvÝ’è
 	};
 
 	struct DevicePropertyX {

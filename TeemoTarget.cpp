@@ -17,12 +17,12 @@ TeemoTarget::TeemoTarget()
 
 	count_ = 0;
 
-	dpx_teemo_ = new DevicePropertyX;
-	gpx4_teemo_ = new GraphicPropertyX4;
-	phx_teemo_ = nya_position_->Create();
 	nya_device_ = new NyaDevice;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
+	dpx_teemo_ = new DevicePropertyX;
+	gpx4_teemo_ = new GraphicPropertyX4;
+	phx_teemo_ = nya_position_->Create();
 //	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
 //	nya_position_->SettingCollisionHighAccuracy(eOBJECT::GROUP::TARGET_ATTACK1);
 

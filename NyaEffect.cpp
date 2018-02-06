@@ -17,8 +17,8 @@ NyaEffect::NyaEffect()
 	nya_position_ = new NyaPosition;
 	if (first_call) {
 		wait_list_.resize(10000);
-		for (auto it = wait_list_.begin(); it != wait_list_.end(); ++it) {
-			it->phx_ = nya_position_->Create();
+		for (auto& it : wait_list_) {
+			it.phx_ = nya_position_->Create();
 		}
 		first_call = false;
 	}
@@ -55,8 +55,8 @@ void NyaEffect::Draw(EffectPropertyX* epx)
 	it->phx_->grid_y_ = epx->grid_y_;
 	it->setting_id_ = epx->setting_id_;
 
-	object_group = setting_vector_[epx->setting_id_].object_group_;
-	wait_list_.splice(draw_list_[object_group].begin(), wait_list_, it);
+	object_group = setting_vector_[it->setting_id_].object_group_;
+	draw_list_[object_group].splice(draw_list_[object_group].begin(), move(wait_list_), it);
 }
 
 /**
@@ -70,12 +70,12 @@ int NyaEffect::LoadSetting(EffectSetting* setting)
 	int vector_index = 0;
 
 	// Šù‚É“¯‚¶İ’è‚ª“o˜^‚³‚ê‚Ä‚¢‚½‚çA‚»‚Ìİ’èID‚ğ•Ô‚·
-	for (auto it = setting_vector_.begin(); it != setting_vector_.end(); ++it) {
+	for (auto& it : setting_vector_) {
 
-		if (it->effect_div_max_ == setting->effect_div_max_ && it->effect_interval_time_ == setting->effect_interval_time_ &&
-			it->effect_move_x_ == setting->effect_move_x_ && it->effect_move_y_ == setting->effect_move_y_ &&
-			it->graphic_draw_angle_ == setting->graphic_draw_angle_ && it->graphic_draw_extend_ == setting->graphic_draw_extend_ &&
-			it->graphic_file_id_ == setting->graphic_file_id_ && it->object_group_ == setting->object_group_) {
+		if (it.effect_div_max_ == setting->effect_div_max_ && it.effect_interval_time_ == setting->effect_interval_time_ &&
+			it.effect_move_x_ == setting->effect_move_x_ && it.effect_move_y_ == setting->effect_move_y_ &&
+			it.graphic_draw_angle_ == setting->graphic_draw_angle_ && it.graphic_draw_extend_ == setting->graphic_draw_extend_ &&
+			it.graphic_file_id_ == setting->graphic_file_id_ && it.object_group_ == setting->object_group_) {
 
 			return vector_index;
 		}
@@ -98,34 +98,35 @@ void NyaEffect::Run(void)
 void NyaEffect::DrawAll(eOBJECT::GROUP group)
 {
 	GraphicPropertyX4 gpx4;
-	list<Effect>::iterator it_delete;
+	list<Effect>::iterator it, it_delete;
 
 	// íœˆ—
-	for (list<Effect>::iterator it = draw_list_[group].begin(); it != draw_list_[group].end(); ++it) {
+	for (it = draw_list_[group].begin(); it != draw_list_[group].end(); ++it) {
 
-		if (setting_vector_[it->setting_id_].effect_interval_time_ * (setting_vector_[it->setting_id_].effect_div_max_ + 1) == it->count_) {
+		if (setting_vector_[it->setting_id_].effect_interval_time_ * (setting_vector_[it->setting_id_].effect_div_max_ + 1) == it->count_ - 1) {
 			it_delete = --it;
-			draw_list_[group].splice(wait_list_.begin(), draw_list_[group], ++it_delete);
+			wait_list_.splice(wait_list_.begin(), move(draw_list_[group]), ++it_delete);
 		}
 	}
 
 	// •`‰æˆ—
 	gpx4.flag_trans_ = true;
 	gpx4.flag_turn_ = false;
-	for (list<Effect>::iterator it = draw_list_[group].begin(); it != draw_list_[group].end(); ++it) {
+	for (auto& it : draw_list_[group]) {
 
-		gpx4.draw_angle_ = setting_vector_[it->setting_id_].graphic_draw_angle_;
-		gpx4.extend_rate_ = setting_vector_[it->setting_id_].graphic_draw_extend_;
-		gpx4.file_div_ = it->count_ / setting_vector_[it->setting_id_].effect_interval_time_;
-		gpx4.file_id_ = setting_vector_[it->setting_id_].graphic_file_id_;
-		gpx4.object_group_ = setting_vector_[it->setting_id_].object_group_;
-		gpx4.pos_cx_ = (int)it->phx_->grid_x_;
-		gpx4.pos_cy_ = (int)it->phx_->grid_y_;
+		gpx4.draw_angle_ = setting_vector_[it.setting_id_].graphic_draw_angle_;
+		gpx4.extend_rate_ = setting_vector_[it.setting_id_].graphic_draw_extend_;
+//		gpx4.file_div_ = it.count_ / setting_vector_[it.setting_id_].effect_interval_time_;
+		gpx4.file_div_ = 0;
+		gpx4.file_id_ = setting_vector_[it.setting_id_].graphic_file_id_;
+		gpx4.object_group_ = setting_vector_[it.setting_id_].object_group_;
+		gpx4.pos_cx_ = (int)it.phx_->grid_x_;
+		gpx4.pos_cy_ = (int)it.phx_->grid_y_;
 		nya_graphic_->Draw(&gpx4);
 
-		it->count_++;
-		it->phx_->grid_x_ += setting_vector_[it->setting_id_].effect_move_x_;
-		it->phx_->grid_y_ += setting_vector_[it->setting_id_].effect_move_y_;
+		it.count_++;
+		it.phx_->grid_x_ += setting_vector_[it.setting_id_].effect_move_x_;
+		it.phx_->grid_y_ += setting_vector_[it.setting_id_].effect_move_y_;
 	}
 
 

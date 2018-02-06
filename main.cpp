@@ -22,6 +22,7 @@
 //#include "User1b.h"
 
 // 2018年
+#include <crtdbg.h>
 #include "DxLib.h"
 #include "NyaTarget.h"
 #include "NyaUser.h"
@@ -46,7 +47,9 @@ void Target2(int inst, int lv);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-
+	//	メモリリーク検出
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	
 	H2NLIB::NyaWindow *nya_window = new H2NLIB::NyaWindow();	
 	nya_window->Init();
 

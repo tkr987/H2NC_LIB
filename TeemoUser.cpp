@@ -20,24 +20,40 @@ TeemoUser::TeemoUser()
 
 	count_ = 0;
 
-	gpx4_teemo_ = new GraphicPropertyX4;
 	nya_device_ = new NyaDevice;
 	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
+	dpx_teemo_ = new DevicePropertyX;
+	epx_teemo_ = new EffectPropertyX;
+	gpx4_teemo_ = new GraphicPropertyX4;
+	phx_teemo_ = nya_position_->Create();
 	nya_position_->SettingCollision(eOBJECT::GROUP::USER_ATTACK1, eOBJECT::GROUP::TARGET1);
 	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
 
-	// gpx 設定
-	//gpx4_teemo_->draw_angle_ = 0;
-	//gpx4_teemo_->extend_rate_ = 1.0;
-	//gpx4_teemo_->file_div_ = 0;
-	//gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("teemo.png");
-	//gpx4_teemo_->flag_trans_ = true;
-	//gpx4_teemo_->flag_turn_ = false;
-	//gpx4_teemo_->object_group_ = eOBJECT::GROUP::USER1;
+	// デバイスとプロパティの設定
+	device_setting.collision_pow_ = 1;
+	device_setting.collision_range_ = 3.0;
+	device_setting.draw_extend_ = 1.0;
+	device_setting.draw_rotate_ = 0.0;
+	device_setting.object_group_ = eOBJECT::GROUP::USER_ATTACK1;
+	dpx_teemo_->device_setting_id_ = nya_device_->LoadSetting(&device_setting);
+	// エフェクト追加
+	effect_setting.effect_div_max_ = 3;
+	effect_setting.effect_interval_time_ = 5;
+	effect_setting.effect_move_x_ = 0;
+	effect_setting.effect_move_y_ = 0;
+	effect_setting.graphic_draw_angle_ = 0;
+	effect_setting.graphic_draw_extend_ = 1.0;
+	effect_setting.graphic_file_id_ = nya_graphic_->LoadFile(4, 1, 64, 64, "img/teemo_user_attack_effect.png");
+	effect_setting.object_group_ = eOBJECT::GROUP::USER_ATTACK_EFFECT1;
+	effect_setting_id = nya_effect_->LoadSetting(&effect_setting);
+	nya_device_->SetEffect(effect_setting_id);
+	// 画像追加
+	graphic_file_id = nya_graphic_->LoadFile("img/teemo_user_attack.png");
+	nya_device_->SetGraphic(graphic_file_id, 0);
 
-	epx_teemo_ = new EffectPropertyX;
+	// NyaEffectとプロパティの設定
 	effect_setting.effect_div_max_ = 7;
 	effect_setting.effect_interval_time_ = 10;
 	effect_setting.effect_move_x_ = 0;
@@ -56,9 +72,7 @@ TeemoUser::TeemoUser()
 	gpx4_teemo_->flag_turn_ = false;
 	gpx4_teemo_->object_group_ = eOBJECT::GROUP::USER1;
 
-
-	// phx 設定
-	phx_teemo_ = nya_position_->Create();
+	// NyaPositionプロパティの設定
 	phx_teemo_->health_max_ = 100;
 	phx_teemo_->health_now_ = 100;
 	phx_teemo_->collision_pow_ = 1;
@@ -66,28 +80,7 @@ TeemoUser::TeemoUser()
 	phx_teemo_->grid_x_ = 100;
 	phx_teemo_->grid_y_ = 500;
 
-	// デバイスとプロパティの設定
-	dpx_teemo_ = new DevicePropertyX;
-	device_setting.collision_pow_ = 1;
-	device_setting.collision_range_ = 3.0;
-	device_setting.draw_extend_ = 1.0;
-	device_setting.draw_rotate_ = 0.0;
-	device_setting.object_group_ = eOBJECT::GROUP::USER_ATTACK1;
-	dpx_teemo_->device_setting_id_ = nya_device_->LoadSetting(&device_setting);
 
-	effect_setting.effect_div_max_ = 3;
-	effect_setting.effect_interval_time_ = 5;
-	effect_setting.effect_move_x_ = 0;
-	effect_setting.effect_move_y_ = 0;
-	effect_setting.graphic_draw_angle_ = 0;
-	effect_setting.graphic_draw_extend_ = 1.0;
-	effect_setting.graphic_file_id_ = nya_graphic_->LoadFile(4, 1, 64, 64, "img/teemo_user_attack_effect.png");
-	effect_setting.object_group_ = eOBJECT::GROUP::USER_ATTACK_EFFECT1;
-	effect_setting_id = nya_effect_->LoadSetting(&effect_setting);
-	nya_device_->SetEffect(effect_setting_id);
-
-	graphic_file_id = nya_graphic_->LoadFile("img/teemo_user_attack.png");
-	nya_device_->SetGraphic(graphic_file_id, 0);
 
 	// デバッグ
 	NyaString::SettingFont("teemo_font", 10, 2);
@@ -97,6 +90,7 @@ TeemoUser::TeemoUser()
 TeemoUser::~TeemoUser()
 {
 	delete nya_device_;
+	delete nya_effect_;
 	delete nya_graphic_;
 	delete nya_position_;
 	delete dpx_teemo_;
@@ -163,7 +157,7 @@ void TeemoUser::Draw(void)
 	if (count_ % 200 == 0) {
 		epx_teemo_->grid_x_ = 500;
 		epx_teemo_->grid_y_ = 500;
-		nya_effect_->Draw(epx_teemo_);
+//		nya_effect_->Draw(epx_teemo_);
 	}
 
 }

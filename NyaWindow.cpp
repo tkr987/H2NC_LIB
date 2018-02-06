@@ -37,9 +37,6 @@ NyaWindow::~NyaWindow()
 
 int NyaWindow::Init(void)
 {
-	//	メモリリーク検出
-	//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-
 	// *****************
 	//  dxlib初期化
 	// *****************
@@ -56,11 +53,13 @@ int NyaWindow::Init(void)
 	// DXLIB初期化後にインスタンスを生成する必要がある。
 	nya_device_ = new NyaDevice;
 	nya_design_ = new NyaDesign;
+	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
 	nya_posision_ = new NyaPosition;
 
 	// 変数初期化
 	set_user_ = false;
+	set_target_ = false;
 	
 	// 設定
 	NyaString::SettingFont("debug_window_font", 10, 2);
@@ -119,62 +118,4 @@ void NyaWindow::SetUser(NyaUser* user)
 	nya_user_ = user;
 	set_user_ = true;
 }
-
-/**
-@param FPS更新関数
-@note
-**/
-//void NyaWindow::FpsUpdater(void)
-//{
-//
-//	static	int frame_ave_ = 0;					//フレームレート平均
-//	static	int wtime_ave_ = 0;					//wait時間平均
-//	static	int ltime_ave_ = 0;					//loop時間平均
-//	static	int frame_[FPS_MAX] = {};			//フレームレート
-//	static	int ltime_[FPS_MAX] = {};			//loop時間
-//	static	int wtime_[FPS_MAX] = {};			//wait時間
-//	static	int prev_time_ = 0;					//1フレーム前の時間
-//	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
-//	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
-//
-//
-//#ifdef __DEBUG__
-////	DebugPrint::SetData(615, 220, "frames_: %d", fpsall++);
-//	if (frame_ave_ != 0) {
-//		DebugPrint::SetData(1180, 660, "fps[%.1f]", 1000.0 / (double)frame_ave_);
-//		DebugPrint::SetData(1180, 680, "loop[%dms]", ltime_ave_);
-//		DebugPrint::SetData(1180, 700, "wait[%dms]", wtime_ave_);
-//	}
-//#else
-//	if (frame_ave_ != 0)
-//		DebugPrint::SetData(1200, 700, "fps[%.1f]", 1000.0 / (double)frame_ave_);
-//#endif
-//
-//
-//	frame_count_ = ++all_frame_count_ % FPS_MAX;
-//	/*平均算出*/
-//	if (frame_count_ == FPS_MAX - 1)
-//	{
-//		frame_ave_ = 0;
-//		ltime_ave_ = 0;
-//		wtime_ave_ = 0;
-//		for (int i = 0; i < FPS_MAX; i++)
-//		{
-//			frame_ave_ += frame_[i];
-//			ltime_ave_ += ltime_[i];
-//			wtime_ave_ += wtime_[i];
-//		}
-//		frame_ave_ = frame_ave_ / FPS_MAX;
-//		ltime_ave_ = ltime_ave_ / FPS_MAX;
-//		wtime_ave_ = wtime_ave_ / FPS_MAX;
-//	}
-//
-//	ltime_[frame_count_] = GetNowCount() - prev_time_;
-//	/*wait処理*/
-//	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
-//	if (0 < wtime_[frame_count_])
-//		Sleep(wtime_[frame_count_]);
-//	frame_[frame_count_] = GetNowCount() - prev_time_;
-//	prev_time_ = GetNowCount();
-//}
 

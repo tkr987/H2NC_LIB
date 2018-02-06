@@ -13,12 +13,7 @@ list<PositionHandleX> NyaPosition::create_list_;
 
 NyaPosition::NyaPosition()
 {
-	static bool first_call = true;
 
-	if (first_call) {
-		NyaString::SettingFont("debug", 10, 2);
-		first_call = false;
-	}
 }
 
 
@@ -36,7 +31,7 @@ void NyaPosition::Collision(PositionHandleX* phx, eOBJECT::GROUP group)
 
 PositionHandleX* NyaPosition::Create(void) 
 {
-	static PositionHandleX phx;
+	PositionHandleX phx;
 
 	create_list_.insert(create_list_.begin(), phx);
 
@@ -85,10 +80,10 @@ void NyaPosition::SettingCollision(eOBJECT::GROUP group1, eOBJECT::GROUP group2)
 	pair<eOBJECT::GROUP, eOBJECT::GROUP> set;
 
 	// すでに同じオブジェクトグループが設定されてたら何もしないで終了
-	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
-		if (it->first == group1 && it->second == group2)
+	for (auto& it : collision_group_vector_) {
+		if (it.first == group1 && it.second == group2)
 			return;
-		if (it->first == group2 && it->second == group1)
+		if (it.first == group2 && it.second == group1)
 			return;
 	}
 

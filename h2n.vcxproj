@@ -1,0 +1,307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CA0A015D-6D73-432E-97C0-DDF3FA3A072A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>h2n</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\data\tools\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\data\prog_tools\DxLib;C:\DxLibNoneModel_NoneSoftDrawCode_VC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\data\tools\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\data\prog_tools\DxLib;C:\DxLibNoneModel_NoneSoftDrawCode_VC;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\takahiro\OneDrive\happy2nya\DxLib_VC\プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\takahiro\OneDrive\happy2nya\DxLib_VC\プロジェクトに追加すべきファイル_VC用;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\data\tools\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\data\prog_tools\DxLib;C:\DxLibNoneModel_NoneSoftDrawCode_VC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\data\tools\DxLib_VC\プロジェクトに追加すべきファイル_VC用;C:\data\prog_tools\DxLib;C:\DxLibNoneModel_NoneSoftDrawCode_VC;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Users\takahiro\OneDrive\happy2nya\DxLib_VC\プロジェクトに追加すべきファイル_VC用;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\takahiro\OneDrive\happy2nya\DxLib_VC\プロジェクトに追加すべきファイル_VC用;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Boss3OXA48.cpp" />
+    <ClCompile Include="Boss4MDRTB.cpp" />
+    <ClCompile Include="NyaDevice.cpp" />
+    <ClCompile Include="NyaDesign.cpp" />
+    <ClCompile Include="NyaEffect.cpp" />
+    <ClCompile Include="NyaGraphic.cpp" />
+    <ClCompile Include="NyaInput.cpp" />
+    <ClCompile Include="NyaMission.cpp" />
+    <ClCompile Include="NyaPosition.cpp" />
+    <ClCompile Include="NyaString.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Stage1.cpp" />
+    <ClCompile Include="StageSound.cpp" />
+    <ClCompile Include="StageContinue.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Sample.cpp" />
+    <ClCompile Include="NyaWindow.cpp" />
+    <ClCompile Include="Target1Denso.cpp" />
+    <ClCompile Include="Target3Arena.cpp" />
+    <ClCompile Include="ArmsManager.cpp" />
+    <ClCompile Include="ArmsUpdater.cpp" />
+    <ClCompile Include="DebugPrint.cpp" />
+    <ClCompile Include="DesignManager.cpp" />
+    <ClCompile Include="DesignUpdater.cpp" />
+    <ClCompile Include="EffectManager.cpp" />
+    <ClCompile Include="EffectUpdater.cpp" />
+    <ClCompile Include="FpsManager.cpp" />
+    <ClCompile Include="FpsUpdater.cpp" />
+    <ClCompile Include="ImgManager.cpp" />
+    <ClCompile Include="ImgUpdater.cpp" />
+    <ClCompile Include="KeyManager.cpp" />
+    <ClCompile Include="KeyUpdater.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="PosManager.cpp" />
+    <ClCompile Include="PosUpdater.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SoundUpdater.cpp" />
+    <ClCompile Include="Target.cpp" />
+    <ClCompile Include="StageTarget.cpp" />
+    <ClCompile Include="Target1Anello.cpp" />
+    <ClCompile Include="Target3Asfar.cpp" />
+    <ClCompile Include="Target1Erythro.cpp" />
+    <ClCompile Include="Target2.cpp" />
+    <ClCompile Include="Target2Colti.cpp" />
+    <ClCompile Include="Boss1MRAB.cpp" />
+    <ClCompile Include="Target3Bunya.cpp" />
+    <ClCompile Include="Target3Corona.cpp" />
+    <ClCompile Include="Target1Picorna.cpp" />
+    <ClCompile Include="Target1Virga.cpp" />
+    <ClCompile Include="Target1Sipho.cpp" />
+    <ClCompile Include="Target2Seadma.cpp" />
+    <ClCompile Include="Target3.cpp" />
+    <ClCompile Include="Target3Filo.cpp" />
+    <ClCompile Include="Target3Rhabdo.cpp" />
+    <ClCompile Include="Target4.cpp" />
+    <ClCompile Include="Target4Borna.cpp" />
+    <ClCompile Include="Target4Caulimo.cpp" />
+    <ClCompile Include="Target4Denso.cpp" />
+    <ClCompile Include="Target4Hepadna.cpp" />
+    <ClCompile Include="Target4Retro.cpp" />
+    <ClCompile Include="TeemoDesign.cpp" />
+    <ClCompile Include="TeemoTarget.cpp" />
+    <ClCompile Include="TeemoUser.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="User1.cpp" />
+    <ClCompile Include="User1b.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArmsManager.h" />
+    <ClInclude Include="ArmsUpdater.h" />
+    <ClInclude Include="Boss3OXA48.h" />
+    <ClInclude Include="Boss4MDRTB.h" />
+    <ClInclude Include="Design.h" />
+    <ClInclude Include="NyaDevice.h" />
+    <ClInclude Include="NyaDebugPrint.h" />
+    <ClInclude Include="NyaDefine.h" />
+    <ClInclude Include="NyaDesign.h" />
+    <ClInclude Include="NyaEffect.h" />
+    <ClInclude Include="NyaGraphic.h" />
+    <ClInclude Include="NyaInput.h" />
+    <ClInclude Include="NyaMission.h" />
+    <ClInclude Include="NyaPosition.h" />
+    <ClInclude Include="NyaString.h" />
+    <ClInclude Include="NyaTarget.h" />
+    <ClInclude Include="NyaUser.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Stage1.h" />
+    <ClInclude Include="StageSound.h" />
+    <ClInclude Include="StageContinue.h" />
+    <ClInclude Include="StageTarget.h" />
+    <ClInclude Include="NyaWindow.h" />
+    <ClInclude Include="Target1Denso.h" />
+    <ClInclude Include="Target4Borna.h" />
+    <ClInclude Include="Target4Caulimo.h" />
+    <ClInclude Include="DebugPrint.h" />
+    <ClInclude Include="DefineNH.h" />
+    <ClInclude Include="DesignManager.h" />
+    <ClInclude Include="DesignUpdater.h" />
+    <ClInclude Include="EffectManager.h" />
+    <ClInclude Include="EffectUpdater.h" />
+    <ClInclude Include="FpsManager.h" />
+    <ClInclude Include="FpsUpdater.h" />
+    <ClInclude Include="ImgManager.h" />
+    <ClInclude Include="ImgUpdater.h" />
+    <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="KeyUpdater.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Object.h" />
+    <ClInclude Include="PosManager.h" />
+    <ClInclude Include="PosUpdater.h" />
+    <ClInclude Include="Result.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SoundUpdater.h" />
+    <ClInclude Include="Target.h" />
+    <ClInclude Include="Target1Anello.h" />
+    <ClInclude Include="Target3Arena.h" />
+    <ClInclude Include="Target3Asfar.h" />
+    <ClInclude Include="Target1Erythro.h" />
+    <ClInclude Include="Target2Colti.h" />
+    <ClInclude Include="Boss1MRAB.h" />
+    <ClInclude Include="Target3Bunya.h" />
+    <ClInclude Include="Target3Corona.h" />
+    <ClInclude Include="Target1Picorna.h" />
+    <ClInclude Include="Target1Virga.h" />
+    <ClInclude Include="Target1Sipho.h" />
+    <ClInclude Include="Target2Seadma.h" />
+    <ClInclude Include="Target3.h" />
+    <ClInclude Include="Target3Filo.h" />
+    <ClInclude Include="Target3Rhabdo.h" />
+    <ClInclude Include="Target4.h" />
+    <ClInclude Include="Target4Denso.h" />
+    <ClInclude Include="Target4Hepadna.h" />
+    <ClInclude Include="Target4Retro.h" />
+    <ClInclude Include="TargetBase.h" />
+    <ClInclude Include="Target0Sample.h" />
+    <ClInclude Include="TeemoTarget.h" />
+    <ClInclude Include="TeemoUser.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="User1.h" />
+    <ClInclude Include="User1b.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

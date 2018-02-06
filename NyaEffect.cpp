@@ -15,11 +15,11 @@ NyaEffect::NyaEffect()
 
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
+
 	if (first_call) {
 		wait_list_.resize(10000);
-		for (auto& it : wait_list_) {
+		for (auto& it : wait_list_)
 			it.phx_ = nya_position_->Create();
-		}
 		first_call = false;
 	}
 }

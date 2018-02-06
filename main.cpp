@@ -53,10 +53,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	H2NLIB::NyaWindow *nya_window = new H2NLIB::NyaWindow();	
 	nya_window->Init();
 
-	H2NLIB::NyaUser* teemo_user = new TeemoUser;
+//	H2NLIB::NyaUser* teemo_user = new TeemoUser;
 	H2NLIB::NyaTarget* teemo_target = new TeemoTarget;
 
-	nya_window->SetUser(teemo_user);
+//	nya_window->SetUser(teemo_user);
 	nya_window->SetTarget(teemo_target);
 
 	TeemoDesign();
@@ -65,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 	delete teemo_target;
-	delete teemo_user;
+//	delete teemo_user;
 	delete nya_window;
 	return 0;
 

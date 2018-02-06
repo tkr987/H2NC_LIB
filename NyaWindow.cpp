@@ -53,7 +53,7 @@ int NyaWindow::Init(void)
 	// DXLIB初期化後にインスタンスを生成する必要がある。
 	nya_device_ = new NyaDevice;
 	nya_design_ = new NyaDesign;
-	nya_effect_ = new NyaEffect;
+//	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
 	nya_posision_ = new NyaPosition;
 
@@ -71,6 +71,7 @@ int NyaWindow::Init(void)
 
 void NyaWindow::Run(void)
 {
+	int img = LoadGraph("img/teemo.png");
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	std::chrono::system_clock::time_point debug_time_start, debug_time_end;
 	long long debug_time_msec;
@@ -79,8 +80,11 @@ void NyaWindow::Run(void)
 		
 		ClearDrawScreen();
 
-		nya_device_->Run();
-		nya_effect_->Run();
+		
+		DrawGraph(100, 500, img, true);
+
+//		nya_device_->Run();
+//		nya_effect_->Run();
 
 		debug_time_start = std::chrono::system_clock::now();
 		nya_graphic_->Run();
@@ -93,10 +97,10 @@ void NyaWindow::Run(void)
 			nya_target_->Action();
 			nya_target_->Draw();
 		}
-		if (set_user_) {
-			nya_user_->Action();
-			nya_user_->Draw();
-		}
+//		if (set_user_) {
+//			nya_user_->Action();
+//			nya_user_->Draw();
+//		}
 
 		NyaInput::Run();
 		nya_design_->Run();

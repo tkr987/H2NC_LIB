@@ -157,7 +157,7 @@ void TeemoUser::Draw(void)
 	if (count_ % 200 == 0) {
 		epx_teemo_->grid_x_ = 500;
 		epx_teemo_->grid_y_ = 500;
-//		nya_effect_->Draw(epx_teemo_);
+		nya_effect_->Draw(epx_teemo_);
 	}
 
 }

@@ -9,8 +9,11 @@
 using namespace std;
 using namespace H2NLIB;
 
+int NyaGraphic::swing_x_;
+int NyaGraphic::swing_y_;
 std::vector<GraphicFileSet> NyaGraphic::file_vector_;
 std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::GROUP::sizeof_enum);
+std::vector<bool> NyaGraphic::swing_vector_(eOBJECT::GROUP::sizeof_enum);
 
 NyaGraphic::NyaGraphic()
 {
@@ -19,6 +22,8 @@ NyaGraphic::NyaGraphic()
 	if (first_call) {
 		swing_x_ = 0;
 		swing_y_ = 0;
+		for (auto& it : swing_vector_)
+			it = false;
 		NyaString::SettingFont("debug_image_font", 15, 2);
 		first_call = false;
 	}
@@ -44,9 +49,9 @@ int NyaGraphic::LoadFile(std::string file_pass)
 	static GraphicFileSet file_set;
 
 	vector_index = 0;
-	for (auto it = file_vector_.begin(); it != file_vector_.end(); ++it) {
+	for (auto& it : file_vector_) {
 
-		if (it->file_pass_ == file_pass) {
+		if (it.file_pass_ == file_pass) {
 			return vector_index;
 		}
 		vector_index++;
@@ -153,7 +158,7 @@ DXLIB DrawRotaGraph() ‚É‘Î‰žB
 void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 {
 	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
-	layer_vector_.at(gpx->object_group_).gpx4_deque_.push_back(*gpx);
+	layer_vector_[gpx->object_group_].gpx4_deque_.push_back(*gpx);
 }
 
 
@@ -189,11 +194,17 @@ void NyaGraphic::Run(void)
 {
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
 
-	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
-		DrawAll((eOBJECT::GROUP)group, true);
+	// U“®ˆ—
+	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++) {
+		if (swing_vector_[group]) {
+			DrawAll((eOBJECT::GROUP)group, swing_x_, swing_y_);
+		} else {
+			DrawAll((eOBJECT::GROUP)group, 0, 0);		
+		}
+	}
 
 #ifdef __DEBUG__
-	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
+//	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
 #endif
 
 }
@@ -204,7 +215,7 @@ void NyaGraphic::Run(void)
 @param layer •`‰æ‚·‚éƒŒƒCƒ„[
 @param swing U“®•
 **/
-void NyaGraphic::DrawAll(eOBJECT::GROUP layer, bool swing)
+void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
 {
 	GraphicPropertyX1* gpx1;
 	GraphicPropertyX2* gpx2;
@@ -220,19 +231,6 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, bool swing)
 	GraphicPropertyX4b* gpx4b;
 	GraphicPropertyX5b* gpx5b;
 	GraphicPropertyX6b* gpx6b;
-
-	int swing_x = 0;
-	int swing_y = 0;
-
-
-	if (swing) {
-		swing_x = swing_x_;
-		swing_y = swing_y_;
-	}
-
-	if (layer == eOBJECT::GROUP::USER_ATTACK1) {
-		count_ = 0;
-	}
 	
 	while (!layer_vector_.at(layer).gpx1_deque_.empty()) {
 		gpx1 = &layer_vector_.at(layer).gpx1_deque_.front();
@@ -256,7 +254,7 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, bool swing)
 	while (!layer_vector_.at(layer).gpx4_deque_.empty()) {
 		gpx4 = &layer_vector_.at(layer).gpx4_deque_.front();
 		DrawRotaGraph(gpx4->pos_cx_ + swing_x, gpx4->pos_cy_ + swing_y, gpx4->extend_rate_, gpx4->draw_angle_,
-			file_vector_.at(gpx4->file_id_).div_vector_.at(gpx4->file_div_), gpx4->flag_trans_, gpx4->flag_turn_);
+			file_vector_[gpx4->file_id_].div_vector_[gpx4->file_div_], gpx4->flag_trans_, gpx4->flag_turn_);
 		layer_vector_.at(layer).gpx4_deque_.pop_front();
 	}
 	while (!layer_vector_.at(layer).gpx5_deque_.empty()) {

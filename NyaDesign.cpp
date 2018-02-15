@@ -3,13 +3,15 @@
 #include "NyaDesign.h"
 #include "NyaInput.h"
 #include "NyaString.h"
+#include "NyaTarget.h"
 
 #define FPS_MAX 60
 #define __DEBUG__
 
-
+using namespace std;
 using namespace H2NLIB;
 
+int NyaDesign::count_mission_frame_;
 int NyaDesign::user_exp_;
 int NyaDesign::user_lv_;
 int NyaDesign::skill_exp_[4] = {};
@@ -22,6 +24,7 @@ int NyaDesign::skill_exp_next_[4][4] = {
 unsigned int NyaDesign::skill_lv_[4] = {};
 string NyaDesign::skill_name_[4];
 unsigned int NyaDesign::skill_select_;
+ePROCESS::NUM NyaDesign::process_;
 
 
 NyaDesign::NyaDesign()
@@ -59,6 +62,16 @@ void NyaDesign::AddEXP(int x)
 	skill_exp_[skill_select_] += x;
 }
 
+ePROCESS::NUM NyaDesign::GetProcess(void)
+{
+	return process_;
+}
+
+void NyaDesign::SetProcess(ePROCESS::NUM set)
+{
+	process_ = set;
+}
+
 void NyaDesign::Run(void)
 {
 	DrawBlack(850, 0);
@@ -89,32 +102,32 @@ void NyaDesign::DrawInput(int x, int y)
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 	static tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::Q))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q))
 		NyaString::Write("design_input_font", red, x, y, "Å°");
 	NyaString::Write("design_input_font", white, x, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::W))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::W))
 		NyaString::Write("design_input_font", red, x + 50, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 50, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::E))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::E))
 		NyaString::Write("design_input_font", red, x + 100, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 100, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::R))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::R))
 		NyaString::Write("design_input_font", red, x + 150, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 150, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::SPACE))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::SPACE))
 		NyaString::Write("design_input_font", red, x + 200, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 200, y, "Å†");
 
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::UP))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::UP))
 		NyaString::Write("design_input_font", red, x + 275, y -120, "Å°");
 	NyaString::Write("design_input_font", white, x + 275, y - 120, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::RIGHT))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::RIGHT))
 		NyaString::Write("design_input_font", red, x + 325, y - 70, "Å°");
 	NyaString::Write("design_input_font", white, x + 325, y - 70, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::DOWN))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::DOWN))
 		NyaString::Write("design_input_font", red, x + 275, y - 20, "Å°");
 	NyaString::Write("design_input_font", white, x + 275, y -20, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::LEFT))
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::LEFT))
 		NyaString::Write("design_input_font", red, x + 225, y - 70, "Å°");
 	NyaString::Write("design_input_font", white, x + 225, y - 70, "Å†");
 }
@@ -140,6 +153,7 @@ void NyaDesign::DrawSkill(int x, int y)
 		NyaString::Write("design_exp_font", white, x + 150, y + 90 * i + 60, "Next: %d pt", skill_exp_next_[i][0]);
 	}
 }
+
 
 /**
 @param FPSçXêVä÷êî

@@ -228,6 +228,26 @@ namespace H2NLIB {
 		eOBJECT::GROUP object_group_;
 	};
 
+	// DXLIB é©óRïœå`ï`âÊä÷êîÇ…ëŒâû
+	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
+	struct GraphicPropertyX7b {
+		int file_div_;
+		int file_id_;
+		int pos_x1_;
+		int pos_x2_;
+		int pos_x3_;
+		int pos_x4_;
+		int pos_y1_;
+		int pos_y2_;
+		int pos_y3_;
+		int pos_y4_;
+		bool flag_trans_;
+		int blend_alpha_;
+		int blend_mode_;
+		eOBJECT::GROUP object_group_;
+	};
+
 	struct GraphicFileSet {
 		int div_max_;
 		int div_x_;
@@ -253,18 +273,20 @@ namespace H2NLIB {
 		std::deque<GraphicPropertyX4b> gpx4b_deque_;
 		std::deque<GraphicPropertyX5b> gpx5b_deque_;
 		std::deque<GraphicPropertyX6b> gpx6b_deque_;
+		std::deque<GraphicPropertyX7b> gpx7b_deque_;
 	};
 
 	class NyaGraphic {
 	public:
 		NyaGraphic();
 		~NyaGraphic();
-		void Draw(GraphicPropertyX1*);
-		void Draw(GraphicPropertyX2*);
-		void Draw(GraphicPropertyX3*);
-		void Draw(GraphicPropertyX4*);
-		void Draw(GraphicPropertyX5*);
-		void Draw(GraphicPropertyX1b*);
+		void Draw(GraphicPropertyX1* gpx);
+		void Draw(GraphicPropertyX2* gpx);
+		void Draw(GraphicPropertyX3* gpx);
+		void Draw(GraphicPropertyX4* gpx);
+		void Draw(GraphicPropertyX5* gpx);
+		void Draw(GraphicPropertyX6* gpx);
+		void Draw(GraphicPropertyX1b* gpx);
 		int LoadFile(std::string file_pass);
 		int LoadFile(int div_x, int div_y, int size_x, int size_y, std::string file_pass);
 		void Run(void);

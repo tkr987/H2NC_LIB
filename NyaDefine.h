@@ -3,16 +3,16 @@
 
 namespace H2NLIB {
 
-	namespace eGRAPHIC {
-		enum DRAW {
-			TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8,
-			TYPE1B, TYPE2B, TYPE3B, TYPE4B, TYPE5B, TYPE6B, TYPE7B, TYPE8B,
-		};
-	};
+	//namespace eGRAPHIC {
+	//	enum NUM {
+	//		TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8,
+	//		TYPE1B, TYPE2B, TYPE3B, TYPE4B, TYPE5B, TYPE6B, TYPE7B, TYPE8B,
+	//	};
+	//};
 
 
 	namespace eINPUT {
-		enum KEY { 
+		enum NUM { 
 			ENTER, UP, RIGHT, DOWN, LEFT, Q, W, E, R, SPACE, sizeof_enum, 
 		};
 	};
@@ -32,6 +32,17 @@ namespace H2NLIB {
 			USER_ATTACK1, USER_ATTACK2, USER_ATTACK3, USER_ATTACK4, USER_ATTACK5, 
 			USER_ATTACK_EFFECT1, USER_ATTACK_EFFECT2, USER_ATTACK_EFFECT3, USER_ATTACK_EFFECT4, USER_ATTACK_EFFECT5, 
 			USER_EFFECT1, USER_EFFECT2, USER_EFFECT3, USER_EFFECT4, USER_EFFECT5, 
+			sizeof_enum
+		};
+	};
+
+	// ************
+	//  ÉvÉçÉZÉX
+	// ************
+	namespace ePROCESS {
+		enum NUM {
+			enum_zero,
+			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_STOP, CLEAR, GAME_OVER, REPLAY, 
 			sizeof_enum
 		};
 	};

@@ -1,4 +1,5 @@
 #include <chrono>
+#include <tuple>
 #include "DxLib.h"
 #include "DebugPrint.h"
 #include "NyaDevice.h"
@@ -6,6 +7,7 @@
 #include "NyaEffect.h"
 #include "NyaGraphic.h"
 #include "NyaInput.h"
+#include "NyaMission.h"
 #include "NyaPosition.h"
 #include "NyaString.h"
 #include "NyaTarget.h"
@@ -13,9 +15,8 @@
 #include "NyaWindow.h"
 
 #define __DEBUG__
-#define FPS_MAX 60
 
-
+using namespace std;
 using namespace H2NLIB;
 
 
@@ -27,13 +28,32 @@ NyaWindow::NyaWindow()
 
 NyaWindow::~NyaWindow()
 {
-	delete nya_device_;
 	delete nya_design_;
+	delete nya_device_;
 	delete nya_effect_;
 	delete nya_graphic_;
 	delete nya_posision_;
+
+	if (nya_user_.first)
+		delete nya_user_.second;
+
+	for (auto& it : nya_mission_vector_)
+		delete it;
+
 	DxLib_End();
 }
+
+void NyaWindow::AddChMission(NyaMission* mission)
+{
+	nya_mission_vector_.push_back(mission);
+}
+
+void NyaWindow::AddChUser(NyaUser* user)
+{
+	nya_user_.first = true;
+	nya_user_.second = user;
+}
+
 
 int NyaWindow::Init(void)
 {
@@ -51,15 +71,14 @@ int NyaWindow::Init(void)
 
 	// コンストラクタでDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にインスタンスを生成する必要がある。
-	nya_device_ = new NyaDevice;
 	nya_design_ = new NyaDesign;
-//	nya_effect_ = new NyaEffect;
+	nya_device_ = new NyaDevice;
+	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
 	nya_posision_ = new NyaPosition;
 
 	// 変数初期化
-	set_user_ = false;
-	set_target_ = false;
+	nya_user_.first = false;
 	
 	// 設定
 	NyaString::SettingFont("debug_window_font", 10, 2);
@@ -71,18 +90,44 @@ int NyaWindow::Init(void)
 
 void NyaWindow::Run(void)
 {
-	int img = LoadGraph("img/teemo.png");
-	tuple<int, int, int> white = make_tuple(255, 255, 255);
-	std::chrono::system_clock::time_point debug_time_start, debug_time_end;
-	long long debug_time_msec;
+	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+	static std::chrono::system_clock::time_point debug_time_start, debug_time_end;
+	static long long debug_time_msec;
 
+
+	nya_design_->SetProcess(ePROCESS::TITLE);
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
 		
 		ClearDrawScreen();
 
-		
-		DrawGraph(100, 500, img, true);
+		switch (nya_design_->GetProcess()) {
+		case ePROCESS::TITLE:
+			nya_mission_index_ = 0;
+			nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
+			break;
+		case ePROCESS::MISSION_LOAD:
+			nya_mission_vector_[nya_mission_index_]->Load();
+			nya_mission_vector_[nya_mission_index_]->Run();
+			nya_design_->SetProcess(ePROCESS::MISSION_RUN);
+			break;
+		case ePROCESS::MISSION_RUN:
+			if (nya_user_.first) {
+				nya_user_.second->Action();
+				nya_user_.second->Draw();
+			}
+			nya_mission_vector_[nya_mission_index_]->Run();
+			break;
+		case ePROCESS::MISSION_STOP:
+			if (nya_user_.first) 
+				nya_user_.second->Draw();
+			nya_mission_vector_[nya_mission_index_]->Run();
+		break;
+		case ePROCESS::CLEAR:
+			nya_mission_index_++;
+			break;
+		}
 
+		nya_design_->Run();
 //		nya_device_->Run();
 //		nya_effect_->Run();
 
@@ -93,33 +138,13 @@ void NyaWindow::Run(void)
 		NyaString::Write("debug_window_font", white, 600, 700, "[600, 700] NyaGraphic::Run() %d msec", (int)debug_time_msec);
 
 		nya_posision_->Run();
-		if (set_target_) {
-			nya_target_->Action();
-			nya_target_->Draw();
-		}
-//		if (set_user_) {
-//			nya_user_->Action();
-//			nya_user_->Draw();
-//		}
 
 		NyaInput::Run();
 		nya_design_->Run();
 		NyaString::Run();
-
+	
 		ScreenFlip();
 	}
 
-}
-
-void NyaWindow::SetTarget(NyaTarget* target)
-{
-	nya_target_ = target;
-	set_target_ = true;
-}
-
-void NyaWindow::SetUser(NyaUser* user)
-{
-	nya_user_ = user;
-	set_user_ = true;
 }
 

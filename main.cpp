@@ -1,3 +1,60 @@
+
+
+// 2018年
+#if _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
+
+#include "DxLib.h"
+#include "NyaWindow.h"
+#include "TeemoMission1.h"
+#include "TeemoUser.h"
+
+// H2NC++LIB: happy 2 nya c++ library - DXLIB STGLIB
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	//	メモリリーク検出
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	// 初期化
+	H2NLIB::NyaWindow* nya_window = new H2NLIB::NyaWindow;
+	nya_window->Init();
+
+	// user 登録
+	H2NLIB::NyaUser* teemo_user = new TeemoUser;
+	nya_window->AddChUser(teemo_user);
+
+	// mission 追加
+	H2NLIB::NyaMission* teemo_mission1 = new TeemoMission1;
+	nya_window->AddChMission(teemo_mission1);
+
+	// 実行
+	nya_window->Run();
+
+	// 終了
+	delete nya_window;
+
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 2017年
+
 //#include "ArmsUpdater.h"
 //#include "DebugPrint.h"
 //#include "DefineNH.h"
@@ -21,20 +78,9 @@
 //#include "User1.h"
 //#include "User1b.h"
 
-// 2018年
-#include <crtdbg.h>
-#include "DxLib.h"
-#include "NyaTarget.h"
-#include "NyaUser.h"
-#include "NyaWindow.h"
-#include "TeemoUser.h"
-#include "TeemoTarget.h"
-
-void TeemoDesign(void);
-
 //int Title(int inst);
 //void Target1(int inst, int lv);
-void Target2(int inst, int lv);
+//void Target2(int inst, int lv);
 //void User1b(int isnt);
 //int User2(int inst);
 
@@ -42,35 +88,14 @@ void Target2(int inst, int lv);
 //using namespace NH2;
 //using namespace NH3;
 
-// H2NC++LIB: happy 2 nya c++ library - DXLIB STGLIB
 
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
-{
-	//	メモリリーク検出
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	
-	H2NLIB::NyaWindow *nya_window = new H2NLIB::NyaWindow();	
-	nya_window->Init();
-
-//	H2NLIB::NyaUser* teemo_user = new TeemoUser;
-	H2NLIB::NyaTarget* teemo_target = new TeemoTarget;
-
-//	nya_window->SetUser(teemo_user);
-	nya_window->SetTarget(teemo_target);
-
-	TeemoDesign();
-	
-	nya_window->Run();
-
-
-	delete teemo_target;
-//	delete teemo_user;
-	delete nya_window;
-	return 0;
-
-
-
+//int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+//{
+//	//	メモリリーク検出
+//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+//
+//
+//
 //	// ***************************
 //	//  managerクラスの初期化
 //	// ***************************
@@ -282,4 +307,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//SoundManager::End();
 
 	//return 0;
-}
+//}
+//
+

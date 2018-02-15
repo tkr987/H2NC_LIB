@@ -4,7 +4,7 @@
 #include "NyaString.h"
 #include <tuple>
 
-#define __DEBUG__
+//#define __DEBUG__
 
 using namespace std;
 using namespace H2NLIB;
@@ -111,11 +111,11 @@ int NyaGraphic::LoadFile(int div_x, int div_y, int size_x, int size_y, string fi
 
 
 /**
-画像描画関数1
+@brief 画像描画関数1
 @param *gpx プロパティ
 @return なし
 @note
-DXLIB DrawGraph() に対応。
+ DXLIB DrawGraph() に対応。
 **/
 void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
 {
@@ -124,12 +124,12 @@ void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
 
 
 /**
-画像描画関数2
+@brief 画像描画関数2
 @param *gpx プロパティ
 @return なし
 @note
  DXLIB DrawTurnGraph() に対応。
- **/
+**/
 void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
 {
 	layer_vector_[gpx->object_group_].gpx2_deque_.push_back(*gpx);
@@ -137,11 +137,11 @@ void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
 
 
 /**
-画像描画関数3
+@brief 画像描画関数3
 @param *gpx プロパティ
 @return なし
 @note
-DXLIB DrawExtendGraph() に対応。
+ DXLIB DrawExtendGraph() に対応。
 **/
 void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
 {
@@ -149,7 +149,7 @@ void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
 }
 
 /**
-画像描画関数4
+@brief 画像描画関数4
 @param *gpx プロパティ
 @return なし
 @note
@@ -163,11 +163,11 @@ void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 
 
 /**
-画像描画関数5
+@brief 画像描画関数5
 @param *gpx セットするプロパティ
 @return なし
 @note
-DXLIB DrawRotaGraph() に対応。
+ DXLIB DrawRotaGraph2() に対応。
 **/
 void NyaGraphic::Draw(GraphicPropertyX5 *gpx)
 {
@@ -177,12 +177,25 @@ void NyaGraphic::Draw(GraphicPropertyX5 *gpx)
 
 
 /**
+@brief 画像描画関数6
+@param *gpx セットするプロパティ
+@return なし
+@note
+ DXLIB DrawRotaGraph3() に対応。
+**/
+void NyaGraphic::Draw(GraphicPropertyX6 *gpx)
+{
+	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
+	layer_vector_.at(gpx->object_group_).gpx6_deque_.push_back(*gpx);
+}
+
+/**
 画像描画関数1b
 @param *gpx プロパティ
 @return なし
 @note
-DXLIB DrawGraph(), DXLIB SetDrawBlendMode() に対応。
-ただし、重い処理なので多用するときは注意。
+ DXLIB DrawGraph(), DXLIB SetDrawBlendMode() に対応。
+ ただし、重い処理なので多用するときは注意。
 **/
 void NyaGraphic::Draw(GraphicPropertyX1b *gpx)
 {
@@ -204,7 +217,7 @@ void NyaGraphic::Run(void)
 	}
 
 #ifdef __DEBUG__
-//	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
+	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
 #endif
 
 }
@@ -213,7 +226,8 @@ void NyaGraphic::Run(void)
 /**
 @brief 全てのグラフィックデータを描画する関数
 @param layer 描画するレイヤー
-@param swing 振動幅
+@param swing_x x軸方向振動幅
+@param swing_y y軸方向振動幅
 **/
 void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
 {
@@ -231,6 +245,7 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
 	GraphicPropertyX4b* gpx4b;
 	GraphicPropertyX5b* gpx5b;
 	GraphicPropertyX6b* gpx6b;
+	GraphicPropertyX7b* gpx7b;
 	
 	while (!layer_vector_.at(layer).gpx1_deque_.empty()) {
 		gpx1 = &layer_vector_.at(layer).gpx1_deque_.front();
@@ -336,6 +351,16 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
 			file_vector_[gpx6b->file_id_].div_vector_[gpx6b->file_div_], gpx6b->flag_trans_, gpx6b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx6b_deque_.pop_front();
+	}
+	while (!layer_vector_.at(layer).gpx7_deque_.empty()) {
+		gpx7b = &layer_vector_.at(layer).gpx7b_deque_.front();
+		SetDrawBlendMode(gpx7b->blend_mode_, gpx7b->blend_alpha_);
+		DrawModiGraph(
+			gpx7b->pos_x1_ + swing_x, gpx7b->pos_y1_ + swing_y, gpx7b->pos_x2_ + swing_x, gpx7b->pos_y2_ + swing_y, 
+			gpx7b->pos_x3_ + swing_x, gpx7b->pos_y3_ + swing_y, gpx7b->pos_x4_ + swing_x, gpx7b->pos_y4_ + swing_y,
+			file_vector_[gpx7b->file_id_].div_vector_[gpx7b->file_div_], gpx7b->flag_trans_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		layer_vector_.at(layer).gpx7_deque_.pop_front();
 	}
 }
 

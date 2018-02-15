@@ -45,7 +45,7 @@ TeemoTarget::TeemoTarget()
 	gpx4_teemo_->draw_angle_ = 0;
 	gpx4_teemo_->extend_rate_ = 1.0;
 	gpx4_teemo_->file_div_ = 0;
-	gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("img/teemo.png");
+	gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("img/teemo_target.png");
 	gpx4_teemo_->flag_trans_ = true;
 	gpx4_teemo_->flag_turn_ = false;
 	gpx4_teemo_->object_group_ = eOBJECT::GROUP::TARGET1;
@@ -65,7 +65,7 @@ TeemoTarget::TeemoTarget()
 TeemoTarget::~TeemoTarget()
 {
 
-	delete nya_device_;
+//	delete nya_device_;
 	delete nya_graphic_;
 	delete nya_position_;
 	delete dpx_teemo_;

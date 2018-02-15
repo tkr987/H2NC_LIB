@@ -109,17 +109,17 @@ void TeemoUser::Action(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::RIGHT)) {
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::RIGHT)) {
 		phx_teemo_->grid_x_ += 5;
-	} else if (NyaInput::GetKeyFlagNow(eINPUT::KEY::LEFT)) {
+	} else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::LEFT)) {
 		phx_teemo_->grid_x_ -= 5;
-	} else if (NyaInput::GetKeyFlagNow(eINPUT::KEY::UP)) {
+	} else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::UP)) {
 		phx_teemo_->grid_y_ -= 5;
-	} else if (NyaInput::GetKeyFlagNow(eINPUT::KEY::DOWN)) {
+	} else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::DOWN)) {
 		phx_teemo_->grid_y_ += 5;
 	}
 
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::Q) == true && count_ % 10 == 0) {
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0) {
 		dpx_teemo_->draw_angle_ = -90.0;
 		dpx_teemo_->move_angle_ = -90.0;
 		dpx_teemo_->move_speed_ = 10.0;
@@ -147,7 +147,7 @@ void TeemoUser::Draw(void)
 
 	gpx4_teemo_->pos_cx_ = (int)phx_teemo_->grid_x_;
 	gpx4_teemo_->pos_cy_ = (int)phx_teemo_->grid_y_;
-	if (NyaInput::GetKeyFlagNow(eINPUT::KEY::RIGHT)) {
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::RIGHT)) {
 		gpx4_teemo_->file_div_ = 1;
 	} else {
 		gpx4_teemo_->file_div_ = 0;

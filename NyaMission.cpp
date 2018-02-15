@@ -43,13 +43,7 @@ void NyaMission::Run(void)
 		for (auto& it : nya_target_vector_) {
 			if (it.first <= count_) {
 				it.second->Action();
-
-
-
 				it.second->Draw();
-
-
-
 			}
 		}
 		count_++;

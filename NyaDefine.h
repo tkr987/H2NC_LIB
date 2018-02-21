@@ -42,7 +42,7 @@ namespace H2NLIB {
 	namespace ePROCESS {
 		enum NUM {
 			enum_zero,
-			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_STOP, CLEAR, GAME_OVER, REPLAY, 
+			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_STOP, CLEAR, CONTINUE, OVER, REPLAY, 
 			sizeof_enum
 		};
 	};

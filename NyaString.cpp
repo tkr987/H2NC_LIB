@@ -21,6 +21,11 @@ NyaString::~NyaString()
 
 void NyaString::SettingFont(std::string font_name, int font_size, int font_thick)
 {
+	auto it = map_font_.find(font_name);
+
+	if (it != map_font_.end())
+		return;
+
 	int font = CreateFontToHandle(font_name.c_str(), font_size, font_thick);
 	map_font_.insert(make_pair(font_name, font));
 }

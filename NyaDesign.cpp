@@ -74,7 +74,7 @@ void NyaDesign::SetProcess(ePROCESS::NUM set)
 
 void NyaDesign::Run(void)
 {
-	DrawBlack(850, 0);
+	DrawBlack(850, 0, 1279, 719);
 	DrawSkill(875, 110);
 	DrawLv(875, 515);
 	DrawInput(875, 600);
@@ -91,10 +91,10 @@ void NyaDesign::SetSkillName(int x, string name)
 	skill_name_[x] = name;
 }
 
-void NyaDesign::DrawBlack(int x, int y) {
+void NyaDesign::DrawBlack(int x, int y, int x2, int y2) {
 	static int color = GetColor(16, 16, 16);
 
-	DrawBox(x, y, 1279, 719, color , true) ;
+	DrawBox(x, y, x2, y2, color , true) ;
 }
 
 void NyaDesign::DrawInput(int x, int y)

@@ -99,25 +99,32 @@ void NyaEffect::DrawAll(eOBJECT::GROUP group)
 {
 	GraphicPropertyX4 gpx4;
 	list<Effect>::iterator it, it_delete;
+	static deque<list<Effect>::iterator> delete_deque;
 
+	///////////////
 	// íœˆ—
-	for (it = draw_list_[group].begin(); it != draw_list_[group].end(); ++it) {
+	///////////////
+	for (auto it = draw_list_[group].begin(); it != draw_list_[group].end(); ++it) {
 
-		if (setting_vector_[it->setting_id_].effect_interval_time_ * (setting_vector_[it->setting_id_].effect_div_max_ + 1) == it->count_ - 1) {
-			it_delete = --it;
-			wait_list_.splice(wait_list_.begin(), move(draw_list_[group]), ++it_delete);
-		}
+		if (setting_vector_[it->setting_id_].effect_interval_time_ * (setting_vector_[it->setting_id_].effect_div_max_ + 1) == it->count_)
+			delete_deque.push_back(it);
 	}
 
+	while (!delete_deque.empty()) {
+		wait_list_.splice(wait_list_.begin(), move(draw_list_[group]), delete_deque.front());
+		delete_deque.pop_front();
+	}
+
+	///////////////
 	// •`‰æˆ—
+	///////////////
 	gpx4.flag_trans_ = true;
 	gpx4.flag_turn_ = false;
 	for (auto& it : draw_list_[group]) {
 
 		gpx4.draw_angle_ = setting_vector_[it.setting_id_].graphic_draw_angle_;
 		gpx4.extend_rate_ = setting_vector_[it.setting_id_].graphic_draw_extend_;
-//		gpx4.file_div_ = it.count_ / setting_vector_[it.setting_id_].effect_interval_time_;
-		gpx4.file_div_ = 0;
+		gpx4.file_div_ = it.count_ / setting_vector_[it.setting_id_].effect_interval_time_;
 		gpx4.file_id_ = setting_vector_[it.setting_id_].graphic_file_id_;
 		gpx4.object_group_ = setting_vector_[it.setting_id_].object_group_;
 		gpx4.pos_cx_ = (int)it.phx_->grid_x_;

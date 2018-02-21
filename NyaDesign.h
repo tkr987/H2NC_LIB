@@ -32,7 +32,7 @@ namespace H2NLIB {
 		static unsigned int skill_select_;
 		static ePROCESS::NUM process_;
 		static std::string skill_name_[4];
-		void DrawBlack(int x, int y);
+		void DrawBlack(int x, int y, int x2, int y2);
 		void DrawLv(int x, int y);
 		void DrawSkill(int x, int y);
 		void DrawInput(int x, int y);

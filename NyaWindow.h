@@ -29,11 +29,9 @@ namespace H2NLIB {
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;
-		NyaPosition* nya_posision_;
+		NyaPosition* nya_position_;
 		std::pair<bool, NyaUser*> nya_user_;
 		std::vector<NyaMission*> nya_mission_vector_;
-		void ProcessMissionRun(void);
-		void ProcessMissionStop(void);
 	};
 
 }

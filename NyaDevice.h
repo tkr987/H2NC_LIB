@@ -17,6 +17,7 @@ namespace H2NLIB {
 	class NyaPosition;
 
 	struct Bullet {
+		bool delete_flag_;
 		double draw_angle_;
 		double move_angle_;
 		double move_x_;

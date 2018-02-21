@@ -24,10 +24,7 @@ TeemoTarget::TeemoTarget()
 	dpx_teemo_ = new DevicePropertyX;
 	gpx4_teemo_ = new GraphicPropertyX4;
 	phx_teemo_ = nya_position_->Create();
-
-
-//	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
-//	nya_position_->SettingCollisionHighAccuracy(eOBJECT::GROUP::TARGET_ATTACK1);
+	//nya_position_->SettingCollisionHighAccuracy(eOBJECT::GROUP::TARGET_ATTACK1);
 
 
 	// NyaDeviceとプロパティの設定
@@ -57,8 +54,6 @@ TeemoTarget::TeemoTarget()
 	phx_teemo_->collision_range_ = 20.0;
 	phx_teemo_->grid_x_ = 400;
 	phx_teemo_->grid_y_ = 200;
-
-	NyaString::SettingFont("debug_target_font", 10, 2);
 }
 
 
@@ -84,8 +79,8 @@ void TeemoTarget::Action(void)
 	//	dpx_teemo_->create_y_ = phx_teemo_->grid_y_;
 	//	nya_device_->Attack(dpx_teemo_);
 	//}
-
-	//nya_position_->Collision(phx_teemo_, eOBJECT::GROUP::TARGET1);
+	
+	nya_position_->Collision(phx_teemo_, eOBJECT::GROUP::TARGET1);
 
 	count_++;
 
@@ -101,9 +96,6 @@ void TeemoTarget::Draw(void)
 //	gpx4_teemo_->pos_cx_ = (int)x;
 //	gpx4_teemo_->pos_cy_ = 200;
 	nya_graphic_->Draw(gpx4_teemo_);
-
-	NyaString::Write("debug_target_font", white, 50, 70, "[50, 70] gpx4_file_id = %d", gpx4_teemo_->file_id_);
-
 }
 
 void TeemoTarget::Init(void)

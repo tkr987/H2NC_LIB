@@ -31,14 +31,14 @@ TeemoUser::TeemoUser()
 	nya_position_->SettingCollision(eOBJECT::GROUP::USER_ATTACK1, eOBJECT::GROUP::TARGET1);
 	nya_position_->SettingCollision(eOBJECT::GROUP::TARGET_ATTACK1, eOBJECT::GROUP::USER1);
 
-	// デバイスとプロパティの設定
+	// NyaDeviceとプロパティの設定
 	device_setting.collision_pow_ = 1;
 	device_setting.collision_range_ = 3.0;
 	device_setting.draw_extend_ = 1.0;
 	device_setting.draw_rotate_ = 0.0;
 	device_setting.object_group_ = eOBJECT::GROUP::USER_ATTACK1;
 	dpx_teemo_->device_setting_id_ = nya_device_->LoadSetting(&device_setting);
-	// エフェクト追加
+	// エフェクトを追加する
 	effect_setting.effect_div_max_ = 3;
 	effect_setting.effect_interval_time_ = 5;
 	effect_setting.effect_move_x_ = 0;
@@ -49,7 +49,7 @@ TeemoUser::TeemoUser()
 	effect_setting.object_group_ = eOBJECT::GROUP::USER_ATTACK_EFFECT1;
 	effect_setting_id = nya_effect_->LoadSetting(&effect_setting);
 	nya_device_->SetEffect(effect_setting_id);
-	// 画像追加
+	// 画像を追加する
 	graphic_file_id = nya_graphic_->LoadFile("img/teemo_user_attack.png");
 	nya_device_->SetGraphic(graphic_file_id, 0);
 

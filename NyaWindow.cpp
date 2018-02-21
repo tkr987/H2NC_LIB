@@ -32,7 +32,7 @@ NyaWindow::~NyaWindow()
 	delete nya_device_;
 	delete nya_effect_;
 	delete nya_graphic_;
-	delete nya_posision_;
+	delete nya_position_;
 
 	if (nya_user_.first)
 		delete nya_user_.second;
@@ -60,7 +60,7 @@ int NyaWindow::Init(void)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v59");		// タイトル
+	SetMainWindowText("H2NC++LIB v60");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化
@@ -75,14 +75,13 @@ int NyaWindow::Init(void)
 	nya_device_ = new NyaDevice;
 	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
-	nya_posision_ = new NyaPosition;
+	nya_position_ = new NyaPosition;
 
 	// 変数初期化
 	nya_user_.first = false;
 	
 	// 設定
-	NyaString::SettingFont("debug_window_font", 10, 2);
-
+	NyaString::SettingFont("debug_font", 10, 2);
 
 	return 0;
 }
@@ -95,6 +94,8 @@ void NyaWindow::Run(void)
 	static long long debug_time_msec;
 
 
+	// 各プロセス処理
+	// プロセスの変更はここでおこなう
 	nya_design_->SetProcess(ePROCESS::TITLE);
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
 		
@@ -125,19 +126,51 @@ void NyaWindow::Run(void)
 		case ePROCESS::CLEAR:
 			nya_mission_index_++;
 			break;
+		case ePROCESS::CONTINUE:
+			break;
+		case ePROCESS::OVER:
+			break;
 		}
 
-		nya_design_->Run();
-//		nya_device_->Run();
-//		nya_effect_->Run();
+#ifdef __DEBUG__
+		debug_time_start = std::chrono::system_clock::now();
+		nya_device_->Run();
+		debug_time_end = std::chrono::system_clock::now();
+		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
+		NyaString::Write("debug_font", white, 600, 640, "[600, 640] NyaDevice::Run() %d msec", (int)debug_time_msec);
+#else 
+		nya_device_->Run();
+#endif
 
+#ifdef __DEBUG__
+		debug_time_start = std::chrono::system_clock::now();
+		nya_effect_->Run();
+		debug_time_end = std::chrono::system_clock::now();
+		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
+		NyaString::Write("debug_font", white, 600, 660, "[600, 660] NyaEffect::Run() %d msec", (int)debug_time_msec);
+#else 
+		nya_effect_->Run();
+#endif
+
+#ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
 		nya_graphic_->Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_window_font", white, 600, 700, "[600, 700] NyaGraphic::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 680, "[600, 680] NyaGraphic::Run() %d msec", (int)debug_time_msec);
+#else 
+		nya_graphic_->Run();
+#endif
 
-		nya_posision_->Run();
+#ifdef __DEBUG__
+		debug_time_start = std::chrono::system_clock::now();
+		nya_position_->Run();
+		debug_time_end = std::chrono::system_clock::now();
+		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
+		NyaString::Write("debug_font", white, 600, 700, "[600, 700] NyaPosition::Run() %d msec", (int)debug_time_msec);
+#else 
+		nya_position_->Run();
+#endif
 
 		NyaInput::Run();
 		nya_design_->Run();

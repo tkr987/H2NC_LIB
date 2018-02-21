@@ -202,6 +202,19 @@ void NyaGraphic::Draw(GraphicPropertyX1b *gpx)
 	layer_vector_[gpx->object_group_].gpx1b_deque_.push_back(*gpx);
 }
 
+/**
+画像描画関数2b
+@param *gpx プロパティ
+@return なし
+@note
+ DXLIB DrawTurnGraph(), DXLIB SetDrawBlendMode() に対応。
+ ただし、重い処理なので多用するときは注意。
+**/
+void NyaGraphic::Draw(GraphicPropertyX2b *gpx)
+{
+	layer_vector_[gpx->object_group_].gpx2b_deque_.push_back(*gpx);
+}
+
 
 void NyaGraphic::Run(void)
 {
@@ -246,6 +259,7 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
 	GraphicPropertyX5b* gpx5b;
 	GraphicPropertyX6b* gpx6b;
 	GraphicPropertyX7b* gpx7b;
+	GraphicPropertyX8b* gpx8b;
 	
 	while (!layer_vector_.at(layer).gpx1_deque_.empty()) {
 		gpx1 = &layer_vector_.at(layer).gpx1_deque_.front();
@@ -361,6 +375,15 @@ void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
 			file_vector_[gpx7b->file_id_].div_vector_[gpx7b->file_div_], gpx7b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_vector_.at(layer).gpx7_deque_.pop_front();
+	}
+	while (!layer_vector_.at(layer).gpx8_deque_.empty()) {
+		gpx8b = &layer_vector_.at(layer).gpx8b_deque_.front();
+		SetDrawBlendMode(gpx8b->blend_mode_, gpx8b->blend_alpha_);
+		DrawRectGraph(gpx8b->pos_dx_ + swing_x, gpx8b->pos_dy_ + swing_y, 
+			gpx8b->pos_sx_ + swing_x, gpx8b->pos_sy_ + swing_y, gpx8b->val_width_, gpx8b->val_height_, 
+			file_vector_[gpx8b->file_id_].div_vector_[gpx8b->file_div_], gpx8b->flag_trans_, gpx8b->flag_turn_);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+		layer_vector_.at(layer).gpx8b_deque_.pop_front();
 	}
 }
 

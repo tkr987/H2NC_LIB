@@ -49,13 +49,16 @@ void NyaEffect::Draw(EffectPropertyX* epx, int option_index)
 	
 	it = wait_list_.begin();
 	it->count_ = 0;
+	it->div_max_ = epx->animation_div_max_;
+	it->file_id_ = epx->file_id_;
+	it->interval_time_ = epx->animation_interval_time_;
+	it->option_index_ = option_index;
 	it->phx_->health_max_ = 1;
 	it->phx_->health_now_ = 1;
 	it->phx_->collision_pow_ = 0;
 	it->phx_->collision_range_ = 0;
 	it->phx_->grid_x_ = epx->grid_x_;
 	it->phx_->grid_y_ = epx->grid_y_;
-	it->option_index_ = option_index;
 
 	draw_list_[epx->object_group_].splice(draw_list_[epx->object_group_].begin(), move(wait_list_), it);
 }
@@ -67,7 +70,7 @@ int NyaEffect::LoadFile(int div_x, int div_y, string file_pass)
 
 
 /**
-@brief 設定をロードする関数
+@brief オプション項目の設定をする関数
 @param setting 設定する値
 @note
  EffectSetting::effect_interval_time_ * EffectSetting::effect_div_max_ がint型最大値を超えないように注意すること。

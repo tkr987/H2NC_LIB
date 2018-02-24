@@ -66,12 +66,12 @@ void NyaDevice::Attack(DevicePropertyX* dpx, int option_index)
 	it = wait_list_.begin();
 	it->device_option_index_ = option_index;
 	it->draw_angle_ = option_vector_[option_index].draw_angle_;
-	it->move_angle_  = AngleToRad(dpx->move_angle_);
 	it->effect_ = effect_;
 	it->graphic_ = graphic_;
-	it->move_angle_ = dpx->move_angle_;
+	it->move_angle_  = AngleToRad(dpx->move_angle_);
 	it->move_x_ = cos(it->move_angle_) * dpx->move_speed_;
 	it->move_y_ = sin(it->move_angle_) * dpx->move_speed_;
+	it->phx_->collision_hit_ = false;
 	it->phx_->collision_pow_ = option_vector_[option_index].collision_pow_;
 	it->phx_->collision_range_ = option_vector_[option_index].collision_range_;
 	it->phx_->health_max_ = 1.0;
@@ -187,6 +187,11 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 	gpx4.flag_turn_ = false;
 	for (auto& it : attack_list_[group])
 	{
+
+
+
+
+
 		// •`‰æˆ—
 		if (it.graphic_.set_)
 		{
@@ -203,6 +208,9 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 			gpx4.pos_cy_ = (int)it.phx_->grid_y_;
 			nya_graphic_->Draw(&gpx4);
 		}
+
+
+
 
 		// Õ“Ë”»’èˆ—
 		it.phx_->collision_pow_ = option_vector_[it.device_option_index_].collision_pow_;

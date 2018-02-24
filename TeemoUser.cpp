@@ -136,7 +136,8 @@ void TeemoUser::Draw(void)
 	{
 		gpx4_teemo_->file_div_ = 1;
 	}
-	else {
+	else
+	{
 		gpx4_teemo_->file_div_ = 0;
 	}
 	nya_graphic_->Draw(gpx4_teemo_);

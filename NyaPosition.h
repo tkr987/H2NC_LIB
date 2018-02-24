@@ -9,7 +9,9 @@
 namespace H2NLIB {
 
 
-	struct PositionHandleX {
+	class PositionHandleX {
+	public:
+		bool collision_hit_;
 		double collision_pow_;
 		double collision_range_;
 		double health_max_;

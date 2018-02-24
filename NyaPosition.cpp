@@ -44,8 +44,8 @@ void NyaPosition::Run(void)
 	vector<eOBJECT::GROUP>::iterator find_it2;
 
 	// Õ“Ë”»’è
-	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
-
+	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it)
+	{
 		find_it1 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->first);
 		find_it2 = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), it->second);
 		if (find_it1 != collision_high_accuracy_group_vector_.end()) {
@@ -115,14 +115,23 @@ void NyaPosition::SettingCollisionHighAccuracy(eOBJECT::GROUP group)
 
 void NyaPosition::JudgeCollision(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
 {
+	for (auto& it1 : collision_vector_[object_group1])
+		it1->collision_hit_ = false;
 
-	for (auto it1 = collision_vector_[object_group1].begin(); it1 != collision_vector_[object_group1].end(); ++it1) {	
-		for (auto it2 = collision_vector_[object_group2].begin(); it2 != collision_vector_[object_group2].end(); ++it2) {
-			
+	for (auto it2 : collision_vector_[object_group2])
+		it2->collision_hit_ = false;
+
+	for (auto& it1 : collision_vector_[object_group1])
+	{	
+		for (auto it2 : collision_vector_[object_group2])
+		{
 			// pow()‚µ‚Ä‚é‚Ì‚Åabs()‚Í•s—v
-			if (pow((*it1)->grid_x_ - (*it2)->grid_x_, 2.0) + pow((*it1)->grid_y_ - (*it2)->grid_y_, 2.0) < pow((*it1)->collision_range_ + (*it2)->collision_range_, 2.0)) {
-				(*it1)->health_now_ -= (*it2)->collision_pow_;
-				(*it2)->health_now_ -= (*it1)->collision_pow_;
+			if (pow(it1->grid_x_ - it2->grid_x_, 2.0) + pow(it1->grid_y_ - it2->grid_y_, 2.0) < pow(it1->collision_range_ + it2->collision_range_, 2.0))
+			{
+				it1->health_now_ -= it2->collision_pow_;
+				it2->health_now_ -= it1->collision_pow_;
+				it1->collision_hit_ = true;
+				it2->collision_hit_ = true;
 			}
 		}
 	}

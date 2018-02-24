@@ -43,10 +43,27 @@ NyaWindow::~NyaWindow()
 	DxLib_End();
 }
 
+/**
+@brief ミッションを追加する関数
+@param mission 追加するミッション
+@note
+ NyaWindowの子オブジェクトとしてミッションが追加される。
+ 子オブジェクトは親オブジェクト(NyaWindow)がdeleteされるときに自動的に削除される。
+ なので、子オブジェクト自体はdeleteを書く必要はない。
+**/
 void NyaWindow::AddChMission(NyaMission* mission)
 {
 	nya_mission_vector_.push_back(mission);
 }
+
+/**
+@brief ユーザーを追加する関数
+@param mission 追加するユーザー
+@note
+ NyaWindowの子オブジェクトとしてユーザーが追加される。
+ 子オブジェクトは親オブジェクト(NyaWindow)がdeleteされるときに自動的に削除される。
+ なので、子オブジェクト自体はdeleteを書く必要はない。
+**/
 
 void NyaWindow::AddChUser(NyaUser* user)
 {
@@ -55,7 +72,13 @@ void NyaWindow::AddChUser(NyaUser* user)
 }
 
 
-int NyaWindow::Init(void)
+/**
+@brief 初期化関数
+@param name タイトルの設定
+@note
+ 必ず最初に一度呼び出すこと。
+**/
+int NyaWindow::Init(string title)
 {
 	// *****************
 	//  dxlib初期化
@@ -78,9 +101,11 @@ int NyaWindow::Init(void)
 	nya_position_ = new NyaPosition;
 
 	// 変数初期化
+	title_name_ = title;
 	nya_user_.first = false;
 	
 	// 設定
+	NyaString::SettingFont("window_title_font", 30, 4);
 	NyaString::SettingFont("debug_font", 10, 2);
 
 	return 0;
@@ -98,13 +123,19 @@ void NyaWindow::Run(void)
 	// プロセスの変更はここでおこなう
 	nya_design_->SetProcess(ePROCESS::TITLE);
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
-		
+
+#ifdef __DEBUG__
+		debug_time_start = std::chrono::system_clock::now();
+#endif
+
 		ClearDrawScreen();
 
 		switch (nya_design_->GetProcess()) {
 		case ePROCESS::TITLE:
 			nya_mission_index_ = 0;
-			nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
+			RunTitle();
+			if (NyaInput::IsPressKey(eINPUT::ENTER))
+				nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
 			break;
 		case ePROCESS::MISSION_LOAD:
 			nya_mission_vector_[nya_mission_index_]->Load();
@@ -131,6 +162,12 @@ void NyaWindow::Run(void)
 		case ePROCESS::OVER:
 			break;
 		}
+
+#ifdef __DEBUG__
+		debug_time_end = std::chrono::system_clock::now();
+		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
+		NyaString::Write("debug_font", white, 600, 620, "[600, 620] NyaWindow Process %d msec", (int)debug_time_msec);
+#endif
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
@@ -179,5 +216,13 @@ void NyaWindow::Run(void)
 		ScreenFlip();
 	}
 
+}
+
+void NyaWindow::RunTitle(void)
+{
+	static tuple<int, int, int> white = make_tuple(255, 37, 37);
+
+	NyaString::Write("window_title_font", white, 100, 70, "title [%s] start", title_name_);
+	NyaString::Write("window_title_font", white, 50, 70, "=>");
 }
 

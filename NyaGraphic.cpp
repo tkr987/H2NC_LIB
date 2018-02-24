@@ -40,6 +40,9 @@ NyaGraphic::~NyaGraphic()
 @brief 画像ロード関数
 @param file_pass ファイルパス
 @return 画像ファイルの識別ID
+@note
+ 画像ファイルをメモリにロードして画像ファイルの識別IDを返す。
+ 識別IDはNyaGraphic::Draw()などで利用する。
 **/
 int NyaGraphic::LoadFile(std::string file_pass)
 {
@@ -76,36 +79,40 @@ int NyaGraphic::LoadFile(std::string file_pass)
 @brief 分割画像ロード関数
 @param div_x x軸方向分割数
 @param div_y y軸方向分割数
-@param size_x x軸方向分割サイズ
-@param size_y y軸方向分割サイズ
 @param file_pass ファイルパス
-@return 画像ファイルの識別ID (ロード失敗のとき-1)
-@note 
- xnum と ynum には自然数を入力する。
- xnum * ynum が512以上になる値はロードできない。
+@return 画像ファイルの識別ID
+@note
+ 画像ファイルをメモリにロードして画像ファイルの識別IDを返す。
+ 識別IDはNyaGraphic::Draw()などで利用する。
 **/
-int NyaGraphic::LoadFile(int div_x, int div_y, int size_x, int size_y, string file_pass)
+int NyaGraphic::LoadFile(int div_x, int div_y, string file_pass)
 {
-	static GraphicFileSet file_set;
-	static int file_id[512] = {};
+	static int check_graphic_handle, check_size_x, check_size_y;
+	static std::vector<int> file_div;
 
-	if (512 <= div_x * div_y)
-		return -1;
-	if (size_x <= 0 || size_y <= 0)
-		return -1;
+	// ロードする画像ファイルの分割サイズを計算
+	check_graphic_handle = LoadGraph(file_pass.c_str());
+	GetGraphSize(check_graphic_handle, &check_size_x, &check_size_y);
+	check_size_x /= div_x;
+	check_size_y /= div_y;
+	DeleteGraph(check_graphic_handle);
 
-	file_vector_.push_back(file_set);
-	LoadDivGraph(file_pass.c_str(), div_x * div_y, div_x, div_y, size_x, size_y, file_id);
+	// 分割画像をロードする
+	file_div.resize(div_x * div_y);
+	LoadDivGraph(file_pass.c_str(), div_x * div_y, div_x, div_y, check_size_x, check_size_y, &file_div.front());
+
+	// ロードした分割画像をvectorに保存
+	file_vector_.resize(file_vector_.size()+1);
 	for (int i = 0; i < div_x * div_y; i++)
-		file_vector_.back().div_vector_.push_back(file_id[i]);
-
-	file_vector_.back().div_max_ = div_x * div_y - 1;
-	file_vector_.back().div_x_ = size_x;
-	file_vector_.back().div_y_ = size_y;
+		file_vector_.back().div_vector_.push_back(file_div[i]);
+	file_vector_.back().div_max_ = div_x * div_y;
+	file_vector_.back().div_x_ = div_x;
+	file_vector_.back().div_y_ = div_y;
 	file_vector_.back().file_pass_ = file_pass;
-	file_vector_.back().size_x_ = size_x;
-	file_vector_.back().size_y_ = size_y;
+	file_vector_.back().size_x_ = check_size_x;
+	file_vector_.back().size_y_ = check_size_y;
 	
+	file_div.clear();
 	return ((int)file_vector_.size() - 1);
 }
 
@@ -190,7 +197,7 @@ void NyaGraphic::Draw(GraphicPropertyX6 *gpx)
 }
 
 /**
-画像描画関数1b
+@brief 画像描画関数1b
 @param *gpx プロパティ
 @return なし
 @note
@@ -203,7 +210,7 @@ void NyaGraphic::Draw(GraphicPropertyX1b *gpx)
 }
 
 /**
-画像描画関数2b
+@brief 画像描画関数2b
 @param *gpx プロパティ
 @return なし
 @note

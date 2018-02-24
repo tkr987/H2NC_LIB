@@ -3,7 +3,8 @@
 #include <deque>
 #include "DxLib.h"
 
-	struct DebugData {
+	class DebugData {
+	public:
 		int pos_x_;
 		int pos_y_;
 		bool type_i_;

@@ -14,17 +14,15 @@ using namespace H2NLIB;
 TeemoTarget::TeemoTarget()
 {
 	int graphic_id;
-	DeviceSetting device_setting;
 
 	count_ = 0;
 
-	//nya_device_ = new NyaDevice;
+	nya_device_ = new NyaDevice;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	dpx_teemo_ = new DevicePropertyX;
+	dpx_ = new DevicePropertyX;
 	gpx4_teemo_ = new GraphicPropertyX4;
 	phx_teemo_ = nya_position_->Create();
-	//nya_position_->SettingCollisionHighAccuracy(eOBJECT::GROUP::TARGET_ATTACK1);
 
 
 	// NyaDeviceとプロパティの設定
@@ -60,10 +58,10 @@ TeemoTarget::TeemoTarget()
 TeemoTarget::~TeemoTarget()
 {
 
-//	delete nya_device_;
+	delete nya_device_;
 	delete nya_graphic_;
 	delete nya_position_;
-	delete dpx_teemo_;
+	delete dpx_;
 	delete gpx4_teemo_;
 }
 

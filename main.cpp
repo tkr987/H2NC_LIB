@@ -21,7 +21,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ‰Šú‰»
 	H2NLIB::NyaWindow* nya_window = new H2NLIB::NyaWindow;
-	nya_window->Init();
+	nya_window->Init("teemo on duty");
 
 	// user “o˜^
 	H2NLIB::NyaUser* teemo_user = new TeemoUser;

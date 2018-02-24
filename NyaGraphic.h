@@ -15,7 +15,8 @@ namespace H2NLIB {
 
 	// DXLIB ’Êí•`‰æŠÖ”‚É‘Î‰
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
-	struct GraphicPropertyX1 {
+	class GraphicPropertyX1 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -26,7 +27,8 @@ namespace H2NLIB {
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰
 	// int DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
-	struct GraphicPropertyX2 {
+	class GraphicPropertyX2 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -37,7 +39,8 @@ namespace H2NLIB {
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
 	// int DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
-	struct GraphicPropertyX3 {
+	class GraphicPropertyX3 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x1_;
@@ -50,7 +53,8 @@ namespace H2NLIB {
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
 	// int DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
-	struct GraphicPropertyX4 {
+	class GraphicPropertyX4 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_cx_;
@@ -64,7 +68,8 @@ namespace H2NLIB {
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
 	// int DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
-	struct GraphicPropertyX5 {
+	class GraphicPropertyX5 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -80,7 +85,8 @@ namespace H2NLIB {
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
 	// int DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
-	struct GraphicPropertyX6 {
+	class GraphicPropertyX6 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -97,7 +103,8 @@ namespace H2NLIB {
 
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚É‘Î‰
 	// int DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
-	struct GraphicPropertyX7 {
+	class GraphicPropertyX7 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x1_;
@@ -114,7 +121,8 @@ namespace H2NLIB {
 
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚É‘Î‰
 	// int DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
-	struct GraphicPropertyX8 {
+	class GraphicPropertyX8 {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_dx_;
@@ -131,7 +139,8 @@ namespace H2NLIB {
 	// DXLIB ’Êí•`‰æŠÖ”‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
-	struct GraphicPropertyX1b {
+	class GraphicPropertyX1b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -145,7 +154,8 @@ namespace H2NLIB {
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
-	struct GraphicPropertyX2b {
+	class GraphicPropertyX2b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -159,7 +169,8 @@ namespace H2NLIB {
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
-	struct GraphicPropertyX3b {
+	class GraphicPropertyX3b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x1_;
@@ -175,7 +186,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
-	struct GraphicPropertyX4b {
+	class GraphicPropertyX4b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_cx_;
@@ -192,7 +204,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
-	struct GraphicPropertyX5b {
+	class GraphicPropertyX5b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -211,7 +224,8 @@ namespace H2NLIB {
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
-	struct GraphicPropertyX6b {
+	class GraphicPropertyX6b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x_;
@@ -231,7 +245,8 @@ namespace H2NLIB {
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
-	struct GraphicPropertyX7b {
+	class GraphicPropertyX7b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_x1_;
@@ -251,7 +266,8 @@ namespace H2NLIB {
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚É‘Î‰
 	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
 	// int DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
-	struct GraphicPropertyX8b {
+	class GraphicPropertyX8b {
+	public:
 		int file_div_;
 		int file_id_;
 		int pos_dx_;
@@ -267,7 +283,8 @@ namespace H2NLIB {
 		eOBJECT::GROUP object_group_;
 	};
 
-	struct GraphicFileSet {
+	class GraphicFileSet {
+	public:
 		int div_max_;
 		int div_x_;
 		int div_y_;
@@ -277,7 +294,8 @@ namespace H2NLIB {
 		std::vector<int> div_vector_;
 	};
 
-	struct DrawDequeSet {
+	class DrawDequeSet {
+	public:
 		std::deque<GraphicPropertyX1> gpx1_deque_;
 		std::deque<GraphicPropertyX2> gpx2_deque_;
 		std::deque<GraphicPropertyX3> gpx3_deque_;
@@ -309,7 +327,7 @@ namespace H2NLIB {
 		void Draw(GraphicPropertyX1b* gpx);
 		void Draw(GraphicPropertyX2b* gpx);
 		int LoadFile(std::string file_pass);
-		int LoadFile(int div_x, int div_y, int size_x, int size_y, std::string file_pass);
+		int LoadFile(int div_x, int div_y, std::string file_pass);
 		void Run(void);
 	private:
 		static int swing_x_;

@@ -17,9 +17,10 @@ namespace H2NLIB {
 		int font_;
 		int x_;
 		int y_;
-		std::tuple<bool, std::string, int> write_int_;
-		std::tuple<bool, std::string, double> write_double_;
 		std::tuple<bool, std::string> write_string_;
+		std::tuple<bool, std::string, int> write_value_int_;
+		std::tuple<bool, std::string, double> write_value_double_;
+		std::tuple<bool, std::string, std::string> write_value_string_;
 	};
 
 	class NyaString {
@@ -28,9 +29,10 @@ namespace H2NLIB {
 		~NyaString();
 		static void Run(void);
 		static void SettingFont(std::string, int, int);
-		static void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str);
-		static void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, int value);
-		static void Write(std::string, std::tuple<int, int, int> color, int pos_x, int pos_y, std::string str, double value);
+		static void Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str);
+		static void Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, int value);
+		static void Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, double value);
+		static void Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, std::string value);
 	private:
 		static std::deque<StringSet> deque_string_set_;
 		static std::map<std::string, int> map_font_;

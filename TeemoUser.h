@@ -1,17 +1,19 @@
 #pragma once
 
 #include "NyaUser.h"
+#include <utility>
 
 namespace H2NLIB {
-	struct DevicePropertyX;
-	struct EffectPropertyX;
-	struct GraphicPropertyX4;
-	struct PositionHandleX;
 	class NyaDevice;
 	class NyaEffect;
 	class NyaGraphic;
 	class NyaPosition;
-	class NyaString;
+	class DevicePropertyX;
+	class EffectPropertyX;
+	class GraphicPropertyX4;
+	class PositionHandleX;
+	class DeviceOption;
+	class EffectOption;
 }
 
 
@@ -28,9 +30,11 @@ private:
 	H2NLIB::NyaEffect* nya_effect_;
 	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
-	H2NLIB::DevicePropertyX* dpx_teemo_;
-	H2NLIB::EffectPropertyX* epx_teemo_;
+	H2NLIB::DevicePropertyX* dpx_;
+	H2NLIB::EffectPropertyX* epx_;
 	H2NLIB::GraphicPropertyX4* gpx4_teemo_;
 	H2NLIB::PositionHandleX* phx_teemo_;
+	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
+	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
 };
 

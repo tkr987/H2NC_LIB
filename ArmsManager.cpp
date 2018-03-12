@@ -11,8 +11,8 @@ using namespace NH2;
 int ArmsManager::shot_num_;
 int ArmsManager::imgfile_point_;
 std::list<ArmsToken> ArmsManager::list_unused_;
-std::list<ArmsToken> ArmsManager::list_wait_[eOBJECT::GROUP::sizeof_enum];
-std::list<ArmsToken> ArmsManager::list_used_[eOBJECT::GROUP::sizeof_enum];
+std::list<ArmsToken> ArmsManager::list_wait_[eOBJECT::NUM::sizeof_enum];
+std::list<ArmsToken> ArmsManager::list_used_[eOBJECT::NUM::sizeof_enum];
 
 void ArmsManager::Clear(void)
 {
@@ -44,7 +44,7 @@ void ArmsManager::End(void)
 	}
 	list_unused_.clear();
 
-	for (int group = eOBJECT::GROUP::enum_zero; group < eOBJECT::GROUP::sizeof_enum; group++) {
+	for (int group = eOBJECT::NUM::enum_zero; group < eOBJECT::NUM::sizeof_enum; group++) {
 		for (it = list_used_[group].begin(); it != list_used_[group].end(); ++it) {
 			delete it->eparam_;
 			delete it->pparam_;
@@ -95,7 +95,7 @@ int ArmsManager::UserShot(ArmsParam1* param)
 	it->pparam_->SetRange(param->shot_range_);
 	it->pparam_->SetStartX(param->shot_x_);
 	it->pparam_->SetStartY(param->shot_y_);
-	if (!PosManager::Generate(eOBJECT::GROUP::USER_ARMS, it->pparam_))
+	if (!PosManager::Generate(eOBJECT::NUM::USER_ARMS, it->pparam_))
 		return -1;
 
 	// effect パラメータ
@@ -111,7 +111,7 @@ int ArmsManager::UserShot(ArmsParam1* param)
 		it->hit_effect_ = false;
 	}
 	
-	list_unused_.splice(list_wait_[eOBJECT::GROUP::USER_ARMS].begin(), list_unused_, it);
+	list_unused_.splice(list_wait_[eOBJECT::NUM::USER_ARMS].begin(), list_unused_, it);
 	return 0;
 }
 
@@ -153,7 +153,7 @@ int ArmsManager::TargetShotSmall(ArmsParam1* param)
 	it->pparam_->SetRange(0);
 	it->pparam_->SetStartX(param->shot_x_);
 	it->pparam_->SetStartY(param->shot_y_);
-	if (!PosManager::Generate(eOBJECT::GROUP::TARGET_ARMS_SMALL, it->pparam_))
+	if (!PosManager::Generate(eOBJECT::NUM::TARGET_ARMS_SMALL, it->pparam_))
 		return -1;
 
 	// effect パラメータ
@@ -168,7 +168,7 @@ int ArmsManager::TargetShotSmall(ArmsParam1* param)
 		it->hit_effect_ = false;
 	}
 
-	list_unused_.splice(list_wait_[eOBJECT::GROUP::TARGET_ARMS_SMALL].begin(), list_unused_, it);
+	list_unused_.splice(list_wait_[eOBJECT::NUM::TARGET_ARMS_SMALL].begin(), list_unused_, it);
 	return 0;
 }
 
@@ -209,7 +209,7 @@ int ArmsManager::TargetShotLarge(ArmsParam1* param)
 	it->pparam_->SetRange(0);
 	it->pparam_->SetStartX(param->shot_x_);
 	it->pparam_->SetStartY(param->shot_y_);
-	if (!PosManager::Generate(eOBJECT::GROUP::TARGET_ARMS_LARGE, it->pparam_))
+	if (!PosManager::Generate(eOBJECT::NUM::TARGET_ARMS_LARGE, it->pparam_))
 		return -1;
 
 	// effect パラメータ
@@ -224,7 +224,7 @@ int ArmsManager::TargetShotLarge(ArmsParam1* param)
 		it->hit_effect_ = false;
 	}
 
-	list_unused_.splice(list_wait_[eOBJECT::GROUP::TARGET_ARMS_LARGE].begin(), list_unused_, it);
+	list_unused_.splice(list_wait_[eOBJECT::NUM::TARGET_ARMS_LARGE].begin(), list_unused_, it);
 	return 0;
 }
 
@@ -243,14 +243,14 @@ void ArmsManager::DeleteAll(eOBJECT::GROUP group)
 	list<ArmsToken>::iterator it, sit;
 
 	// target arms の座標に point を描する
-	if (group == eOBJECT::GROUP::TARGET_ARMS_SMALL || group == eOBJECT::GROUP::TARGET_ARMS_LARGE) {
+	if (group == eOBJECT::NUM::TARGET_ARMS_SMALL || group == eOBJECT::NUM::TARGET_ARMS_LARGE) {
 		if (8 < (list_used_[group].size() / 200)) {
 			imgfile_div = 8;
 		} else {
 			imgfile_div = ((int)list_used_[group].size() / 200);
 		}
 		eparam1.extend_rate_ = 1.0;
-		eparam1.group_ = eOBJECT::GROUP::TARGET_ARMS_EFFECT;
+		eparam1.group_ = eOBJECT::NUM::TARGET_ARMS_EFFECT;
 		eparam1.img_divmax_ = imgfile_div;
 		eparam1.img_divmin_ = imgfile_div;
 		eparam1.img_id_ = imgfile_point_;

@@ -31,12 +31,12 @@ void Title::Init(void)
 	select_ = 0;
 	// Img Help 固定パラメータ
 	iparam1_help_->flag_trans_ = true;
-	iparam1_help_->group_type_ = eOBJECT::GROUP::TITLE_HELP;
+	iparam1_help_->group_type_ = eOBJECT::NUM::TITLE_HELP;
 	iparam1_help_->x_ = 0;
 	iparam1_help_->y_ = 0;
 	// Img Main 固定パラメータ
 	iparam1_main_->flag_trans_ = true;
-	iparam1_main_->group_type_ = eOBJECT::GROUP::TITLE_MAIN;
+	iparam1_main_->group_type_ = eOBJECT::NUM::TITLE_MAIN;
 	iparam1_main_->x_ = 0;
 	iparam1_main_->y_ = 0;
 
@@ -151,7 +151,7 @@ void Title::KeyUpdate(eGEVENT::TYPE *type)
 //		tdata.imgfile_enter_ = ImgManager::LoadImg("data/img_design/enter.png");
 //		tdata.imgfile_icon_ = ImgManager::LoadImg(12, 1, 32, 32, "data/img_design/icon.png");
 //		// 描画固定パラメータ
-//		tdata.iparam1_.group_type_ = eOBJECT::GROUP::TITLE;
+//		tdata.iparam1_.group_type_ = eOBJECT::NUM::TITLE;
 //	}
 //
 //

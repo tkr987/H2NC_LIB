@@ -12,7 +12,7 @@ using namespace H2NLIB;
 #define DEVICE_OBJECT_MAX 10000
 
 std::vector<DeviceOption> NyaDevice::option_vector_;
-list<Gadget> NyaDevice::attack_list_[eOBJECT::GROUP::sizeof_enum];
+list<Gadget> NyaDevice::attack_list_[eOBJECT::NUM::sizeof_enum];
 list<Gadget> NyaDevice::wait_list_;
 
 
@@ -26,16 +26,16 @@ NyaDevice::NyaDevice()
 	nya_effect_ = new NyaEffect;
 	nya_position_ = new NyaPosition;
 
-	effect_.set_ = false;
-	graphic_.set_ = false;
+	set_effect_pair_.first = false;
+	set_graphic_pair_.first = false;
 
 	// 弾オブジェクトの最大個数は10000個
 	if (first_call) {
 		NewOption(&default_option);
 		wait_list_.resize(DEVICE_OBJECT_MAX);
 		for (auto& it : wait_list_) {
-			it.effect_.set_ = false;
-			it.graphic_.set_ = false;
+			it.effect_pair_.first = false;
+			it.graphic_pair_.first = false;
 			it.phx_ = nya_position_->Create();
 		}
 		first_call = false;
@@ -66,8 +66,8 @@ void NyaDevice::Attack(DevicePropertyX* dpx, int option_index)
 	it = wait_list_.begin();
 	it->device_option_index_ = option_index;
 	it->draw_angle_ = option_vector_[option_index].draw_angle_;
-	it->effect_ = effect_;
-	it->graphic_ = graphic_;
+	it->effect_pair_ = set_effect_pair_;
+	it->graphic_pair_ = set_graphic_pair_;
 	it->move_angle_  = AngleToRad(dpx->move_angle_);
 	it->move_x_ = cos(it->move_angle_) * dpx->move_speed_;
 	it->move_y_ = sin(it->move_angle_) * dpx->move_speed_;
@@ -86,44 +86,45 @@ void NyaDevice::Run(void)
 {
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
-		Calculate((eOBJECT::GROUP)group);
+	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++)
+		Calculate((eOBJECT::NUM)group);
 
 
-	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", (int)attack_list_[eOBJECT::GROUP::USER_ATTACK1].size());
+	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", (int)attack_list_[eOBJECT::NUM::USER_ATTACK1].size());
 	NyaString::Write("debug_font", white, 50, 210, "[50, 210] wait list size = %d", (int)wait_list_.size());
 }
 
-void NyaDevice::SetEffect(string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::GROUP object_group)
+void NyaDevice::SetEffect(string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::NUM object_group)
 {
-	effect_.set_ = true;
-	effect_.animation_div_max_ = animation_div_max;
-	effect_.animation_interval_time_ = animation_interval_time;
-	effect_.file_id_ = nya_effect_->LoadFile(div_x, div_y, file_pass);
-	effect_.object_group_ = object_group;
-	effect_.effect_option_index_ = 0;
+	set_effect_pair_.first = true;
+	set_effect_pair_.second.animation_div_max_ = animation_div_max;
+	set_effect_pair_.second.animation_interval_time_ = animation_interval_time;
+	set_effect_pair_.second.file_id_ = nya_effect_->LoadFile(div_x, div_y, file_pass);
+	set_effect_pair_.second.object_group_ = object_group;
+	set_effect_pair_.second.effect_option_index_ = 0;
 }
 
-void NyaDevice::SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::GROUP object_group, double draw_angle, double draw_extend_, double draw_move_x_, double draw_move_y_)
+void NyaDevice::SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::NUM object_group, double draw_angle, double draw_extend_, double draw_move_x_, double draw_move_y_)
 {
 	EffectOption option;
 
-	effect_.set_ = true;
-	effect_.animation_div_max_ = animation_div_max;
-	effect_.animation_interval_time_ = animation_interval_time;
-	effect_.file_id_ = nya_effect_->LoadFile(div_x, div_y, file_pass);
-	effect_.object_group_ = object_group;
+	set_effect_pair_.first = true;
+	set_effect_pair_.second.animation_div_max_ = animation_div_max;
+	set_effect_pair_.second.animation_interval_time_ = animation_interval_time;
+	set_effect_pair_.second.file_id_ = nya_effect_->LoadFile(div_x, div_y, file_pass);
+	set_effect_pair_.second.object_group_ = object_group;
 	option.draw_angle_ = draw_angle;
 	option.draw_extend_ = draw_extend_;
 	option.draw_move_x_ = draw_move_x_;
 	option.draw_move_y_ = draw_move_y_;
-	effect_.effect_option_index_ = nya_effect_->NewOption(&option);
+	set_effect_pair_.second.effect_option_index_ = nya_effect_->NewOption(&option);
 }
 
 void NyaDevice::SetGraphic(string file_pass)
 {
-	graphic_.set_ = true;
-	graphic_.file_id_ = nya_graphic_->LoadFile(file_pass);
+	set_graphic_pair_.first = true;
+	set_graphic_pair_.second.file_div_ = 0;
+	set_graphic_pair_.second.file_id_ = nya_graphic_->LoadFile(file_pass);
 }
 
 int NyaDevice::NewOption(DeviceOption* setting)
@@ -137,7 +138,7 @@ int NyaDevice::NewOption(DeviceOption* setting)
 }
 
 
-void NyaDevice::Calculate(eOBJECT::GROUP group)
+void NyaDevice::Calculate(eOBJECT::NUM group)
 {
 	static EffectPropertyX epx;
 	static GraphicPropertyX4 gpx4;
@@ -159,15 +160,15 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 		else if (it->phx_->collision_hit_)
 		{
 			// エフェクト描画処理
-			if (it->effect_.set_)
+			if (it->effect_pair_.first)
 			{
-				epx.animation_div_max_ = it->effect_.animation_div_max_;
-				epx.animation_interval_time_ = it->effect_.animation_interval_time_;
-				epx.file_id_ = it->effect_.file_id_;
+				epx.animation_div_max_ = it->effect_pair_.second.animation_div_max_;
+				epx.animation_interval_time_ = set_effect_pair_.second.animation_interval_time_;
+				epx.file_id_ = set_effect_pair_.second.file_id_;
 				epx.grid_x_ = (int)it->phx_->grid_x_;
 				epx.grid_y_ = (int)it->phx_->grid_y_;
-				epx.object_group_ = it->effect_.object_group_;
-				nya_effect_->Draw(&epx, it->effect_.effect_option_index_);
+				epx.object_group_ = set_effect_pair_.second.object_group_;
+				nya_effect_->Draw(&epx, set_effect_pair_.second.effect_option_index_);
 			}
 			delete_deque.push_back(it);
 		}
@@ -188,29 +189,19 @@ void NyaDevice::Calculate(eOBJECT::GROUP group)
 	for (auto& it : attack_list_[group])
 	{
 
-
-
-
-
 		// 描画処理
-		if (it.graphic_.set_)
+		if (it.graphic_pair_.first)
 		{
 			gpx4.draw_angle_ = it.draw_angle_;
 			it.draw_angle_ += option_vector_[it.device_option_index_].draw_rotate_;
 			gpx4.extend_rate_ = option_vector_[it.device_option_index_].draw_extend_;
-
-			gpx4.file_div_ = 0;
-			gpx4.file_id_ = it.graphic_.file_id_;
+			gpx4.file_div_ = it.graphic_pair_.second.file_div_;
+			gpx4.file_id_ = it.graphic_pair_.second.file_id_;
 			gpx4.object_group_ = group;
-			
-			
 			gpx4.pos_cx_ = (int)it.phx_->grid_x_;
 			gpx4.pos_cy_ = (int)it.phx_->grid_y_;
 			nya_graphic_->Draw(&gpx4);
 		}
-
-
-
 
 		// 衝突判定処理
 		it.phx_->collision_pow_ = option_vector_[it.device_option_index_].collision_pow_;

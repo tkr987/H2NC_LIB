@@ -6,9 +6,9 @@
 using namespace std;
 using namespace H2NLIB;
 
-vector<pair<eOBJECT::GROUP, eOBJECT::GROUP>> NyaPosition::collision_group_vector_;
-vector<eOBJECT::GROUP> NyaPosition::collision_high_accuracy_group_vector_;
-vector<PositionHandleX*> NyaPosition::collision_vector_[eOBJECT::GROUP::sizeof_enum];
+vector<pair<eOBJECT::NUM, eOBJECT::NUM>> NyaPosition::collision_group_vector_;
+vector<eOBJECT::NUM> NyaPosition::collision_high_accuracy_group_vector_;
+vector<PositionHandleX*> NyaPosition::collision_vector_[eOBJECT::NUM::sizeof_enum];
 list<PositionHandleX> NyaPosition::create_list_;
 
 NyaPosition::NyaPosition()
@@ -23,7 +23,7 @@ NyaPosition::~NyaPosition()
 }
 
 
-void NyaPosition::Collision(PositionHandleX* phx, eOBJECT::GROUP group)
+void NyaPosition::Collision(PositionHandleX* phx, eOBJECT::NUM group)
 {
 	collision_vector_[group].push_back(phx);
 }
@@ -40,8 +40,8 @@ PositionHandleX* NyaPosition::Create(void)
 
 void NyaPosition::Run(void)
 {
-	vector<eOBJECT::GROUP>::iterator find_it1;
-	vector<eOBJECT::GROUP>::iterator find_it2;
+	vector<eOBJECT::NUM>::iterator find_it1;
+	vector<eOBJECT::NUM>::iterator find_it2;
 
 	// 衝突判定
 	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it)
@@ -58,7 +58,8 @@ void NyaPosition::Run(void)
 	}
 
 	// 配列のクリア
-	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) {
+	for (auto it = collision_group_vector_.begin(); it != collision_group_vector_.end(); ++it) 
+	{
 		collision_vector_[it->first].clear();
 		collision_vector_[it->second].clear();
 	}
@@ -72,12 +73,12 @@ void NyaPosition::Run(void)
  @param group2 セットする値２
  @note
  どのオブジェクトグループ同士で衝突判定処理をするのか設定するために使用する関数。
- 例えば、eOBJECT::GROUP::USER1とeOBJECT::GROUP::TARGET_ATTACK1を引数で指定しておけば、
+ 例えば、eOBJECT::NUM::USER1とeOBJECT::NUM::TARGET_ATTACK1を引数で指定しておけば、
  NyaPosition::Run()にてUSER1とTARGET_ATTACK1のオブジェクト同士の衝突判定を実行するようになる。
 **/
-void NyaPosition::SettingCollision(eOBJECT::GROUP group1, eOBJECT::GROUP group2)
+void NyaPosition::SettingCollision(eOBJECT::NUM group1, eOBJECT::NUM group2)
 {
-	pair<eOBJECT::GROUP, eOBJECT::GROUP> set;
+	pair<eOBJECT::NUM, eOBJECT::NUM> set;
 
 	// すでに同じオブジェクトグループが設定されてたら何もしないで終了
 	for (auto& it : collision_group_vector_) {
@@ -98,12 +99,12 @@ void NyaPosition::SettingCollision(eOBJECT::GROUP group1, eOBJECT::GROUP group2)
  @param group1 セットする値１
  @note
  どのオブジェクトグループ同士で衝突判定処理をするのか設定するために使用する関数。
- 例えば、eOBJECT::GROUP::USER1とeOBJECT::GROUP::TARGET_ATTACK1を引数で指定しておけば、
+ 例えば、eOBJECT::NUM::USER1とeOBJECT::NUM::TARGET_ATTACK1を引数で指定しておけば、
  NyaPosition::Run()にてUSER1とTARGET_ATTACK1のオブジェクト同士の衝突判定を実行するようになる。
 **/
-void NyaPosition::SettingCollisionHighAccuracy(eOBJECT::GROUP group)
+void NyaPosition::SettingCollisionHighAccuracy(eOBJECT::NUM group)
 {
-	vector<eOBJECT::GROUP>::iterator find_it;
+	vector<eOBJECT::NUM>::iterator find_it;
 
 	// すでに同じオブジェクトグループが設定されてたら何もしないで終了
 	find_it = find(collision_high_accuracy_group_vector_.begin(), collision_high_accuracy_group_vector_.end(), group);
@@ -113,7 +114,7 @@ void NyaPosition::SettingCollisionHighAccuracy(eOBJECT::GROUP group)
 	collision_high_accuracy_group_vector_.push_back(group);
 }
 
-void NyaPosition::JudgeCollision(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
+void NyaPosition::JudgeCollision(eOBJECT::NUM object_group1, eOBJECT::NUM object_group2)
 {
 	for (auto& it1 : collision_vector_[object_group1])
 		it1->collision_hit_ = false;
@@ -138,7 +139,7 @@ void NyaPosition::JudgeCollision(eOBJECT::GROUP object_group1, eOBJECT::GROUP ob
 }
 
 
-void NyaPosition::JudgeCollisionHighAccuracy(eOBJECT::GROUP object_group1, eOBJECT::GROUP object_group2)
+void NyaPosition::JudgeCollisionHighAccuracy(eOBJECT::NUM object_group1, eOBJECT::NUM object_group2)
 {
 	double a, b, c;
 	double distance;

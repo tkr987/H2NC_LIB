@@ -11,11 +11,11 @@
 using namespace std;
 using namespace NH2;
 unsigned int ImgManager::id_load_;
-unsigned int ImgManager::id_draw_[eOBJECT::GROUP::sizeof_enum];
+unsigned int ImgManager::id_draw_[eOBJECT::NUM::sizeof_enum];
 int ImgManager::swing_scale_y_;
 int ImgManager::swing_time_y_;
 vector<ImgLoad> ImgManager::vec_iload_;
-vector<ImgToken> ImgManager::vec_itoken_[eOBJECT::GROUP::sizeof_enum];
+vector<ImgToken> ImgManager::vec_itoken_[eOBJECT::NUM::sizeof_enum];
 
 
 // *************
@@ -25,7 +25,7 @@ vector<ImgToken> ImgManager::vec_itoken_[eOBJECT::GROUP::sizeof_enum];
 void ImgManager::Clear(void)
 {
 	id_load_ = 0;
-	for (int i = 0; i < eOBJECT::GROUP::sizeof_enum; i++)
+	for (int i = 0; i < eOBJECT::NUM::sizeof_enum; i++)
 		id_draw_[i] = 0;
 	swing_scale_y_ = 0;
 	swing_time_y_ = 0;
@@ -42,61 +42,61 @@ void ImgManager::End(void)
 
 void ImgManager::Init(void)
 {
-	unsigned int itoken_maxsize_[eOBJECT::GROUP::sizeof_enum];	// vec_itoken_の最大要素数
+	unsigned int itoken_maxsize_[eOBJECT::NUM::sizeof_enum];	// vec_itoken_の最大要素数
 
 	// メモリ確保済みなら何もしない
 	if (vec_iload_.size() != 0)
 		return;
 
-	itoken_maxsize_[eOBJECT::GROUP::TITLE_MAIN] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::MAP_BOTTOM] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::STAGE_CONTINUE] = 4;
-	itoken_maxsize_[eOBJECT::GROUP::STAGE_RESULT] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_READY] = 4;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_RUN_FLY] = 1024;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_RUN_WALK] = 1024;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_EFFECT] = 512;
-	itoken_maxsize_[eOBJECT::GROUP::USER] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::USER_EFFECT] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::USER_ARMS] = 128;
-	itoken_maxsize_[eOBJECT::GROUP::USER_ARMS_EFFECT] = 128;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_ARMS_SMALL] = 2048;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_ARMS_LARGE] = 2048;
-	itoken_maxsize_[eOBJECT::GROUP::TARGET_ARMS_EFFECT] = 4096;	
-	itoken_maxsize_[eOBJECT::GROUP::MAP_TOP] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::DESIGN_LAYER1] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::DESIGN_LAYER2] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::DESIGN_LAYER3] = 32;
-	itoken_maxsize_[eOBJECT::GROUP::TITLE_HELP] = 4;
+	itoken_maxsize_[eOBJECT::NUM::TITLE_MAIN] = 32;
+	itoken_maxsize_[eOBJECT::NUM::MAP_BOTTOM] = 32;
+	itoken_maxsize_[eOBJECT::NUM::STAGE_CONTINUE] = 4;
+	itoken_maxsize_[eOBJECT::NUM::STAGE_RESULT] = 32;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_READY] = 4;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_RUN_FLY] = 1024;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_RUN_WALK] = 1024;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_EFFECT] = 512;
+	itoken_maxsize_[eOBJECT::NUM::USER] = 32;
+	itoken_maxsize_[eOBJECT::NUM::USER_EFFECT] = 32;
+	itoken_maxsize_[eOBJECT::NUM::USER_ARMS] = 128;
+	itoken_maxsize_[eOBJECT::NUM::USER_ARMS_EFFECT] = 128;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_ARMS_SMALL] = 2048;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_ARMS_LARGE] = 2048;
+	itoken_maxsize_[eOBJECT::NUM::TARGET_ARMS_EFFECT] = 4096;	
+	itoken_maxsize_[eOBJECT::NUM::MAP_TOP] = 32;
+	itoken_maxsize_[eOBJECT::NUM::DESIGN_LAYER1] = 32;
+	itoken_maxsize_[eOBJECT::NUM::DESIGN_LAYER2] = 32;
+	itoken_maxsize_[eOBJECT::NUM::DESIGN_LAYER3] = 32;
+	itoken_maxsize_[eOBJECT::NUM::TITLE_HELP] = 4;
 	
 	// 画像データ配列の初期化
 	vec_iload_.resize(IMG_FILE_MAXSIZE);
 	// 配列の初期化
-	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
+	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++)
 		vec_itoken_[group].resize(1);
 
 
 
-	vec_itoken_[eOBJECT::GROUP::TITLE_MAIN].resize(itoken_maxsize_[eOBJECT::GROUP::TITLE_MAIN]);
-	vec_itoken_[eOBJECT::GROUP::MAP_BOTTOM].resize(itoken_maxsize_[eOBJECT::GROUP::MAP_BOTTOM]);
-	vec_itoken_[eOBJECT::GROUP::STAGE_CONTINUE].resize(itoken_maxsize_[eOBJECT::GROUP::STAGE_CONTINUE]);
-	vec_itoken_[eOBJECT::GROUP::STAGE_RESULT].resize(itoken_maxsize_[eOBJECT::GROUP::STAGE_RESULT]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_READY].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_READY]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_RUN_FLY].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_RUN_FLY]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_RUN_WALK].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_RUN_WALK]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_EFFECT].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_EFFECT]);
-	vec_itoken_[eOBJECT::GROUP::USER].resize(itoken_maxsize_[eOBJECT::GROUP::USER]);
-	vec_itoken_[eOBJECT::GROUP::USER_EFFECT].resize(itoken_maxsize_[eOBJECT::GROUP::USER_EFFECT]);
-	vec_itoken_[eOBJECT::GROUP::USER_ARMS].resize(itoken_maxsize_[eOBJECT::GROUP::USER_ARMS]);
-	vec_itoken_[eOBJECT::GROUP::USER_ARMS_EFFECT].resize(itoken_maxsize_[eOBJECT::GROUP::USER_ARMS_EFFECT]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_ARMS_SMALL].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_ARMS_SMALL]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_ARMS_LARGE].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_ARMS_LARGE]);
-	vec_itoken_[eOBJECT::GROUP::TARGET_ARMS_EFFECT].resize(itoken_maxsize_[eOBJECT::GROUP::TARGET_ARMS_EFFECT]);
-	vec_itoken_[eOBJECT::GROUP::MAP_TOP].resize(itoken_maxsize_[eOBJECT::GROUP::MAP_TOP]);
-	vec_itoken_[eOBJECT::GROUP::DESIGN_LAYER1].resize(itoken_maxsize_[eOBJECT::GROUP::DESIGN_LAYER1]);
-	vec_itoken_[eOBJECT::GROUP::DESIGN_LAYER2].resize(itoken_maxsize_[eOBJECT::GROUP::DESIGN_LAYER2]);
-	vec_itoken_[eOBJECT::GROUP::DESIGN_LAYER3].resize(itoken_maxsize_[eOBJECT::GROUP::DESIGN_LAYER3]);
-	vec_itoken_[eOBJECT::GROUP::TITLE_HELP].resize(itoken_maxsize_[eOBJECT::GROUP::TITLE_HELP]);
+	vec_itoken_[eOBJECT::NUM::TITLE_MAIN].resize(itoken_maxsize_[eOBJECT::NUM::TITLE_MAIN]);
+	vec_itoken_[eOBJECT::NUM::MAP_BOTTOM].resize(itoken_maxsize_[eOBJECT::NUM::MAP_BOTTOM]);
+	vec_itoken_[eOBJECT::NUM::STAGE_CONTINUE].resize(itoken_maxsize_[eOBJECT::NUM::STAGE_CONTINUE]);
+	vec_itoken_[eOBJECT::NUM::STAGE_RESULT].resize(itoken_maxsize_[eOBJECT::NUM::STAGE_RESULT]);
+	vec_itoken_[eOBJECT::NUM::TARGET_READY].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_READY]);
+	vec_itoken_[eOBJECT::NUM::TARGET_RUN_FLY].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_RUN_FLY]);
+	vec_itoken_[eOBJECT::NUM::TARGET_RUN_WALK].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_RUN_WALK]);
+	vec_itoken_[eOBJECT::NUM::TARGET_EFFECT].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_EFFECT]);
+	vec_itoken_[eOBJECT::NUM::USER].resize(itoken_maxsize_[eOBJECT::NUM::USER]);
+	vec_itoken_[eOBJECT::NUM::USER_EFFECT].resize(itoken_maxsize_[eOBJECT::NUM::USER_EFFECT]);
+	vec_itoken_[eOBJECT::NUM::USER_ARMS].resize(itoken_maxsize_[eOBJECT::NUM::USER_ARMS]);
+	vec_itoken_[eOBJECT::NUM::USER_ARMS_EFFECT].resize(itoken_maxsize_[eOBJECT::NUM::USER_ARMS_EFFECT]);
+	vec_itoken_[eOBJECT::NUM::TARGET_ARMS_SMALL].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_ARMS_SMALL]);
+	vec_itoken_[eOBJECT::NUM::TARGET_ARMS_LARGE].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_ARMS_LARGE]);
+	vec_itoken_[eOBJECT::NUM::TARGET_ARMS_EFFECT].resize(itoken_maxsize_[eOBJECT::NUM::TARGET_ARMS_EFFECT]);
+	vec_itoken_[eOBJECT::NUM::MAP_TOP].resize(itoken_maxsize_[eOBJECT::NUM::MAP_TOP]);
+	vec_itoken_[eOBJECT::NUM::DESIGN_LAYER1].resize(itoken_maxsize_[eOBJECT::NUM::DESIGN_LAYER1]);
+	vec_itoken_[eOBJECT::NUM::DESIGN_LAYER2].resize(itoken_maxsize_[eOBJECT::NUM::DESIGN_LAYER2]);
+	vec_itoken_[eOBJECT::NUM::DESIGN_LAYER3].resize(itoken_maxsize_[eOBJECT::NUM::DESIGN_LAYER3]);
+	vec_itoken_[eOBJECT::NUM::TITLE_HELP].resize(itoken_maxsize_[eOBJECT::NUM::TITLE_HELP]);
 
 	// データクリア
 	Clear();

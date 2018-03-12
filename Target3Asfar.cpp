@@ -48,7 +48,7 @@ Target3Asfar::Target3Asfar(double start_posx, double start_posy, double move_ang
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -101,8 +101,8 @@ void Target3Asfar::AttackHard(void)
 
 	// •ÎŠp‚ÌXV
 	if (12 < count_ % (50 - rank * 6)) {
-		atan2_cube = cube_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
-		atan2_main = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		atan2_cube = cube_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
+		atan2_main = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		if (atan2_main - atan2_cube < CalcRAD(3)) {
 			cube_angle_ += CalcRAD(3);
 		}
@@ -113,7 +113,7 @@ void Target3Asfar::AttackHard(void)
 
 	// UŒ‚ˆ—
 	if (count_ % (50 - rank * 6) == 0) {
-		aparam_->shot_angle_ = cube_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_->shot_angle_ = cube_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		cube_->GetPos(&aparam_->shot_x_, &aparam_->shot_y_);
 		if (cube_->InsidePanel(-64))
 			ArmsManager::TargetShotSmall(aparam_);

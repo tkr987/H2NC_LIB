@@ -53,7 +53,7 @@ Target1Denso::Target1Denso(double start_posx, double end_posy, int lv)
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -88,9 +88,9 @@ void Target1Denso::Action(void)
 {
 	switch(phase_) {
 	case 10:
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 2; i++)
-			cube_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cube_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		phase_ = 11;
 		frames_ = -1;
 		break;
@@ -202,7 +202,7 @@ void Target1Denso::Act13_Move(void)
 		return;
 
 	if (frames_ == 0)
-		act13_move_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		act13_move_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 
 	act13_move_speed_ = (4.0 < act13_move_speed_ + 0.1) ? 4.0 : act13_move_speed_ + 0.1;
 	main_->MoveB(act13_move_angle_, act13_move_speed_);
@@ -263,16 +263,16 @@ void Target1Denso::ShotMainHard(void)
 	if (!main_->InsidePanel())
 		return;
 
-	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int way = 0; way < 3; way++) {
 		main_->GetPos(&aparam_main_->shot_x_, &aparam_main_->shot_y_);
 		aparam_main_->shot_angle_ -= CalcRAD(3);
 		ArmsManager::TargetShotLarge(aparam_main_);
 	}
-	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	main_->GetPos(&aparam_main_->shot_x_, &aparam_main_->shot_y_);
 	ArmsManager::TargetShotLarge(aparam_main_);
-	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int way = 0; way < 3; way++) {
 		main_->GetPos(&aparam_main_->shot_x_, &aparam_main_->shot_y_);
 		aparam_main_->shot_angle_ += CalcRAD(3);
@@ -296,7 +296,7 @@ void Target1Denso::ShotCubeHard(void)
 	for (int i = 0; i < max_cube_; i++) {
 		if (!cube_[i]->InsidePanel())
 			continue;
-		aparam_cube_->shot_angle_ = cube_[i]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_cube_->shot_angle_ = cube_[i]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		for (int wait = 0; wait < 4 + rank_wait; wait++) {
 			cube_[i]->GetPos(&aparam_cube_->shot_x_, &aparam_cube_->shot_y_);
 			aparam_cube_->shot_wait_ = wait * 2;

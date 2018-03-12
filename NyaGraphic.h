@@ -22,7 +22,7 @@ namespace H2NLIB {
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰
@@ -34,7 +34,7 @@ namespace H2NLIB {
 		int pos_x_;
 		int pos_y_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
@@ -48,7 +48,7 @@ namespace H2NLIB {
 		int pos_x2_;
 		int pos_y2_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
@@ -63,7 +63,7 @@ namespace H2NLIB {
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
@@ -80,7 +80,7 @@ namespace H2NLIB {
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
@@ -98,7 +98,7 @@ namespace H2NLIB {
 		double extend_ratey_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚É‘Î‰
@@ -116,7 +116,7 @@ namespace H2NLIB {
 		int pos_y3_;
 		int pos_y4_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚É‘Î‰
@@ -133,7 +133,7 @@ namespace H2NLIB {
 		int val_height_;
 		bool flag_turn_;
 		bool flag_trans_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ’Êí•`‰æŠÖ”‚É‘Î‰
@@ -148,7 +148,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰
@@ -163,7 +163,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
@@ -180,7 +180,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
@@ -198,7 +198,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
@@ -218,7 +218,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
@@ -239,7 +239,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚É‘Î‰
@@ -260,7 +260,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚É‘Î‰
@@ -280,7 +280,7 @@ namespace H2NLIB {
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 	class GraphicFileSet {
@@ -335,7 +335,7 @@ namespace H2NLIB {
 		static std::vector<GraphicFileSet> file_vector_;
 		static std::vector<DrawDequeSet> layer_vector_;
 		static std::vector<bool> swing_vector_;
-		void DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y);
+		void DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y);
 		double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
 	};

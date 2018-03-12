@@ -70,7 +70,7 @@ void User1::Clear(void)
 	sync_movecount_ = 0;
 	// エフェクト設定
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::USER_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::USER_EFFECT;
 	eparam_death_->img_divmax_ = 8;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -80,7 +80,7 @@ void User1::Clear(void)
 	iparam_main_->extend_rate_ = 0.4;
 	iparam_main_->flag_trans_ = true;
 	iparam_main_->flag_turn_ = false;
-	iparam_main_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_main_->group_type_ = eOBJECT::NUM::USER;
 	// IMG MAIN INVINCIBLE 固定パラメータ
 	iparam_main_invincible_->blend_alpha_ = 255;
 	iparam_main_invincible_->blend_mode_ = DX_BLENDMODE_INVSRC;
@@ -88,13 +88,13 @@ void User1::Clear(void)
 	iparam_main_invincible_->extend_rate_ = 0.4;
 	iparam_main_invincible_->flag_trans_ = true;
 	iparam_main_invincible_->flag_turn_ = false;
-	iparam_main_invincible_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_main_invincible_->group_type_ = eOBJECT::NUM::USER;
 	// IMG SUB 固定パラメータ
 	iparam_sub_->draw_angle_ = 0;
 	iparam_sub_->extend_rate_ = 0.5;
 	iparam_sub_->flag_trans_ = true;
 	iparam_sub_->flag_turn_ = false;
-	iparam_sub_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_sub_->group_type_ = eOBJECT::NUM::USER;
 	// ARMS 固定パラメータ
 	aparam_->hit_effect_ = true;
 	aparam_->hit_effect_img_divmax_ = 4;
@@ -123,31 +123,31 @@ void User1::Clear(void)
 	iparam_exeffect1_->draw_angle_ = 0;
 	iparam_exeffect1_->flag_trans_ = true;
 	iparam_exeffect1_->flag_turn_ = false;
-	iparam_exeffect1_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_exeffect1_->group_type_ = eOBJECT::NUM::USER;
 	// EX EFFECT 2 固定パラメータ
 	iparam_exeffect2_->blend_alpha_ = 200;
 	iparam_exeffect2_->blend_mode_ = DX_BLENDMODE_ALPHA;
 	iparam_exeffect2_->draw_angle_ = 0;
 	iparam_exeffect2_->flag_trans_ = true;
 	iparam_exeffect2_->flag_turn_ = false;
-	iparam_exeffect2_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_exeffect2_->group_type_ = eOBJECT::NUM::USER;
 	// EX EFFECT 3A 固定パラメータ
 	iparam_exeffect3a_->extend_rate_ = 1.0;
 	iparam_exeffect3a_->flag_trans_ = true;
 	iparam_exeffect3a_->flag_turn_ = false;
-	iparam_exeffect3a_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_exeffect3a_->group_type_ = eOBJECT::NUM::USER;
 	// EX EFFECT 3B 固定パラメータ
 	iparam_exeffect3b_->extend_rate_ = 1.0;
 	iparam_exeffect3b_->flag_trans_ = true;
 	iparam_exeffect3b_->flag_turn_ = false;
-	iparam_exeffect3b_->group_type_ = eOBJECT::GROUP::USER;
+	iparam_exeffect3b_->group_type_ = eOBJECT::NUM::USER;
 	// POS PARAM 初期パラメータ
 	pparam_->SetRange(2.0);
 //	pparam_->SetStartX(DRAW_PANEL_CENTER);
 //	pparam_->SetStartY(DRAW_PANEL_MAX_Y - 64.0);
 	pparam_->SetStartX(200);
 	pparam_->SetStartY(450);
-	PosManager::Generate(eOBJECT::GROUP::USER, pparam_, POS_NAME_USER_MAIN);
+	PosManager::Generate(eOBJECT::NUM::USER, pparam_, POS_NAME_USER_MAIN);
 	// その他 設定
 	DesignManager::SetAttackLV(1.0);
 	DesignManager::SetExArms(150);
@@ -480,7 +480,7 @@ void User1::Draw1(void)
 //		iparam_exeffect3a_->draw_angle_ = 0.0;
 //		iparam_exeffect3b_->draw_angle_ = 0.0;
 //		DesignManager::AddExTime(250);
-//		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+//		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 //	}
 //	if (0 < DesignManager::GetExTime()) {
 //		// exarms1a エフェクト(素材がないのでImgManagerで実現)
@@ -597,7 +597,7 @@ void User1::DrawInvincible(void)
 	//	iparam_exeffect3a_->draw_angle_ = 0.0;
 	//	iparam_exeffect3b_->draw_angle_ = 0.0;
 	//	DesignManager::AddExTime(250);
-	//	ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+	//	ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 	//}
 	//if (0 < DesignManager::GetExTime()) {
 	//	// exarms1a エフェクト(素材がないのでImgManagerで実現)

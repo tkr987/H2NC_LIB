@@ -122,7 +122,7 @@ Boss3OXA48::Boss3OXA48(double y, int lv)
 	aparam_act11_cristal_->shot_wait_ = 0;
 	// DEATH CRISTAL エフェクト設定
 	eparam_death_cristal_->extend_rate_ = 1.0;
-	eparam_death_cristal_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_cristal_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_cristal_->img_divmax_ = 8;
 	eparam_death_cristal_->img_divmin_ = 0;
 	eparam_death_cristal_->img_id_ = imgfile_death_cristal_;
@@ -131,7 +131,7 @@ Boss3OXA48::Boss3OXA48(double y, int lv)
 	eparam_death_main_->blend_alpha_ = 255;
 	eparam_death_main_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_main_->extend_rate_ = 1.0;
-	eparam_death_main_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_main_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_main_->img_divmax_ = 64;
 	eparam_death_main_->img_divmin_ = 0;
 	eparam_death_main_->img_id_ = imgfile_death_main_;
@@ -187,9 +187,9 @@ void Boss3OXA48::Run(void)
 	case 0:
 		srand(48);
 		DesignManager::FlagDrawBossHealth(true);
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 12; i++)
-			cristal_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cristal_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		Act0_SetPosition();
 		action_ = 1;
 		break;
@@ -321,8 +321,8 @@ void Boss3OXA48::Run(void)
 		cristal_posy = main_posy;
 		cristal2_[0]->SetPos(&cristal_posx, &cristal_posy);
 		cristal2_[1]->SetPos(&cristal_posx, &cristal_posy);
-		cristal2_[0]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-		cristal2_[1]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		cristal2_[0]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+		cristal2_[1]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		act10_cristal2_movex_[0] = (panel_center_x + 200 - cristal_posx) / 150.0;
 		act10_cristal2_movex_[1] = (panel_center_x - 200 - cristal_posx) / 150.0;
 		action_ = 11;
@@ -363,8 +363,8 @@ void Boss3OXA48::Run(void)
 	// 体力30% クリスタル爆発処理
 	if (action_ < 9 && health_percent < 30) {
 		DeleteCristal(1.0, true, true);
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_LARGE);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_LARGE);
 		main_->GetPos(&main_posx, &main_posy);
 		PosManager::GetRelativePanelCenterX(&panel_center_x);
 		act8_main_movex_ = (panel_center_x - main_posx) / 150.0;
@@ -375,8 +375,8 @@ void Boss3OXA48::Run(void)
 	if (health_percent < 0) {
 		DeleteMain(1.0, true, true);
 		DeleteCristal2(1.0, true, true);
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_LARGE);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_LARGE);
 		DesignManager::FlagDrawBossHealth(false);
 		action_ = 100;
 		frames_ = 0;
@@ -640,7 +640,7 @@ void Boss3OXA48::Act7_ShotHard1(void)
 	wave_max += rank_wave;
 	DesignManager::GetRank(&rank_speed);
 	aparam_act6_cristal_->shot_speed_ = 1.5 + (rank_speed / 3);
-	PosManager::GetPos(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, NULL, &user_posy);
+	PosManager::GetPos(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, NULL, &user_posy);
 	if (200 < user_posy) {
 		for (int i = 0; i < 12; i += 2) {
 			cristal_[i]->GetPos(&aparam_act6_cristal_->shot_x_, &aparam_act6_cristal_->shot_y_);
@@ -679,7 +679,7 @@ void Boss3OXA48::Act7_ShotHard2(void)
 	wave_max += rank_wave;
 	DesignManager::GetRank(&rank_speed);
 	aparam_act6_cristal_->shot_speed_ = 1.5 + (rank_speed / 3);
-	PosManager::GetPos(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, NULL, &user_posy);
+	PosManager::GetPos(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, NULL, &user_posy);
 	if (200 < user_posy) {
 		for (int i = 1; i < 12; i += 2) {
 			cristal_[i]->GetPos(&aparam_act6_cristal_->shot_x_, &aparam_act6_cristal_->shot_y_);
@@ -711,7 +711,7 @@ void Boss3OXA48::Act7_ShotHard3(void)
 	if (frames_ % 30 != 10)
 		return;
 
-	PosManager::GetPos(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, NULL, &user_posy);
+	PosManager::GetPos(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, NULL, &user_posy);
 	if (user_posy < 200) {
 		DesignManager::GetRank(&rank_speed);
 		aparam_act6_main_->shot_speed_ = 5.0 + (rank_speed / 3);
@@ -770,7 +770,7 @@ void Boss3OXA48::Act7_Move(void)
 	//  メイン移動処理
 	// *****************
 	if (frames_ % 30 == 0) {
-		PosManager::GetPos(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, &user_posx, &user_posy);
+		PosManager::GetPos(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, &user_posx, &user_posy);
 		main_->GetPos(&boss_posx, &boss_posy);
 		act6_main_movex_ = (user_posx - boss_posx) / 10;
 	}

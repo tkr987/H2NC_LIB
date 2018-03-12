@@ -52,7 +52,7 @@ Target3Arena::Target3Arena(double start_posx, double start_posy, double move_spe
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 64;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -151,7 +151,7 @@ void Target3Arena::Attack1Hard(void)
 	int rank_freq;			// ƒ‰ƒ“ƒNˆË‘¶‚ÌUŒ‚•p“x
 	double rank_speed;		// ƒ‰ƒ“ƒNˆË‘¶‚ÌUŒ‚‘¬“x
 	// UŒ‚Šp“x
-	double angle = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	double angle = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 
 
 	if (lv_ != LV_HARD)

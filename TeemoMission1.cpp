@@ -10,7 +10,8 @@ void TeemoMission1::Load(void)
 	NyaDesign* nya_design_ = new NyaDesign;
 	NyaTarget* teemo_target = new TeemoTarget;
 
-	AddChTarget(1, teemo_target);
+	AddChTarget(1, 30, teemo_target);
+	LoadBack("img/back1.png", 0, -2560 + 720, 2560 - 720, 180);
 
 	nya_design_->SetSkillName(0, "Skill Q (power)");
 	nya_design_->SetSkillName(1, "Skill W (wave)");

@@ -42,7 +42,7 @@ Target1Virga::Target1Virga(double start_posx, double start_posy, int lv)
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -69,7 +69,7 @@ void Target1Virga::Action(void)
 {	
 	switch(phase_) {
 	case 10:
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_WALK);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_WALK);
 		phase_ = 11;
 		frames_ = -1;
 		break;
@@ -134,18 +134,18 @@ void Target1Virga::Attack(void)
 	aparam_main_->shot_x_ = x;
 	aparam_main_->shot_y_ = y;
 	if (main_->InsidePanel()) {
-		aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		aparam_main_->shot_angle_ -= CalcRAD(10);
 		aparam_main_->shot_wait_ = 0;
 		ArmsManager::TargetShotSmall(aparam_main_);
 		aparam_main_->shot_wait_ = 5;
 		ArmsManager::TargetShotSmall(aparam_main_);
-		aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		aparam_main_->shot_wait_ = 0;
 		ArmsManager::TargetShotSmall(aparam_main_);
 		aparam_main_->shot_wait_ = 5;
 		ArmsManager::TargetShotSmall(aparam_main_);
-		aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		aparam_main_->shot_angle_ += CalcRAD(10);
 		aparam_main_->shot_wait_ = 0;
 		ArmsManager::TargetShotSmall(aparam_main_);

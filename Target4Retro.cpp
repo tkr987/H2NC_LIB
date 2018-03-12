@@ -48,7 +48,7 @@ Target4Retro::Target4Retro(double start_posx, double start_posy, double move_spe
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -73,7 +73,7 @@ void Target4Retro::Run(void)
 
 	switch (action_) {
 	case 10:
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		action_ = 11;
 		frames_ = -1;
 		break;
@@ -129,7 +129,7 @@ void Target4Retro::Act11_ShotHard(void)
 	if (!main_->InsidePanel())
 		return;
 
-	angle = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	angle = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	angle90 = CalcRAD(90);
 	DesignManager::GetRank(&rank_wait);
 	rank_wait /= 3;

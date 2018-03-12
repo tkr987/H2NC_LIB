@@ -29,7 +29,7 @@ namespace H2NLIB {
 		int file_id_;
 		int grid_x_;
 		int grid_y_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 	};
 
 
@@ -60,10 +60,10 @@ namespace H2NLIB {
 		int graphic_file_id_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
-		static std::list<Animation> draw_list_[eOBJECT::GROUP::sizeof_enum];
+		static std::list<Animation> draw_list_[eOBJECT::NUM::sizeof_enum];
 		static std::list<Animation> wait_list_;
 		static std::vector<EffectOption> option_vector_;
-		void DrawAll(eOBJECT::GROUP group);
+		void DrawAll(eOBJECT::NUM group);
 	};
 
 }

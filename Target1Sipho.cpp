@@ -53,7 +53,7 @@ Target1Sipho::Target1Sipho(double start_posx, double end_posy, int lv)
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 64;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -81,9 +81,9 @@ void Target1Sipho::Action(void)
 {
 	switch(phase_) {
 	case 10:
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 4; i++)
-			cube_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cube_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		phase_ = 11;
 		frames_ = -1;
 		break;

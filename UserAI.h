@@ -17,10 +17,10 @@ namespace H2NLIB {
 }
 
 
-class TeemoUser : public H2NLIB::NyaUser {
+class UserAI : public H2NLIB::NyaUser {
 public:
-	TeemoUser();
-	~TeemoUser();
+	UserAI();
+	~UserAI();
 	void Action(void);
 	void Draw(void);
 	void Init(void);
@@ -32,8 +32,8 @@ private:
 	H2NLIB::NyaPosition* nya_position_;
 	H2NLIB::DevicePropertyX* dpx_;
 	H2NLIB::EffectPropertyX* epx_;
-	H2NLIB::GraphicPropertyX4* gpx4_teemo_;
-	H2NLIB::PositionHandleX* phx_teemo_;
+	H2NLIB::GraphicPropertyX4* gpx4_ai_;
+	H2NLIB::PositionHandleX* phx_ai_;
 	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
 	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
 };

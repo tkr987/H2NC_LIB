@@ -20,7 +20,7 @@ namespace H2NLIB {
 	public:
 		void AddChMission(NyaMission*);
 		void AddChUser(NyaUser* user);
-		int Init(std::string);
+		int Init(std::string title);
 		void Run(void);
 		NyaWindow();
 		~NyaWindow();

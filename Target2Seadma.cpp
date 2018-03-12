@@ -54,7 +54,7 @@ Target2Seadma::Target2Seadma(double start_posx, double end_posy, int lv)
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -128,7 +128,7 @@ void Target2Seadma::Attack(int interval)
 		aparam_cube_->shot_speed_ = shot_speed + rank / 150.0;
 		// cube1
 		if (cube1_->InsidePanel(-32)) {
-			shot_diff_angle = cube1_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+			shot_diff_angle = cube1_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 			cube1_->GetPos(&aparam_cube_->shot_x_, &aparam_cube_->shot_y_);
 			for (double angle = -8.0; angle <= 8.0; angle += 4.0) {
 				aparam_cube_->shot_angle_ = shot_diff_angle + CalcRAD(angle);
@@ -137,7 +137,7 @@ void Target2Seadma::Attack(int interval)
 		}
 		// cube2
 		if (cube2_->InsidePanel(-32)) {
-			shot_diff_angle = cube2_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+			shot_diff_angle = cube2_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 			cube2_->GetPos(&aparam_cube_->shot_x_, &aparam_cube_->shot_y_);
 			for (double angle = -8.0; angle <= 8.0; angle += 4.0) {
 				aparam_cube_->shot_angle_ = shot_diff_angle + CalcRAD(angle);
@@ -146,7 +146,7 @@ void Target2Seadma::Attack(int interval)
 		}
 		// cube3
 		if (cube3_->InsidePanel(-32)) {
-			shot_diff_angle = cube3_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+			shot_diff_angle = cube3_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 			cube3_->GetPos(&aparam_cube_->shot_x_, &aparam_cube_->shot_y_);
 			for (double angle = -8.0; angle <= 8.0; angle += 4.0) {
 				aparam_cube_->shot_angle_ = shot_diff_angle + CalcRAD(angle);
@@ -155,7 +155,7 @@ void Target2Seadma::Attack(int interval)
 		}
 		// cube4
 		if (cube4_->InsidePanel(-32)) {
-			shot_diff_angle = cube4_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+			shot_diff_angle = cube4_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 			cube4_->GetPos(&aparam_cube_->shot_x_, &aparam_cube_->shot_y_);
 			for (double angle = -8.0; angle <= 8.0; angle += 4.0) {
 				aparam_cube_->shot_angle_ = shot_diff_angle + CalcRAD(angle);
@@ -228,7 +228,7 @@ void Target2Seadma::Delete(void)
 			cube2_->GetPos(&eparam_death_->x_, &eparam_death_->y_);
 			EffectManager::Create(eparam_death_);
 			cube2_->DeleteData(add_alv, add_rank);
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 			DesignManager::AddExArms(add_exarms);
 			ImgManager::SwingY(20, 2);
 			SoundManager::Play(soundfile_death_, DX_PLAYTYPE_BACK);
@@ -258,7 +258,7 @@ void Target2Seadma::Delete(void)
 			cube4_->GetPos(&eparam_death_->x_, &eparam_death_->y_);
 			EffectManager::Create(eparam_death_);
 			cube4_->DeleteData(add_alv, add_rank);
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 			DesignManager::AddExArms(add_exarms);
 			ImgManager::SwingY(20, 2);
 			SoundManager::Play(soundfile_death_, DX_PLAYTYPE_BACK);

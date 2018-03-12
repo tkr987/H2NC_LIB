@@ -96,7 +96,7 @@ Boss1MRAB::Boss1MRAB(double x, double y, int lv)
 	eparam_death_cristal_->blend_alpha_ = 255;
 	eparam_death_cristal_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_cristal_->extend_rate_ = 1.0;
-	eparam_death_cristal_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_cristal_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_cristal_->img_divmax_ = 64;
 	eparam_death_cristal_->img_divmin_ = 0;
 	eparam_death_cristal_->img_id_ = imgfile_death_cristal_;
@@ -105,7 +105,7 @@ Boss1MRAB::Boss1MRAB(double x, double y, int lv)
 	eparam_death_main_->blend_alpha_ = 255;
 	eparam_death_main_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_main_->extend_rate_ = 1.0;
-	eparam_death_main_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_main_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_main_->img_divmax_ = 63;
 	eparam_death_main_->img_divmin_ = 0;
 	eparam_death_main_->img_id_ = imgfile_death_main_;
@@ -185,11 +185,11 @@ void Boss1MRAB::Action(void)
 	case 10:
 		DesignManager::FlagDrawBossHealth(true);
 		DesignManager::SetBossHealthColor("green");
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-		cristal_orange_[0]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-		cristal_orange_[1]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-		cristal_red_[0]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-		cristal_red_[1]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+		cristal_orange_[0]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+		cristal_orange_[1]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+		cristal_red_[0]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+		cristal_red_[1]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		phase_ = 11;
 		frames_ = -1;
 		break;
@@ -253,7 +253,7 @@ void Boss1MRAB::Action(void)
 	// **************
 	case 31:
 		Act31_Delete();
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 		ImgManager::SwingY(30, 4);
 		phase_ = 32;
 		frames_ = -1;
@@ -279,7 +279,7 @@ void Boss1MRAB::Action(void)
 	// **********
 	case 51:
 		Act51_Delete();
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 		ImgManager::SwingY(40, 5);
 		phase_ = 52;
 		frames_ = -1;

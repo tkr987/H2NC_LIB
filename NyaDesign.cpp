@@ -5,7 +5,6 @@
 #include "NyaString.h"
 #include "NyaTarget.h"
 
-#define FPS_MAX 60
 #define __DEBUG__
 
 using namespace std;

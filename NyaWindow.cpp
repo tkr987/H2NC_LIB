@@ -37,8 +37,9 @@ NyaWindow::~NyaWindow()
 	if (nya_user_.first)
 		delete nya_user_.second;
 
-	for (auto& it : nya_mission_vector_)
-		delete it;
+
+	for (vector<NyaMission*>::iterator it = nya_mission_vector_.begin(); it != nya_mission_vector_.end(); ++it)
+		delete *it;
 
 	DxLib_End();
 }
@@ -130,7 +131,8 @@ void NyaWindow::Run(void)
 
 		ClearDrawScreen();
 
-		switch (nya_design_->GetProcess()) {
+		switch (nya_design_->GetProcess()) 
+		{
 		case ePROCESS::TITLE:
 			nya_mission_index_ = 0;
 			RunTitle();
@@ -138,21 +140,27 @@ void NyaWindow::Run(void)
 				nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
 			break;
 		case ePROCESS::MISSION_LOAD:
-			nya_mission_vector_[nya_mission_index_]->Load();
-			nya_mission_vector_[nya_mission_index_]->Run();
+			if (nya_mission_vector_.size() != 0)
+			{ 
+				nya_mission_vector_[nya_mission_index_]->Load();
+				nya_mission_vector_[nya_mission_index_]->Run();
+			}
 			nya_design_->SetProcess(ePROCESS::MISSION_RUN);
 			break;
 		case ePROCESS::MISSION_RUN:
-			if (nya_user_.first) {
+			if (nya_user_.first) 
+			{
 				nya_user_.second->Action();
 				nya_user_.second->Draw();
 			}
-			nya_mission_vector_[nya_mission_index_]->Run();
+			if (nya_mission_vector_.size() != 0)
+				nya_mission_vector_[nya_mission_index_]->Run();
 			break;
 		case ePROCESS::MISSION_STOP:
 			if (nya_user_.first) 
 				nya_user_.second->Draw();
-			nya_mission_vector_[nya_mission_index_]->Run();
+			if (nya_mission_vector_.size() != 0)
+				nya_mission_vector_[nya_mission_index_]->Run();
 		break;
 		case ePROCESS::CLEAR:
 			nya_mission_index_++;

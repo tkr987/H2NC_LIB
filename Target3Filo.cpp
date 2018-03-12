@@ -45,7 +45,7 @@ Target3Filo::Target3Filo(double start_posx, double start_posy, int lv)
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -128,7 +128,7 @@ void Target3Filo::Attack1Hard(void)
 	if (main_->InsidePanel(-32)) {
 		main_->GetPos(&aparam_->shot_x_, &aparam_->shot_y_);
 		for (int wave = -2; wave < 3; wave++) {
-			aparam_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+			aparam_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 			aparam_->shot_angle_ += wave * CalcRAD(10);
 			ArmsManager::TargetShotSmall(aparam_);
 		}

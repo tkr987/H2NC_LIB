@@ -154,14 +154,14 @@ Boss4MDRTB::Boss4MDRTB(double y, int lv)
 	aparam_act52_main_->shot_speed_ = 12.0;
 	// DEATH CUBE エフェクト設定
 	eparam_death_cube_->extend_rate_ = 1.0;
-	eparam_death_cube_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_cube_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_cube_->img_divmax_ = 8;
 	eparam_death_cube_->img_divmin_ = 0;
 	eparam_death_cube_->img_id_ = imgfile_death_cube_;
 	eparam_death_cube_->img_interval_ = 2;
 	// DEATH CRISTAL エフェクト設定
 	eparam_death_cristal_->extend_rate_ = 1.0;
-	eparam_death_cristal_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_cristal_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_cristal_->img_divmax_ = 8;
 	eparam_death_cristal_->img_divmin_ = 0;
 	eparam_death_cristal_->img_id_ = imgfile_death_cristal_;
@@ -170,7 +170,7 @@ Boss4MDRTB::Boss4MDRTB(double y, int lv)
 	eparam_death_main_->blend_alpha_ = 255;
 	eparam_death_main_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_main_->extend_rate_ = 1.0;
-	eparam_death_main_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_main_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_main_->img_divmax_ = 64;
 	eparam_death_main_->img_divmin_ = 0;
 	eparam_death_main_->img_id_ = imgfile_death_main_;
@@ -239,19 +239,19 @@ void Boss4MDRTB::Run(void)
 		srand(128);
 		DesignManager::FlagDrawBossHealth(true);
 		DesignManager::SetBossHealthColor("green");
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 6; i++)
-			cristal1_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cristal1_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (it = cube_wait_.begin(); it != cube_wait_.end(); ++it)
-			(*it)->target_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			(*it)->target_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 12; i++) {
-			cristalL_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-			cristalR_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cristalL_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+			cristalR_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		}
-		cristal2_[0]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
-		cristal2_[1]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		cristal2_[0]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
+		cristal2_[1]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 16; i++)
-			cristal3_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cristal3_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		Act10_SetPosition();
 		action_ = 11;
 		frames_ = -1;
@@ -337,8 +337,8 @@ void Boss4MDRTB::Run(void)
 			action_ = 41;
 			frames_ = -1;
 		} else if (frames_ == 399 && health_percent < 15) {
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_LARGE);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 			action_ = 50;
 			frames_ = -1;
 		}
@@ -366,8 +366,8 @@ void Boss4MDRTB::Run(void)
 		Collision6();
 		Draw5();
 		if (health_percent < 15) {
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_LARGE);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 			action_ = 44;
 			frames_ = -1;
 		}
@@ -414,8 +414,8 @@ void Boss4MDRTB::Run(void)
 		Collision9();
 		Draw7();
 		if (health_ < 0) {
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-			ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_LARGE);
+			ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 			action_ = 53;
 			frames_ = -1;
 		}
@@ -557,12 +557,12 @@ void Boss4MDRTB::Act20_MainShotHard(void)
 	main_->GetPos(&aparam_act20_main_->shot_x_, &aparam_act20_main_->shot_y_);
 	for (int wait = 0; wait < 30; wait += 2) {
 		aparam_act20_main_->shot_wait_ = wait;
-		aparam_act20_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, act20_main_shot_angleL_);
+		aparam_act20_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, act20_main_shot_angleL_);
 		ArmsManager::TargetShotSmall(aparam_act20_main_);
 	}
 	for (int wait = 0; wait < 30; wait += 2) {
 		aparam_act20_main_->shot_wait_ = wait;
-		aparam_act20_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, act20_main_shot_angleR_);
+		aparam_act20_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, act20_main_shot_angleR_);
 		ArmsManager::TargetShotSmall(aparam_act20_main_);
 	}
 
@@ -803,7 +803,7 @@ void Boss4MDRTB::Act43_CristalShotHard(void)
 		return;
 
 	DesignManager::GetRank(&rank_wait);
-	aparam_act43_cristal_->shot_angle_ = cristal2_[0]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_act43_cristal_->shot_angle_ = cristal2_[0]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int wave = 1; wave < 2; wave++) {
 		aparam_act43_cristal_->shot_angle_ -= CalcRAD(3.0);
 		for (int wait = 0; wait < 6 + rank_wait; wait++) {
@@ -812,13 +812,13 @@ void Boss4MDRTB::Act43_CristalShotHard(void)
 			ArmsManager::TargetShotSmall(aparam_act43_cristal_);
 		}
 	}
-	aparam_act43_cristal_->shot_angle_ = cristal2_[0]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_act43_cristal_->shot_angle_ = cristal2_[0]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int wait = 0; wait < 6 + rank_wait; wait++) {
 		aparam_act43_cristal_->shot_wait_ = wait * 3;
 		cristal2_[0]->GetPos(&aparam_act43_cristal_->shot_x_, &aparam_act43_cristal_->shot_y_);
 		ArmsManager::TargetShotSmall(aparam_act43_cristal_);
 	}
-	aparam_act43_cristal_->shot_angle_ = cristal2_[0]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_act43_cristal_->shot_angle_ = cristal2_[0]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int wave = 1; wave < 2; wave++) {
 			aparam_act43_cristal_->shot_angle_ += CalcRAD(3.0);
 		for (int wait = 0; wait < 6 + rank_wait; wait++) {
@@ -828,7 +828,7 @@ void Boss4MDRTB::Act43_CristalShotHard(void)
 		}
 	}
 	DesignManager::GetRank(&rank_wait);
-	aparam_act43_cristal_->shot_angle_ = cristal2_[1]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_act43_cristal_->shot_angle_ = cristal2_[1]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int wave = 1; wave < 2; wave++) {
 		aparam_act43_cristal_->shot_angle_ -= CalcRAD(3.0);
 		for (int wait = 0; wait < 6 + rank_wait; wait++) {
@@ -837,13 +837,13 @@ void Boss4MDRTB::Act43_CristalShotHard(void)
 			ArmsManager::TargetShotSmall(aparam_act43_cristal_);
 		}
 	}
-	aparam_act43_cristal_->shot_angle_ = cristal2_[1]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_act43_cristal_->shot_angle_ = cristal2_[1]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int wait = 0; wait < 6 + rank_wait; wait++) {
 		aparam_act43_cristal_->shot_wait_ = wait * 3;
 		cristal2_[1]->GetPos(&aparam_act43_cristal_->shot_x_, &aparam_act43_cristal_->shot_y_);
 		ArmsManager::TargetShotSmall(aparam_act43_cristal_);
 	}
-	aparam_act43_cristal_->shot_angle_ = cristal2_[1]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_act43_cristal_->shot_angle_ = cristal2_[1]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	for (int wave = 1; wave < 2; wave++) {
 			aparam_act43_cristal_->shot_angle_ += CalcRAD(3.0);
 		for (int wait = 0; wait < 6 + rank_wait; wait++) {
@@ -1035,7 +1035,7 @@ void Boss4MDRTB::Act52_CristalShotHard(void)
 			used_shot_number = true;
 	}
 	if (!used_shot_number) {
-		aparam_act52_cristal_->shot_angle_ = cristal3_[shot_number]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_act52_cristal_->shot_angle_ = cristal3_[shot_number]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		for (int wait = 0; wait < 6; wait++) {
 			aparam_act52_cristal_->shot_wait_ = wait * 2;
 			cristal3_[shot_number]->GetPos(&aparam_act52_cristal_->shot_x_, &aparam_act52_cristal_->shot_y_);

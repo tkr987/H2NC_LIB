@@ -1,18 +1,17 @@
 #pragma once
 
-
-namespace H2NLIB {
-
-	//namespace eGRAPHIC {
-	//	enum NUM {
-	//		TYPE1, TYPE2, TYPE3, TYPE4, TYPE5, TYPE6, TYPE7, TYPE8,
-	//		TYPE1B, TYPE2B, TYPE3B, TYPE4B, TYPE5B, TYPE6B, TYPE7B, TYPE8B,
-	//	};
-	//};
+#define FPS_MAX 60
 
 
-	namespace eINPUT {
-		enum NUM { 
+namespace H2NLIB
+{
+	// *****************
+	//  入力の種類
+	// *****************
+	namespace eINPUT
+	{
+		enum NUM
+		{ 
 			ENTER, UP, RIGHT, DOWN, LEFT, Q, W, E, R, SPACE, sizeof_enum, 
 		};
 	};
@@ -21,9 +20,12 @@ namespace H2NLIB {
 	// **********************
 	//  オブジェクトの種類
 	// **********************
-	namespace eOBJECT {
-		enum GROUP {
+	namespace eOBJECT
+	{
+		enum NUM
+		{
 			enum_zero,
+			MAP, 
 			TARGET1, TARGET2, TARGET3, TARGET4, TARGET5,
 			TARGET_ATTACK1, TARGET_ATTACK2, TARGET_ATTACK3, TARGET_ATTACK4, TARGET_ATTACK5, 
 			TARGET_ATTACK_EFFECT1, TARGET_ATTACK_EFFECT2, TARGET_ATTACK_EFFECT3, TARGET_ATTACK_EFFECT4, TARGET_ATTACK_EFFECT5, 
@@ -39,8 +41,10 @@ namespace H2NLIB {
 	// ************
 	//  プロセス
 	// ************
-	namespace ePROCESS {
-		enum NUM {
+	namespace ePROCESS
+	{
+		enum NUM
+		{
 			enum_zero,
 			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_STOP, CLEAR, CONTINUE, OVER, REPLAY, 
 			sizeof_enum

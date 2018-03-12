@@ -55,7 +55,7 @@ Target4Caulimo::Target4Caulimo(double start_posx, double start_posy, double move
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 64;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -88,9 +88,9 @@ void Target4Caulimo::Run(void)
 	switch (action_) {
 	case 10:
 		srand(16);
-		main_->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+		main_->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		for (int i = 0; i < 6; i++)
-			cube_[i]->SetGroup(eOBJECT::GROUP::TARGET_RUN_FLY);
+			cube_[i]->SetGroup(eOBJECT::NUM::TARGET_RUN_FLY);
 		action_ = 11;
 		frames_ = -1;
 		break;
@@ -129,8 +129,8 @@ void Target4Caulimo::Run(void)
 		}
 		break;
 	case 20:
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-		ArmsManager::DeleteAll(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_LARGE);
+		ArmsManager::DeleteAll(eOBJECT::NUM::TARGET_ARMS_SMALL);
 		ImgManager::SwingY(20, 3);
 		Delete(1.0, true, true);
 		action_ = 22;

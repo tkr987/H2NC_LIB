@@ -11,28 +11,28 @@ using namespace std;
 
 void PosUpdater::Run(void)
 {
-	InitHitCount(eOBJECT::GROUP::USER);
-	InitHitCount(eOBJECT::GROUP::TARGET_RUN_FLY);
-	InitHitCount(eOBJECT::GROUP::TARGET_RUN_WALK);
-	InitHitCount(eOBJECT::GROUP::USER_ARMS);
-	InitHitCount(eOBJECT::GROUP::TARGET_ARMS_SMALL);
-	InitHitCount(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-	Collision(eOBJECT::GROUP::USER, eOBJECT::GROUP::TARGET_ARMS_SMALL);
-	Collision(eOBJECT::GROUP::USER, eOBJECT::GROUP::TARGET_ARMS_LARGE);
-	Collision(eOBJECT::GROUP::USER, eOBJECT::GROUP::TARGET_RUN_FLY);
-	Collision(eOBJECT::GROUP::USER, eOBJECT::GROUP::TARGET_RUN_WALK);
-	Collision(eOBJECT::GROUP::TARGET_RUN_FLY, eOBJECT::GROUP::USER_ARMS);
-	Collision(eOBJECT::GROUP::TARGET_RUN_WALK, eOBJECT::GROUP::USER_ARMS);
-	AxisCalculate(eOBJECT::GROUP::MAP_BOTTOM);
-	AxisCalculate(eOBJECT::GROUP::TARGET_READY);
-	AxisCalculate(eOBJECT::GROUP::TARGET_RUN_FLY);
-	AxisCalculate(eOBJECT::GROUP::TARGET_RUN_WALK);
-	AxisCalculate(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-	AxisCalculate(eOBJECT::GROUP::TARGET_ARMS_SMALL);
+	InitHitCount(eOBJECT::NUM::USER);
+	InitHitCount(eOBJECT::NUM::TARGET_RUN_FLY);
+	InitHitCount(eOBJECT::NUM::TARGET_RUN_WALK);
+	InitHitCount(eOBJECT::NUM::USER_ARMS);
+	InitHitCount(eOBJECT::NUM::TARGET_ARMS_SMALL);
+	InitHitCount(eOBJECT::NUM::TARGET_ARMS_LARGE);
+	Collision(eOBJECT::NUM::USER, eOBJECT::NUM::TARGET_ARMS_SMALL);
+	Collision(eOBJECT::NUM::USER, eOBJECT::NUM::TARGET_ARMS_LARGE);
+	Collision(eOBJECT::NUM::USER, eOBJECT::NUM::TARGET_RUN_FLY);
+	Collision(eOBJECT::NUM::USER, eOBJECT::NUM::TARGET_RUN_WALK);
+	Collision(eOBJECT::NUM::TARGET_RUN_FLY, eOBJECT::NUM::USER_ARMS);
+	Collision(eOBJECT::NUM::TARGET_RUN_WALK, eOBJECT::NUM::USER_ARMS);
+	AxisCalculate(eOBJECT::NUM::MAP_BOTTOM);
+	AxisCalculate(eOBJECT::NUM::TARGET_READY);
+	AxisCalculate(eOBJECT::NUM::TARGET_RUN_FLY);
+	AxisCalculate(eOBJECT::NUM::TARGET_RUN_WALK);
+	AxisCalculate(eOBJECT::NUM::TARGET_ARMS_LARGE);
+	AxisCalculate(eOBJECT::NUM::TARGET_ARMS_SMALL);
 	AxisUpdate();
 
 	list<PosToken>::iterator it;
-	for (it = list_used_[eOBJECT::GROUP::USER].begin(); it != list_used_[eOBJECT::GROUP::USER].end(); ++it) {
+	for (it = list_used_[eOBJECT::NUM::USER].begin(); it != list_used_[eOBJECT::NUM::USER].end(); ++it) {
 		if (it->name_ == POS_NAME_USER_MAIN)
 			break;
 	}

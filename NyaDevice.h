@@ -19,29 +19,28 @@ namespace H2NLIB {
 
 	class DeviceEffect {
 	public:
-		bool set_;
 		int animation_div_max_;
 		int animation_interval_time_;
 		int file_id_;
-		eOBJECT::GROUP object_group_;
+		eOBJECT::NUM object_group_;
 		int effect_option_index_;
 	};
 
 	class DeviceGraphic {
 	public:
-		bool set_;
+		int file_div_;
 		int file_id_;
 	};
 
 	struct Gadget {
+		int device_option_index_;
 		double draw_angle_;
 		double move_angle_;
 		double move_x_;
 		double move_y_;
-		DeviceEffect effect_;
-		DeviceGraphic graphic_;
 		PositionHandleX* phx_;
-		int device_option_index_;
+		std::pair<bool, DeviceEffect> effect_pair_;
+		std::pair<bool, DeviceGraphic> graphic_pair_;
 	};
 
 	class DeviceOption {
@@ -66,7 +65,7 @@ namespace H2NLIB {
 		double create_y_;					//!< 生成y座標	
 		double move_angle_;					//!< 移動角度
 		double move_speed_;					//!< 移動速度
-		eOBJECT::GROUP object_group_;		//!< オブジェクトのグループ設定
+		eOBJECT::NUM object_group_;			//!< オブジェクトのグループ設定
 	};
 
 	class NyaDevice {
@@ -76,19 +75,19 @@ namespace H2NLIB {
 		void Attack(DevicePropertyX* dpx, int option_index = 0);
 		int NewOption(DeviceOption* option);
 		void Run(void);
-		void SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::GROUP object_group);
-		void SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::GROUP object_group, double draw_angle, double draw_extend_, double draw_move_x_, double draw_move_y_);
+		void SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::NUM object_group);
+		void SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::NUM object_group, double draw_angle, double draw_extend_, double draw_move_x_, double draw_move_y_);
 		void SetGraphic(std::string file_pass);
 	private:
 		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
-		DeviceEffect effect_;
-		DeviceGraphic graphic_;
+		std::pair<bool, DeviceEffect> set_effect_pair_;
+		std::pair<bool, DeviceGraphic> set_graphic_pair_;
 		static std::vector<DeviceOption> option_vector_;
-		static std::list<Gadget> attack_list_[eOBJECT::GROUP::sizeof_enum];
+		static std::list<Gadget> attack_list_[eOBJECT::NUM::sizeof_enum];
 		static std::list<Gadget> wait_list_;
-		void Calculate(eOBJECT::GROUP group);
+		void Calculate(eOBJECT::NUM group);
 		double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
 	};

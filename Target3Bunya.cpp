@@ -53,7 +53,7 @@ Target3Bunya::Target3Bunya(double start_posx, double move_quadratic_a, double mo
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -153,7 +153,7 @@ void Target3Bunya::Attack1Hard(void)
 	// ************
 	if (cube_[0]->InsidePanel(-32)) {
 		cube_[0]->GetPos(&aparam_->shot_x_, &aparam_->shot_y_);
-		aparam_->shot_angle_ = cube_[0]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_->shot_angle_ = cube_[0]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		for (int num = 0; num < rank_num; num++) {
 			aparam_->shot_wait_ = num * 3;
 			ArmsManager::TargetShotSmall(aparam_);
@@ -161,7 +161,7 @@ void Target3Bunya::Attack1Hard(void)
 	}
 	if (cube_[1]->InsidePanel(-32)) {
 		cube_[1]->GetPos(&aparam_->shot_x_, &aparam_->shot_y_);
-		aparam_->shot_angle_ = cube_[1]->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+		aparam_->shot_angle_ = cube_[1]->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 		for (int num = 0; num < rank_num; num++) {
 			aparam_->shot_wait_ = num * 3;
 			ArmsManager::TargetShotSmall(aparam_);

@@ -19,17 +19,17 @@ void Result::Init(void)
 	soundfile_score_ = SoundManager::Load("data/sound/ResultScore.wav");
 	// IMG CLEAR STAGE 固定パラメータ
 	iparam1_clear_stage_->flag_trans_ = true;
-	iparam1_clear_stage_->group_type_ = eOBJECT::GROUP::STAGE_RESULT;
+	iparam1_clear_stage_->group_type_ = eOBJECT::NUM::STAGE_RESULT;
 	iparam1_clear_stage_->x_ = 192;
 	iparam1_clear_stage_->y_ = 320;
 	// IMG STAGE 固定パラメータ
 	iparam1_stage_->flag_trans_ = true;
-	iparam1_stage_->group_type_ = eOBJECT::GROUP::STAGE_RESULT;
+	iparam1_stage_->group_type_ = eOBJECT::NUM::STAGE_RESULT;
 	iparam1_stage_->x_ = 0;
 	iparam1_stage_->y_ = 0;
 	// IMG SCORE NUMBER 固定パラメータ
 	iparam1_score_number_->flag_trans_ = true;
-	iparam1_score_number_->group_type_ = eOBJECT::GROUP::STAGE_RESULT;
+	iparam1_score_number_->group_type_ = eOBJECT::NUM::STAGE_RESULT;
 	Clear();
 }
 

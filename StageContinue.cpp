@@ -22,7 +22,7 @@ void StageContinue::DataLoad(void)
 	select_ = 0;
 	// Image ŒÅ’èƒpƒ‰ƒ[ƒ^
 	iparam1_->flag_trans_ = false;
-	iparam1_->group_type_ = eOBJECT::GROUP::STAGE_CONTINUE;
+	iparam1_->group_type_ = eOBJECT::NUM::STAGE_CONTINUE;
 	iparam1_->x_ = 0;
 	iparam1_->y_ = 100;
 }

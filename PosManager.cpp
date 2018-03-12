@@ -15,7 +15,7 @@ double PosManager::move_axis_y_;
 int PosManager::swing_scale_y_;
 int PosManager::swing_time_y_;
 list<PosToken> PosManager::list_unused_;
-list<PosToken> PosManager::list_used_[eOBJECT::GROUP::sizeof_enum];
+list<PosToken> PosManager::list_used_[eOBJECT::NUM::sizeof_enum];
 
 
 void PosManager::Clear(void)
@@ -31,7 +31,7 @@ void PosManager::Clear(void)
 
 	// リストの要素全消去
 	list_unused_.clear();
-	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
+	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++)
 		list_used_[group].clear();
 
 	// 新規リスト生成
@@ -43,7 +43,7 @@ void PosManager::Clear(void)
 
 void PosManager::End(void) {
 	list_unused_.clear();
-	for (int group = 0; group != eOBJECT::GROUP::sizeof_enum; group++)
+	for (int group = 0; group != eOBJECT::NUM::sizeof_enum; group++)
 		list_used_[group].clear();
 }
 

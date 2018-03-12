@@ -1,20 +1,32 @@
 #pragma once
 
 
+#include <string>
 #include <utility>
 #include <vector>
 
 
-namespace H2NLIB {
-
+namespace H2NLIB
+{
 	class NyaDesign;
+	class NyaGraphic;
 	class NyaTarget;
+	class GraphicPropertyX1;
 
-	struct MapSet {
-		int start_grid_x_;
-		int start_grid_y_;
-		double move_grid_y_;
+	// îwåi
+	struct MissionBack {
+		int img_;
+		int scroll_limit_frame_time_;
+		double scroll_size_per_frame_;
+		double grid_x_;
+		double grid_y_;
+	};
 
+	// target
+	struct MissionTarget {
+		int start_frame_;
+		int end_frame_;
+		NyaTarget* target_;
 	};
 
 	class NyaMission {
@@ -22,15 +34,17 @@ namespace H2NLIB {
 		NyaMission();
 		virtual ~NyaMission();
 		virtual void Load(void) = 0;
-		void LoadMap();
+		void LoadBack(std::string file_pass, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
 		void LoadSound();
 		void LoadSoundEx();
-		void AddChTarget(int frame, NyaTarget* add_target);
+		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
 		void Run(void);
 	private:
 		int count_;
 		NyaDesign* nya_design_;
-		std::vector<std::pair<int, NyaTarget*>> nya_target_vector_;
+		NyaGraphic* nya_graphic_;
+		std::pair<bool, MissionBack> back_pair_;
+		std::vector<MissionTarget> nya_target_vector_;
 	};
 
 }

@@ -22,12 +22,12 @@ void ArmsUpdater::Run(void)
 	RemoveUserArms();
 //	Remove(eARMS::GROUP::USER_ARMS);
 //	Remove(eARMS::GROUP::TARGET_ARMS);
-	Calculate(eOBJECT::GROUP::USER_ARMS);
-	Calculate(eOBJECT::GROUP::TARGET_ARMS_SMALL);
-	Calculate(eOBJECT::GROUP::TARGET_ARMS_LARGE);
-	Draw(eOBJECT::GROUP::USER_ARMS);
-	Draw(eOBJECT::GROUP::TARGET_ARMS_SMALL);
-	Draw(eOBJECT::GROUP::TARGET_ARMS_LARGE);
+	Calculate(eOBJECT::NUM::USER_ARMS);
+	Calculate(eOBJECT::NUM::TARGET_ARMS_SMALL);
+	Calculate(eOBJECT::NUM::TARGET_ARMS_LARGE);
+	Draw(eOBJECT::NUM::USER_ARMS);
+	Draw(eOBJECT::NUM::TARGET_ARMS_SMALL);
+	Draw(eOBJECT::NUM::TARGET_ARMS_LARGE);
 
 #ifdef __DEBUG__
 	DebugPrint::SetData(615, 180, "shot_num_: %d", debug_shotnum);
@@ -112,18 +112,18 @@ void ArmsUpdater::RemoveTargetArms()
 	const int POS_MAX_Y = 664;
 
 
-	for (it = list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL].begin(); it != list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL].end(); ++it) {
+	for (it = list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL].begin(); it != list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL].end(); ++it) {
 		PosManager::GetPosX(it->pparam_, &x);
 		PosManager::GetPosY(it->pparam_, &y);
 		hit = PosManager::GetHit(it->pparam_);
 		if (x < POS_MIN_X || POS_MAX_X < x) {
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL], ++sit);
+			list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL], ++sit);
 		} else if (y < POS_MIN_Y || POS_MAX_Y < y) {
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL], ++sit);
+			list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL], ++sit);
 		} else if (hit != 0) {
 			it->eparam_->x_ = (int)x;
 			it->eparam_->y_ = (int)y;
@@ -131,21 +131,21 @@ void ArmsUpdater::RemoveTargetArms()
 				EffectManager::Create(it->eparam_);
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::TARGET_ARMS_SMALL], ++sit);
+			list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::TARGET_ARMS_SMALL], ++sit);
 		}
 	}
-	for (it = list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE].begin(); it != list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE].end(); ++it) {
+	for (it = list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE].begin(); it != list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE].end(); ++it) {
 		PosManager::GetPosX(it->pparam_, &x);
 		PosManager::GetPosY(it->pparam_, &y);
 		hit = PosManager::GetHit(it->pparam_);
 		if (x < POS_MIN_X || POS_MAX_X < x) {
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE], ++sit);
+			list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE], ++sit);
 		} else if (y < POS_MIN_Y || POS_MAX_Y < y) {
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE], ++sit);
+			list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE], ++sit);
 		} else if (hit != 0) {
 			it->eparam_->x_ = (int)x;
 			it->eparam_->y_ = (int)y;
@@ -153,7 +153,7 @@ void ArmsUpdater::RemoveTargetArms()
 				EffectManager::Create(it->eparam_);
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::TARGET_ARMS_LARGE], ++sit);
+			list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::TARGET_ARMS_LARGE], ++sit);
 		}
 	}
 
@@ -176,18 +176,18 @@ void ArmsUpdater::RemoveUserArms()
 	const int POS_MAX_Y = 664;
 
 
-	for (it = list_used_[eOBJECT::GROUP::USER_ARMS].begin(); it != list_used_[eOBJECT::GROUP::USER_ARMS].end(); ++it) {
+	for (it = list_used_[eOBJECT::NUM::USER_ARMS].begin(); it != list_used_[eOBJECT::NUM::USER_ARMS].end(); ++it) {
 		PosManager::GetPosX(it->pparam_, &x);
 		PosManager::GetPosY(it->pparam_, &y);
 		hit = PosManager::GetHit(it->pparam_);
 		if (x < POS_MIN_X || POS_MAX_X < x) {
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::USER_ARMS].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::USER_ARMS], ++sit);
+			list_used_[eOBJECT::NUM::USER_ARMS].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::USER_ARMS], ++sit);
 		} else if (y < POS_MIN_Y || POS_MAX_Y < y) {
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::USER_ARMS].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::USER_ARMS], ++sit);
+			list_used_[eOBJECT::NUM::USER_ARMS].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::USER_ARMS], ++sit);
 		} else if (hit != 0) {
 			it->eparam_->x_ = (int)x;
 			it->eparam_->y_ = (int)y;
@@ -195,7 +195,7 @@ void ArmsUpdater::RemoveUserArms()
 				EffectManager::Create(it->eparam_);
 			PosManager::Delete(it->pparam_);
 			sit = --it;
-			list_used_[eOBJECT::GROUP::USER_ARMS].splice(list_unused_.begin(), list_used_[eOBJECT::GROUP::USER_ARMS], ++sit);
+			list_used_[eOBJECT::NUM::USER_ARMS].splice(list_unused_.begin(), list_used_[eOBJECT::NUM::USER_ARMS], ++sit);
 		}
 	}
 }

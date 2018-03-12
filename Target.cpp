@@ -20,13 +20,13 @@ Target::Target(double x, double y, double range)
 	// 描画固定パラメータ
 	iparam_->flag_trans_ = true;
 	iparam_->flag_turn_ = false;
-	iparam_->group_type_ = eOBJECT::GROUP::TARGET_READY;
+	iparam_->group_type_ = eOBJECT::NUM::TARGET_READY;
 	// 描画固定パラメータ
 	iparam_collision_->draw_angle_ = 0;
 	iparam_collision_->extend_rate_ = 1.0;
 	iparam_collision_->flag_trans_ = true;
 	iparam_collision_->flag_turn_ = false;
-	iparam_collision_->group_type_ = eOBJECT::GROUP::TARGET_EFFECT;
+	iparam_collision_->group_type_ = eOBJECT::NUM::TARGET_EFFECT;
 	// POSパラメータ＆オブジェクト生成
 	pparam_->SetPow(1);
 	pparam_->SetRange(range);
@@ -55,7 +55,7 @@ Target::~Target(void)
  自身と対象オブジェクト間の角度を計算して結果を返す。
  第三引数に指定があった場合、計算結果に第三引数の角度を加える。
 */
-double Target::GetAtan(eOBJECT::GROUP group, std::string name, double angle)
+double Target::GetAtan(eOBJECT::NUM group, std::string name, double angle)
 {
 	double return_value;
 
@@ -126,7 +126,7 @@ void Target::DeleteData(double add_alv)
 {
 	double distance;
 
-	distance = PosManager::CalcDiffDistance(pparam_, eOBJECT::GROUP::USER, "UserPos");
+	distance = PosManager::CalcDiffDistance(pparam_, eOBJECT::NUM::USER, "UserPos");
 	if (distance < 100) {
 		DesignManager::AddAttackLV(add_alv * 3);
 	} else if (distance < 200) {
@@ -142,7 +142,7 @@ void Target::DeleteData(double add_alv, double add_rank)
 {
 	double distance;
 
-	distance = PosManager::CalcDiffDistance(pparam_, eOBJECT::GROUP::USER, "UserPos");
+	distance = PosManager::CalcDiffDistance(pparam_, eOBJECT::NUM::USER, "UserPos");
 	if (distance < 100) {
 		DesignManager::AddAttackLV(add_alv * 3);
 		DesignManager::AddClockRank(add_rank * 3);
@@ -161,7 +161,7 @@ void Target::DeleteData(double add_alv, double add_exarms, double add_rank, long
 {
 	double distance;
 
-	distance = PosManager::CalcDiffDistance(pparam_, eOBJECT::GROUP::USER, "UserPos");
+	distance = PosManager::CalcDiffDistance(pparam_, eOBJECT::NUM::USER, "UserPos");
 	if (distance < 100) {
 		DesignManager::AddAttackLV(add_alv * 3);
 		DesignManager::AddExArms(add_exarms * 3);
@@ -267,7 +267,7 @@ void Target::SetPos(double *x, double *y)
 }
 
 
-void Target::SetGroup(eOBJECT::GROUP set_group)
+void Target::SetGroup(eOBJECT::NUM set_group)
 {
 	iparam_->group_type_ = set_group;
 	PosManager::SetGroup(pparam_, set_group);

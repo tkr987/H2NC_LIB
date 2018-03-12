@@ -48,7 +48,7 @@ Target2Colti::Target2Colti(double start_posx, double start_posy, double move_ang
 	eparam_death_->blend_alpha_ = 255;
 	eparam_death_->blend_mode_ = DX_BLENDMODE_ADD;
 	eparam_death_->extend_rate_ = 1.0;
-	eparam_death_->group_ = eOBJECT::GROUP::TARGET_EFFECT;
+	eparam_death_->group_ = eOBJECT::NUM::TARGET_EFFECT;
 	eparam_death_->img_divmax_ = 32;
 	eparam_death_->img_divmin_ = 0;
 	eparam_death_->img_id_ = imgfile_death_;
@@ -98,7 +98,7 @@ void Target2Colti::Attack(double shot_speed)
 	if (!main_->InsidePanel(-32))
 		return;
 
-	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::GROUP::USER, POS_NAME_USER_MAIN, 0);
+	aparam_main_->shot_angle_ = main_->GetAtan(eOBJECT::NUM::USER, POS_NAME_USER_MAIN, 0);
 	main_->GetPos(&aparam_main_->shot_x_, &aparam_main_->shot_y_);
 	aparam_main_->shot_speed_ = shot_speed + rank_;
 	ArmsManager::TargetShotSmall(aparam_main_);

@@ -40,36 +40,36 @@ DesignUpdater::DesignUpdater(void) : NH2::DesignManager()
 	imgfile_window_ = ImgManager::LoadImg("data/12_img_design/window.png");
 	// 描画固定パラメータ, ALV
 	iparam1_alv_->flag_trans_ = true;
-	iparam1_alv_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER3;
+	iparam1_alv_->group_type_ = eOBJECT::NUM::DESIGN_LAYER3;
 	// 描画固定パラメータ, BOSS FRAME
 	iparam1_boss_frame_->flag_trans_ = true;
-	iparam1_boss_frame_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER3;
+	iparam1_boss_frame_->group_type_ = eOBJECT::NUM::DESIGN_LAYER3;
 	// 描画固定パラメータ, BOSS HEALTH
 	iparam1_boss_health_->flag_trans_ = false;
-	iparam1_boss_health_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER1;
+	iparam1_boss_health_->group_type_ = eOBJECT::NUM::DESIGN_LAYER1;
 	// 描画固定パラメータ，時計盤
 	iparam1_clock_dial_->flag_trans_ = true;
-	iparam1_clock_dial_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER3;
+	iparam1_clock_dial_->group_type_ = eOBJECT::NUM::DESIGN_LAYER3;
 	// 描画固定パラメータ，時計針
 	iparam4_clock_hands_->extend_rate_ = 1.0;
 	iparam4_clock_hands_->flag_trans_ = true;
 	iparam4_clock_hands_->flag_turn_ = false;
-	iparam4_clock_hands_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER3;
+	iparam4_clock_hands_->group_type_ = eOBJECT::NUM::DESIGN_LAYER3;
 	// EX-ARMS ゲージ描画固定パラメータ
-	iparam1_exarms_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER1;
+	iparam1_exarms_->group_type_ = eOBJECT::NUM::DESIGN_LAYER1;
 	iparam1_exarms_->flag_trans_ = false;
-	iparam3_exarms_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER1;
+	iparam3_exarms_->group_type_ = eOBJECT::NUM::DESIGN_LAYER1;
 	iparam3_exarms_->flag_trans_ = false;
 	// 描画固定パラメータ, キー入力
-	iparam1_key_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER1;
+	iparam1_key_->group_type_ = eOBJECT::NUM::DESIGN_LAYER1;
 	iparam1_key_->flag_trans_ = false;
 	// 描画固定パラメータ, スコア
-	iparam1_score_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER3;
+	iparam1_score_->group_type_ = eOBJECT::NUM::DESIGN_LAYER3;
 	iparam1_score_->x_ = 0;
 	iparam1_score_->y_ = 0;
 	iparam1_score_->flag_trans_ = true;
 	// 描画固定パラメータ, ウィンドウ
-	iparam1_window_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER2;
+	iparam1_window_->group_type_ = eOBJECT::NUM::DESIGN_LAYER2;
 	iparam1_window_->x_ = 0;
 	iparam1_window_->y_ = 0;
 	iparam1_window_->flag_trans_ = true;
@@ -277,7 +277,7 @@ void DesignUpdater::DrawClockRank(void)
 **/
 void DesignUpdater::DrawWindow(void)
 {
-	iparam1_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER2;
+	iparam1_->group_type_ = eOBJECT::NUM::DESIGN_LAYER2;
 	iparam1_->x_ = 0;
 	iparam1_->y_ = 0;
 	iparam1_->flag_trans_ = true;
@@ -372,7 +372,7 @@ void DesignUpdater::DrawKey(void)
 
 void DesignUpdater::DrawStar(void)
 {
-	iparam1_->group_type_ = eOBJECT::GROUP::DESIGN_LAYER3;
+	iparam1_->group_type_ = eOBJECT::NUM::DESIGN_LAYER3;
 	iparam1_->flag_trans_ = true;
 	iparam1_->x_ = 616;
 	iparam1_->y_ = 128;

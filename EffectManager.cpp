@@ -9,7 +9,7 @@ using namespace NH2;
 
 
 list<EffectToken> EffectManager::list_unused_;
-list<EffectToken> EffectManager::list_used_[eOBJECT::GROUP::sizeof_enum];
+list<EffectToken> EffectManager::list_used_[eOBJECT::NUM::sizeof_enum];
 
 
 void EffectManager::Clear(void)

@@ -35,7 +35,7 @@ void ImgUpdater::Run(void)
 
 	// •`‰æˆ—
 	// •Ï”id_draw_ƒNƒŠƒA
-	for (int layer = 0; layer < eOBJECT::GROUP::sizeof_enum; layer++) {
+	for (int layer = 0; layer < eOBJECT::NUM::sizeof_enum; layer++) {
 		Draw(layer);
 		id_draw_[layer] = 0;
 	}
@@ -171,15 +171,15 @@ void ImgUpdater::GetSwingScale(int layer, int *x, int *y)
 
 	switch(layer) {
 		case eOBJECT::MAP_BOTTOM:
-		case eOBJECT::GROUP::TARGET_ARMS_EFFECT:
-		case eOBJECT::GROUP::TARGET_ARMS_SMALL:
-		case eOBJECT::GROUP::TARGET_ARMS_LARGE:
-		case eOBJECT::GROUP::TARGET_RUN_FLY:
-		case eOBJECT::GROUP::TARGET_RUN_WALK:
-		case eOBJECT::GROUP::USER:
-		case eOBJECT::GROUP::USER_ARMS:
-		case eOBJECT::GROUP::USER_ARMS_EFFECT:
-		case eOBJECT::GROUP::USER_EFFECT:
+		case eOBJECT::NUM::TARGET_ARMS_EFFECT:
+		case eOBJECT::NUM::TARGET_ARMS_SMALL:
+		case eOBJECT::NUM::TARGET_ARMS_LARGE:
+		case eOBJECT::NUM::TARGET_RUN_FLY:
+		case eOBJECT::NUM::TARGET_RUN_WALK:
+		case eOBJECT::NUM::USER:
+		case eOBJECT::NUM::USER_ARMS:
+		case eOBJECT::NUM::USER_ARMS_EFFECT:
+		case eOBJECT::NUM::USER_EFFECT:
 			*y = (swing_time_y_ % 4 == 0) ? swing_scale_y_ : (swing_scale_y_ % 4 == 2) ? -swing_scale_y_ : 0 ;
 			break;
 	}

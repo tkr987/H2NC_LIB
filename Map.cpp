@@ -30,13 +30,13 @@ void Map::DataLoad(int stage)
 	// pos パラメータ初期化
 	pparam_map_->SetStartX(-21);
 	pparam_map_->SetStartY(-3200);
-	PosManager::Generate(eOBJECT::GROUP::MAP_BOTTOM, pparam_map_);
+	PosManager::Generate(eOBJECT::NUM::MAP_BOTTOM, pparam_map_);
 
 	// img パラメータ初期化
 	iparam_map_->blend_alpha_ = 255;
 	iparam_map_->blend_mode_ = DX_BLENDMODE_ADD;
 	iparam_map_->flag_trans_ = false;
-	iparam_map_->group_type_ = eOBJECT::GROUP::MAP_BOTTOM;
+	iparam_map_->group_type_ = eOBJECT::NUM::MAP_BOTTOM;
 
 	// ファイルパス
 	filepass_img_gameover_ = "data/img_map/gameover.png";
@@ -96,7 +96,7 @@ void Map::MoveMap(void)
 	PosManager::MovePosA(pparam_map_, NULL, &add_y);
 
 	// マップ以外のオブジェクト(target)をシンクロさせて移動させる
-	PosManager::MovePosC(eOBJECT::GROUP::TARGET_RUN_WALK, NULL, &add_y);
+	PosManager::MovePosC(eOBJECT::NUM::TARGET_RUN_WALK, NULL, &add_y);
 }
 
 void Map::PlaySeBgm(void)

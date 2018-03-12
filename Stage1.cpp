@@ -25,18 +25,18 @@ Stage1::Stage1()
 	pparam1_map_ = new PosParam1;
 	// continue 固定imgパラメータ
 	iparam1_continue_->flag_trans_ = false;
-	iparam1_continue_->group_type_ = eOBJECT::GROUP::STAGE_CONTINUE;
+	iparam1_continue_->group_type_ = eOBJECT::NUM::STAGE_CONTINUE;
 	iparam1_continue_->x_ = 0;
 	iparam1_continue_->y_ = 100;
 	// map 固定imgパラメータ
 	iparam1b_map_->blend_alpha_ = 255;
 	iparam1b_map_->blend_mode_ = DX_BLENDMODE_ADD;
 	iparam1b_map_->flag_trans_ = false;
-	iparam1b_map_->group_type_ = eOBJECT::GROUP::MAP_BOTTOM;
+	iparam1b_map_->group_type_ = eOBJECT::NUM::MAP_BOTTOM;
 	// map 固定posパラメータ
 	pparam1_map_->SetStartX(-21);
 	pparam1_map_->SetStartY(-3200);
-	PosManager::Generate(eOBJECT::GROUP::MAP_BOTTOM, pparam1_map_);
+	PosManager::Generate(eOBJECT::NUM::MAP_BOTTOM, pparam1_map_);
 }
 
 
@@ -344,7 +344,7 @@ void Stage1::Run(void)
 	//switch (phase_) {
 	//case 10:
 	//	Phase10_Target();
-	//	PosManager::MovePosC(eOBJECT::GROUP::TARGET_RUN_WALK, NULL, &move_speed);
+	//	PosManager::MovePosC(eOBJECT::NUM::TARGET_RUN_WALK, NULL, &move_speed);
 	//	DesignManager::GetStar(&user_star);
 	//	if (user_star == -1)
 	//		phase_ = 11;

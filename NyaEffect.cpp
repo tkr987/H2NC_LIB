@@ -5,7 +5,7 @@
 using namespace std;
 using namespace H2NLIB;
 
-list<Animation> NyaEffect::draw_list_[eOBJECT::GROUP::sizeof_enum];
+list<Animation> NyaEffect::draw_list_[eOBJECT::NUM::sizeof_enum];
 list<Animation> NyaEffect::wait_list_;
 std::vector<EffectOption> NyaEffect::option_vector_;
 
@@ -98,12 +98,12 @@ int NyaEffect::NewOption(EffectOption* option)
 
 void NyaEffect::Run(void)
 {
-	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++)
-		DrawAll((eOBJECT::GROUP)group);
+	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++)
+		DrawAll((eOBJECT::NUM)group);
 
 }
 
-void NyaEffect::DrawAll(eOBJECT::GROUP group)
+void NyaEffect::DrawAll(eOBJECT::NUM group)
 {
 	GraphicPropertyX4 gpx4;
 	list<Animation>::iterator it, it_delete;

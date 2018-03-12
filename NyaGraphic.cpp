@@ -12,8 +12,8 @@ using namespace H2NLIB;
 int NyaGraphic::swing_x_;
 int NyaGraphic::swing_y_;
 std::vector<GraphicFileSet> NyaGraphic::file_vector_;
-std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::GROUP::sizeof_enum);
-std::vector<bool> NyaGraphic::swing_vector_(eOBJECT::GROUP::sizeof_enum);
+std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::NUM::sizeof_enum);
+std::vector<bool> NyaGraphic::swing_vector_(eOBJECT::NUM::sizeof_enum);
 
 NyaGraphic::NyaGraphic()
 {
@@ -228,11 +228,11 @@ void NyaGraphic::Run(void)
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
 
 	// êUìÆèàóù
-	for (int group = eOBJECT::GROUP::enum_zero; group != eOBJECT::GROUP::sizeof_enum; group++) {
+	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++) {
 		if (swing_vector_[group]) {
-			DrawAll((eOBJECT::GROUP)group, swing_x_, swing_y_);
+			DrawAll((eOBJECT::NUM)group, swing_x_, swing_y_);
 		} else {
-			DrawAll((eOBJECT::GROUP)group, 0, 0);		
+			DrawAll((eOBJECT::NUM)group, 0, 0);		
 		}
 	}
 
@@ -249,24 +249,24 @@ void NyaGraphic::Run(void)
 @param swing_x xé≤ï˚å¸êUìÆïù
 @param swing_y yé≤ï˚å¸êUìÆïù
 **/
-void NyaGraphic::DrawAll(eOBJECT::GROUP layer, int swing_x, int swing_y)
+void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
 {
-	GraphicPropertyX1* gpx1;
-	GraphicPropertyX2* gpx2;
-	GraphicPropertyX3* gpx3;
-	GraphicPropertyX4* gpx4;
-	GraphicPropertyX5* gpx5;
-	GraphicPropertyX6* gpx6;
-	GraphicPropertyX7* gpx7;
-	GraphicPropertyX8* gpx8;
-	GraphicPropertyX1b* gpx1b;
-	GraphicPropertyX2b* gpx2b;
-	GraphicPropertyX3b* gpx3b;
-	GraphicPropertyX4b* gpx4b;
-	GraphicPropertyX5b* gpx5b;
-	GraphicPropertyX6b* gpx6b;
-	GraphicPropertyX7b* gpx7b;
-	GraphicPropertyX8b* gpx8b;
+	static GraphicPropertyX1* gpx1;
+	static GraphicPropertyX2* gpx2;
+	static GraphicPropertyX3* gpx3;
+	static GraphicPropertyX4* gpx4;
+	static GraphicPropertyX5* gpx5;
+	static GraphicPropertyX6* gpx6;
+	static GraphicPropertyX7* gpx7;
+	static GraphicPropertyX8* gpx8;
+	static GraphicPropertyX1b* gpx1b;
+	static GraphicPropertyX2b* gpx2b;
+	static GraphicPropertyX3b* gpx3b;
+	static GraphicPropertyX4b* gpx4b;
+	static GraphicPropertyX5b* gpx5b;
+	static GraphicPropertyX6b* gpx6b;
+	static GraphicPropertyX7b* gpx7b;
+	static GraphicPropertyX8b* gpx8b;
 	
 	while (!layer_vector_.at(layer).gpx1_deque_.empty()) {
 		gpx1 = &layer_vector_.at(layer).gpx1_deque_.front();

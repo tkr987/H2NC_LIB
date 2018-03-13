@@ -5,8 +5,8 @@
 using namespace std;
 using namespace H2NLIB;
 
-deque<StringSet> NyaString::deque_string_set_;
-map<string, int> NyaString::map_font_;
+deque<StringOutput> NyaString::string_output_deque_;
+map<string, int> NyaString::font_map_;
 
 NyaString::NyaString()
 {
@@ -21,106 +21,115 @@ NyaString::~NyaString()
 
 void NyaString::SettingFont(std::string font_name, int font_size, int font_thick)
 {
-	auto it = map_font_.find(font_name);
+	auto it = font_map_.find(font_name);
 
-	if (it != map_font_.end())
+	if (it != font_map_.end())
 		return;
 
 	int font = CreateFontToHandle(font_name.c_str(), font_size, font_thick);
-	map_font_.insert(make_pair(font_name, font));
+	font_map_.insert(make_pair(font_name, font));
 }
 
 void NyaString::Write(string font, std::tuple<int, int, int> color, int grid_x, int grid_y, string str)
 {
-	StringSet ss;
+	StringOutput so;
 
-	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
-	ss.x_ = grid_x;
-	ss.y_ = grid_y;
-	get<0>(ss.write_string_) = true;
-	get<1>(ss.write_string_) = str;
-	get<0>(ss.write_value_int_) = false;
-	get<0>(ss.write_value_double_) = false;
-	get<0>(ss.write_value_string_) = false;
+	so.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	try { so.font_ = font_map_.at(font); } catch(std::out_of_range&) { return; }
+	so.x_ = grid_x;
+	so.y_ = grid_y;
+	get<0>(so.write_string_) = true;
+	get<1>(so.write_string_) = str;
+	get<0>(so.write_value_int_) = false;
+	get<0>(so.write_value_double_) = false;
+	get<0>(so.write_value_string_) = false;
 
-	deque_string_set_.push_back(ss);
+	string_output_deque_.push_back(so);
 }
 
 
 void NyaString::Write(string font, std::tuple<int, int, int> color, int grid_x, int grid_y, string str, int value)
 {
-	StringSet ss;
+	StringOutput so;
 
-	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
-	ss.x_ = grid_x;
-	ss.y_ = grid_y;
-	get<0>(ss.write_string_) = false;
-	get<0>(ss.write_value_int_) = true;
-	get<1>(ss.write_value_int_) = str;
-	get<2>(ss.write_value_int_) = value;
-	get<0>(ss.write_value_double_) = false;
-	get<0>(ss.write_value_string_) = false;
+	so.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	try { so.font_ = font_map_.at(font); } catch(std::out_of_range&) { return; }
+	so.x_ = grid_x;
+	so.y_ = grid_y;
+	get<0>(so.write_string_) = false;
+	get<0>(so.write_value_int_) = true;
+	get<1>(so.write_value_int_) = str;
+	get<2>(so.write_value_int_) = value;
+	get<0>(so.write_value_double_) = false;
+	get<0>(so.write_value_string_) = false;
 
-	deque_string_set_.push_back(ss);
+	string_output_deque_.push_back(so);
 }
 
 
 void NyaString::Write(string font, std::tuple<int, int, int> color, int x, int y, string str, double value)
 {
-	StringSet ss;
+	StringOutput so;
 
-	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
-	ss.x_ = x;
-	ss.y_ = y;
-	get<0>(ss.write_string_) = false;
-	get<0>(ss.write_value_int_) = false;
-	get<0>(ss.write_value_double_) = true;
-	get<1>(ss.write_value_double_) = str;
-	get<2>(ss.write_value_double_) = value;
-	get<0>(ss.write_value_string_) = false;
+	so.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	try { so.font_ = font_map_.at(font); } catch(std::out_of_range&) { return; }
+	so.x_ = x;
+	so.y_ = y;
+	get<0>(so.write_string_) = false;
+	get<0>(so.write_value_int_) = false;
+	get<0>(so.write_value_double_) = true;
+	get<1>(so.write_value_double_) = str;
+	get<2>(so.write_value_double_) = value;
+	get<0>(so.write_value_string_) = false;
 
-	deque_string_set_.push_back(ss);
+	string_output_deque_.push_back(so);
 }
 
 
 void NyaString::Write(string font, std::tuple<int, int, int> color, int grid_x, int grid_y, string str, string value)
 {
-	StringSet ss;
+	StringOutput so;
 
-	ss.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
-	try { ss.font_ = map_font_.at(font); } catch(std::out_of_range&) { return; }
-	ss.x_ = grid_x;
-	ss.y_ = grid_y;
-	get<0>(ss.write_string_) = false;
-	get<0>(ss.write_value_int_) = false;
-	get<0>(ss.write_value_double_) = false;
-	get<0>(ss.write_value_string_) = true;
-	get<1>(ss.write_value_string_) = str;
-	get<2>(ss.write_value_string_) = value;
+	so.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	try { so.font_ = font_map_.at(font); } catch(std::out_of_range&) { return; }
+	so.x_ = grid_x;
+	so.y_ = grid_y;
+	get<0>(so.write_string_) = false;
+	get<0>(so.write_value_int_) = false;
+	get<0>(so.write_value_double_) = false;
+	get<0>(so.write_value_string_) = true;
+	get<1>(so.write_value_string_) = str;
+	get<2>(so.write_value_string_) = value;
 
-	deque_string_set_.push_back(ss);
+	string_output_deque_.push_back(so);
 }
 
 
 void NyaString::Run(void)
 {
-	StringSet ss;
+	StringOutput so;
 
-	while (!deque_string_set_.empty()) {
-		ss = deque_string_set_.front();
-		if (get<0>(ss.write_value_int_)) {
-			DrawFormatStringToHandle(ss.x_, ss.y_, ss.color_, ss.font_, get<1>(ss.write_value_int_).c_str(), get<2>(ss.write_value_int_));
-		} else if (get<0>(ss.write_value_double_)) {
-			DrawFormatStringToHandle(ss.x_, ss.y_, ss.color_, ss.font_, get<1>(ss.write_value_double_).c_str(), get<2>(ss.write_value_double_));
-		}  else if (get<0>(ss.write_value_string_)) {
-			DrawFormatStringToHandle(ss.x_, ss.y_, ss.color_, ss.font_, get<1>(ss.write_value_string_).c_str(), get<2>(ss.write_value_string_).c_str());
-		} else {
-			DrawStringToHandle(ss.x_, ss.y_, get<1>(ss.write_string_).c_str(), ss.color_, ss.font_);
+	while (!string_output_deque_.empty())
+	{
+		so = string_output_deque_.front();
+
+		if (get<0>(so.write_value_int_))
+		{
+			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_int_).c_str(), get<2>(so.write_value_int_));
 		}
-		deque_string_set_.pop_front();
+		else if (get<0>(so.write_value_double_)) 
+		{
+			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_double_).c_str(), get<2>(so.write_value_double_));
+		} 
+		else if (get<0>(so.write_value_string_))
+		{
+			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_string_).c_str(), get<2>(so.write_value_string_).c_str());
+		}
+		else
+		{
+			DrawStringToHandle(so.x_, so.y_, get<1>(so.write_string_).c_str(), so.color_, so.font_);
+		}
+		string_output_deque_.pop_front();
 	}
 }
 

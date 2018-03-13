@@ -13,10 +13,10 @@ void TeemoMission1::Load(void)
 	AddChTarget(1, 30, teemo_target);
 	LoadBack("img/back1.png", 0, -2560 + 720, 2560 - 720, 180);
 
-	nya_design_->SetSkillName(0, "Skill Q (power)");
-	nya_design_->SetSkillName(1, "Skill W (wave)");
-	nya_design_->SetSkillName(2, "Skill E (bit)");
-	nya_design_->SetSkillName(3, "Skill R (bomb)");
+	nya_design_->SetSkillName(eSKILL::NUM::Q, "Skill Q (power)");
+	nya_design_->SetSkillName(eSKILL::NUM::W, "Skill W (wave)");
+	nya_design_->SetSkillName(eSKILL::NUM::E, "Skill E (bit)");
+	nya_design_->SetSkillName(eSKILL::NUM::R, "Skill R (bomb)");
 
 	delete nya_design_;
 }

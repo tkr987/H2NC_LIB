@@ -3,7 +3,9 @@
 #include "NyaUser.h"
 #include <utility>
 
-namespace H2NLIB {
+namespace H2NLIB
+{
+	class NyaDesign;
 	class NyaDevice;
 	class NyaEffect;
 	class NyaGraphic;
@@ -26,6 +28,7 @@ public:
 	void Init(void);
 private:
 	long count_;
+	H2NLIB::NyaDesign* nya_design_;
 	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaEffect* nya_effect_;
 	H2NLIB::NyaGraphic* nya_graphic_;

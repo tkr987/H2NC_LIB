@@ -67,7 +67,7 @@ void NyaMission::Run(void)
 			gpx1_back.file_div_ = 0;
 			gpx1_back.file_id_ = back_pair_.second.img_;
 			gpx1_back.flag_trans_ = true;
-			gpx1_back.object_group_ = eOBJECT::NUM::MAP;
+			gpx1_back.object_group_ = eOBJECT::NUM::MAP1;
 			gpx1_back.pos_x_ = (int)back_pair_.second.grid_x_;
 			gpx1_back.pos_y_ = (int)back_pair_.second.grid_y_;
 		}

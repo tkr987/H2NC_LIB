@@ -12,7 +12,8 @@ namespace H2NLIB {
 	// 文字列を表示するクラス
 	// 常に一番上に表示されるのでデバッグなどに使える
 
-	struct StringSet {
+	struct StringOutput
+	{
 		int color_;
 		int font_;
 		int x_;
@@ -34,8 +35,8 @@ namespace H2NLIB {
 		static void Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, double value);
 		static void Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, std::string value);
 	private:
-		static std::deque<StringSet> deque_string_set_;
-		static std::map<std::string, int> map_font_;
+		static std::map<std::string, int> font_map_;
+		static std::deque<StringOutput> string_output_deque_;
 	};
 
 }

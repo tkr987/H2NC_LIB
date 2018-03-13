@@ -1,11 +1,13 @@
 
 
 // 2018年
-#if _DEBUG
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#endif
+//#if _DEBUG
+//#define _CRTDBG_MAP_ALLOC
+//#include <crtdbg.h>
+//#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//#endif
+
+//#include <vld.h> 
 
 #include "DxLib.h"
 #include "NyaWindow.h"
@@ -17,7 +19,7 @@
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	//	メモリリーク検出
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 	// 初期化
 	H2NLIB::NyaWindow* nya_window = new H2NLIB::NyaWindow;
@@ -36,6 +38,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// 終了
 	delete nya_window;
+
 
 	return 0;
 }

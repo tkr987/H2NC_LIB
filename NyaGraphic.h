@@ -7,8 +7,8 @@
 
 
 
-namespace H2NLIB {
-
+namespace H2NLIB
+{
 	///////////////////////////////////
 	// ここからパラメータ設定用構造体
 	///////////////////////////////////
@@ -64,6 +64,7 @@ namespace H2NLIB {
 		bool flag_turn_;
 		bool flag_trans_;
 		eOBJECT::NUM object_group_;
+		~GraphicPropertyX4(){}
 	};
 
 	// DXLIB 回転描画関数IIに対応

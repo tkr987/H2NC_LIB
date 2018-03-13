@@ -1,5 +1,6 @@
 #include <tuple>
 #include "NyaDefine.h"
+#include "NyaDesign.h"
 #include "NyaDevice.h"
 #include "NyaEffect.h"
 #include "NyaGraphic.h"
@@ -15,6 +16,7 @@ UserAI::UserAI()
 {
 	count_ = 0;
 
+	nya_design_ = new NyaDesign;
 	nya_device_ = new NyaDevice;
 	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
@@ -66,6 +68,7 @@ UserAI::UserAI()
 
 UserAI::~UserAI()
 {
+	delete nya_design_;
 	delete nya_device_;
 	delete nya_effect_;
 	delete nya_graphic_;
@@ -118,6 +121,12 @@ void UserAI::Action(void)
 
 	// Õ“Ë”»’è
 	nya_position_->Collision(phx_ai_, eOBJECT::NUM::USER1);
+
+
+	// warning
+	if (count_ == 300)
+		nya_design_->Warning(200, 300, 5);
+		
 
 	// ‚»‚Ì‘¼
 	count_++;

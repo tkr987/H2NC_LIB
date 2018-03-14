@@ -101,16 +101,26 @@ void NyaDesign::Run(void)
 	UpdateFPS(1180, 660);
 }
 
-void NyaDesign::Warning(int grid_x, int grid_y, int draw_time_sec)
+void NyaDesign::LoadWarningSound(std::string file_pass, int volume)
 {
-	warning_string_pair_.first = true;
-	warning_string_pair_.second.draw_start_frame_ = count_mission_frame_;
-	warning_string_pair_.second.draw_end_frame_ = count_mission_frame_ + FPS_MAX * draw_time_sec;
-	warning_string_pair_.second.grid_x_ = grid_x;
-	warning_string_pair_.second.grid_y_ = grid_y;
+	static SoundPropertyX spx;
+	
+	warning_sound_pair_.first = true;
+	
+	spx.file_id_ = nya_sound_->LoadFile(file_pass);
+	warning_sound_pair_.second = spx.file_id_;
+	nya_sound_->ChangeVolume(&spx, volume);
 }
 
 
+void NyaDesign::Warning(int grid_x, int grid_y, int draw_time_sec)
+{
+	warning_string_pair_.first = true;
+	warning_string_pair_.second.draw_start_frame_ = count_mission_frame_ + 1;
+	warning_string_pair_.second.draw_end_frame_ = count_mission_frame_ + FPS_MAX * draw_time_sec + 1;
+	warning_string_pair_.second.grid_x_ = grid_x;
+	warning_string_pair_.second.grid_y_ = grid_y;
+}
 
 
 void NyaDesign::DrawBlack(int x, int y, int x2, int y2) 

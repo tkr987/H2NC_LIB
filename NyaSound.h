@@ -28,6 +28,7 @@ namespace H2NLIB
 	public:
 		NyaSound();
 		~NyaSound();
+		void ChangeVolume(SoundPropertyX* spx, int volume);
 		int LoadFile(std::string pass);
 		void Play(std::string pass, bool loop = false);
 		void Play(SoundPropertyX* spx);

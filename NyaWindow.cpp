@@ -9,6 +9,7 @@
 #include "NyaInput.h"
 #include "NyaMission.h"
 #include "NyaPosition.h"
+#include "NyaSound.h"
 #include "NyaString.h"
 #include "NyaTarget.h"
 #include "NyaUser.h"
@@ -33,6 +34,7 @@ NyaWindow::~NyaWindow()
 	delete nya_effect_;
 	delete nya_graphic_;
 	delete nya_position_;
+	delete nya_sound_;
 
 	if (nya_user_.first)
 		delete nya_user_.second;
@@ -100,6 +102,7 @@ int NyaWindow::Init(string title)
 	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
+	nya_sound_ = new NyaSound;
 
 	// •Ï”‰Šú‰»
 	title_name_ = title;
@@ -216,6 +219,8 @@ void NyaWindow::Run(void)
 #else 
 		nya_position_->Run();
 #endif
+
+		nya_sound_->Run();
 
 		NyaInput::Run();
 		nya_design_->Run();

@@ -13,6 +13,7 @@ namespace H2NLIB {
 	class NyaInput;
 	class NyaMission;
 	class NyaPosition;
+	class NyaSound;
 	class NyaTarget;
 	class NyaUser;
 
@@ -32,6 +33,7 @@ namespace H2NLIB {
 		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
+		NyaSound* nya_sound_;
 		std::pair<bool, NyaUser*> nya_user_;
 		std::vector<NyaMission*> nya_mission_vector_;
 		void RunTitle(void);

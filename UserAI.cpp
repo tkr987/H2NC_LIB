@@ -28,6 +28,9 @@ UserAI::UserAI()
 	device_option_pair_.first = new DeviceOption;
 	effect_option_pair_.first = new EffectOption;
 
+	// NyaDesignの設定
+	nya_design_->LoadWarningSound("sound/warning.wav", 40);
+
 	// NyaDeviceとプロパティの設定
 	device_option_pair_.first->collision_range_ = 3.0;
 	device_option_pair_.first->draw_angle_ = -90.0;

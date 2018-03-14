@@ -17,6 +17,11 @@ NyaSound::~NyaSound()
 
 }
 
+void NyaSound::ChangeVolume(SoundPropertyX* spx, int volume)
+{
+	ChangeVolumeSoundMem(255 * volume / 100, file_vector_[spx->file_id_].id_);
+}
+
 
 int NyaSound::LoadFile(std::string pass)
 {
@@ -50,7 +55,7 @@ void NyaSound::Run(void)
 	while (!play_deque_.empty())
 	{
 		spx = play_deque_.front();
-		PlaySoundMem(file_vector_[spx.file_id_].id_, spx.loop_);
+		PlaySoundMem(file_vector_[spx.file_id_].id_, DX_PLAYTYPE_BACK, spx.loop_);
 		play_deque_.pop_front();
 	}
 }

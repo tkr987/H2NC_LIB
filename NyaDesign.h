@@ -39,6 +39,7 @@ namespace H2NLIB
 		NyaDesign();
 		~NyaDesign();
 		void AddEXP(int);
+		void LoadWarningSound(std::string file_pass, int volume = 100);
 		void Run(void);
 		void Warning(int grid_x, int grid_y, int draw_time_sec);
 		void SetProcess(ePROCESS::NUM set_process) { process_ = set_process; }

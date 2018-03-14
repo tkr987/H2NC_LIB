@@ -8,8 +8,9 @@ namespace H2NLIB {
 	public:
 		NyaTarget(){}
 		virtual ~NyaTarget(){}
-		virtual void Action(void) = 0;
+		virtual void Act(void) = 0;
 		virtual void Draw(void) = 0;
+		virtual void End(void) = 0;
 	};
 
 }

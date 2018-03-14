@@ -17,25 +17,40 @@ namespace H2NLIB {
 	class NyaTarget;
 	class NyaUser;
 
+	struct WindowUser
+	{
+		bool empty_;
+		NyaUser* nya_user_;
+	};
+
+	struct WindowMission
+	{
+		bool empty_;
+		int index_;
+		std::vector<NyaMission*> nya_mission_vector_;
+	};
+
 	class NyaWindow {
 	public:
 		void AddChMission(NyaMission*);
 		void AddChUser(NyaUser* user);
 		int Init(std::string title);
 		void Run(void);
+		void RunChangeProcess(void);
+		void RunMission(void);
+		void RunUser(void);
 		NyaWindow();
 		~NyaWindow();
 	private:
-		int nya_mission_index_;
-		std::string title_name_;
+		WindowUser ch_user_;
+		WindowMission ch_mission_;
 		NyaDesign* nya_design_;
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		NyaSound* nya_sound_;
-		std::pair<bool, NyaUser*> nya_user_;
-		std::vector<NyaMission*> nya_mission_vector_;
+		std::string title_name_;
 		void RunTitle(void);
 	};
 

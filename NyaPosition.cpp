@@ -38,6 +38,18 @@ PositionHandleX* NyaPosition::Create(void)
 	return &(*create_list_.begin());
 }
 
+bool NyaPosition::InScreen(PositionHandleX* phx, int gap)
+{
+	if (0 - gap < phx->grid_x_ && phx->grid_x_ < SCREEN_MAX_X + gap)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void NyaPosition::Run(void)
 {
 	vector<eOBJECT::NUM>::iterator find_it1;

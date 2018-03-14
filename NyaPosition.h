@@ -5,7 +5,6 @@
 #include <utility>
 #include "NyaDefine.h"
 
-
 namespace H2NLIB {
 
 
@@ -40,6 +39,7 @@ namespace H2NLIB {
 		~NyaPosition();
 		void Collision(PositionHandleX* phx, eOBJECT::NUM group);
 		PositionHandleX* Create(void);
+		bool InScreen(PositionHandleX* phx, int gap = 0);
 		void SettingCollision(eOBJECT::NUM group1, eOBJECT::NUM group2);
 		void SettingCollisionHighAccuracy(eOBJECT::NUM group);
 		void Run(void);

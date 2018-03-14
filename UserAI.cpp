@@ -90,7 +90,7 @@ void UserAI::Init(void)
 }
 
 
-void UserAI::Action(void)
+void UserAI::Act(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
@@ -111,6 +111,16 @@ void UserAI::Action(void)
 	{
 		phx_ai_->grid_y_ += 5;
 	}
+
+	// 境界チェック
+	if (phx_ai_->grid_x_ < SCREEN_MIN_X)
+		phx_ai_->grid_x_ = SCREEN_MIN_X;
+	if (phx_ai_->grid_y_ < SCREEN_MIN_Y)
+		phx_ai_->grid_y_ = SCREEN_MIN_Y;
+	if (SCREEN_MAX_X < phx_ai_->grid_x_)
+		phx_ai_->grid_x_ = SCREEN_MAX_X;
+	if (SCREEN_MAX_Y < phx_ai_->grid_y_)
+		phx_ai_->grid_y_ = SCREEN_MAX_Y;
 
 	// 攻撃テスト
 	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)

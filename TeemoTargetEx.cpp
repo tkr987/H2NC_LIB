@@ -1,24 +1,18 @@
-#include <tuple>
-#include "NyaDefine.h"
-#include "NyaDevice.h"
+#include "TeemoTargetEx.h"
 #include "NyaGraphic.h"
-#include "NyaInput.h"
 #include "NyaPosition.h"
-#include "NyaString.h"
-#include "TeemoTarget.h"
+#include "NyaTarget.h"
 
-using namespace std;
 using namespace H2NLIB;
 
 
-TeemoTarget::TeemoTarget()
+
+TeemoTargetEx::TeemoTargetEx()
 {
 	count_ = 0;
 
-	nya_device_ = new NyaDevice;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	dpx_ = new DevicePropertyX;
 	gpx4_teemo_ = new GraphicPropertyX4;
 	phx_teemo_ = nya_position_->Create();
 
@@ -37,7 +31,7 @@ TeemoTarget::TeemoTarget()
 	gpx4_teemo_->draw_angle_ = 0;
 	gpx4_teemo_->extend_rate_ = 1.0;
 	gpx4_teemo_->file_div_ = 0;
-	gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("img/teemo.png");
+	gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("img/teemo_ex.png");
 	gpx4_teemo_->flag_trans_ = true;
 	gpx4_teemo_->flag_turn_ = false;
 	gpx4_teemo_->object_group_ = eOBJECT::NUM::TARGET1;
@@ -52,47 +46,22 @@ TeemoTarget::TeemoTarget()
 }
 
 
-TeemoTarget::~TeemoTarget()
+TeemoTargetEx::~TeemoTargetEx()
 {
-
-	delete nya_device_;
-	delete nya_graphic_;
-	delete nya_position_;
-	delete dpx_;
-	delete gpx4_teemo_;
-}
-
-
-void TeemoTarget::Act(void)
-{
-
-	//if (count_ % 120 == 0) {
-	//	dpx_teemo_->draw_angle_ = 0;
-	//	dpx_teemo_->move_angle_ = 110;
-	//	dpx_teemo_->move_speed_ = 1;
-	//	dpx_teemo_->create_x_ = phx_teemo_->grid_x_;
-	//	dpx_teemo_->create_y_ = phx_teemo_->grid_y_;
-	//	nya_device_->Attack(dpx_teemo_);
-	//}
-	
-	//nya_position_->Collision(phx_teemo_, eOBJECT::NUM::TARGET1);
-
-	count_++;
 
 }
 
-void TeemoTarget::Draw(void)
+void TeemoTargetEx::Act(void)
 {
-	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+	if (phx_teemo_->health_now_ < 0)
+	{
 
+	}
+}
+
+void TeemoTargetEx::Draw(void)
+{
 	gpx4_teemo_->pos_cx_ = (int)phx_teemo_->grid_x_;
 	gpx4_teemo_->pos_cy_ = (int)phx_teemo_->grid_y_;
 	nya_graphic_->Draw(gpx4_teemo_);
 }
-
-void TeemoTarget::Init(void)
-{
-
-
-}
-

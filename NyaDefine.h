@@ -1,6 +1,11 @@
 #pragma once
 
-#define FPS_MAX 60
+#define FPS_MAX			60
+#define SCREEN_MIN_X	0
+#define SCREEN_MIN_Y	0
+#define SCREEN_MAX_X	850
+#define SCREEN_MAX_Y	750
+
 
 
 namespace H2NLIB
@@ -46,7 +51,7 @@ namespace H2NLIB
 		enum NUM
 		{
 			enum_zero,
-			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_STOP, CLEAR, CONTINUE, OVER, REPLAY, 
+			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_STOP, MISSION_CLEAR, CONTINUE, OVER, REPLAY, 
 			sizeof_enum
 		};
 	};

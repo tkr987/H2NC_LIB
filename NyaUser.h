@@ -8,7 +8,7 @@ namespace H2NLIB {
 	public:
 		NyaUser(){}
 		virtual ~NyaUser(){}
-		virtual void Action(void) = 0;
+		virtual void Act(void) = 0;
 		virtual void Draw(void) = 0;
 	};
 

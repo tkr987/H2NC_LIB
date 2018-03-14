@@ -51,9 +51,11 @@ namespace H2NLIB
 		static ePROCESS::NUM process_;
 		static DesignSkillInfo skill_info_[4];
 		static DesignUserInfo user_info_;
+		static std::pair<bool, int> clear_pair_;
 		static std::pair<bool, int> warning_sound_pair_;
 		static std::pair<bool, DesignWarningString> warning_string_pair_;
 		void DrawBlack(int x, int y, int x2, int y2);
+		void DrawMissionClear(int x, int y);
 		void DrawLv(int x, int y);
 		void DrawSkill(int x, int y);
 		void DrawInput(int x, int y);

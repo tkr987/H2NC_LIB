@@ -33,16 +33,19 @@ namespace H2NLIB
 	public:
 		NyaMission();
 		virtual ~NyaMission();
-		virtual void Load(void) = 0;
-		void LoadBack(std::string file_pass, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
-		void LoadSound();
-		void LoadSoundEx();
 		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
+		void End(void);
+		void LoadBack(std::string file_pass, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
+		void LoadSound(void);
+		void LoadSoundEx(void);
 		void Run(void);
+		void Stop(void);
+		virtual void Load(void) = 0;
 	private:
 		int count_;
 		NyaDesign* nya_design_;
 		NyaGraphic* nya_graphic_;
+		GraphicPropertyX1* gpx1_back_;
 		std::pair<bool, MissionBack> back_pair_;
 		std::vector<MissionTarget> nya_target_vector_;
 	};

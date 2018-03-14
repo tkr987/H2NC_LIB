@@ -23,7 +23,7 @@ class UserAI : public H2NLIB::NyaUser {
 public:
 	UserAI();
 	~UserAI();
-	void Action(void);
+	void Act(void);
 	void Draw(void);
 	void Init(void);
 private:

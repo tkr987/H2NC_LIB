@@ -55,6 +55,7 @@ NyaDesign::NyaDesign()
 		NyaString::SettingFont("design_exp_font", 18, 2);
 		NyaString::SettingFont("design_fps_font", 14, 2);
 		NyaString::SettingFont("design_lv_font", 60, 6);
+		NyaString::SettingFont("design_mission_clear_font", 50, 2);
 		NyaString::SettingFont("design_skill_font", 30, 2);
 		NyaString::SettingFont("design_input_font", 50, 2);
 		NyaString::SettingFont("design_warning_font", 64, 4);
@@ -92,9 +93,15 @@ void NyaDesign::Run(void)
 			DrawWarning();
 		count_mission_frame_++;
 		break;
+	case ePROCESS::NUM::MISSION_CLEAR:
+		DrawMissionClear(200, 300);
+		count_mission_frame_++;
+		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
+			process_ = ePROCESS::NUM::MISSION_LOAD;
+		break;
 	}
 
-	DrawBlack(850, 0, 1279, 719);
+	DrawBlack(850, 0, 1280, 720);
 	DrawSkill(875, 110);
 	DrawLv(875, 515);
 	DrawInput(875, 600);
@@ -128,6 +135,16 @@ void NyaDesign::DrawBlack(int x, int y, int x2, int y2)
 	static int color = GetColor(16, 16, 16);
 
 	DrawBox(x, y, x2, y2, color , true) ;
+}
+
+void NyaDesign::DrawMissionClear(int x, int y)
+{
+	static int black = GetColor(0, 0, 0);
+	static tuple<int, int, int> color = make_tuple(212, 212, 255);
+
+	DrawBox(x, y, x + 400, y + 150, black, true);
+	NyaString::Write("design_mission_clear_font", color, x + 90, y + 25, "MISSION CLEAR");
+	NyaString::Write("design_mission_clear_font", color, x + 90, y + 25, "PRESS ENTER KEY");
 }
 
 void NyaDesign::DrawInput(int x, int y)

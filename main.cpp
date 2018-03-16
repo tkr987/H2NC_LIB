@@ -7,7 +7,7 @@
 //#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 //#endif
 
-//#include <vld.h> 
+#include <vld.h> 
 
 #include "DxLib.h"
 #include "NyaWindow.h"

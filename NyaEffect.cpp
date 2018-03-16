@@ -117,7 +117,6 @@ void NyaEffect::DrawAll(eOBJECT::NUM group)
 		if (it->interval_time_ * it->div_max_ == it->count_)
 			delete_deque.push_back(it);
 	}
-
 	while (!delete_deque.empty())
 	{
 		wait_list_.splice(wait_list_.begin(), move(draw_list_[group]), delete_deque.front());

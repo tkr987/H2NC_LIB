@@ -39,8 +39,12 @@ NyaWindow::~NyaWindow()
 	if (!ch_user_.empty_)
 		delete ch_user_.nya_user_;
 
-	for (vector<NyaMission*>::iterator it = ch_mission_.nya_mission_vector_.begin(); it != ch_mission_.nya_mission_vector_.end(); ++it)
-		delete *it;
+	//for (vector<NyaMission*>::iterator it = ch_mission_.nya_mission_vector_.begin();
+	//	it != ch_mission_.nya_mission_vector_.end(); ++it)
+	//	delete *it;
+
+	for (auto& it : ch_mission_.nya_mission_vector_)
+		delete it;
 
 	DxLib_End();
 }
@@ -150,6 +154,7 @@ void NyaWindow::Run(void)
 #else
 		RunMission();
 		RunUser();
+		RunTitle();
 #endif
 		// **********************************************************
 		// ƒ‰ƒCƒuƒ‰ƒŠ‚Ìˆ—

@@ -11,24 +11,25 @@
 using namespace std;
 using namespace H2NLIB;
 
-int NyaDesign::count_mission_frame_;
+int NyaDesign::count_;
+DesignExMode NyaDesign::ex_mode_;
+int NyaDesign::instance_ = 0;
 ePROCESS::NUM NyaDesign::process_;
 DesignSkillInfo NyaDesign::skill_info_[4];
 DesignUserInfo NyaDesign::user_info_;
-pair<bool, int> NyaDesign::warning_sound_pair_;
-pair<bool, DesignWarningString> NyaDesign::warning_string_pair_;
+DesignWarning NyaDesign::warning_;
 
 
 NyaDesign::NyaDesign()
 {
-	static bool first_call = true;
 	DesignSkillInfo init_skill_info;
 
 	nya_sound_ = new NyaSound;
 
 	// ‰Šú‰»‚·‚é‚Ì‚Í1‰ñ‚¾‚¯
-	if (first_call) {
-		count_mission_frame_ = 0;
+	if (instance_ == 0) {
+		count_ = 0;
+		instance_ = 0;
 		init_skill_info.exp_ = 0;
 		init_skill_info.exp_next_[0] = 2147483647;
 		init_skill_info.exp_next_[1] = 2147483647;
@@ -50,8 +51,7 @@ NyaDesign::NyaDesign()
 		user_info_.exp_ = 0;
 		user_info_.exp_next_ = 2147483647;
 		user_info_.lv_ = 123;
-		warning_sound_pair_.first = false;
-		warning_string_pair_.first = false;
+		warning_.spx_ = new SoundPropertyX;
 		NyaString::SettingFont("design_exp_font", 18, 2);
 		NyaString::SettingFont("design_fps_font", 14, 2);
 		NyaString::SettingFont("design_lv_font", 60, 6);
@@ -59,15 +59,20 @@ NyaDesign::NyaDesign()
 		NyaString::SettingFont("design_skill_font", 30, 2);
 		NyaString::SettingFont("design_input_font", 50, 2);
 		NyaString::SettingFont("design_warning_font", 64, 4);
-
-		first_call = false;
 	}
+
+	instance_++;
 }
 
 
 NyaDesign::~NyaDesign()
 {
 	delete nya_sound_;
+
+	if (instance_ == 1)
+		delete warning_.spx_;
+
+	instance_--;
 }
 
 void NyaDesign::AddEXP(int x)
@@ -82,51 +87,47 @@ void NyaDesign::AddEXP(int x)
 
 void NyaDesign::Run(void)
 {
+	// ƒ~ƒbƒVƒ‡ƒ“ŒÀ’è‚Ìˆ—
 	switch(process_)
 	{
 	case ePROCESS::NUM::MISSION_LOAD:
-		count_mission_frame_ = 0;
+		count_ = 0;
 		break;
 	case ePROCESS::NUM::MISSION_RUN:
+		DrawMissionEx();
+		DrawMissionWarning();
+		break;
 	case ePROCESS::NUM::MISSION_STOP:
-		if (warning_string_pair_.first)
-			DrawWarning();
-		count_mission_frame_++;
+		DrawMissionEx();
+		DrawMissionWarning();
 		break;
 	case ePROCESS::NUM::MISSION_CLEAR:
 		DrawMissionClear(200, 300);
-		count_mission_frame_++;
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			process_ = ePROCESS::NUM::MISSION_LOAD;
 		break;
 	}
 
+	// ’Êíˆ—
 	DrawBlack(850, 0, 1280, 720);
 	DrawSkill(875, 110);
 	DrawLv(875, 515);
 	DrawInput(875, 600);
 	UpdateFPS(1180, 660);
+
+	count_++;
 }
 
 void NyaDesign::LoadWarningSound(std::string file_pass, int volume)
 {
-	static SoundPropertyX spx;
-	
-	warning_sound_pair_.first = true;
-	
-	spx.file_id_ = nya_sound_->LoadFile(file_pass);
-	warning_sound_pair_.second = spx.file_id_;
-	nya_sound_->ChangeVolume(&spx, volume);
+	warning_.sound_flag_ = true;
+	warning_.spx_->file_id_ = nya_sound_->LoadFile(file_pass);
+	nya_sound_->ChangeVolume(warning_.spx_, volume);
 }
 
 
-void NyaDesign::Warning(int grid_x, int grid_y, int draw_time_sec)
+void NyaDesign::Warning(int draw_time_sec)
 {
-	warning_string_pair_.first = true;
-	warning_string_pair_.second.draw_start_frame_ = count_mission_frame_ + 1;
-	warning_string_pair_.second.draw_end_frame_ = count_mission_frame_ + FPS_MAX * draw_time_sec + 1;
-	warning_string_pair_.second.grid_x_ = grid_x;
-	warning_string_pair_.second.grid_y_ = grid_y;
+	warning_.draw_frame_end_ = count_ + FPS_MAX * draw_time_sec + 1;
+	warning_.draw_frame_start_ = count_;
 }
 
 
@@ -134,7 +135,20 @@ void NyaDesign::DrawBlack(int x, int y, int x2, int y2)
 {
 	static int color = GetColor(16, 16, 16);
 
-	DrawBox(x, y, x2, y2, color , true) ;
+	DrawBox(x, y, x2, y2, color , true);
+}
+
+void NyaDesign::DrawMissionEx(void)
+{
+	const double ex_max_size_x = 840.0;
+	static int black = GetColor(0, 0, 0);
+	static int red = GetColor(255, 0, 0);
+
+	if (!ex_mode_.flag_)
+		return;
+
+	DrawBox(0, 0, 850, 20, black, true);
+	DrawBox(5, 4, 5 + (int)(ex_max_size_x * ex_mode_.value_ / 100.0), 15, red, true);
 }
 
 void NyaDesign::DrawMissionClear(int x, int y)
@@ -204,28 +218,24 @@ void NyaDesign::DrawSkill(int x, int y)
 	}
 }
 
-void NyaDesign::DrawWarning(void)
+void NyaDesign::DrawMissionWarning(void)
 {
-	int x = warning_string_pair_.second.grid_x_;
-	int y = warning_string_pair_.second.grid_y_;
+	const int draw_grid_x = 200;
+	const int draw_grid_y = 200;
 	static int black = GetColor(0, 0, 0);
 	static tuple<int, int, int> red = make_tuple(255, 0, 0);
-	static SoundPropertyX spx;
 
-	if (count_mission_frame_ == warning_string_pair_.second.draw_start_frame_)
+	if (count_ == warning_.draw_frame_start_)
 	{
-		if (warning_sound_pair_.first)
-		{
-			spx.file_id_ = warning_sound_pair_.second;
-			nya_sound_->Play(&spx);
-		}
+		if (warning_.sound_flag_)
+			nya_sound_->Play(warning_.spx_);
 	}
 
-	if (count_mission_frame_ == warning_string_pair_.second.draw_end_frame_ - 1)
-		warning_string_pair_.first = false;
-
-	DrawBox(x, y, x + 400, y + 150, black, true);
-	NyaString::Write("design_warning_font", red, x + 90, y + 25, "WARNING");
+	if (warning_.draw_frame_start_ <= count_ && count_ < warning_.draw_frame_end_)
+	{
+		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
+		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
+	}
 }
 
 /**

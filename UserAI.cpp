@@ -137,8 +137,12 @@ void UserAI::Act(void)
 
 
 	// warning
-	if (count_ == 300)
-		nya_design_->Warning(200, 300, 5);
+	if (count_ == 300) {
+		nya_design_->Warning(5);
+		nya_design_->ExMode(true);
+		nya_design_->SetExValue(100);
+	}
+
 		
 
 	// ‚»‚Ì‘¼

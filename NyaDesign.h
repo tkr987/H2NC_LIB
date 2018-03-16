@@ -17,11 +17,18 @@ namespace H2NLIB
 		double value_;
 	};
 
-	struct DesignUserInfo
+	class DesignUserInfo
 	{
+	public:
 		int exp_;
 		int exp_next_;
 		int lv_;
+		DesignUserInfo()
+		{
+			exp_ = 0;
+			exp_next_ = 2147483647;
+			lv_ = 123;
+		}
 	};
 
 	struct DesignSkillInfo

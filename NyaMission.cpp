@@ -44,6 +44,9 @@ void NyaMission::End(void)
 	count_ = 0;
 	for (vector<MissionTarget>::iterator it = nya_target_vector_.begin(); it != nya_target_vector_.end(); ++it)
 		delete it->target_;
+	if (back_pair_.first)
+		;
+
 }
 
 void NyaMission::LoadBack(std::string file_pass, int start_grid_x, int start_grid_y, int scroll_max_size, int scroll_max_time_sec)

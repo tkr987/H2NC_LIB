@@ -48,9 +48,6 @@ NyaDesign::NyaDesign()
 		init_skill_info.name_ = "Skill R";
 		init_skill_info.select_ = false;
 		skill_info_[3] = init_skill_info;
-		user_info_.exp_ = 0;
-		user_info_.exp_next_ = 2147483647;
-		user_info_.lv_ = 123;
 		warning_.spx_ = new SoundPropertyX;
 		NyaString::SettingFont("design_exp_font", 18, 2);
 		NyaString::SettingFont("design_fps_font", 14, 2);

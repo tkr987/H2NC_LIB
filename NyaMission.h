@@ -11,6 +11,7 @@ namespace H2NLIB
 	class NyaDesign;
 	class NyaGraphic;
 	class NyaTarget;
+	class GraphicFile;
 	class GraphicPropertyX1;
 
 	// îwåi

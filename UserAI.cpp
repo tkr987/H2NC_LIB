@@ -49,7 +49,7 @@ UserAI::UserAI()
 	gpx4_ai_->draw_angle_ = 0;
 	gpx4_ai_->extend_rate_ = 0.4;
 	gpx4_ai_->file_div_ = 0;
-	gpx4_ai_->file_id_ = nya_graphic_->LoadFile(8, 2, "img/user_ai.png");
+	gpx4_ai_->graphic_file_ = nya_graphic_->LoadFile(8, 2, "img/user_ai.png");
 	gpx4_ai_->flag_trans_ = true;
 	gpx4_ai_->flag_turn_ = false;
 	gpx4_ai_->object_group_ = eOBJECT::NUM::USER1;
@@ -133,17 +133,7 @@ void UserAI::Act(void)
 	}
 
 	// Õ“Ë”»’è
-	nya_position_->Collision(phx_ai_, eOBJECT::NUM::USER1);
-
-
-	// warning
-	if (count_ == 300) {
-		nya_design_->Warning(5);
-		nya_design_->ExMode(true);
-		nya_design_->SetExValue(100);
-	}
-
-		
+	nya_position_->Collision(phx_ai_, eOBJECT::NUM::USER1);		
 
 	// ‚»‚Ì‘¼
 	count_++;

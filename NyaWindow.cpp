@@ -279,17 +279,17 @@ void NyaWindow::RunMission(void)
 		break;
 	case ePROCESS::MISSION_LOAD:
 		if (ch_mission_.index_ != 0)
-			ch_mission_.nya_mission_vector_[ch_mission_.index_-1]->End();
+			ch_mission_.nya_mission_vector_[ch_mission_.index_-1]->MissionEnd();
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Load();
 		break;
 	case ePROCESS::MISSION_RUN:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Run();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
 		break;
 	case ePROCESS::MISSION_STOP:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Stop();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionStop();
 	break;
 	case ePROCESS::NUM::MISSION_CLEAR:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Run();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
 		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
 			ch_mission_.index_++;
 		break;

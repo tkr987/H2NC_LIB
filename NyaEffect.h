@@ -22,7 +22,8 @@ namespace H2NLIB
 		int interval_time_frame_;
 		int grid_x_;
 		int grid_y_;
-		eOBJECT::NUM object_group_;
+		EffectPropertyX1(){}
+		~EffectPropertyX1(){}
 	};
 
 	class EffectPropertyX2
@@ -33,7 +34,6 @@ namespace H2NLIB
 		int interval_time_frame_;
 		int grid_x_;
 		int grid_y_;
-		eOBJECT::NUM object_group_;
 	};
 
 	class EffectAnimation1

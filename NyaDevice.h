@@ -14,6 +14,7 @@ namespace H2NLIB {
 	class NyaEffect;
 	class NyaGraphic;
 	class NyaPosition;
+	class EffectPropertyX1;
 	class GraphicPropertyX4;
 	class PositionHandleX;
 
@@ -79,9 +80,6 @@ namespace H2NLIB {
 		void Attack(DevicePropertyX1* dpx, GraphicPropertyX4* gadget_gpx4, EffectPropertyX1* epx1, GraphicPropertyX4* effect_gpx4);
 		void Attack(DevicePropertyX2* dpx, GraphicPropertyX4* gadget_gpx4, EffectPropertyX1* epx1, GraphicPropertyX4* effect_gpx4);
 		void Run(void);
-		void SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::NUM object_group);
-		void SetEffect(std::string file_pass, int div_x, int div_y, int animation_div_max, int animation_interval_time, eOBJECT::NUM object_group, double draw_angle, double draw_extend_, double draw_move_x_, double draw_move_y_);
-		void SetGraphic(std::string file_pass);
 	private:
 		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;

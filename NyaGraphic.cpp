@@ -3,6 +3,7 @@
 #include "NyaGraphic.h"
 #include "NyaString.h"
 #include <tuple>
+#include <iterator>
 
 //#define __DEBUG__
 
@@ -36,33 +37,52 @@ NyaGraphic::~NyaGraphic()
 
 }
 
+void NyaGraphic::DeleteGraphicFile(GraphicFile file)
+{
+	// すでにロードしたファイルかどうかのチェック
+	for (list<GraphicFile>::iterator it = file_list_.begin(); it != file_list_.end(); ++it)
+	{
+		if (it->pass_ == file.pass_ && it->div_x_ == file.div_x_ && it->div_y_ == file.div_y_)
+		{
+			file_list_.erase(it);
+			break;
+		}
+	}
+	for (auto& e : file.div_vector_)
+		DeleteGraph(e);
+}
+
 /**
 @brief 画像ロード関数
 @param file_pass ファイルパス
-@return ファイル構造体
+@param *file ロード結果
 @note
  画像ファイルをメモリにロードしてファイル構造体を返す。
  ファイル構造体はNyaGraphic::Draw()などで利用する。
 **/
-GraphicFile NyaGraphic::LoadFile(std::string file_pass)
+void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
 {
-	static GraphicFile file;
+	static list<GraphicFile>::iterator it;
+	const static GraphicFile empty_file;
 
-	// すでにロードしたファイルかどうかのチェック
+	// ロード済みファイルなら新しくロードする必要ない
 	for (auto& it : file_list_)
 	{
 		if (it.pass_ == file_pass && it.div_x_ == 0 && it.div_y_ == 0)
-			return it;
+			*file = it;		
 	}
 
-	file.div_vector_.push_back(LoadGraph(file_pass.c_str()));
-	file.div_total_ = 1;
-	file.div_x_ = 0;
-	file.div_y_ = 0;
-	file.pass_ = file_pass;
-	file_list_.insert(file_list_.begin(), file);
+	// 画像ファイルをメモリにロードする
+	file_list_.push_front(empty_file);
+	it = file_list_.begin();
+	it->div_total_ = 1;
+	it->div_vector_.push_back(LoadGraph(file_pass.c_str()));
+	it->div_x_ = 0;
+	it->div_y_ = 0;
+	it->pass_ = file_pass;
 
-	return file;
+	// ロード結果を返す
+	*file = *it;
 }
 
 /**
@@ -70,21 +90,22 @@ GraphicFile NyaGraphic::LoadFile(std::string file_pass)
 @param div_x x軸方向分割数
 @param div_y y軸方向分割数
 @param file_pass ファイルパス
-@return 画像ファイルの識別ID
+@param *file ロード結果
 @note
  画像ファイルをメモリにロードして画像ファイルの識別IDを返す。
  識別IDはNyaGraphic::Draw()などで利用する。
 **/
-GraphicFile NyaGraphic::LoadFile(int div_x, int div_y, string file_pass)
+void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, GraphicFile* file)
 {
-	static int check_graphic_handle, check_size_x, check_size_y;
-	static GraphicFile file;
+	int check_graphic_handle, check_size_x, check_size_y;
+	static list<GraphicFile>::iterator it;
+	const static GraphicFile empty_file;
 
-	// すでにロードしたファイルかどうかのチェック
+	// ロード済みファイルなら新しくロードする必要ない
 	for (auto& it : file_list_)
 	{
 		if (it.pass_ == file_pass && it.div_x_ == 0 && it.div_y_ == 0)
-			return it;
+			*file = it;		
 	}
 
 	// ロードする画像ファイルの分割サイズを計算
@@ -94,19 +115,18 @@ GraphicFile NyaGraphic::LoadFile(int div_x, int div_y, string file_pass)
 	check_size_y /= div_y;
 	DeleteGraph(check_graphic_handle);
 
-	// 初期化してから分割画像をロードする
-	file.div_vector_.clear();
-	file.div_vector_.resize(div_x * div_y);
-	LoadDivGraph(file_pass.c_str(), div_x * div_y, div_x, div_y, check_size_x, check_size_y, &file.div_vector_.front());
+	// 分割画像としてメモリにロードする
+	file_list_.push_front(empty_file);
+	it = file_list_.begin();
+	it->div_total_ = div_x * div_y;
+	it->div_vector_.resize(div_x * div_y);
+	LoadDivGraph(file_pass.c_str(), div_x * div_y, div_x, div_y, check_size_x, check_size_y, &it->div_vector_.front());
+	it->div_x_ = div_x;
+	it->div_y_ = div_y;
+	it->pass_ = file_pass;
 
-	// ロードした分割画像をlistに保存
-	file.div_total_ = div_x * div_y;
-	file.div_x_ = div_x;
-	file.div_y_ = div_y;
-	file.pass_ = file_pass;
-	file_list_.insert(file_list_.begin(), file);
-	
-	return file;
+	// ロード結果を返す
+	*file = *it;
 }
 
 

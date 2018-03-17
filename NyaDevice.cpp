@@ -10,10 +10,13 @@ using namespace std;
 using namespace H2NLIB;
 
 #define DEVICE_GADGET_MAX 10000
+
+
 int NyaDevice::count_instance_ = 0;
 list<DeviceGadget14> NyaDevice::dg14_attack_list_[eOBJECT::NUM::sizeof_enum];
 list<DeviceGadget14> NyaDevice::dg14_wait_list_;
-
+list<DeviceGadget1414> NyaDevice::dg1414_attack_list_[eOBJECT::NUM::sizeof_enum];
+list<DeviceGadget1414> NyaDevice::dg1414_wait_list_;
 
 NyaDevice::NyaDevice()
 {
@@ -93,13 +96,24 @@ void NyaDevice::Attack(DevicePropertyX1* dpx, GraphicPropertyX4* gadget_gpx4)
 		return;
 
 	it = dg14_wait_list_.begin();
-	it->dpx1_ = dpx;
-	it->gadget_gpx4_ = gadget_gpx4;
+	*it->dpx1_ = *dpx;
+	*it->gadget_gpx4_ = *gadget_gpx4;
 	it->move_angle_rad_ = AngleToRad(dpx->move_angle_deg_);
 	it->move_x_ = cos(it->move_angle_rad_) * dpx->move_speed_;
 	it->move_y_ = sin(it->move_angle_rad_) * dpx->move_speed_;
 
 }
+
+void NyaDevice::Attack(DevicePropertyX1* dpx, GraphicPropertyX4* gadget_gpx4, EffectPropertyX1* epx1, GraphicPropertyX4* effect_gpx4)
+{
+
+}
+
+void NyaDevice::Attack(DevicePropertyX2* dpx, GraphicPropertyX4* gadget_gpx4, EffectPropertyX1* epx1, GraphicPropertyX4* effect_gpx4)
+{
+
+}
+
 
 
 void NyaDevice::Run(void)

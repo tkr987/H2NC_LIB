@@ -76,8 +76,8 @@ void NyaEffect::Draw(EffectPropertyX1* epx, GraphicPropertyX4* gpx4)
 	
 	it = ea1_wait_list_.begin();
 	it->count_ = 0;
-	it->gpx4_ = gpx4;
-	it->epx1_ = epx;
+	*it->gpx4_ = *gpx4;
+	*it->epx1_ = *epx;
 
 	ea1_draw_list_.splice(ea1_draw_list_.begin(), move(ea1_wait_list_), it);
 }
@@ -96,8 +96,8 @@ void NyaEffect::Draw(EffectPropertyX2* epx, GraphicPropertyX4* gpx4)
 	
 	it = ea2_wait_list_.begin();
 	it->count_ = 0;
-	it->gpx4_ = gpx4;
-	it->epx2_ = epx;
+	*it->gpx4_ = *gpx4;
+	*it->epx2_ = *epx;
 
 	ea2_draw_list_.splice(ea2_draw_list_.begin(), move(ea2_wait_list_), it);
 }
@@ -145,6 +145,11 @@ void NyaEffect::DrawAnimation1(void)
 		nya_graphic_->Draw(&gpx4);
 
 		it.count_++;
+		if (it.count_ == it.epx1_->interval_time_frame_)
+		{
+			it.gpx4_->file_div_++;
+			it.count_ = 0;
+		}
 	}
 }
 

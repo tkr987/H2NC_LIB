@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include <iterator>
 #include <list>
 #include <string>
 #include <vector>
@@ -14,10 +15,19 @@ namespace H2NLIB
 	{
 	public:
 		int div_total_;
+		std::vector<int> div_vector_;
 		int div_x_;
 		int div_y_;
-		std::vector<int> div_vector_;
 		std::string pass_;
+		GraphicFile& operator=(GraphicFile file)
+		{
+			div_total_ = file.div_total_;
+			std::copy(file.div_vector_.begin(), file.div_vector_.end(), back_inserter(div_vector_));
+			div_x_ = file.div_x_;
+			div_y_ = file.div_y_;
+			pass_ = file.pass_;
+			return *this;
+		}
 	};
 
 	///////////////////////////////////
@@ -35,6 +45,11 @@ namespace H2NLIB
 		int pos_y_;
 		bool flag_trans_;
 		eOBJECT::NUM object_group_;
+		GraphicPropertyX1()
+		{
+			file_div_ = 0;
+			flag_trans_ = true;
+		}
 	};
 
 	// DXLIB LRîΩì]ï`âÊä÷êîÇ…ëŒâû
@@ -79,7 +94,14 @@ namespace H2NLIB
 		bool flag_turn_;
 		bool flag_trans_;
 		eOBJECT::NUM object_group_;
-		~GraphicPropertyX4(){}
+		GraphicPropertyX4()
+		{
+			file_div_ = 0;
+			draw_angle_ = 0;
+			extend_rate_ = 1.0;
+			flag_turn_ = false;
+			flag_trans_ = true;
+		}
 	};
 
 	// DXLIB âÒì]ï`âÊä÷êîIIÇ…ëŒâû
@@ -335,6 +357,7 @@ namespace H2NLIB
 	public:
 		NyaGraphic();
 		~NyaGraphic();
+		void DeleteGraphicFile(GraphicFile file);
 		void Draw(GraphicPropertyX1* gpx);
 		void Draw(GraphicPropertyX2* gpx);
 		void Draw(GraphicPropertyX3* gpx);
@@ -343,8 +366,8 @@ namespace H2NLIB
 		void Draw(GraphicPropertyX6* gpx);
 		void Draw(GraphicPropertyX1b* gpx);
 		void Draw(GraphicPropertyX2b* gpx);
-		GraphicFile LoadFile(std::string file_pass);
-		GraphicFile LoadFile(int div_x, int div_y, std::string file_pass);
+		void LoadGraphicFile(std::string file_pass, GraphicFile* file);
+		void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		void Run(void);
 	private:
 		static int swing_x_;

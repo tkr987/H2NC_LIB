@@ -33,7 +33,7 @@ TeemoTargetEx::TeemoTargetEx()
 	gpx4_teemo_->draw_angle_ = 0;
 	gpx4_teemo_->extend_rate_ = 1.0;
 	gpx4_teemo_->file_div_ = 0;
-	gpx4_teemo_->graphic_file_ = nya_graphic_->LoadFile("img/teemo_ex.png");
+	nya_graphic_->LoadGraphicFile("img/teemo_ex.png", &gpx4_teemo_->graphic_file_);
 	gpx4_teemo_->flag_trans_ = true;
 	gpx4_teemo_->flag_turn_ = false;
 	gpx4_teemo_->object_group_ = eOBJECT::NUM::TARGET1;

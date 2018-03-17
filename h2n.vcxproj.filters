@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ソース ファイル\NH2">
+      <UniqueIdentifier>{5a2cc4c0-28d8-4b0a-8511-3db282359e6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NH2T">
+      <UniqueIdentifier>{5f1c4590-b8aa-4d9c-b9be-31edc96f7a8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NH2">
+      <UniqueIdentifier>{c9ffd2ff-c983-48da-b1fd-1ffc34b8e17b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\NH3">
+      <UniqueIdentifier>{30ebb004-e712-4b0e-b599-cf39eb8e5153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\NH3">
+      <UniqueIdentifier>{ea514283-6074-4e26-ae8f-9568a0b4ef97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\LIB">
+      <UniqueIdentifier>{8c4001ca-2baf-4940-9d6b-39186dd0af63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\LIB">
+      <UniqueIdentifier>{db12c604-e011-4db4-9a77-d5571f6afb57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\TEEMO">
+      <UniqueIdentifier>{67d2fc42-f115-4a43-ba82-639cd8f0c81d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\TEEMO">
+      <UniqueIdentifier>{249abd57-ce2f-43e8-9ab3-126869150a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\AI">
+      <UniqueIdentifier>{7bbf65db-f4cb-4439-a58c-c566d2908111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\AI">
+      <UniqueIdentifier>{3e608f89-9055-43fa-bc15-59dc1084f12c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SoundUpdater.cpp">
+      <Filter>ソース ファイル\NH3</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaDesign.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaWindow.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaString.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaGraphic.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaPosition.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaInput.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaDevice.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaEffect.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="TeemoTarget.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaMission.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>ソース ファイル\NH2</Filter>
+    </ClCompile>
+    <ClCompile Include="UserAI.cpp">
+      <Filter>ソース ファイル\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="TeemoMission1.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="NyaSound.cpp">
+      <Filter>ソース ファイル\LIB</Filter>
+    </ClCompile>
+    <ClCompile Include="TeemoMission2.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+    <ClCompile Include="TeemoTargetEx.cpp">
+      <Filter>ソース ファイル\TEEMO</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DebugPrint.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaString.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaWindow.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaGraphic.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDefine.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaUser.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDesign.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaPosition.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDevice.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaMission.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="TeemoTarget.h">
+      <Filter>ヘッダー ファイル\TEEMO</Filter>
+    </ClInclude>
+    <ClInclude Include="TeemoMission1.h">
+      <Filter>ヘッダー ファイル\TEEMO</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaEffect.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaInput.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaTarget.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaDebugPrint.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="UserAI.h">
+      <Filter>ヘッダー ファイル\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NyaSound.h">
+      <Filter>ヘッダー ファイル\LIB</Filter>
+    </ClInclude>
+    <ClInclude Include="TeemoMission2.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TeemoTargetEx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

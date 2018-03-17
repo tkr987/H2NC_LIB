@@ -66,10 +66,10 @@ void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
 	const static GraphicFile empty_file;
 
 	// ロード済みファイルなら新しくロードする必要ない
-	for (auto& it : file_list_)
+	for (auto& e : file_list_)
 	{
-		if (it.pass_ == file_pass && it.div_x_ == 0 && it.div_y_ == 0)
-			*file = it;		
+		if (e.pass_ == file_pass && e.div_x_ == 0 && e.div_y_ == 0)
+			*file = e;
 	}
 
 	// 画像ファイルをメモリにロードする
@@ -102,10 +102,10 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 	const static GraphicFile empty_file;
 
 	// ロード済みファイルなら新しくロードする必要ない
-	for (auto& it : file_list_)
+	for (auto& e : file_list_)
 	{
-		if (it.pass_ == file_pass && it.div_x_ == 0 && it.div_y_ == 0)
-			*file = it;		
+		if (e.pass_ == file_pass && e.div_x_ == 0 && e.div_y_ == 0)
+			*file = e;
 	}
 
 	// ロードする画像ファイルの分割サイズを計算

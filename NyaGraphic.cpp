@@ -23,8 +23,8 @@ NyaGraphic::NyaGraphic()
 	if (first_call) {
 		swing_x_ = 0;
 		swing_y_ = 0;
-		for (auto& it : swing_vector_)
-			it = false;
+		for (auto& e : swing_vector_)
+			e = false;
 		NyaString::SettingFont("debug_image_font", 15, 2);
 		first_call = false;
 	}

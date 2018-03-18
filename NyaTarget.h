@@ -10,6 +10,7 @@ namespace H2NLIB {
 		virtual ~NyaTarget(){}
 		virtual void Act(void) = 0;
 		virtual void Draw(void) = 0;
+		virtual void End(void) = 0;
 	};
 
 }

@@ -3,73 +3,67 @@
 #include "NyaDefine.h"
 #include <list>
 #include <string>
-#include <utility>
 #include <vector>
 
 
-namespace H2NLIB 
-{
+namespace H2NLIB {
 
 	class NyaGraphic;
 	class NyaPosition;
-	class GraphicPropertyX4;
 	class PositionHandleX;
 
-
-	class EffectPropertyX1
-	{
+	class Animation {
 	public:
-		int interval_time_frame_;
-		int grid_x_;
-		int grid_y_;
-		EffectPropertyX1(){}
-		~EffectPropertyX1(){}
+		int count_;
+		int div_max_;
+		int file_id_;
+		int interval_time_;
+		PositionHandleX* phx_;
+		int option_index_;
 	};
 
-	class EffectPropertyX2
-	{
+	class EffectPropertyX {
 	public:
+		int animation_div_max_;
+		int animation_interval_time_;
+		int file_id_;
+		int grid_x_;
+		int grid_y_;
+		eOBJECT::NUM object_group_;
+	};
+
+
+	class EffectOption {
+	public:
+		double draw_angle_;
+		double draw_extend_;
 		double draw_move_x_;
 		double draw_move_y_;
-		int interval_time_frame_;
-		int grid_x_;
-		int grid_y_;
+		EffectOption() {
+			draw_angle_ = 0;
+			draw_extend_ = 1.0;
+			draw_move_x_ = 0;
+			draw_move_y_ = 0;
+		}
+
 	};
 
-	class EffectAnimation1
-	{
-	public:
-		int count_;
-		EffectPropertyX1* epx1_;
-		GraphicPropertyX4* gpx4_;
-	};
-
-	class EffectAnimation2
-	{
-	public:
-		int count_;
-		EffectPropertyX2* epx2_;
-		GraphicPropertyX4* gpx4_;
-	};
-
-	class NyaEffect
-	{
+	class NyaEffect {
 	public:
 		NyaEffect();
 		~NyaEffect();
-		void Draw(EffectPropertyX1* epx, GraphicPropertyX4* gpx4);
-		void Draw(EffectPropertyX2* epx, GraphicPropertyX4* gpx4);
+		void Draw(EffectPropertyX* epx, int option_index = 0);
+		int LoadFile(int div_x, int div_y, std::string file_pass);
+		int NewOption(EffectOption* option);
 		void Run(void);
 	private:
+		int graphic_file_id_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
-		static int count_instance_;
-		static std::list<EffectAnimation1> ea1_draw_list_;
-		static std::list<EffectAnimation1> ea1_wait_list_;
-		static std::list<EffectAnimation2> ea2_draw_list_;
-		static std::list<EffectAnimation2> ea2_wait_list_;
-		void DrawAnimation1(void);
-		void DrawAnimation2(void);
+		static std::list<Animation> draw_list_[eOBJECT::NUM::sizeof_enum];
+		static std::list<Animation> wait_list_;
+		static std::vector<EffectOption> option_vector_;
+		void DrawAll(eOBJECT::NUM group);
 	};
 
 }

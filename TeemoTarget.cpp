@@ -18,9 +18,9 @@ TeemoTarget::TeemoTarget()
 	nya_device_ = new NyaDevice;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	teemo_dpx1_ = new DevicePropertyX1;
-	teemo_gpx4_ = new GraphicPropertyX4;
-	teemo_phx_ = nya_position_->Create();
+	dpx_ = new DevicePropertyX;
+	gpx4_teemo_ = new GraphicPropertyX4;
+	phx_teemo_ = nya_position_->Create();
 
 	// NyaDeviceとプロパティの設定
 	//device_setting.collision_pow_ = 1.0;
@@ -33,15 +33,22 @@ TeemoTarget::TeemoTarget()
 	//graphic_id = nya_graphic_->LoadFile("img/attack.png");
 	//nya_device_->SetGraphic(graphic_id, 0);
 
-	// teemo プロパティの設定
-	nya_graphic_->LoadGraphicFile("img/teemo.png", &teemo_gpx4_->graphic_file_);
-	teemo_gpx4_->object_group_ = eOBJECT::NUM::TARGET1;
-	teemo_phx_->health_max_ = 1000;
-	teemo_phx_->health_now_ = 1000;
-	teemo_phx_->collision_pow_ = 1.0;
-	teemo_phx_->collision_range_ = 20.0;
-	teemo_phx_->grid_x_ = 400;
-	teemo_phx_->grid_y_ = 200;
+	// NyaGraphicプロパティの設定
+	gpx4_teemo_->draw_angle_ = 0;
+	gpx4_teemo_->extend_rate_ = 1.0;
+	gpx4_teemo_->file_div_ = 0;
+	gpx4_teemo_->file_id_ = nya_graphic_->LoadFile("img/teemo.png");
+	gpx4_teemo_->flag_trans_ = true;
+	gpx4_teemo_->flag_turn_ = false;
+	gpx4_teemo_->object_group_ = eOBJECT::NUM::TARGET1;
+
+	// NyaPositionプロパティの設定
+	phx_teemo_->health_max_ = 1;
+	phx_teemo_->health_now_ = 1;
+	phx_teemo_->collision_pow_ = 1.0;
+	phx_teemo_->collision_range_ = 20.0;
+	phx_teemo_->grid_x_ = 400;
+	phx_teemo_->grid_y_ = 200;
 }
 
 
@@ -51,8 +58,8 @@ TeemoTarget::~TeemoTarget()
 	delete nya_device_;
 	delete nya_graphic_;
 	delete nya_position_;
-	delete teemo_dpx1_;
-	delete teemo_gpx4_;
+	delete dpx_;
+	delete gpx4_teemo_;
 }
 
 
@@ -76,9 +83,16 @@ void TeemoTarget::Act(void)
 
 void TeemoTarget::Draw(void)
 {
-	teemo_gpx4_->pos_cx_ = (int)teemo_phx_->grid_x_;
-	teemo_gpx4_->pos_cy_ = (int)teemo_phx_->grid_y_;
-	nya_graphic_->Draw(teemo_gpx4_);
+	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+	gpx4_teemo_->pos_cx_ = (int)phx_teemo_->grid_x_;
+	gpx4_teemo_->pos_cy_ = (int)phx_teemo_->grid_y_;
+	nya_graphic_->Draw(gpx4_teemo_);
 }
 
+void TeemoTarget::Init(void)
+{
+
+
+}
 

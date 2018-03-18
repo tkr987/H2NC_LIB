@@ -11,29 +11,19 @@ namespace H2NLIB
 	class NyaDesign;
 	class NyaGraphic;
 	class NyaTarget;
-	class GraphicFile;
 	class GraphicPropertyX1;
 
 	// îwåi
-	class MissionBack
-	{
-	public:
-		bool empty_;
-		double grid_x_;
-		double grid_y_;
+	struct MissionBack {
+		int img_;
 		int scroll_limit_frame_time_;
 		double scroll_size_per_frame_;
-		GraphicPropertyX1* gpx1_;
-		MissionBack()
-		{
-			empty_ = true;
-		}
+		double grid_x_;
+		double grid_y_;
 	};
 
 	// target
-	class MissionTarget
-	{
-	public:
+	struct MissionTarget {
 		int start_frame_;
 		int end_frame_;
 		NyaTarget* target_;
@@ -44,19 +34,20 @@ namespace H2NLIB
 		NyaMission();
 		virtual ~NyaMission();
 		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
-		virtual void Load(void) = 0;
-		void LoadBack(GraphicPropertyX1* gpx1, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
+		void End(void);
+		void LoadBack(std::string file_pass, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
 		void LoadSound(void);
 		void LoadSoundEx(void);
-		void MissionEnd(void);
-		void MissionRun(void);
-		void MissionStop(void);
+		void Run(void);
+		void Stop(void);
+		virtual void Load(void) = 0;
 	private:
 		int count_;
 		NyaDesign* nya_design_;
 		NyaGraphic* nya_graphic_;
-		MissionBack mission_back_;
-		std::vector<MissionTarget> mission_target_vector_;
+		GraphicPropertyX1* gpx1_back_;
+		std::pair<bool, MissionBack> back_pair_;
+		std::vector<MissionTarget> nya_target_vector_;
 	};
 
 }

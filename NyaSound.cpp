@@ -1,6 +1,5 @@
 #include "DxLib.h"
 #include "NyaSound.h"
-#include "NyaDesign.h"
 
 using namespace H2NLIB;
 
@@ -9,9 +8,8 @@ std::deque<SoundPropertyX> NyaSound::play_deque_;
 
 NyaSound::NyaSound()
 {
+
 }
-
-
 
 
 NyaSound::~NyaSound()

@@ -39,8 +39,12 @@ NyaWindow::~NyaWindow()
 	if (!ch_user_.empty_)
 		delete ch_user_.nya_user_;
 
-	for (vector<NyaMission*>::iterator it = ch_mission_.nya_mission_vector_.begin(); it != ch_mission_.nya_mission_vector_.end(); ++it)
-		delete *it;
+	//for (vector<NyaMission*>::iterator it = ch_mission_.nya_mission_vector_.begin();
+	//	it != ch_mission_.nya_mission_vector_.end(); ++it)
+	//	delete *it;
+
+	for (auto& it : ch_mission_.nya_mission_vector_)
+		delete it;
 
 	DxLib_End();
 }
@@ -136,9 +140,10 @@ void NyaWindow::Run(void)
 		ClearDrawScreen();
 
 
-		// **************************************
-		// プロセスの状態によって分岐する処理
-		// **************************************
+		// ****************************
+		// NyaWindowメンバ関数の処理
+		// 子オブジェクトの処理
+		// ****************************
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
 		RunMission();
@@ -152,10 +157,9 @@ void NyaWindow::Run(void)
 		RunUser();
 		RunTitle();
 #endif
-		// **********************************************************
-		// ライブラリの処理
-		// プロセスの状態に左右されず、常に同じ処理をおこなう
-		// **********************************************************
+		// ******************
+		// 他クラスの処理
+		// ******************
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
@@ -242,8 +246,20 @@ void NyaWindow::RunChangeProcess()
 	case ePROCESS::MISSION_STOP:
 		break;
 	case ePROCESS::NUM::MISSION_CLEAR:
+
 		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			nya_design_->SetProcess(ePROCESS::MISSION_RUN);
+		{
+			if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
+			{
+				nya_design_->SetProcess(ePROCESS::TITLE);
+			}
+			else
+			{
+				nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
+			}
+		}
+		break;
+	case ePROCESS::SAVE:
 		break;
 	case ePROCESS::CONTINUE:
 		break;
@@ -263,19 +279,22 @@ void NyaWindow::RunMission(void)
 		break;
 	case ePROCESS::MISSION_LOAD:
 		if (ch_mission_.index_ != 0)
-			ch_mission_.nya_mission_vector_[ch_mission_.index_-1]->End();
+			ch_mission_.nya_mission_vector_[ch_mission_.index_-1]->MissionEnd();
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Load();
 		break;
 	case ePROCESS::MISSION_RUN:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Run();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
 		break;
 	case ePROCESS::MISSION_STOP:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Stop();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionStop();
 	break;
 	case ePROCESS::NUM::MISSION_CLEAR:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Run();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
 		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
 			ch_mission_.index_++;
+		break;
+	case ePROCESS::SAVE:
+		ch_mission_.index_ = 0;
 		break;
 	case ePROCESS::CONTINUE:
 		break;

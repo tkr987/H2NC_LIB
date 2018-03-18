@@ -6,6 +6,9 @@
 
 namespace H2NLIB
 {
+
+	class NyaDesign;
+
 	struct SoundFile
 	{
 		int id_;

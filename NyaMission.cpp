@@ -10,12 +10,21 @@ using namespace std;
 using namespace H2NLIB;
 
 
+MissionBack::MissionBack()
+{
+	gp_ = new GraphicProperty1;
+	valid_ = false;
+}
+
+MissionBack::~MissionBack()
+{
+	delete gp_;
+}
+
 NyaMission::NyaMission()
 {
 	nya_design_ = new NyaDesign;
 	nya_graphic_ = new NyaGraphic;
-	mission_back_.gpx1_ = new GraphicPropertyX1;
-	mission_back_.empty_ = true;
 
 	// •Ï”‰Šú‰»
 	count_ = 0;
@@ -25,7 +34,6 @@ NyaMission::~NyaMission()
 {
 	delete nya_design_;
 	delete nya_graphic_;
-	delete mission_back_.gpx1_;
 }
 
 
@@ -39,19 +47,19 @@ void NyaMission::AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* ta
 	mission_target_vector_.push_back(mission_target);
 }
 
-void NyaMission::LoadBack(GraphicPropertyX1* gpx1, int start_grid_x, int start_grid_y, int scroll_max_size, int scroll_max_time_sec)
+void NyaMission::LoadBack(GraphicProperty1* gp, eOBJECT::NUM draw_layer, int start_grid_x, int start_grid_y, int scroll_max_size, int scroll_max_time_sec)
 {
-	if (!mission_back_.empty_)
+	if (mission_back_.valid_)
 		return;
 
 	// ”wŒi‚Ìƒ[ƒh
-	mission_back_.empty_ = false;
+	mission_back_.valid_ = true;
 	mission_back_.grid_x_ = (double)start_grid_x;
 	mission_back_.grid_y_ = (double)start_grid_y;
 	mission_back_.scroll_limit_frame_time_ = scroll_max_time_sec * FPS_MAX;
 	mission_back_.scroll_size_per_frame_ = (double)scroll_max_size / (double)(scroll_max_time_sec * FPS_MAX);
-	mission_back_.gpx1_->graphic_file_.div_vector_.resize(gpx1->file_div_);
-	*mission_back_.gpx1_ = *gpx1;
+	*mission_back_.gp_ = *gp;
+	mission_back_.draw_layer_ = draw_layer;
 }
 
 void NyaMission::LoadSound()
@@ -64,42 +72,7 @@ void NyaMission::LoadSoundEx()
 
 }
 
-void NyaMission::MissionEnd(void)
-{
-	count_ = 0;
-	for (auto& e : mission_target_vector_)
-		delete e.target_;
-	nya_graphic_->DeleteGraphicFile(mission_back_.gpx1_->graphic_file_);
-	mission_back_.empty_ = true;
-}
-
-void NyaMission::MissionRun(void)
-{
-	// target‚Ìˆ—
-	for (auto& it : mission_target_vector_)
-	{
-		if (it.start_frame_ <= count_ && count_ < it.end_frame_)
-		{
-			it.target_->Act();
-			it.target_->Draw();
-		}
-	}
-	
-	// ”wŒiˆ—
-	if (!mission_back_.empty_)
-	{
-		mission_back_.gpx1_->draw_grid_x_ = (int)mission_back_.grid_x_;
-		mission_back_.gpx1_->draw_grid_y_ = (int)mission_back_.grid_y_;
-		nya_graphic_->Draw(mission_back_.gpx1_);
-		if (count_ < mission_back_.scroll_limit_frame_time_)
-			mission_back_.grid_y_ += mission_back_.scroll_size_per_frame_;
-	}
-
-	count_++;
-}
-
-
-void NyaMission::MissionStop(void)
+void NyaMission::ProcessMissionContinue(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
@@ -111,10 +84,46 @@ void NyaMission::MissionStop(void)
 	}
 	
 	// ”wŒiˆ—
-	if (!mission_back_.empty_)
+	if (mission_back_.valid_)
 	{
-		mission_back_.gpx1_->draw_grid_x_ = (int)mission_back_.grid_x_;
-		mission_back_.gpx1_->draw_grid_y_ = (int)mission_back_.grid_y_;
-		nya_graphic_->Draw(mission_back_.gpx1_);
+		mission_back_.gp_->draw_grid_x_ = (int)mission_back_.grid_x_;
+		mission_back_.gp_->draw_grid_y_ = (int)mission_back_.grid_y_;
+		nya_graphic_->Draw(mission_back_.gp_, mission_back_.draw_layer_);
 	}
 }
+
+void NyaMission::ProcessMissionDelete(void)
+{
+	count_ = 0;
+	for (auto& e : mission_target_vector_)
+		delete e.target_;
+	mission_back_.valid_ = false;
+}
+
+void NyaMission::ProcessMissionRun(void)
+{
+	// target‚Ìˆ—
+	for (auto& e : mission_target_vector_)
+	{
+		if (e.start_frame_ <= count_ && count_ < e.end_frame_)
+		{
+			e.target_->Act();
+			e.target_->Draw();
+		}
+	}
+	
+	// ”wŒiˆ—
+	if (mission_back_.valid_)
+	{
+		mission_back_.gp_->draw_grid_x_ = (int)mission_back_.grid_x_;
+		mission_back_.gp_->draw_grid_y_ = (int)mission_back_.grid_y_;
+		nya_graphic_->Draw(mission_back_.gp_, mission_back_.draw_layer_);
+		if (count_ < mission_back_.scroll_limit_frame_time_)
+			mission_back_.grid_y_ += mission_back_.scroll_size_per_frame_;
+	}
+
+	count_++;
+}
+
+
+

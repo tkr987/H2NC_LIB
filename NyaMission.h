@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "NyaDefine.h"
 
 
 namespace H2NLIB
@@ -12,22 +13,21 @@ namespace H2NLIB
 	class NyaGraphic;
 	class NyaTarget;
 	class GraphicFile;
-	class GraphicPropertyX1;
+	class GraphicProperty1;
 
 	// îwåi
 	class MissionBack
 	{
 	public:
-		bool empty_;
+		eOBJECT::NUM draw_layer_;
 		double grid_x_;
 		double grid_y_;
 		int scroll_limit_frame_time_;
 		double scroll_size_per_frame_;
-		GraphicPropertyX1* gpx1_;
-		MissionBack()
-		{
-			empty_ = true;
-		}
+		bool valid_;
+		GraphicProperty1* gp_;
+		MissionBack();
+		~MissionBack();
 	};
 
 	// target
@@ -43,14 +43,14 @@ namespace H2NLIB
 	public:
 		NyaMission();
 		virtual ~NyaMission();
-		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
 		virtual void Load(void) = 0;
-		void LoadBack(GraphicPropertyX1* gpx1, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
+		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
+		void LoadBack(GraphicProperty1* gp, eOBJECT::NUM draw_layer, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
 		void LoadSound(void);
 		void LoadSoundEx(void);
-		void MissionEnd(void);
-		void MissionRun(void);
-		void MissionStop(void);
+		void ProcessMissionContinue(void);
+		void ProcessMissionDelete(void);
+		void ProcessMissionRun(void);
 	private:
 		int count_;
 		NyaDesign* nya_design_;

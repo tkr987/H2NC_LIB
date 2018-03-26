@@ -8,9 +8,9 @@ namespace H2NLIB {
 	class NyaGraphic;
 	class NyaPosition;
 	class NyaString;
-	class DevicePropertyX1;
+	class DeviceProperty1;
 	class GraphicPropertyX4;
-	class PositionHandleX;
+	class PositionHandle1;
 }
 
 
@@ -25,8 +25,8 @@ private:
 	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
-	H2NLIB::DevicePropertyX1* teemo_dpx1_;
+	H2NLIB::DeviceProperty1* teemo_dpx1_;
 	H2NLIB::GraphicPropertyX4* teemo_gpx4_;
-	H2NLIB::PositionHandleX* teemo_phx_;
+	H2NLIB::PositionHandle1* teemo_ph1_;
 };
 

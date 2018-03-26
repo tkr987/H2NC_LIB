@@ -12,6 +12,42 @@
 using namespace std;
 using namespace H2NLIB;
 
+UserAiDevice::UserAiDevice()
+{
+	dp_ = new DeviceProperty1;
+	gp_ = new GraphicProperty4;
+}
+
+UserAiDevice::~UserAiDevice()
+{
+	delete dp_;
+	delete gp_;
+}
+
+UserAiEffectTest::UserAiEffectTest()
+{
+	ep_ = new EffectProperty1;
+	gp_ = new GraphicProperty4;
+}
+
+UserAiEffectTest::~UserAiEffectTest()
+{
+	delete ep_;
+	delete gp_;
+}
+
+UserAiMain::UserAiMain()
+{
+	gp_ = new H2NLIB::GraphicProperty4;
+	ph_ = new H2NLIB::PositionHandle1;
+}
+
+UserAiMain::~UserAiMain()
+{
+	delete gp_;
+	delete ph_;
+}
+
 UserAI::UserAI()
 {
 	count_ = 0;
@@ -21,60 +57,33 @@ UserAI::UserAI()
 	nya_effect_ = new NyaEffect;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	user_device_.attack1_dpx1_ = new DevicePropertyX1;
-	user_device_.gpx4_ = new GraphicPropertyX4;
-	test_effect_.epx1_ = new EffectPropertyX1;
-	test_effect_.gpx4_ = new GraphicPropertyX4;
 
-	//test_gpx1_ = new GraphicPropertyX1;
-	//test_gpx1_->pos_x_ = 0;
-	//test_gpx1_->pos_y_ = 0;
-	//test_gpx1_->graphic_file_ = nya_graphic_->LoadGraphicFile("img/back1.png");
-	//test_gpx1_->object_group_ = eOBJECT::NUM::MAP1;
+	// user ai device property
+	ai_device_.dp_->collision_pow_ = 1.0;
+	ai_device_.dp_->collision_range_ = 2.0;
+	ai_device_.dp_->move_angle_deg_ = -90;
+	ai_device_.dp_->move_speed_ = 10;
+	ai_device_.gp_->draw_angle_ = -90;
+	ai_device_.gp_->file_div_ = 0;
+	//nya_graphic_->LoadGraphicFile("img/ai_device.png", &ai_device_.gp_->graphic_file_);
 
+	// user ai effect test property
+	ai_effect_test_.ep_->draw_max_div_ = 8;
+	ai_effect_test_.ep_->interval_time_frame_ = 10;
+	//nya_graphic_->LoadGraphicFile(4, 2, "img/Death80.png", &ai_effect_test_.gp_->graphic_file_);
 
-	gpx4_ai_ = new GraphicPropertyX4;
-	phx_ai_ = nya_position_->Create();
+	// user ai main property
+	nya_graphic_->LoadGraphicFile(8, 2, "img/user_ai.png", &ai_main_.gp_->graphic_file_);
+	ai_main_.gp_->extend_rate_ = 0.4;
+	ai_main_.gp_->draw_angle_ = 90;
+	ai_main_.ph_->health_max_ = 100;
+	ai_main_.ph_->health_now_ = 100;
+	ai_main_.ph_->collision_pow_ = 1;
+	ai_main_.ph_->collision_range_ = 20;
+	ai_main_.ph_->grid_x_ = 100;
+	ai_main_.ph_->grid_y_ = 500;
 
-	// NyaDesignの設定
-	nya_design_->LoadWarningSound("sound/warning.wav", 40);
-
-	// NyaDeviceとプロパティの設定
-	user_device_.attack1_dpx1_->collision_pow_ = 1.0;
-	user_device_.attack1_dpx1_->collision_range_ = 2.0;
-	user_device_.attack1_dpx1_->move_angle_deg_ = -90;
-	user_device_.attack1_dpx1_->move_speed_ = 10;
-	user_device_.attack1_dpx1_->object_group_ = eOBJECT::NUM::USER_ATTACK1;
-	user_device_.gpx4_->draw_angle_ = -90;
-	user_device_.gpx4_->extend_rate_ = 1.0;
-	user_device_.gpx4_->file_div_ = 0;
-	user_device_.gpx4_->flag_trans_ = true;
-	user_device_.gpx4_->flag_turn_ = false;
-	nya_graphic_->LoadGraphicFile("img/user_ai_attack.png", &user_device_.gpx4_->graphic_file_);
-	user_device_.gpx4_->object_group_ = eOBJECT::NUM::USER_ATTACK1;
-
-	// エフェクト関連プロパティの設定
-	test_effect_.epx1_->draw_max_div_ = 8;
-	test_effect_.epx1_->interval_time_frame_ = 10;
-	nya_graphic_->LoadGraphicFile(4, 2, "img/Death80.png", &test_effect_.gpx4_->graphic_file_);
-	test_effect_.gpx4_->object_group_ = eOBJECT::NUM::USER_EFFECT1;
-
-	// NyaGraphicとプロパティの設定
-	gpx4_ai_->draw_angle_ = 0;
-	gpx4_ai_->extend_rate_ = 0.4;
-	gpx4_ai_->file_div_ = 0;
-	nya_graphic_->LoadGraphicFile(8, 2, "img/user_ai.png", &gpx4_ai_->graphic_file_);
-	gpx4_ai_->flag_trans_ = true;
-	gpx4_ai_->flag_turn_ = false;
-	gpx4_ai_->object_group_ = eOBJECT::NUM::USER1;
-
-	// NyaPositionとハンドルの設定
-	phx_ai_->health_max_ = 100;
-	phx_ai_->health_now_ = 100;
-	phx_ai_->collision_pow_ = 1;
-	phx_ai_->collision_range_ = 20;
-	phx_ai_->grid_x_ = 100;
-	phx_ai_->grid_y_ = 500;
+	// 衝突判定設定
 	nya_position_->SettingCollision(eOBJECT::NUM::USER_ATTACK1, eOBJECT::NUM::TARGET1);
 	nya_position_->SettingCollision(eOBJECT::NUM::TARGET_ATTACK1, eOBJECT::NUM::USER1);
 
@@ -90,11 +99,6 @@ UserAI::~UserAI()
 	delete nya_effect_;
 	delete nya_graphic_;
 	delete nya_position_;
-	delete user_device_.attack1_dpx1_;
-	delete user_device_.gpx4_;
-	delete test_effect_.epx1_;
-	delete test_effect_.gpx4_;
-	delete gpx4_ai_;
 }
 
 
@@ -111,73 +115,68 @@ void UserAI::Act(void)
 	// 移動テスト
 	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::RIGHT))
 	{
-		phx_ai_->grid_x_ += 5;
+		ai_main_.ph_->grid_x_ += 5;
 	}
 	else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::LEFT))
 	{
-		phx_ai_->grid_x_ -= 5;
+		ai_main_.ph_->grid_x_ -= 5;
 	}
 	else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::UP))
 	{
-		phx_ai_->grid_y_ -= 5;
+		ai_main_.ph_->grid_y_ -= 5;
 	}
 	else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::DOWN))
 	{
-		phx_ai_->grid_y_ += 5;
+		ai_main_.ph_->grid_y_ += 5;
 	}
 
 	// 境界チェック
-	if (phx_ai_->grid_x_ < SCREEN_MIN_X)
-		phx_ai_->grid_x_ = SCREEN_MIN_X;
-	if (phx_ai_->grid_y_ < SCREEN_MIN_Y)
-		phx_ai_->grid_y_ = SCREEN_MIN_Y;
-	if (SCREEN_MAX_X < phx_ai_->grid_x_)
-		phx_ai_->grid_x_ = SCREEN_MAX_X;
-	if (SCREEN_MAX_Y < phx_ai_->grid_y_)
-		phx_ai_->grid_y_ = SCREEN_MAX_Y;
+	if (ai_main_.ph_->grid_x_ < SCREEN_MIN_X)
+		ai_main_.ph_->grid_x_ = SCREEN_MIN_X;
+	if (ai_main_.ph_->grid_y_ < SCREEN_MIN_Y)
+		ai_main_.ph_->grid_y_ = SCREEN_MIN_Y;
+	if (SCREEN_MAX_X < ai_main_.ph_->grid_x_)
+		ai_main_.ph_->grid_x_ = SCREEN_MAX_X;
+	if (SCREEN_MAX_Y < ai_main_.ph_->grid_y_)
+		ai_main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
 	// 攻撃テスト
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
-	{
-
-
-		user_device_.attack1_dpx1_->create_x_ = phx_ai_->grid_x_;
-		user_device_.attack1_dpx1_->create_y_ = phx_ai_->grid_y_;
-		nya_device_->Attack(user_device_.attack1_dpx1_, user_device_.gpx4_);
-
-
-
-	}
+	//if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
+	//{
+	//	ai_device_.dp_->create_x_ = ai_main_.ph_->grid_x_;
+	//	ai_device_.dp_->create_y_ = ai_main_.ph_->grid_y_;
+	//	nya_device_->Attack(user_device_.attack1_dp1_, user_device_.gpx4_);
+	//}
 
 	// 衝突判定
-	nya_position_->Collision(phx_ai_, eOBJECT::NUM::USER1);		
+	//nya_position_->Collision(ai_ph1_, eOBJECT::NUM::USER1);		
 
 	// その他
 	count_++;
 
 	// デバッグ
 	NyaString::Write("teemo_font", white, 50, 70, "[50, 70] teemo count = %d", count_);
-	NyaString::Write("teemo_font", white, 50, 110, "[50, 110] teemo x = %d", (int)phx_ai_->grid_x_);
-	NyaString::Write("teemo_font", white, 50, 130, "[50, 130] teemo y = %d", (int)phx_ai_->grid_y_);
+	NyaString::Write("teemo_font", white, 50, 110, "[50, 110] teemo x = %d", (int)ai_main_.ph_->grid_x_);
+	NyaString::Write("teemo_font", white, 50, 130, "[50, 130] teemo y = %d", (int)ai_main_.ph_->grid_y_);
 }
 
 void UserAI::Draw(void)
 {
 	// 描画テスト
-	gpx4_ai_->draw_grid_cx_ = (int)phx_ai_->grid_x_;
-	gpx4_ai_->draw_grid_cy_ = (int)phx_ai_->grid_y_;
+	ai_main_.gp_->draw_grid_cx_ = (int)ai_main_.ph_->grid_x_;
+	ai_main_.gp_->draw_grid_cy_ = (int)ai_main_.ph_->grid_y_;
 	if (count_ % 2 == 0)
-		gpx4_ai_->file_div_ = ++gpx4_ai_->file_div_ % 16;
-	nya_graphic_->Draw(gpx4_ai_);
+		ai_main_.gp_->file_div_ = ++ai_main_.gp_->file_div_ % 16;
+	nya_graphic_->Draw(ai_main_.gp_, eOBJECT::NUM::USER1);
 
 
 	//nya_graphic_->Draw(test_gpx1_);
 
 	// エフェクトテスト
 	if (count_ % 200 == 0) {
-		test_effect_.epx1_->grid_x_ = 500;
-		test_effect_.epx1_->grid_y_ = 500;
-		nya_effect_->Draw(test_effect_.epx1_, test_effect_.gpx4_);
+//		test_effect_.epx1_->grid_x_ = 500;
+//		test_effect_.epx1_->grid_y_ = 500;
+//		nya_effect_->Draw(test_effect_.epx1_, test_effect_.gpx4_);
 	}
 
 }

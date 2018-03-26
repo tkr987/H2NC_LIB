@@ -10,24 +10,40 @@ namespace H2NLIB
 	class NyaEffect;
 	class NyaGraphic;
 	class NyaPosition;
-	class DevicePropertyX1;
-	class EffectPropertyX1;
-	class GraphicPropertyX4;
-	class PositionHandleX;
+	class DeviceProperty1;
+	class EffectProperty1;
+	class GraphicProperty4;
+	class PositionHandle1;
 	class DeviceOption;
 	class EffectOption;
 }
 
-struct UserEffectTest
+class UserAiDevice
 {
-	H2NLIB::EffectPropertyX1* epx1_;
-	H2NLIB::GraphicPropertyX4* gpx4_;
+public:
+	H2NLIB::DeviceProperty1* dp_;
+	H2NLIB::GraphicProperty4* gp_;
+	UserAiDevice();
+	~UserAiDevice();
 };
 
-struct UserDevice
+struct UserAiEffectTest
 {
-	H2NLIB::DevicePropertyX1* attack1_dpx1_;
-	H2NLIB::GraphicPropertyX4* gpx4_;
+public:
+	H2NLIB::EffectProperty1* ep_;
+	H2NLIB::GraphicProperty4* gp_;
+	UserAiEffectTest();
+	~UserAiEffectTest();
+};
+
+
+struct UserAiMain
+{
+public:
+	H2NLIB::GraphicProperty4* gp_;
+	H2NLIB::PositionHandle1* ph_;
+	UserAiMain();
+	~UserAiMain();
 };
 
 
@@ -40,16 +56,14 @@ public:
 	void Init(void);
 private:
 	long count_;
-	UserEffectTest test_effect_;
 	H2NLIB::NyaDesign* nya_design_;
 	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaEffect* nya_effect_;
 	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
-	H2NLIB::GraphicPropertyX1* test_gpx1_;
-	UserDevice user_device_;
-	H2NLIB::GraphicPropertyX4* gpx4_ai_;
-	H2NLIB::PositionHandleX* phx_ai_;
+	UserAiDevice ai_device_;
+	UserAiEffectTest ai_effect_test_;
+	UserAiMain ai_main_;
 	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
 	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
 };

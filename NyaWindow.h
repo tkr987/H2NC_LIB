@@ -3,8 +3,10 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include "NyaDefine.h"
 
-namespace H2NLIB {
+namespace H2NLIB
+{
 
 	class NyaDesign;
 	class NyaDevice;
@@ -36,12 +38,11 @@ namespace H2NLIB {
 		void AddChUser(NyaUser* user);
 		int Init(std::string title);
 		void Run(void);
-		void RunChangeProcess(void);
-		void RunMission(void);
-		void RunUser(void);
 		NyaWindow();
 		~NyaWindow();
 	private:
+		ePROCESS::NUM process_;
+		std::string title_name_;
 		WindowUser ch_user_;
 		WindowMission ch_mission_;
 		NyaDesign* nya_design_;
@@ -50,7 +51,10 @@ namespace H2NLIB {
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		NyaSound* nya_sound_;
-		std::string title_name_;
+		void RunChMission(void);
+		void RunChUser(void);
+		void RunFPS(int x, int y);
+		void RunProcess(void);
 		void RunTitle(void);
 	};
 

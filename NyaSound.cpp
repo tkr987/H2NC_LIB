@@ -46,6 +46,9 @@ void NyaSound::Play(std::string pass, bool loop)
 
 void NyaSound::Play(SoundPropertyX* spx)
 {
+	if (spx == nullptr)
+		return;
+
 	play_deque_.push_back(*spx);
 }
 

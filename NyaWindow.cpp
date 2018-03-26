@@ -39,10 +39,6 @@ NyaWindow::~NyaWindow()
 	if (!ch_user_.empty_)
 		delete ch_user_.nya_user_;
 
-	//for (vector<NyaMission*>::iterator it = ch_mission_.nya_mission_vector_.begin();
-	//	it != ch_mission_.nya_mission_vector_.end(); ++it)
-	//	delete *it;
-
 	for (auto& it : ch_mission_.nya_mission_vector_)
 		delete it;
 
@@ -100,6 +96,10 @@ int NyaWindow::Init(string title)
 	SetUseDivGraphFlag(false);				// グラフィック描画分割方法
 	SetDrawScreen(DX_SCREEN_BACK);			// 描画先グラフィック領域の指定
 
+	// 変数初期化
+	title_name_ = title;
+	process_ = ePROCESS::NUM::TITLE;
+
 	// 子オブジェクトの初期化
 	ch_user_.empty_ = true;
 	ch_mission_.empty_ = true;
@@ -113,9 +113,6 @@ int NyaWindow::Init(string title)
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
 	nya_sound_ = new NyaSound;
-
-	// 変数初期化
-	title_name_ = title;
 	
 	// 設定
 	NyaString::SettingFont("window_title_font", 30, 4);
@@ -134,29 +131,26 @@ void NyaWindow::Run(void)
 
 	// 各プロセス処理
 	// プロセスの変更はここでおこなう
-	nya_design_->SetProcess(ePROCESS::TITLE);
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
 
 		ClearDrawScreen();
 
 
 		// ****************************
-		// NyaWindowメンバ関数の処理
 		// 子オブジェクトの処理
 		// ****************************
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		RunMission();
-		RunUser();
-		RunTitle();
+		RunChMission();
+		RunChUser();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 600, "[600, 620] Mission&User::Run() %d msec", (int)debug_time_msec);
 #else
-		RunMission();
-		RunUser();
-		RunTitle();
+		RunChMission();
+		RunChUser();
 #endif
+
 		// ******************
 		// 他クラスの処理
 		// ******************
@@ -223,91 +217,121 @@ void NyaWindow::Run(void)
 		ScreenFlip();
 
 		// ***********************
-		// プロセス状態の更新
+		// NyaWindow メンバ関数
 		// ***********************
-		RunChangeProcess();
+		RunFPS(1180, 660);
+		RunProcess();
+		RunTitle();
 	}
 
 }
 
-void NyaWindow::RunChangeProcess()
-{
-	switch (nya_design_->GetProcess()) 
-	{
-	case ePROCESS::TITLE:
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
-		break;
-	case ePROCESS::MISSION_LOAD:
-		nya_design_->SetProcess(ePROCESS::MISSION_RUN);
-		break;
-	case ePROCESS::MISSION_RUN:
-		break;
-	case ePROCESS::MISSION_STOP:
-		break;
-	case ePROCESS::NUM::MISSION_CLEAR:
-
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-		{
-			if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
-			{
-				nya_design_->SetProcess(ePROCESS::TITLE);
-			}
-			else
-			{
-				nya_design_->SetProcess(ePROCESS::MISSION_LOAD);
-			}
-		}
-		break;
-	case ePROCESS::SAVE:
-		break;
-	case ePROCESS::CONTINUE:
-		break;
-	case ePROCESS::OVER:
-		break;
-	}
-}
-
-void NyaWindow::RunMission(void)
+void NyaWindow::RunChMission(void)
 {
 	if (ch_mission_.empty_)
 		return;
 
-	switch (nya_design_->GetProcess()) 
+	switch (process_) 
 	{
-	case ePROCESS::TITLE:
-		break;
 	case ePROCESS::MISSION_LOAD:
-		if (ch_mission_.index_ != 0)
-			ch_mission_.nya_mission_vector_[ch_mission_.index_-1]->MissionEnd();
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Load();
 		break;
 	case ePROCESS::MISSION_RUN:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->ProcessMissionRun();
 		break;
-	case ePROCESS::MISSION_STOP:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionStop();
+	case ePROCESS::NUM::MISSION_CONTINUE:
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->ProcessMissionContinue();
 	break;
-	case ePROCESS::NUM::MISSION_CLEAR:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			ch_mission_.index_++;
-		break;
-	case ePROCESS::SAVE:
-		ch_mission_.index_ = 0;
-		break;
-	case ePROCESS::CONTINUE:
-		break;
-	case ePROCESS::OVER:
+	case ePROCESS::NUM::MISSION_DELETE:
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->ProcessMissionDelete();
+		ch_mission_.index_++;
 		break;
 	}
 }
+
+void NyaWindow::RunChUser(void)
+{
+	if (ch_user_.empty_)
+		return;
+
+	switch (process_) 
+	{
+	case ePROCESS::MISSION_RUN:
+		ch_user_.nya_user_->Act();
+		ch_user_.nya_user_->Draw();
+		break;
+	case ePROCESS::NUM::MISSION_CLEAR:
+	case ePROCESS::NUM::MISSION_CONTINUE:
+		ch_user_.nya_user_->Draw();
+		break;
+	}
+}
+
+/**
+@param FPS更新関数
+**/
+void NyaWindow::RunFPS(int x, int y)
+{
+
+	static	int frame_ave_ = 0;					//フレームレート平均
+	static	int wtime_ave_ = 0;					//wait時間平均
+	static	int ltime_ave_ = 0;					//loop時間平均
+	static	int frame_[FPS_MAX] = {};			//フレームレート
+	static	int ltime_[FPS_MAX] = {};			//loop時間
+	static	int wtime_[FPS_MAX] = {};			//wait時間
+	static	int prev_time_ = 0;					//1フレーム前の時間
+	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
+	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
+	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+
+
+#ifdef __DEBUG__
+	if (frame_ave_ != 0) {
+		NyaString::Write("design_fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
+		NyaString::Write("design_fps_font", white, x, y + 20, "loop[%d ms]", ltime_ave_);
+		NyaString::Write("design_fps_font", white, x, y + 40, "wait[%d ms]", wtime_ave_);
+	}
+#else
+	if (frame_ave_ != 0)
+		DebugPrint::SetData(1200, 700, "fps[%.1f]", 1000.0 / (double)frame_ave_);
+#endif
+
+
+	frame_count_ = ++all_frame_count_ % FPS_MAX;
+	/*平均算出*/
+	if (frame_count_ == FPS_MAX - 1)
+	{
+		frame_ave_ = 0;
+		ltime_ave_ = 0;
+		wtime_ave_ = 0;
+		for (int i = 0; i < FPS_MAX; i++)
+		{
+			frame_ave_ += frame_[i];
+			ltime_ave_ += ltime_[i];
+			wtime_ave_ += wtime_[i];
+		}
+		frame_ave_ = frame_ave_ / FPS_MAX;
+		ltime_ave_ = ltime_ave_ / FPS_MAX;
+		wtime_ave_ = wtime_ave_ / FPS_MAX;
+	}
+
+	ltime_[frame_count_] = GetNowCount() - prev_time_;
+	/*wait処理*/
+	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
+	if (0 < wtime_[frame_count_])
+		Sleep(wtime_[frame_count_]);
+	frame_[frame_count_] = GetNowCount() - prev_time_;
+	prev_time_ = GetNowCount();
+}
+
+
 
 void NyaWindow::RunTitle(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 37, 37);
 
-	switch (nya_design_->GetProcess()) 
+	switch (process_) 
 	{
 	case ePROCESS::TITLE:
 		NyaString::Write("window_title_font", white, 100, 70, "title [%s] start", title_name_);
@@ -316,21 +340,47 @@ void NyaWindow::RunTitle(void)
 	}
 }
 
-void NyaWindow::RunUser(void)
-{
-	if (ch_user_.empty_)
-		return;
 
-	switch (nya_design_->GetProcess()) 
+void NyaWindow::RunProcess(void)
+{
+	DesignHandleMissionClear* handle_mission_clear;
+	
+	switch (process_) 
 	{
-	case ePROCESS::MISSION_RUN:
-		ch_user_.nya_user_->Act();
-		ch_user_.nya_user_->Draw();
+	case ePROCESS::TITLE:
+		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
+			process_ = ePROCESS::NUM::MISSION_LOAD;
 		break;
-	case ePROCESS::MISSION_STOP:
+	case ePROCESS::MISSION_LOAD:
+		process_ = ePROCESS::MISSION_RUN;
+		break;
+	case ePROCESS::MISSION_RUN:
+		handle_mission_clear = nya_design_->GetHandleMissionClear();
+		if (handle_mission_clear->valid_)
+		{
+			process_ = ePROCESS::NUM::MISSION_CLEAR;
+			handle_mission_clear->valid_ = false;
+		}
+		break;
 	case ePROCESS::NUM::MISSION_CLEAR:
-		ch_user_.nya_user_->Draw();
+		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
+			process_ = ePROCESS::NUM::MISSION_DELETE;
+		break;
+	case ePROCESS::MISSION_CONTINUE:
+		break;
+	case ePROCESS::MISSION_DELETE:
+		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
+		{
+			process_ = ePROCESS::NUM::TITLE;
+		}
+		else
+		{
+			process_ = ePROCESS::NUM::MISSION_LOAD;
+		}
 		break;
 	}
 }
+
+
+
 

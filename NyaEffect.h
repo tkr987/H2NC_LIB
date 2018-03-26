@@ -12,11 +12,11 @@ namespace H2NLIB
 
 	class NyaGraphic;
 	class NyaPosition;
-	class GraphicPropertyX4;
-	class PositionHandleX;
+	class GraphicProperty4;
+	class PositionHandle1;
 
 
-	class EffectPropertyX1
+	class EffectProperty1
 	{
 	public:
 		int draw_max_div_;
@@ -25,7 +25,7 @@ namespace H2NLIB
 		int grid_y_;
 	};
 
-	class EffectPropertyX2
+	class EffectProperty2
 	{
 	public:
 		int draw_max_div_;
@@ -40,16 +40,16 @@ namespace H2NLIB
 	{
 	public:
 		int count_;
-		EffectPropertyX1* epx1_;
-		GraphicPropertyX4* gpx4_;
+		EffectProperty1* ep_;
+		GraphicProperty4* gp_;
 	};
 
 	class EffectAnimation2
 	{
 	public:
 		int count_;
-		EffectPropertyX2* epx2_;
-		GraphicPropertyX4* gpx4_;
+		EffectProperty2* ep_;
+		GraphicProperty4* gp_;
 	};
 
 	class NyaEffect
@@ -57,19 +57,19 @@ namespace H2NLIB
 	public:
 		NyaEffect();
 		~NyaEffect();
-		void Draw(EffectPropertyX1* epx, GraphicPropertyX4* gpx4);
-		void Draw(EffectPropertyX2* epx, GraphicPropertyX4* gpx4);
+		void Draw(EffectProperty1* ep, GraphicProperty4* gp, eOBJECT::NUM layer);
+		void Draw(EffectProperty2* ep, GraphicProperty4* gp, eOBJECT::NUM layer);
 		void Run(void);
 	private:
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		static int count_instance_;
-		static std::list<EffectAnimation1> ea1_draw_list_;
+		static std::list<EffectAnimation1> ea1_draw_list_[eOBJECT::NUM::sizeof_enum];
 		static std::list<EffectAnimation1> ea1_wait_list_;
-		static std::list<EffectAnimation2> ea2_draw_list_;
+		static std::list<EffectAnimation2> ea2_draw_list_[eOBJECT::NUM::sizeof_enum];
 		static std::list<EffectAnimation2> ea2_wait_list_;
-		void DrawAnimation1(void);
-		void DrawAnimation2(void);
+		void DrawAnimation1(eOBJECT::NUM layer);
+		void DrawAnimation2(eOBJECT::NUM layer);
 	};
 
 }

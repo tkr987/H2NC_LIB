@@ -11,13 +11,13 @@
 using namespace std;
 using namespace H2NLIB;
 
-int NyaDesign::count_;
-DesignExMode NyaDesign::ex_mode_;
+unsigned int NyaDesign::count_;
+DesignHandleMissionClear NyaDesign::handle_mission_clear_;
+DesignHandleMissionEx NyaDesign::handle_mission_ex_;
+DesignHandleMissionWarning NyaDesign::handle_mission_warning_;
 int NyaDesign::instance_ = 0;
-ePROCESS::NUM NyaDesign::process_;
 DesignSkillInfo NyaDesign::skill_info_[4];
 DesignUserInfo NyaDesign::user_info_;
-DesignWarning NyaDesign::warning_;
 
 
 NyaDesign::NyaDesign()
@@ -48,7 +48,6 @@ NyaDesign::NyaDesign()
 		init_skill_info.name_ = "Skill R";
 		init_skill_info.select_ = false;
 		skill_info_[3] = init_skill_info;
-		warning_.spx_ = new SoundPropertyX;
 		NyaString::SettingFont("design_exp_font", 18, 2);
 		NyaString::SettingFont("design_fps_font", 14, 2);
 		NyaString::SettingFont("design_lv_font", 60, 6);
@@ -66,9 +65,6 @@ NyaDesign::~NyaDesign()
 {
 	delete nya_sound_;
 
-	if (instance_ == 1)
-		delete warning_.spx_;
-
 	instance_--;
 }
 
@@ -84,78 +80,25 @@ void NyaDesign::AddEXP(int x)
 
 void NyaDesign::Run(void)
 {
-	// ミッション限定の処理
-	switch(process_)
-	{
-	case ePROCESS::NUM::MISSION_LOAD:
-		count_ = 0;
-		break;
-	case ePROCESS::NUM::MISSION_RUN:
-		DrawMissionEx();
-		DrawMissionWarning();
-		break;
-	case ePROCESS::NUM::MISSION_STOP:
-		DrawMissionEx();
-		DrawMissionWarning();
-		break;
-	case ePROCESS::NUM::MISSION_CLEAR:
-		DrawMissionClear(200, 300);
-		break;
-	}
+	// プロセス別の処理
+	count_ = 0;
 
-	// 通常処理
 	DrawBlack(850, 0, 1280, 720);
+	DrawMissionClear();
+	DrawMissionEx();
+	DrawMissionWarning();
 	DrawSkill(875, 110);
 	DrawLv(875, 515);
 	DrawInput(875, 600);
-	UpdateFPS(1180, 660);
 
 	count_++;
 }
 
-void NyaDesign::LoadWarningSound(std::string file_pass, int volume)
-{
-	warning_.sound_flag_ = true;
-	warning_.spx_->file_id_ = nya_sound_->LoadFile(file_pass);
-	nya_sound_->ChangeVolume(warning_.spx_, volume);
-}
-
-
-void NyaDesign::Warning(int draw_time_sec)
-{
-	warning_.draw_frame_end_ = count_ + FPS_MAX * draw_time_sec + 1;
-	warning_.draw_frame_start_ = count_;
-}
-
-
 void NyaDesign::DrawBlack(int x, int y, int x2, int y2) 
 {
-	static int color = GetColor(16, 16, 16);
+	const int color = GetColor(16, 16, 16);
 
 	DrawBox(x, y, x2, y2, color , true);
-}
-
-void NyaDesign::DrawMissionEx(void)
-{
-	const double ex_max_size_x = 840.0;
-	static int black = GetColor(0, 0, 0);
-	static int red = GetColor(255, 0, 0);
-
-	if (!ex_mode_.flag_)
-		return;
-
-	DrawBox(0, 0, 850, 20, black, true);
-	DrawBox(5, 4, 5 + (int)(ex_max_size_x * ex_mode_.value_ / 100.0), 15, red, true);
-}
-
-void NyaDesign::DrawMissionClear(int x, int y)
-{
-	static int black = GetColor(0, 0, 0);
-	static tuple<int, int, int> color = make_tuple(212, 212, 255);
-
-	DrawBox(x, y, x + 400, y + 150, black, true);
-	NyaString::Write("design_mission_clear_font", color, x + 90, y + 25, "MISSION CLEAR");
-	NyaString::Write("design_mission_clear_font", color, x + 90, y + 25, "PRESS ENTER KEY");
 }
 
 void NyaDesign::DrawInput(int x, int y)
@@ -200,6 +143,57 @@ void NyaDesign::DrawLv(int x, int y)
 	NyaString::Write("design_lv_font", white, x, y, "Lv.%d", user_info_.lv_);
 }
 
+void NyaDesign::DrawMissionClear()
+{
+	int draw_grid_x, draw_grid_y;
+	static int black = GetColor(0, 0, 0);
+	static tuple<int, int, int> color = make_tuple(212, 212, 255);
+
+	if (!handle_mission_clear_.valid_)
+		return;
+
+	draw_grid_x = handle_mission_clear_.draw_grid_x_;
+	draw_grid_y = handle_mission_clear_.draw_grid_y_;
+	DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
+	NyaString::Write("design_mission_clear_font", color, draw_grid_x + 90, draw_grid_y + 25, "MISSION CLEAR");
+	NyaString::Write("design_mission_clear_font", color, draw_grid_x + 90, draw_grid_y + 25, "PRESS ENTER KEY");
+}
+
+void NyaDesign::DrawMissionEx(void)
+{
+	const double ex_max_size_x = 840.0;
+	const int black = GetColor(0, 0, 0);
+	const int red = GetColor(255, 0, 0);
+
+	if (!handle_mission_ex_.valid_)
+		return;
+
+	DrawBox(0, 0, 850, 20, black, true);
+	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_mission_ex_.value_ / 100.0), 15, red, true);
+}
+
+void NyaDesign::DrawMissionWarning(void)
+{
+	int draw_grid_x, draw_grid_y;
+	static int black = GetColor(0, 0, 0);
+	static tuple<int, int, int> red = make_tuple(255, 0, 0);
+
+	if (handle_mission_warning_.valid_)
+	{
+		nya_sound_->Play(handle_mission_warning_.spx_);
+		handle_mission_warning_.valid_ = false;
+	}
+		
+	if (0 < handle_mission_warning_.time_frame_)
+	{
+		draw_grid_x = handle_mission_warning_.draw_grid_x_;
+		draw_grid_y = handle_mission_warning_.draw_grid_y_;
+		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
+		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
+		handle_mission_warning_.time_frame_--;
+	}
+}
+
 void NyaDesign::DrawSkill(int x, int y)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
@@ -215,80 +209,8 @@ void NyaDesign::DrawSkill(int x, int y)
 	}
 }
 
-void NyaDesign::DrawMissionWarning(void)
-{
-	const int draw_grid_x = 200;
-	const int draw_grid_y = 200;
-	static int black = GetColor(0, 0, 0);
-	static tuple<int, int, int> red = make_tuple(255, 0, 0);
-
-	if (count_ == warning_.draw_frame_start_)
-	{
-		if (warning_.sound_flag_)
-			nya_sound_->Play(warning_.spx_);
-	}
-
-	if (warning_.draw_frame_start_ <= count_ && count_ < warning_.draw_frame_end_)
-	{
-		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
-		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
-	}
-}
-
-/**
-@param FPS更新関数
-**/
-void NyaDesign::UpdateFPS(int x, int y)
-{
-
-	static	int frame_ave_ = 0;					//フレームレート平均
-	static	int wtime_ave_ = 0;					//wait時間平均
-	static	int ltime_ave_ = 0;					//loop時間平均
-	static	int frame_[FPS_MAX] = {};			//フレームレート
-	static	int ltime_[FPS_MAX] = {};			//loop時間
-	static	int wtime_[FPS_MAX] = {};			//wait時間
-	static	int prev_time_ = 0;					//1フレーム前の時間
-	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
-	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
-	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 
 
-#ifdef __DEBUG__
-	if (frame_ave_ != 0) {
-		NyaString::Write("design_fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
-		NyaString::Write("design_fps_font", white, x, y + 20, "loop[%d ms]", ltime_ave_);
-		NyaString::Write("design_fps_font", white, x, y + 40, "wait[%d ms]", wtime_ave_);
-	}
-#else
-	if (frame_ave_ != 0)
-		DebugPrint::SetData(1200, 700, "fps[%.1f]", 1000.0 / (double)frame_ave_);
-#endif
 
 
-	frame_count_ = ++all_frame_count_ % FPS_MAX;
-	/*平均算出*/
-	if (frame_count_ == FPS_MAX - 1)
-	{
-		frame_ave_ = 0;
-		ltime_ave_ = 0;
-		wtime_ave_ = 0;
-		for (int i = 0; i < FPS_MAX; i++)
-		{
-			frame_ave_ += frame_[i];
-			ltime_ave_ += ltime_[i];
-			wtime_ave_ += wtime_[i];
-		}
-		frame_ave_ = frame_ave_ / FPS_MAX;
-		ltime_ave_ = ltime_ave_ / FPS_MAX;
-		wtime_ave_ = wtime_ave_ / FPS_MAX;
-	}
-
-	ltime_[frame_count_] = GetNowCount() - prev_time_;
-	/*wait処理*/
-	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
-	if (0 < wtime_[frame_count_])
-		Sleep(wtime_[frame_count_]);
-	frame_[frame_count_] = GetNowCount() - prev_time_;
-	prev_time_ = GetNowCount();
-}

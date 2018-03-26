@@ -15,8 +15,9 @@ TeemoTargetEx::TeemoTargetEx()
 	nya_design_ = new NyaDesign;
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
-	gpx4_teemo_ = new GraphicPropertyX4;
-	phx_teemo_ = nya_position_->Create();
+	teemo_gp4_ = new GraphicProperty4;
+	teemo_ph1_ = new PositionHandle1;
+	nya_position_->Regist(teemo_ph1_);
 
 	// NyaDeviceとプロパティの設定
 	//device_setting.collision_pow_ = 1.0;
@@ -30,21 +31,20 @@ TeemoTargetEx::TeemoTargetEx()
 	//nya_device_->SetGraphic(graphic_id, 0);
 
 	// NyaGraphicプロパティの設定
-	gpx4_teemo_->draw_angle_ = 0;
-	gpx4_teemo_->extend_rate_ = 1.0;
-	gpx4_teemo_->file_div_ = 0;
-	nya_graphic_->LoadGraphicFile("img/teemo_ex.png", &gpx4_teemo_->graphic_file_);
-	gpx4_teemo_->flag_trans_ = true;
-	gpx4_teemo_->flag_turn_ = false;
-	gpx4_teemo_->object_group_ = eOBJECT::NUM::TARGET1;
+	teemo_gp4_->draw_angle_ = 0;
+	teemo_gp4_->extend_rate_ = 1.0;
+	teemo_gp4_->file_div_ = 0;
+	nya_graphic_->LoadGraphicFile("img/teemo_ex.png", &teemo_gp4_->graphic_file_);
+	teemo_gp4_->flag_trans_ = true;
+	teemo_gp4_->flag_turn_ = false;
 
 	// NyaPositionプロパティの設定
-	phx_teemo_->health_max_ = 100;
-	phx_teemo_->health_now_ = 100;
-	phx_teemo_->collision_pow_ = 1.0;
-	phx_teemo_->collision_range_ = 20.0;
-	phx_teemo_->grid_x_ = 400;
-	phx_teemo_->grid_y_ = 200;
+	teemo_ph1_->health_max_ = 100;
+	teemo_ph1_->health_now_ = 100;
+	teemo_ph1_->collision_pow_ = 1.0;
+	teemo_ph1_->collision_range_ = 20.0;
+	teemo_ph1_->grid_x_ = 400;
+	teemo_ph1_->grid_y_ = 200;
 	nya_position_->SettingCollision(eOBJECT::NUM::TARGET1, eOBJECT::NUM::USER_ATTACK1);
 }
 
@@ -54,24 +54,29 @@ TeemoTargetEx::~TeemoTargetEx()
 	delete nya_design_;
 	delete nya_graphic_;
 	delete nya_position_;
-	delete gpx4_teemo_;
+	delete teemo_gp4_;
+	delete teemo_ph1_;
 }
 
 void TeemoTargetEx::Act(void)
 {
+	DesignHandleMissionClear* handle_mission_clear;
+	DesignHandleMissionEx* handle_mission_ex;
+
 	if (count_ == 1)
 	{
-		nya_design_->Warning(5);
-		nya_design_->ExMode(true);
-		nya_design_->SetExValue(100);
+		handle_mission_ex = nya_design_->GetHandleMissionEx();
+		handle_mission_ex->valid_ = true;
+		handle_mission_ex->value_ = 100;
 	}
 
-	nya_position_->Collision(phx_teemo_, eOBJECT::NUM::TARGET1);
+	nya_position_->Collision(teemo_ph1_, eOBJECT::NUM::TARGET1);
 	
 
-	if (phx_teemo_->health_now_ <= 0)
+	if (teemo_ph1_->health_now_ <= 0)
 	{
-		nya_design_->SetProcess(ePROCESS::MISSION_CLEAR);
+		handle_mission_clear = nya_design_->GetHandleMissionClear();
+		handle_mission_clear->valid_ = true;
 	}
 
 	count_++;
@@ -79,17 +84,21 @@ void TeemoTargetEx::Act(void)
 
 void TeemoTargetEx::Draw(void)
 {
-	gpx4_teemo_->draw_grid_cx_ = (int)phx_teemo_->grid_x_;
-	gpx4_teemo_->draw_grid_cy_ = (int)phx_teemo_->grid_y_;
-	nya_graphic_->Draw(gpx4_teemo_);
+	DesignHandleMissionEx* handle_mission_ex;
 
-	if (0 < phx_teemo_->health_now_) 
+	teemo_gp4_->draw_grid_cx_ = (int)teemo_ph1_->grid_x_;
+	teemo_gp4_->draw_grid_cy_ = (int)teemo_ph1_->grid_y_;
+	nya_graphic_->Draw(teemo_gp4_, eOBJECT::NUM::TARGET1);
+
+	if (0 < teemo_ph1_->health_now_) 
 	{
-		nya_design_->SetExValue(phx_teemo_->health_now_ / phx_teemo_->health_max_ * 100);
+		handle_mission_ex = nya_design_->GetHandleMissionEx();
+		handle_mission_ex->value_ = teemo_ph1_->health_now_ / teemo_ph1_->health_max_ * 100;
 	}
 	else
 	{
-		nya_design_->SetExValue(0);		
+		handle_mission_ex = nya_design_->GetHandleMissionEx();
+		handle_mission_ex->value_ = 0;
 	}
 
 }

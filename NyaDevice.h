@@ -9,28 +9,28 @@
 #include <vector>
 
 
-namespace H2NLIB {
+namespace H2NLIB
+{
 
 	class NyaEffect;
 	class NyaGraphic;
 	class NyaPosition;
-	class EffectPropertyX1;
-	class GraphicPropertyX4;
-	class PositionHandleX;
+	class EffectProperty1;
+	class GraphicProperty4;
+	class PositionHandle1;
 
-	class DevicePropertyX1
+	class DeviceProperty1
 	{
 	public:
 		double collision_pow_;				//!< 衝突力
 		double collision_range_;			//!< 衝突範囲
-		double create_x_;					//!< 生成x座標
-		double create_y_;					//!< 生成y座標	
+		double create_grid_x_;				//!< 生成x座標
+		double create_grid_y_;				//!< 生成y座標	
 		double move_angle_deg_;				//!< 移動角度
 		double move_speed_;					//!< 移動速度
-		eOBJECT::NUM object_group_;			//!< オブジェクトのグループ設定
 	};
 
-	class DevicePropertyX2
+	class DeviceProperty2
 	{
 	public:
 		double collision_pow_;				//!< 衝突力
@@ -42,7 +42,6 @@ namespace H2NLIB {
 		double move_angle_deg_speed_;		//!< 移動角速度
 		double move_speed_;					//!< 移動速度
 		double move_speed_accel_;			//!< 移動速度の加速度
-		eOBJECT::NUM object_group_;			//!< オブジェクトのグループ設定
 	};
 
 
@@ -52,10 +51,11 @@ namespace H2NLIB {
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
-		DevicePropertyX1* dpx1_;
-		GraphicPropertyX4* gadget_gpx4_;
-		PositionHandleX* phx_;
-
+		DeviceProperty1* main_dp_;
+		GraphicProperty4* main_gp_;
+		PositionHandle1* main_ph_;
+		DeviceGadget14();
+		~DeviceGadget14();
 	};
 
 	class DeviceGadget1414
@@ -64,11 +64,20 @@ namespace H2NLIB {
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
-		DevicePropertyX1* dpx1_;
-		GraphicPropertyX4* gadget_gpx4_;
-		EffectPropertyX1* epx1_;
-		GraphicPropertyX4* effect_gpx4_;
-		PositionHandleX* phx_;
+		EffectProperty1* effect_ep_;
+		GraphicProperty4* effect_gp_;
+		DeviceProperty1* main_dp_;
+		GraphicProperty4* main_gp_;
+		PositionHandle1* main_ph_;
+		eOBJECT::NUM effect_type_;
+		DeviceGadget1414();
+		~DeviceGadget1414();
+	};
+
+	class DeviceGadget2414
+	{
+	public:
+
 	};
 
 
@@ -76,9 +85,9 @@ namespace H2NLIB {
 	public:
 		NyaDevice();
 		~NyaDevice();
-		void Attack(DevicePropertyX1* dpx, GraphicPropertyX4* gadget_gpx4);
-		void Attack(DevicePropertyX1* dpx, GraphicPropertyX4* gadget_gpx4, EffectPropertyX1* epx1, GraphicPropertyX4* effect_gpx4);
-		void Attack(DevicePropertyX2* dpx, GraphicPropertyX4* gadget_gpx4, EffectPropertyX1* epx1, GraphicPropertyX4* effect_gpx4);
+		void Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT::NUM gadget_type);
+		void Attack1414(DeviceProperty1* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp);
+		void Attack2414(DeviceProperty2* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp);
 		void Run(void);
 	private:
 		NyaEffect* nya_effect_;
@@ -89,6 +98,8 @@ namespace H2NLIB {
 		static std::list<DeviceGadget14> dg14_wait_list_;
 		static std::list<DeviceGadget1414> dg1414_attack_list_[eOBJECT::NUM::sizeof_enum];
 		static std::list<DeviceGadget1414> dg1414_wait_list_;
+		static std::list<DeviceGadget2414> dg2414_attack_list_[eOBJECT::NUM::sizeof_enum];
+		static std::list<DeviceGadget2414> dg2414_wait_list_;
 		void MoveGadget(eOBJECT::NUM group);
 		double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		double AngleToRad(double x) { return (x * 3.14159 / 180.0); }

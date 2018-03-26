@@ -99,7 +99,7 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 {
 	int check_graphic_handle, check_size_x, check_size_y;
 	static list<GraphicFile>::iterator it;
-	const static GraphicFile empty_file;
+	const GraphicFile empty_file;
 
 	// ロード済みファイルなら新しくロードする必要ない
 	for (auto& e : file_list_)
@@ -137,9 +137,9 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 @note
  DXLIB::DrawGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
+void NyaGraphic::Draw(GraphicProperty1 *gp, eOBJECT::NUM layer)
 {
-	layer_vector_[gpx->object_group_].gpx1_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx1_deque_.push_back(*gp);
 }
 
 
@@ -150,9 +150,9 @@ void NyaGraphic::Draw(GraphicPropertyX1 *gpx)
 @note
  DXLIB::DrawTurnGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
+void NyaGraphic::Draw(GraphicProperty2 *gp, eOBJECT::NUM layer)
 {
-	layer_vector_[gpx->object_group_].gpx2_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx2_deque_.push_back(*gp);
 }
 
 
@@ -163,9 +163,9 @@ void NyaGraphic::Draw(GraphicPropertyX2 *gpx)
 @note
  DXLIB::DrawExtendGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
+void NyaGraphic::Draw(GraphicProperty3 *gp, eOBJECT::NUM layer)
 {
-	layer_vector_[gpx->object_group_].gpx3_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx3_deque_.push_back(*gp);
 }
 
 /**
@@ -175,10 +175,10 @@ void NyaGraphic::Draw(GraphicPropertyX3 *gpx)
 @note
 DXLIB::DrawRotaGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
+void NyaGraphic::Draw(GraphicProperty4 *gp, eOBJECT::NUM layer)
 {
-	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
-	layer_vector_[gpx->object_group_].gpx4_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx4_deque_.push_back(*gp);
+	layer_vector_[layer].gpx4_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
 }
 
 
@@ -189,10 +189,10 @@ void NyaGraphic::Draw(GraphicPropertyX4 *gpx)
 @note
  DXLIB::DrawRotaGraph2() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX5 *gpx)
+void NyaGraphic::Draw(GraphicProperty5 *gp, eOBJECT::NUM layer)
 {
-	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
-	layer_vector_.at(gpx->object_group_).gpx5_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx5_deque_.push_back(*gp);
+	layer_vector_[layer].gpx5_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
 }
 
 
@@ -203,10 +203,10 @@ void NyaGraphic::Draw(GraphicPropertyX5 *gpx)
 @note
  DXLIB::DrawRotaGraph3() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX6 *gpx)
+void NyaGraphic::Draw(GraphicProperty6 *gp, eOBJECT::NUM layer)
 {
-	gpx->draw_angle_ = AngleToRad(gpx->draw_angle_);
-	layer_vector_.at(gpx->object_group_).gpx6_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx6_deque_.push_back(*gp);
+	layer_vector_[layer].gpx6_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
 }
 
 /**
@@ -217,9 +217,9 @@ void NyaGraphic::Draw(GraphicPropertyX6 *gpx)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX1b *gpx)
+void NyaGraphic::Draw(GraphicProperty1b *gp, eOBJECT::NUM layer)
 {
-	layer_vector_[gpx->object_group_].gpx1b_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx1b_deque_.push_back(*gp);
 }
 
 /**
@@ -230,9 +230,9 @@ void NyaGraphic::Draw(GraphicPropertyX1b *gpx)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawTurnGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX2b *gpx)
+void NyaGraphic::Draw(GraphicProperty2b *gp, eOBJECT::NUM layer)
 {
-	layer_vector_[gpx->object_group_].gpx2b_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx2b_deque_.push_back(*gp);
 }
 
 /**
@@ -243,9 +243,9 @@ void NyaGraphic::Draw(GraphicPropertyX2b *gpx)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawExtendGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX3b *gpx)
+void NyaGraphic::Draw(GraphicProperty3b *gp, eOBJECT::NUM layer)
 {
-	layer_vector_[gpx->object_group_].gpx3b_deque_.push_back(*gpx);
+	layer_vector_[layer].gpx3b_deque_.push_back(*gp);
 }
 
 
@@ -278,28 +278,28 @@ void NyaGraphic::Run(void)
 **/
 void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
 {
-	static GraphicPropertyX1* gpx1;
-	static GraphicPropertyX2* gpx2;
-	static GraphicPropertyX3* gpx3;
-	static GraphicPropertyX4* gpx4;
-	static GraphicPropertyX5* gpx5;
-	static GraphicPropertyX6* gpx6;
-	static GraphicPropertyX7* gpx7;
-	static GraphicPropertyX8* gpx8;
-	static GraphicPropertyX1b* gpx1b;
-	static GraphicPropertyX2b* gpx2b;
-	static GraphicPropertyX3b* gpx3b;
-	static GraphicPropertyX4b* gpx4b;
-	static GraphicPropertyX5b* gpx5b;
-	static GraphicPropertyX6b* gpx6b;
-	static GraphicPropertyX7b* gpx7b;
-	static GraphicPropertyX8b* gpx8b;
+	static GraphicProperty1* gpx1;
+	static GraphicProperty2* gpx2;
+	static GraphicProperty3* gpx3;
+	static GraphicProperty4* gpx4;
+	static GraphicProperty5* gpx5;
+	static GraphicProperty6* gpx6;
+	static GraphicProperty7* gpx7;
+	static GraphicProperty8* gpx8;
+	static GraphicProperty1b* gpx1b;
+	static GraphicProperty2b* gpx2b;
+	static GraphicProperty3b* gpx3b;
+	static GraphicProperty4b* gpx4b;
+	static GraphicProperty5b* gpx5b;
+	static GraphicProperty6b* gpx6b;
+	static GraphicProperty7b* gpx7b;
+	static GraphicProperty8b* gpx8b;
 	
-	while (!layer_vector_.at(layer).gpx1_deque_.empty()) {
-		gpx1 = &layer_vector_.at(layer).gpx1_deque_.front();
+	while (!layer_vector_[layer].gpx1_deque_.empty()) {
+		gpx1 = &layer_vector_[layer].gpx1_deque_.front();
 		DrawGraph(gpx1->draw_grid_x_ + swing_x, gpx1->draw_grid_y_ + swing_y, 
 			gpx1->graphic_file_.div_vector_[gpx1->file_div_], gpx1->flag_trans_);
-		layer_vector_.at(layer).gpx1_deque_.pop_front();
+		layer_vector_[layer].gpx1_deque_.pop_front();
 	}
 	while (!layer_vector_.at(layer).gpx2_deque_.empty()) {
 		gpx2 = &layer_vector_.at(layer).gpx2_deque_.front();
@@ -314,12 +314,15 @@ void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
 			gpx3->graphic_file_.div_vector_[gpx3->file_div_], gpx3->flag_trans_);
 		layer_vector_.at(layer).gpx3_deque_.pop_front();
 	}
-	while (!layer_vector_.at(layer).gpx4_deque_.empty()) {
-		gpx4 = &layer_vector_.at(layer).gpx4_deque_.front();
-		DrawRotaGraph(gpx4->draw_grid_cx_ + swing_x, gpx4->draw_grid_cy_ + swing_y, gpx4->extend_rate_, gpx4->draw_angle_,
+	while (!layer_vector_[layer].gpx4_deque_.empty()) {
+		gpx4 = &layer_vector_[layer].gpx4_deque_.front();
+		DrawRotaGraph(gpx4->draw_grid_cx_ + swing_x, gpx4->draw_grid_cy_ + swing_y, 
+			gpx4->extend_rate_, gpx4->draw_angle_,
 			gpx4->graphic_file_.div_vector_[gpx4->file_div_], gpx4->flag_trans_, gpx4->flag_turn_);
-		layer_vector_.at(layer).gpx4_deque_.pop_front();
+		layer_vector_[layer].gpx4_deque_.pop_front();
 	}
+
+
 	while (!layer_vector_.at(layer).gpx5_deque_.empty()) {
 		gpx5 = &layer_vector_.at(layer).gpx5_deque_.front();
 		DrawRotaGraph2(gpx5->pos_x_ + swing_x, gpx5->pos_y_ + swing_y, 

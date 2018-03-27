@@ -22,34 +22,34 @@ list<DeviceGadget2414> NyaDevice::dg2414_wait_list_;
 
 DeviceGadget14::DeviceGadget14()
 {
-	main_dp_ = new DeviceProperty1;
-	main_gp_ = new GraphicProperty4;
-	main_ph_ = new PositionHandle1;
+	gadget_dp_ = new DeviceProperty1;
+	gadget_gp_ = new GraphicProperty4;
+	gadget_ph_ = new PositionHandle1;
 }
 
 DeviceGadget14::~DeviceGadget14()
 {
-	delete main_dp_;
-	delete main_gp_;
-	delete main_ph_;
+	delete gadget_dp_;
+	delete gadget_gp_;
+	delete gadget_ph_;
 }
 
 DeviceGadget1414::DeviceGadget1414()
 {
 	effect_ep_ = new EffectProperty1;
 	effect_gp_ = new GraphicProperty4;
-	main_dp_ = new DeviceProperty1;
-	main_gp_ = new GraphicProperty4;
-	main_ph_ = new PositionHandle1;
+	gadget_dp_ = new DeviceProperty1;
+	gadget_gp_ = new GraphicProperty4;
+	gadget_ph_ = new PositionHandle1;
 }
 
 DeviceGadget1414::~DeviceGadget1414()
 {
 	delete effect_ep_;
 	delete effect_gp_;
-	delete main_dp_;
-	delete main_gp_;
-	delete main_ph_;
+	delete gadget_dp_;
+	delete gadget_gp_;
+	delete gadget_ph_;
 }
 
 NyaDevice::NyaDevice()
@@ -104,26 +104,50 @@ void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicPr
 		return;
 
 	it_from = dg14_wait_list_.begin();
-	*it_from->main_dp_ = *gadget_dp;
-	*it_from->main_gp_ = *gadget_gp;
 	it_from->move_angle_rad_ = AngleToRad(gadget_dp->move_angle_deg_);
 	it_from->move_x_ = cos(it_from->move_angle_rad_) * gadget_dp->move_speed_;
 	it_from->move_y_ = sin(it_from->move_angle_rad_) * gadget_dp->move_speed_;
-	it_from->main_ph_->collision_hit_ = false;
-	it_from->main_ph_->collision_pow_ = gadget_dp->collision_pow_;
-	it_from->main_ph_->collision_range_ = gadget_dp->collision_range_;
-	it_from->main_ph_->grid_x_ = gadget_dp->create_grid_x_;
-	it_from->main_ph_->grid_y_ = gadget_dp->create_grid_y_;
-	it_from->main_ph_->health_max_ = 1;
-	it_from->main_ph_->health_now_ = 1;
+	*it_from->gadget_dp_ = *gadget_dp;
+	*it_from->gadget_gp_ = *gadget_gp;
+	it_from->gadget_ph_->collision_hit_ = false;
+	it_from->gadget_ph_->collision_pow_ = gadget_dp->collision_pow_;
+	it_from->gadget_ph_->collision_range_ = gadget_dp->collision_range_;
+	it_from->gadget_ph_->grid_x_ = gadget_dp->create_x_;
+	it_from->gadget_ph_->grid_y_ = gadget_dp->create_y_;
+	it_from->gadget_ph_->health_max_ = 1;
+	it_from->gadget_ph_->health_now_ = 1;
 
 	it_to = dg14_attack_list_[gadget_type].begin();
 	dg14_attack_list_[gadget_type].splice(it_to, move(dg14_wait_list_), it_from);
 }
 
-void NyaDevice::Attack1414(DeviceProperty1* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp)
+void NyaDevice::Attack1414(DeviceProperty1* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp, eOBJECT::NUM gadget_type, eOBJECT::NUM effect_type)
 {
+	static list<DeviceGadget1414>::iterator it_from, it_to;
 
+	// 最大個数まで生成されているときは何もしない
+	if (dg1414_wait_list_.begin() == dg1414_wait_list_.end())
+		return;
+
+	it_from = dg1414_wait_list_.begin();
+	it_from->effect_type_ = effect_type;
+	it_from->move_angle_rad_ = AngleToRad(gadget_dp->move_angle_deg_);
+	it_from->move_x_ = cos(it_from->move_angle_rad_) * gadget_dp->move_speed_;
+	it_from->move_y_ = sin(it_from->move_angle_rad_) * gadget_dp->move_speed_;
+	*it_from->effect_ep_ = *effect_ep;
+	*it_from->effect_gp_ = *effect_gp;
+	*it_from->gadget_dp_ = *gadget_dp;
+	*it_from->gadget_gp_ = *gadget_gp;
+	it_from->gadget_ph_->collision_hit_ = false;
+	it_from->gadget_ph_->collision_pow_ = gadget_dp->collision_pow_;
+	it_from->gadget_ph_->collision_range_ = gadget_dp->collision_range_;
+	it_from->gadget_ph_->grid_x_ = gadget_dp->create_x_;
+	it_from->gadget_ph_->grid_y_ = gadget_dp->create_y_;
+	it_from->gadget_ph_->health_max_ = 1;
+	it_from->gadget_ph_->health_now_ = 1;
+
+	it_to = dg1414_attack_list_[gadget_type].begin();
+	dg1414_attack_list_[gadget_type].splice(it_to, move(dg1414_wait_list_), it_from);
 }
 
 void NyaDevice::Attack2414(DeviceProperty2* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp)
@@ -158,12 +182,11 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 	{
 		// 表示領域の限界を超えた
 		// 他のオブジェクトと衝突した
-		if ((int)it->main_ph_->grid_x_ < 0 || 1000 < (int)it->main_ph_->grid_x_ ||
-			(int)it->main_ph_->grid_y_ < 0 || 700 < (int)it->main_ph_->grid_y_)
+		if (!nya_position_->InScreen(it->gadget_ph_))
 		{
 			dg14_delete_deque.push_back(it);
 		}
-		else if (it->main_ph_->collision_hit_)
+		else if (it->gadget_ph_->collision_hit_)
 		{
 			dg14_delete_deque.push_back(it);
 		}
@@ -182,36 +205,53 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 	{
 		// 表示領域の限界を超えた
 		// 他のオブジェクトと衝突した
-		if ((int)it->main_ph_->grid_x_ < 0 || 1000 < (int)it->main_ph_->grid_x_ ||
-			(int)it->main_ph_->grid_y_ < 0 || 700 < (int)it->main_ph_->grid_y_)
+		if (!nya_position_->InScreen(it->gadget_ph_))
 		{
 			dg1414_delete_deque.push_back(it);
 		}
-		else if (it->main_ph_->collision_hit_)
+		else if (it->gadget_ph_->collision_hit_)
 		{
-			//it->epx1_->grid_x_ = (int)it->phx_->grid_x_;
-			//it->epx1_->grid_y_ = (int)it->phx_->grid_y_;
-			//nya_effect_->Draw(it->epx1_, it->effect_gpx4_);
+			it->effect_ep_->grid_x_ = (int)it->gadget_ph_->grid_x_;
+			it->effect_ep_->grid_y_ = (int)it->gadget_ph_->grid_y_;
+			nya_effect_->Draw(it->effect_ep_, it->effect_gp_, it->effect_type_);
 			dg1414_delete_deque.push_back(it);
 		}
 	}
 
-	//*********************************
+	//****************************
 	// gadget14 削除以外の処理
-	//*********************************
-	for (auto it = dg14_attack_list_[type].begin(); it != dg14_attack_list_[type].end(); ++it)
+	//****************************
+	for (auto& e : dg14_attack_list_[type])
 	{
 		// 移動処理
-		it->main_ph_->grid_x_ += it->move_x_;
-		it->main_ph_->grid_y_ += it->move_y_;
+		e.gadget_ph_->grid_x_ += e.move_x_;
+		e.gadget_ph_->grid_y_ += e.move_y_;
 		
 		// 描画処理
-		it->main_gp_->draw_grid_cx_ = (int)it->main_ph_->grid_x_;
-		it->main_gp_->draw_grid_cy_ = (int)it->main_ph_->grid_y_;
-		nya_graphic_->Draw(it->main_gp_, type);
+		e.gadget_gp_->draw_grid_cx_ = (int)e.gadget_ph_->grid_x_;
+		e.gadget_gp_->draw_grid_cy_ = (int)e.gadget_ph_->grid_y_;
+		nya_graphic_->Draw(e.gadget_gp_, type);
 
 		// 衝突判定処理
-		nya_position_->Collision(it->main_ph_, type);
+		nya_position_->Collision(e.gadget_ph_, type);
+	}
+
+	//****************************
+	// gadget1414 削除以外の処理
+	//****************************
+	for (auto& e : dg1414_attack_list_[type])
+	{
+		// 移動処理
+		e.gadget_ph_->grid_x_ += e.move_x_;
+		e.gadget_ph_->grid_y_ += e.move_y_;
+		
+		// 描画処理
+		e.gadget_gp_->draw_grid_cx_ = (int)e.gadget_ph_->grid_x_;
+		e.gadget_gp_->draw_grid_cy_ = (int)e.gadget_ph_->grid_y_;
+		nya_graphic_->Draw(e.gadget_gp_, type);
+
+		// 衝突判定処理
+		nya_position_->Collision(e.gadget_ph_, type);
 	}
 
 }

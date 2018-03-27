@@ -87,7 +87,7 @@ int NyaWindow::Init(string title)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v62");		// タイトル
+	SetMainWindowText("H2NC++LIB v63");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化
@@ -334,7 +334,7 @@ void NyaWindow::RunTitle(void)
 	switch (process_) 
 	{
 	case ePROCESS::TITLE:
-		NyaString::Write("window_title_font", white, 100, 70, "title [%s] start", title_name_);
+		NyaString::Write("window_title_font", white, 100, 70, "%s start", title_name_);
 		NyaString::Write("window_title_font", white, 50, 70, "=>");
 		break;
 	}

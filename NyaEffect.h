@@ -19,16 +19,16 @@ namespace H2NLIB
 	class EffectProperty1
 	{
 	public:
-		int draw_max_div_;
-		int interval_time_frame_;
-		int grid_x_;
-		int grid_y_;
+		int draw_div_max_;				//!< 描画分割最大値
+		int interval_time_frame_;		//!< アニメーションインターバル時間(フレーム指定)
+		int grid_x_;					//!< 描画x座標
+		int grid_y_;					//!< 描画y座標
 	};
 
 	class EffectProperty2
 	{
 	public:
-		int draw_max_div_;
+		int draw_div_max_;
 		double draw_move_x_;
 		double draw_move_y_;
 		int interval_time_frame_;
@@ -57,8 +57,8 @@ namespace H2NLIB
 	public:
 		NyaEffect();
 		~NyaEffect();
-		void Draw(EffectProperty1* ep, GraphicProperty4* gp, eOBJECT::NUM layer);
-		void Draw(EffectProperty2* ep, GraphicProperty4* gp, eOBJECT::NUM layer);
+		void Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJECT::NUM layer);
+		void Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJECT::NUM layer);
 		void Run(void);
 	private:
 		NyaGraphic* nya_graphic_;

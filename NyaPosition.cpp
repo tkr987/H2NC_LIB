@@ -53,14 +53,16 @@ void NyaPosition::Delete(PositionHandle2* handle)
 
 bool NyaPosition::InScreen(PositionHandle1* phx, int gap)
 {
-	if (0 - gap < phx->grid_x_ && phx->grid_x_ < SCREEN_MAX_X + gap)
-	{
-		return true;
-	}
-	else
-	{
+	if (phx->grid_x_ < SCREEN_MIN_X - gap)
 		return false;
-	}
+	if (SCREEN_MAX_X + gap < phx->grid_x_)
+		return false;
+	if (phx->grid_y_ < SCREEN_MIN_Y - gap)
+		return false;
+	if (SCREEN_MAX_Y + gap < phx->grid_y_)
+		return false;
+
+	return true;
 }
 
 void NyaPosition::Run(void)

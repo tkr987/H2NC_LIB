@@ -64,13 +64,14 @@ UserAI::UserAI()
 	ai_device_.dp_->move_angle_deg_ = -90;
 	ai_device_.dp_->move_speed_ = 10;
 	ai_device_.gp_->draw_angle_ = -90;
-	ai_device_.gp_->file_div_ = 0;
-	//nya_graphic_->LoadGraphicFile("img/ai_device.png", &ai_device_.gp_->graphic_file_);
+	nya_graphic_->LoadGraphicFile("img/user_ai_gadget.png", &ai_device_.gp_->graphic_file_);
 
 	// user ai effect test property
-	ai_effect_test_.ep_->draw_max_div_ = 8;
+	ai_effect_test_.ep_->draw_div_max_ = 8;
+	ai_effect_test_.ep_->grid_x_ = 500;
+	ai_effect_test_.ep_->grid_y_ = 500;
 	ai_effect_test_.ep_->interval_time_frame_ = 10;
-	//nya_graphic_->LoadGraphicFile(4, 2, "img/Death80.png", &ai_effect_test_.gp_->graphic_file_);
+	nya_graphic_->LoadGraphicFile(4, 2, "img/Death80.png", &ai_effect_test_.gp_->graphic_file_);
 
 	// user ai main property
 	nya_graphic_->LoadGraphicFile(8, 2, "img/user_ai.png", &ai_main_.gp_->graphic_file_);
@@ -141,12 +142,12 @@ void UserAI::Act(void)
 		ai_main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
 	// 攻撃テスト
-	//if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
-	//{
-	//	ai_device_.dp_->create_x_ = ai_main_.ph_->grid_x_;
-	//	ai_device_.dp_->create_y_ = ai_main_.ph_->grid_y_;
-	//	nya_device_->Attack(user_device_.attack1_dp1_, user_device_.gpx4_);
-	//}
+	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
+	{
+		ai_device_.dp_->create_x_ = ai_main_.ph_->grid_x_;
+		ai_device_.dp_->create_y_ = ai_main_.ph_->grid_y_;
+		nya_device_->Attack14(ai_device_.dp_, ai_device_.gp_, eOBJECT::NUM::USER_ATTACK1);
+	}
 
 	// 衝突判定
 	//nya_position_->Collision(ai_ph1_, eOBJECT::NUM::USER1);		
@@ -170,14 +171,9 @@ void UserAI::Draw(void)
 	nya_graphic_->Draw(ai_main_.gp_, eOBJECT::NUM::USER1);
 
 
-	//nya_graphic_->Draw(test_gpx1_);
-
 	// エフェクトテスト
-	if (count_ % 200 == 0) {
-//		test_effect_.epx1_->grid_x_ = 500;
-//		test_effect_.epx1_->grid_y_ = 500;
-//		nya_effect_->Draw(test_effect_.epx1_, test_effect_.gpx4_);
-	}
+	if (count_ % 200 == 0)
+		nya_effect_->Draw(ai_effect_test_.ep_, ai_effect_test_.gp_, eOBJECT::USER_EFFECT1);
 
 }
 

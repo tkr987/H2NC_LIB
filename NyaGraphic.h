@@ -10,7 +10,6 @@
 
 namespace H2NLIB
 {
-	// グラフィックファイル
 	class GraphicFile 
 	{
 	public:
@@ -30,24 +29,33 @@ namespace H2NLIB
 		}
 	};
 
-	///////////////////////////////////
-	// ここからパラメータ設定用構造体
-	///////////////////////////////////
+	// **********************
+	// graphic property
+	// **********************
 
 	// DXLIB 通常描画関数に対応
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	class GraphicProperty1 
 	{
 	public:
-		GraphicFile graphic_file_;
-		int file_div_;
 		int draw_grid_x_;
 		int draw_grid_y_;
+		int file_div_;
 		bool flag_trans_;
+		GraphicFile graphic_file_;
 		GraphicProperty1()
 		{
 			file_div_ = 0;
 			flag_trans_ = true;
+		}
+		GraphicProperty1& operator=(const GraphicProperty1& gp)
+		{
+			draw_grid_x_ = gp.draw_grid_x_;
+			draw_grid_y_ = gp.draw_grid_y_;
+			file_div_ = gp.file_div_;
+			graphic_file_ = gp.graphic_file_;
+			flag_trans_ = gp.flag_trans_;
+			return *this;
 		}
 	};
 
@@ -332,7 +340,7 @@ namespace H2NLIB
 
 	class DrawDequeSet {
 	public:
-		std::deque<GraphicProperty1> gpx1_deque_;
+		std::deque<GraphicProperty1> gp1_deque_;
 		std::deque<GraphicProperty2> gpx2_deque_;
 		std::deque<GraphicProperty3> gpx3_deque_;
 		std::deque<GraphicProperty4> gpx4_deque_;
@@ -364,6 +372,7 @@ namespace H2NLIB
 		void Draw(GraphicProperty1b* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty2b* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty3b* gp, eOBJECT::NUM layer);
+		void Draw(GraphicProperty4b* gp, eOBJECT::NUM layer);
 		void LoadGraphicFile(std::string file_pass, GraphicFile* file);
 		void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		void Run(void);

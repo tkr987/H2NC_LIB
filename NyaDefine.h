@@ -5,6 +5,8 @@
 #define SCREEN_MIN_Y	0
 #define SCREEN_MAX_X	850
 #define SCREEN_MAX_Y	750
+#define SCREEN_MIN_X	0
+#define SCREEN_MIN_Y	0
 
 
 

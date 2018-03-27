@@ -8,7 +8,8 @@
 namespace H2NLIB {
 
 
-	class PositionHandle1 {
+	class PositionHandle1 
+	{
 	public:
 		bool collision_hit_;
 		double collision_pow_;
@@ -29,7 +30,8 @@ namespace H2NLIB {
 		}
 	};
 
-	class PositionHandle2 {
+	class PositionHandle2 
+	{
 	public:
 		bool collision_hit_;
 		double collision_pow_;

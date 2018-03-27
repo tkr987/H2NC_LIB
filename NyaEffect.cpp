@@ -90,8 +90,8 @@ NyaEffect::~NyaEffect()
  gp->flag_trans_;
  gp_->graphic_file_
  この関数では下記メンバ変数は利用しないため、値を設定しても無視される。
- gpx4->file_div_;
- gpx4->int draw_grid_cx_; gpx4->int draw_grid_cy_;
+ gp->file_div_;
+ gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
 void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJECT::NUM layer)
 {
@@ -116,22 +116,22 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJ
 @param gpx グラフィックプロパティ
 @note
  この関数では下記メンバ変数を利用するので、必ず値を設定すること。
- epx->draw_max_div_;
- epx->draw_move_x_;
- epx->draw_move_y_;
- epx->interval_time_frame_;
- epx->grid_x_;
- epx->grid_y_;
- gpx4->draw_angle_;
- gpx4->extend_rate_;
- gpx4->flag_turn_;
- gpx4->flag_trans_;
- gpx4->object_group_;
+ ep->draw_max_div_;
+ ep->draw_move_x_;
+ ep->draw_move_y_;
+ ep->interval_time_frame_;
+ ep->grid_x_;
+ ep->grid_y_;
+ gp->draw_angle_;
+ gp->extend_rate_;
+ gp->flag_turn_;
+ gp->flag_trans_;
+ gp->object_group_;
  この関数では下記メンバ変数は利用しないため、値を設定しても無視される。
- gpx4->file_div_;
- gpx4->int draw_grid_cx_; gpx4->int draw_grid_cy_;
+ gp->file_div_;
+ gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty2* epx, const GraphicProperty4* gpx4, eOBJECT::NUM layer)
+void NyaEffect::Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJECT::NUM layer)
 {
 	static list<EffectAnimation2>::iterator it_from, it_to;
 
@@ -140,9 +140,9 @@ void NyaEffect::Draw(const EffectProperty2* epx, const GraphicProperty4* gpx4, e
 	
 	it_from = ea2_wait_list_.begin();
 	it_from->count_ = 0;
-	*it_from->gp_ = *gpx4;
+	*it_from->gp_ = *gp;
 	it_from->gp_->file_div_ = 0;
-	*it_from->ep_ = *epx;
+	*it_from->ep_ = *ep;
 
 	it_to = ea2_draw_list_[layer].begin();
 	ea2_draw_list_[layer].splice(it_to, move(ea2_wait_list_), it_from);

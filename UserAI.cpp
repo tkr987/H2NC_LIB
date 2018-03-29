@@ -12,16 +12,21 @@
 using namespace std;
 using namespace H2NLIB;
 
-UserAiDevice::UserAiDevice()
+
+UserAiDevice2::UserAiDevice2()
 {
-	dp_ = new DeviceProperty1;
-	gp_ = new GraphicProperty4;
+	gadget_dp_ = new DeviceProperty1;
+	gadget_gp_ = new GraphicProperty4;
+	effect_ep_ = new EffectProperty1;
+	effect_gp_ = new GraphicProperty4;
 }
 
-UserAiDevice::~UserAiDevice()
+UserAiDevice2::~UserAiDevice2()
 {
-	delete dp_;
-	delete gp_;
+	delete gadget_dp_;
+	delete gadget_gp_;
+	delete effect_ep_;
+	delete effect_gp_;
 }
 
 UserAiEffectTest::UserAiEffectTest()
@@ -58,20 +63,30 @@ UserAI::UserAI()
 	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
 
-	// user ai device property
-	ai_device_.dp_->collision_pow_ = 1.0;
-	ai_device_.dp_->collision_range_ = 2.0;
-	ai_device_.dp_->move_angle_deg_ = -90;
-	ai_device_.dp_->move_speed_ = 10;
-	ai_device_.gp_->draw_angle_ = -90;
-	nya_graphic_->LoadGraphicFile("img/user_ai_gadget.png", &ai_device_.gp_->graphic_file_);
+	// user ai device 2 property
+	ai_device2_.gadget_dp_->collision_pow_ = 1.0;
+	ai_device2_.gadget_dp_->collision_range_ = 2.0;
+	ai_device2_.gadget_dp_->move_angle_deg_ = -90;
+	ai_device2_.gadget_dp_->move_speed_ = 10;
+	ai_device2_.gadget_gp_->draw_angle_ = -90;
+	nya_graphic_->LoadGraphicFile("img/user_ai_gadget.png", &ai_device2_.gadget_gp_->graphic_file_);
+	ai_device2_.effect_ep_->interval_time_frame_ = 2;
+	nya_graphic_->LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_device2_.effect_gp_->graphic_file_);
+
 
 	// user ai effect test property
-	ai_effect_test_.ep_->draw_div_max_ = 8;
 	ai_effect_test_.ep_->grid_x_ = 500;
 	ai_effect_test_.ep_->grid_y_ = 500;
 	ai_effect_test_.ep_->interval_time_frame_ = 10;
 	nya_graphic_->LoadGraphicFile(4, 2, "img/Death80.png", &ai_effect_test_.gp_->graphic_file_);
+
+	// user ai effect test 2 property
+	ai_effect_test2_.ep_->grid_x_ = 500;
+	ai_effect_test2_.ep_->grid_y_ = 450;
+	ai_effect_test2_.ep_->interval_time_frame_ = 10;
+	nya_graphic_->LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_effect_test2_.gp_->graphic_file_);
+
+
 
 	// user ai main property
 	nya_graphic_->LoadGraphicFile(8, 2, "img/user_ai.png", &ai_main_.gp_->graphic_file_);
@@ -141,12 +156,12 @@ void UserAI::Act(void)
 	if (SCREEN_MAX_Y < ai_main_.ph_->grid_y_)
 		ai_main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
-	// 攻撃テスト
+	// 攻撃テスト2
 	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
 	{
-		ai_device_.dp_->create_x_ = ai_main_.ph_->grid_x_;
-		ai_device_.dp_->create_y_ = ai_main_.ph_->grid_y_;
-		nya_device_->Attack14(ai_device_.dp_, ai_device_.gp_, eOBJECT::NUM::USER_ATTACK1);
+		ai_device2_.gadget_dp_->create_x_ = ai_main_.ph_->grid_x_;
+		ai_device2_.gadget_dp_->create_y_ = ai_main_.ph_->grid_y_;
+		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::NUM::USER_ATTACK1, eOBJECT::NUM::USER_ATTACK_EFFECT1);
 	}
 
 	// 衝突判定
@@ -174,6 +189,5 @@ void UserAI::Draw(void)
 	// エフェクトテスト
 	if (count_ % 200 == 0)
 		nya_effect_->Draw(ai_effect_test_.ep_, ai_effect_test_.gp_, eOBJECT::USER_EFFECT1);
-
 }
 

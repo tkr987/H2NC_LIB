@@ -60,7 +60,10 @@ NyaDevice::NyaDevice()
 
 	// gadget 最大個数はデフォルトで10000個
 	if (count_instance_ == 0)
+	{ 
 		dg14_wait_list_.resize(DEVICE_GADGET_MAX_DEFAULT);
+		dg1414_wait_list_.resize(DEVICE_GADGET_MAX_DEFAULT);
+	}
 
 	count_instance_++;
 }
@@ -121,7 +124,7 @@ void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicPr
 	dg14_attack_list_[gadget_type].splice(it_to, move(dg14_wait_list_), it_from);
 }
 
-void NyaDevice::Attack1414(DeviceProperty1* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp, eOBJECT::NUM gadget_type, eOBJECT::NUM effect_type)
+void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT::NUM gadget_type, eOBJECT::NUM effect_type)
 {
 	static list<DeviceGadget1414>::iterator it_from, it_to;
 
@@ -191,7 +194,6 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 			dg14_delete_deque.push_back(it);
 		}
 	}
-
 	while (!dg14_delete_deque.empty())
 	{
 		dg14_wait_list_.splice(dg14_wait_list_.begin(), move(dg14_attack_list_[type]), dg14_delete_deque.front());
@@ -216,6 +218,11 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 			nya_effect_->Draw(it->effect_ep_, it->effect_gp_, it->effect_type_);
 			dg1414_delete_deque.push_back(it);
 		}
+	}
+	while (!dg1414_delete_deque.empty())
+	{
+		dg1414_wait_list_.splice(dg1414_wait_list_.begin(), move(dg1414_attack_list_[type]), dg1414_delete_deque.front());
+		dg1414_delete_deque.pop_front();
 	}
 
 	//****************************

@@ -16,18 +16,18 @@ namespace H2NLIB
 	class GraphicProperty1;
 
 	// îwåi
-	class MissionBack
+	class MissionBackSc
 	{
 	public:
 		eOBJECT::NUM draw_layer_;
-		double grid_x_;
-		double grid_y_;
-		int scroll_limit_frame_time_;
-		double scroll_size_per_frame_;
-		bool valid_;
+		double end_grid_y_;
 		GraphicProperty1* gp_;
-		MissionBack();
-		~MissionBack();
+		double scroll_speed_per_frame_;
+		double start_grid_x_;
+		double start_grid_y_;
+		bool valid_;
+		MissionBackSc();
+		~MissionBackSc();
 	};
 
 	// target
@@ -45,7 +45,7 @@ namespace H2NLIB
 		virtual ~NyaMission();
 		virtual void Load(void) = 0;
 		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
-		void LoadBack(GraphicProperty1* gp, eOBJECT::NUM draw_layer, int start_grid_x, int start_grid_y, int max_scroll_size, int max_scroll_time_sec);
+		void LoadBackSc(std::string file_pass, eOBJECT::NUM draw_layer, double start_grid_x, double start_grid_y, double max_scroll_size, unsigned int max_scroll_time_sec);
 		void LoadSound(void);
 		void LoadSoundEx(void);
 		void ProcessMissionContinue(void);
@@ -55,7 +55,7 @@ namespace H2NLIB
 		int count_;
 		NyaDesign* nya_design_;
 		NyaGraphic* nya_graphic_;
-		MissionBack mission_back_;
+		MissionBackSc mission_back_sc_;
 		std::vector<MissionTarget> mission_target_vector_;
 	};
 

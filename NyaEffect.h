@@ -19,7 +19,6 @@ namespace H2NLIB
 	class EffectProperty1
 	{
 	public:
-		int draw_div_max_;				//!< 描画分割最大値
 		int interval_time_frame_;		//!< アニメーションインターバル時間(フレーム指定)
 		int grid_x_;					//!< 描画x座標
 		int grid_y_;					//!< 描画y座標
@@ -28,7 +27,6 @@ namespace H2NLIB
 	class EffectProperty2
 	{
 	public:
-		int draw_div_max_;
 		double draw_move_x_;
 		double draw_move_y_;
 		int interval_time_frame_;

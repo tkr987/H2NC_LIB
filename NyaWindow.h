@@ -19,20 +19,32 @@ namespace H2NLIB
 	class NyaTarget;
 	class NyaUser;
 
-	struct WindowUser
+	class WindowUser
 	{
-		bool empty_;
+	public:
+		bool valid_;
 		NyaUser* nya_user_;
+		WindowUser()
+		{
+			valid_ = false;
+		}
 	};
 
-	struct WindowMission
+	class WindowMission
 	{
-		bool empty_;
+	public:
+		bool valid_;
 		int index_;
 		std::vector<NyaMission*> nya_mission_vector_;
+		WindowMission()
+		{
+			valid_ = false;
+			index_ = 0;
+		}
 	};
 
-	class NyaWindow {
+	class NyaWindow
+	{
 	public:
 		void AddChMission(NyaMission*);
 		void AddChUser(NyaUser* user);
@@ -54,7 +66,7 @@ namespace H2NLIB
 		void RunChMission(void);
 		void RunChUser(void);
 		void RunFPS(int x, int y);
-		void RunProcess(void);
+		void RunProcessUpdate(void);
 		void RunTitle(void);
 	};
 

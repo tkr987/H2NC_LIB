@@ -62,8 +62,9 @@ void NyaGraphic::DeleteGraphicFile(GraphicFile file)
 **/
 void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
 {
-	static list<GraphicFile>::iterator it;
-	const static GraphicFile empty_file;
+	int check_graphic_handle, check_size_x, check_size_y;
+	list<GraphicFile>::iterator it;
+	const GraphicFile empty_file;
 
 	// ロード済みファイルなら新しくロードする必要ない
 	for (auto& e : file_list_)
@@ -71,6 +72,11 @@ void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
 		if (e.pass_ == file_pass && e.div_x_ == 0 && e.div_y_ == 0)
 			*file = e;
 	}
+
+	// ロードする画像ファイルのサイズチェック
+	check_graphic_handle = LoadGraph(file_pass.c_str());
+	GetGraphSize(check_graphic_handle, &check_size_x, &check_size_y);
+	DeleteGraph(check_graphic_handle);
 
 	// 画像ファイルをメモリにロードする
 	file_list_.push_front(empty_file);
@@ -80,6 +86,8 @@ void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
 	it->div_x_ = 0;
 	it->div_y_ = 0;
 	it->pass_ = file_pass;
+	it->size_x_ = check_size_x;
+	it->size_y_ = check_size_y;
 
 	// ロード結果を返す
 	*file = *it;
@@ -312,7 +320,7 @@ void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
 	while (!layer_vector_[layer].gp1_deque_.empty())
 	{
 		gp1 = &layer_vector_[layer].gp1_deque_.front();
-		DrawGraph(gp1->draw_grid_x_ + swing_x, gp1->draw_grid_y_ + swing_y, 
+		DrawGraph((int)(gp1->draw_grid_x_ + swing_x), (int)(gp1->draw_grid_y_ + swing_y), 
 			gp1->graphic_file_.div_vector_[gp1->file_div_], gp1->flag_trans_);
 		layer_vector_[layer].gp1_deque_.pop_front();
 	}
@@ -332,7 +340,7 @@ void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
 	}
 	while (!layer_vector_[layer].gpx4_deque_.empty()) {
 		gpx4 = &layer_vector_[layer].gpx4_deque_.front();
-		DrawRotaGraph(gpx4->draw_grid_cx_ + swing_x, gpx4->draw_grid_cy_ + swing_y, 
+		DrawRotaGraph((int)(gpx4->draw_grid_cx_ + swing_x), (int)(gpx4->draw_grid_cy_ + swing_y), 
 			gpx4->extend_rate_, gpx4->draw_angle_,
 			gpx4->graphic_file_.div_vector_[gpx4->file_div_], gpx4->flag_trans_, gpx4->flag_turn_);
 		layer_vector_[layer].gpx4_deque_.pop_front();

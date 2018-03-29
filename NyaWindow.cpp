@@ -36,7 +36,7 @@ NyaWindow::~NyaWindow()
 	delete nya_position_;
 	delete nya_sound_;
 
-	if (!ch_user_.empty_)
+	if (ch_user_.valid_)
 		delete ch_user_.nya_user_;
 
 	for (auto& it : ch_mission_.nya_mission_vector_)
@@ -55,7 +55,7 @@ NyaWindow::~NyaWindow()
 **/
 void NyaWindow::AddChMission(NyaMission* mission)
 {
-	ch_mission_.empty_ = false;
+	ch_mission_.valid_ = true;
 	ch_mission_.index_ = 0;
 	ch_mission_.nya_mission_vector_.push_back(mission);
 }
@@ -71,7 +71,7 @@ void NyaWindow::AddChMission(NyaMission* mission)
 
 void NyaWindow::AddChUser(NyaUser* user)
 {
-	ch_user_.empty_ = false;
+	ch_user_.valid_ = true;
 	ch_user_.nya_user_ = user;
 }
 
@@ -87,7 +87,7 @@ int NyaWindow::Init(string title)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v63");		// タイトル
+	SetMainWindowText("H2NC++LIB v64");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化
@@ -99,11 +99,6 @@ int NyaWindow::Init(string title)
 	// 変数初期化
 	title_name_ = title;
 	process_ = ePROCESS::NUM::TITLE;
-
-	// 子オブジェクトの初期化
-	ch_user_.empty_ = true;
-	ch_mission_.empty_ = true;
-	ch_mission_.index_ = 0;
 
 	// コンストラクタでDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にインスタンスを生成する必要がある。
@@ -145,7 +140,7 @@ void NyaWindow::Run(void)
 		RunChUser();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_font", white, 600, 600, "[600, 620] Mission&User::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 600, "[600, 620] NyaWindow::ch_***::Run() %d msec", (int)debug_time_msec);
 #else
 		RunChMission();
 		RunChUser();
@@ -220,7 +215,7 @@ void NyaWindow::Run(void)
 		// NyaWindow メンバ関数
 		// ***********************
 		RunFPS(1180, 660);
-		RunProcess();
+		RunProcessUpdate();
 		RunTitle();
 	}
 
@@ -228,7 +223,7 @@ void NyaWindow::Run(void)
 
 void NyaWindow::RunChMission(void)
 {
-	if (ch_mission_.empty_)
+	if (!ch_mission_.valid_)
 		return;
 
 	switch (process_) 
@@ -251,7 +246,7 @@ void NyaWindow::RunChMission(void)
 
 void NyaWindow::RunChUser(void)
 {
-	if (ch_user_.empty_)
+	if (!ch_user_.valid_)
 		return;
 
 	switch (process_) 
@@ -341,7 +336,7 @@ void NyaWindow::RunTitle(void)
 }
 
 
-void NyaWindow::RunProcess(void)
+void NyaWindow::RunProcessUpdate(void)
 {
 	DesignHandleMissionClear* handle_mission_clear;
 	

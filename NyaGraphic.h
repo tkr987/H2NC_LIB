@@ -18,13 +18,19 @@ namespace H2NLIB
 		int div_x_;
 		int div_y_;
 		std::string pass_;
+		int size_x_;
+		int size_y_;
 		GraphicFile& operator=(const GraphicFile& file)
 		{
 			div_total_ = file.div_total_;
+			div_vector_.clear();
 			std::copy(file.div_vector_.begin(), file.div_vector_.end(), back_inserter(div_vector_));
 			div_x_ = file.div_x_;
 			div_y_ = file.div_y_;
+			pass_.clear();
 			pass_ = file.pass_;
+			size_x_ = file.size_x_;
+			size_y_ = file.size_y_;
 			return *this;
 		}
 	};
@@ -38,8 +44,8 @@ namespace H2NLIB
 	class GraphicProperty1 
 	{
 	public:
-		int draw_grid_x_;
-		int draw_grid_y_;
+		double draw_grid_x_;
+		double draw_grid_y_;
 		int file_div_;
 		bool flag_trans_;
 		GraphicFile graphic_file_;
@@ -53,8 +59,8 @@ namespace H2NLIB
 			draw_grid_x_ = gp.draw_grid_x_;
 			draw_grid_y_ = gp.draw_grid_y_;
 			file_div_ = gp.file_div_;
-			graphic_file_ = gp.graphic_file_;
 			flag_trans_ = gp.flag_trans_;
+			graphic_file_ = gp.graphic_file_;
 			return *this;
 		}
 	};
@@ -64,11 +70,25 @@ namespace H2NLIB
 	class GraphicProperty2 
 	{
 	public:
-		GraphicFile graphic_file_;
+		double draw_grid_x_;
+		double draw_grid_y_;
 		int file_div_;
-		int draw_grid_x_;
-		int draw_grid_y_;
 		bool flag_trans_;
+		GraphicFile graphic_file_;
+		GraphicProperty2()
+		{
+			file_div_ = 0;
+			flag_trans_ = true;
+		}
+		GraphicProperty2& operator=(const GraphicProperty2& gp)
+		{
+			draw_grid_x_ = gp.draw_grid_x_;
+			draw_grid_y_ = gp.draw_grid_y_;
+			file_div_ = gp.file_div_;
+			graphic_file_ = gp.graphic_file_;
+			flag_trans_ = gp.flag_trans_;
+			return *this;
+		}
 	};
 
 	// DXLIB ägëÂèkè¨ï`âÊä÷êîÇ…ëŒâû
@@ -90,32 +110,32 @@ namespace H2NLIB
 	class GraphicProperty4 
 	{
 	public:
-		GraphicFile graphic_file_;
-		int file_div_;
-		int draw_grid_cx_;
-		int draw_grid_cy_;
 		double draw_angle_;
+		double draw_grid_cx_;
+		double draw_grid_cy_;
 		double extend_rate_;
+		int file_div_;
 		bool flag_turn_;
 		bool flag_trans_;
+		GraphicFile graphic_file_;
 		GraphicProperty4()
 		{
-			file_div_ = 0;
 			draw_angle_ = 0;
 			extend_rate_ = 1.0;
+			file_div_ = 0;
 			flag_turn_ = false;
 			flag_trans_ = true;
 		}
-		GraphicProperty4& operator=(const GraphicProperty4& gpx4)
+		GraphicProperty4& operator=(const GraphicProperty4& gp)
 		{
-			graphic_file_ = gpx4.graphic_file_;
-			file_div_ = gpx4.file_div_;
-			draw_grid_cx_ = gpx4.draw_grid_cx_;
-			draw_grid_cy_ = gpx4.draw_grid_cy_;
-			draw_angle_ = gpx4.draw_angle_;
-			extend_rate_ = gpx4.extend_rate_;
-			flag_turn_ = gpx4.flag_turn_;
-			flag_trans_ = gpx4.flag_trans_;
+			draw_angle_ = gp.draw_angle_;
+			draw_grid_cx_ = gp.draw_grid_cx_;
+			draw_grid_cy_ = gp.draw_grid_cy_;
+			extend_rate_ = gp.extend_rate_;
+			file_div_ = gp.file_div_;
+			flag_turn_ = gp.flag_turn_;
+			flag_trans_ = gp.flag_trans_;
+			graphic_file_ = gp.graphic_file_;
 			return *this;
 		}
 

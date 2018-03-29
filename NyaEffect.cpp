@@ -70,6 +70,8 @@ NyaEffect::~NyaEffect()
 			delete e.gp_;
 		}
 	}
+
+	count_instance_--;
 }
 
 
@@ -105,6 +107,8 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJ
 	*it_from->ep_ = *ep;
 	*it_from->gp_ = *gp;
 	it_from->gp_->file_div_ = 0;
+
+
 
 	it_to = ea1_draw_list_[layer].begin();
 	ea1_draw_list_[layer].splice(it_to, move(ea1_wait_list_), it_from);
@@ -167,7 +171,7 @@ void NyaEffect::DrawAnimation1(eOBJECT::NUM layer)
 	// ************
 	for (auto it = ea1_draw_list_[layer].begin(); it != ea1_draw_list_[layer].end(); ++it)
 	{
-		if (it->gp_->file_div_ == it->ep_->draw_div_max_)
+		if (it->gp_->file_div_ == it->gp_->graphic_file_.div_total_)
 			delete_deque.push_back(it);
 	}
 	while (!delete_deque.empty())
@@ -188,6 +192,8 @@ void NyaEffect::DrawAnimation1(eOBJECT::NUM layer)
 		e.count_++;
 		if (e.count_ == e.ep_->interval_time_frame_)
 		{
+
+
 			e.gp_->file_div_++;
 			e.count_ = 0;
 		}

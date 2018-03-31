@@ -1,6 +1,7 @@
 #pragma once
 
 #include <deque>
+#include <list>
 #include <string>
 #include <vector>
 
@@ -9,20 +10,33 @@ namespace H2NLIB
 
 	class NyaDesign;
 
-	struct SoundFile
-	{
-		int id_;
-		std::string pass_;
-	};
-
-	class SoundPropertyX
+	class SoundFile
 	{
 	public:
-		int file_id_;
+		int id_;
+		std::string pass_;
+		SoundFile& operator=(const SoundFile& file)
+		{
+			id_ = file.id_;
+			pass_.clear();
+			pass_ = file.pass_;
+			return *this;
+		}
+	};
+
+	class SoundProperty
+	{
+	public:
 		bool loop_;
-		SoundPropertyX()
+		SoundFile sound_file_;
+		SoundProperty()
 		{
 			loop_ = false;
+		}
+		SoundProperty& operator=(SoundProperty& sp)
+		{
+			loop_ = sp.loop_;
+			sound_file_ = sp.sound_file_;
 		}
 	};
 
@@ -31,14 +45,14 @@ namespace H2NLIB
 	public:
 		NyaSound();
 		~NyaSound();
-		void ChangeVolume(SoundPropertyX* spx, int volume);
-		int LoadFile(std::string pass);
-		void Play(std::string pass, bool loop = false);
-		void Play(SoundPropertyX* spx);
+		void ChangeVolume(SoundProperty* sp, int volume);
+		void DeleteSoundFile(SoundFile* file);
+		void LoadSoundFile(std::string pass, SoundFile* file);
+		void Play(const SoundProperty* sp);
 		void Run(void);
 	private:
-		static std::vector<SoundFile> file_vector_;
-		static std::deque<SoundPropertyX> play_deque_;
+		static std::list<SoundFile> file_list_;
+		static std::deque<SoundProperty> play_deque_;
 	};
 
 }

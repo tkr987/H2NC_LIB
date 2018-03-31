@@ -50,11 +50,10 @@ public:
 
 class UserAI : public H2NLIB::NyaUser {
 public:
-	UserAI();
-	~UserAI();
 	void Act(void);
 	void Draw(void);
-	void Init(void);
+	void GameEnd(void);
+	void GameStart(void);
 private:
 	long count_;
 	H2NLIB::NyaDesign* nya_design_;
@@ -65,7 +64,7 @@ private:
 	UserAiDevice2 ai_device2_;
 	UserAiEffectTest ai_effect_test_;
 	UserAiEffectTest ai_effect_test2_;
-	UserAiMain ai_main_;
+	UserAiMain main_;
 	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
 	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
 };

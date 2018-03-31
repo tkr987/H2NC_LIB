@@ -46,14 +46,14 @@ namespace H2NLIB
 	};
 
 	// ************
-	//  プロセス
+	//  イベント
 	// ************
-	namespace ePROCESS
+	namespace eEVENT
 	{
 		enum NUM
 		{
 			enum_zero,
-			TITLE, MISSION_LOAD, MISSION_RUN, MISSION_CONTINUE, MISSION_CLEAR, MISSION_DELETE, REPLAY_SAVE, 
+			TITLE, GAME_START, MISSION_START, MISSION_RUN, MISSION_RUN_CONTINUE, MISSION_RUN_CLEAR, MISSION_END, GAME_END, REPLAY_SAVE, 
 			sizeof_enum,
 		};
 	};

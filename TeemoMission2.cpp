@@ -1,6 +1,6 @@
 #include "TeemoMission2.h"
 #include "TeemoTarget.h"
-#include "TeemoTargetEx.h"
+#include "TargetExTeemo.h"
 #include "NyaTarget.h"
 
 using namespace H2NLIB;

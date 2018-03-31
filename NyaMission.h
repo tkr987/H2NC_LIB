@@ -48,9 +48,11 @@ namespace H2NLIB
 		void LoadBackSc(std::string file_pass, eOBJECT::NUM draw_layer, double start_grid_x, double start_grid_y, double max_scroll_size, unsigned int max_scroll_time_sec);
 		void LoadSound(void);
 		void LoadSoundEx(void);
-		void ProcessMissionContinue(void);
-		void ProcessMissionDelete(void);
-		void ProcessMissionRun(void);
+		void MissionStart(void);
+		void MissionEnd(void);
+		void MissionRunClear(void);
+		void MissionRunContinue(void);
+		void MissionRun(void);
 	private:
 		int count_;
 		NyaDesign* nya_design_;

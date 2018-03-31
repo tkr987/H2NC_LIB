@@ -19,6 +19,17 @@ int NyaDesign::instance_ = 0;
 DesignSkillInfo NyaDesign::skill_info_[4];
 DesignUserInfo NyaDesign::user_info_;
 
+DesignHandleMissionWarning::DesignHandleMissionWarning()
+{
+	Init();
+	sp_ = new SoundProperty;
+}
+
+DesignHandleMissionWarning::~DesignHandleMissionWarning()
+{
+	delete sp_;
+}
+
 
 NyaDesign::NyaDesign()
 {
@@ -51,7 +62,8 @@ NyaDesign::NyaDesign()
 		NyaString::SettingFont("design_exp_font", 18, 2);
 		NyaString::SettingFont("design_fps_font", 14, 2);
 		NyaString::SettingFont("design_lv_font", 60, 6);
-		NyaString::SettingFont("design_mission_clear_font", 50, 2);
+		NyaString::SettingFont("design_mission_clear_big_font", 50, 2);
+		NyaString::SettingFont("design_mission_clear_small_font", 30, 2);
 		NyaString::SettingFont("design_skill_font", 30, 2);
 		NyaString::SettingFont("design_input_font", 50, 2);
 		NyaString::SettingFont("design_warning_font", 64, 4);
@@ -78,11 +90,15 @@ void NyaDesign::AddEXP(int x)
 	}
 }
 
+void NyaDesign::Init(void)
+{
+	handle_mission_clear_.Init();
+	handle_mission_ex_.Init();
+	handle_mission_warning_.Init();
+}
+
 void NyaDesign::Run(void)
 {
-	// ÉvÉçÉZÉXï ÇÃèàóù
-	count_ = 0;
-
 	DrawBlack(850, 0, 1280, 720);
 	DrawMissionClear();
 	DrawMissionEx();
@@ -90,8 +106,6 @@ void NyaDesign::Run(void)
 	DrawSkill(875, 110);
 	DrawLv(875, 515);
 	DrawInput(875, 600);
-
-	count_++;
 }
 
 void NyaDesign::DrawBlack(int x, int y, int x2, int y2) 
@@ -155,8 +169,8 @@ void NyaDesign::DrawMissionClear()
 	draw_grid_x = handle_mission_clear_.draw_grid_x_;
 	draw_grid_y = handle_mission_clear_.draw_grid_y_;
 	DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
-	NyaString::Write("design_mission_clear_font", color, draw_grid_x + 90, draw_grid_y + 25, "MISSION CLEAR");
-	NyaString::Write("design_mission_clear_font", color, draw_grid_x + 90, draw_grid_y + 25, "PRESS ENTER KEY");
+	NyaString::Write("design_mission_clear_big_font", color, draw_grid_x + 40, draw_grid_y + 25, "MISSION CLEAR");
+	NyaString::Write("design_mission_clear_small_font", color, draw_grid_x + 80, draw_grid_y + 90, "PRESS ENTER KEY");
 }
 
 void NyaDesign::DrawMissionEx(void)
@@ -175,23 +189,29 @@ void NyaDesign::DrawMissionEx(void)
 void NyaDesign::DrawMissionWarning(void)
 {
 	int draw_grid_x, draw_grid_y;
-	static int black = GetColor(0, 0, 0);
-	static tuple<int, int, int> red = make_tuple(255, 0, 0);
+	int black = GetColor(0, 0, 0);
+	tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	if (handle_mission_warning_.valid_)
+	if (handle_mission_warning_.sound_valid_)
 	{
-		nya_sound_->Play(handle_mission_warning_.spx_);
-		handle_mission_warning_.valid_ = false;
+		nya_sound_->Play(handle_mission_warning_.sp_);
+		handle_mission_warning_.sound_valid_ = false;
 	}
-		
-	if (0 < handle_mission_warning_.time_frame_)
+
+	if (handle_mission_warning_.draw_valid_)
 	{
 		draw_grid_x = handle_mission_warning_.draw_grid_x_;
 		draw_grid_y = handle_mission_warning_.draw_grid_y_;
 		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
 		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
-		handle_mission_warning_.time_frame_--;
-	}
+		handle_mission_warning_.draw_time_frame_++;
+
+		if (handle_mission_warning_.draw_time_frame_ == handle_mission_warning_.draw_time_max_frame_)
+		{
+			handle_mission_warning_.draw_valid_ = false;
+			handle_mission_warning_.draw_time_frame_ = 0;
+		}
+	}	
 }
 
 void NyaDesign::DrawSkill(int x, int y)

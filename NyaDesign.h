@@ -9,7 +9,7 @@
 namespace H2NLIB
 {
 	class NyaSound;
-	class SoundPropertyX;
+	class SoundProperty;
 
 	class DesignHandleMissionClear
 	{
@@ -17,9 +17,10 @@ namespace H2NLIB
 		int draw_grid_x_;
 		int draw_grid_y_;
 		bool valid_;
-		DesignHandleMissionClear()
+		DesignHandleMissionClear() { Init(); }
+		void Init(void)
 		{
-			draw_grid_x_ = 200;
+			draw_grid_x_ = 225;
 			draw_grid_y_ = 200;
 			valid_ = false;
 		}
@@ -30,10 +31,11 @@ namespace H2NLIB
 	public:
 		bool valid_;
 		double value_;
-		DesignHandleMissionEx()
+		DesignHandleMissionEx() { Init(); }
+		void Init(void)
 		{
 			valid_ = false;
-			value_ = 100;
+			value_ = 100;			
 		}
 	};
 
@@ -42,16 +44,21 @@ namespace H2NLIB
 	public:
 		int draw_grid_x_;
 		int draw_grid_y_;
-		SoundPropertyX* spx_;
-		unsigned int time_frame_;
-		bool valid_;
-		DesignHandleMissionWarning()
+		unsigned int draw_time_frame_;
+		unsigned int draw_time_max_frame_;
+		bool draw_valid_;
+		bool sound_valid_;
+		SoundProperty* sp_;
+		DesignHandleMissionWarning();
+		~DesignHandleMissionWarning();
+		void Init(void)
 		{
-			draw_grid_x_ = 200;
+			draw_grid_x_ = 225;
 			draw_grid_y_ = 200;
-			spx_ = nullptr;
-			time_frame_ = 0;
-			valid_ = false;
+			draw_time_frame_ = 0;
+			draw_time_max_frame_ = 300;
+			draw_valid_ = false;
+			sound_valid_ = false;
 		}
 	};
 
@@ -61,7 +68,8 @@ namespace H2NLIB
 		int exp_;
 		int exp_next_;
 		int lv_;
-		DesignUserInfo()
+		DesignUserInfo() { Init(); }
+		void Init(void)
 		{
 			exp_ = 0;
 			exp_next_ = 2147483647;
@@ -86,6 +94,7 @@ namespace H2NLIB
 		DesignHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
 		DesignHandleMissionEx* GetHandleMissionEx(void) { return &handle_mission_ex_; }
 		DesignHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
+		void Init(void);
 		void Run(void);
 		void SetSkillName(eSKILL::NUM skill, std::string set_name) { skill_info_[skill].name_ = set_name; }
 	private:

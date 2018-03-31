@@ -2,38 +2,39 @@
 
 #include "NyaTarget.h"
 
-
 namespace H2NLIB {
 	class NyaDevice;
 	class NyaGraphic;
 	class NyaPosition;
+	class NyaSound;
 	class NyaString;
 	class DeviceProperty1;
 	class GraphicProperty4;
 	class PositionHandle1;
 }
 
-struct TargetTeemoMain
+class TargetExTeemoMain
 {
 public:
 	H2NLIB::GraphicProperty4* gp_;
 	H2NLIB::PositionHandle1* ph_;
-	TargetTeemoMain();
-	~TargetTeemoMain();
+	TargetExTeemoMain();
+	~TargetExTeemoMain();
 };
 
-
-class TeemoTarget : public H2NLIB::NyaTarget {
+class TargetExTeemo : public H2NLIB::NyaTarget
+{
 public:
 	void Act(void);
 	void Draw(void);
 	void MissionEnd(void);
 	void MissionStart(void);
 private:
-	long count_;
-	H2NLIB::NyaDevice* nya_device_;
+	int count_;
+	H2NLIB::NyaDesign* nya_design_;
 	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
-	TargetTeemoMain teemo_main_;
+	H2NLIB::NyaSound* nya_sound_;
+	TargetExTeemoMain main_;
 };
 

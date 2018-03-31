@@ -39,12 +39,12 @@ NyaMission::~NyaMission()
 
 void NyaMission::AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target)
 {
-	static MissionTarget mission_target;
+	MissionTarget add_mission_target;
 
-	mission_target.start_frame_ = FPS_MAX * start_time_sec;
-	mission_target.end_frame_ = FPS_MAX * end_time_sec;
-	mission_target.target_ = target;
-	mission_target_vector_.push_back(mission_target);
+	add_mission_target.start_frame_ = FPS_MAX * start_time_sec;
+	add_mission_target.end_frame_ = FPS_MAX * end_time_sec;
+	add_mission_target.target_ = target;
+	mission_target_vector_.push_back(add_mission_target);
 }
 
 void NyaMission::LoadBackSc(string file_pass, eOBJECT::NUM draw_layer, double start_grid_x, double start_grid_y, double end_grid_y, unsigned int scroll_max_time_sec)
@@ -72,7 +72,38 @@ void NyaMission::LoadSoundEx()
 
 }
 
-void NyaMission::ProcessMissionContinue(void)
+void NyaMission::MissionEnd(void)
+{
+	// targetÇÃèàóù
+	for (auto& it : mission_target_vector_)
+		it.target_->MissionEnd();
+
+	for (auto& e : mission_target_vector_)
+		delete e.target_;
+	mission_target_vector_.clear();
+
+	if (mission_back_sc_.valid_)
+	{ 
+		mission_back_sc_.valid_ = false;
+		nya_graphic_->DeleteGraphicFile(&mission_back_sc_.gp_->graphic_file_);
+	}
+}
+
+void NyaMission::MissionStart(void)
+{
+	count_ = 0;
+	// targetÇÃèàóù
+	for (auto& it : mission_target_vector_)
+		it.target_->MissionStart();
+}
+
+void NyaMission::MissionRunClear(void)
+{
+
+}
+
+
+void NyaMission::MissionRunContinue(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
@@ -88,15 +119,8 @@ void NyaMission::ProcessMissionContinue(void)
 		nya_graphic_->Draw(mission_back_sc_.gp_, mission_back_sc_.draw_layer_);
 }
 
-void NyaMission::ProcessMissionDelete(void)
-{
-	count_ = 0;
-	for (auto& e : mission_target_vector_)
-		delete e.target_;
-	mission_back_sc_.valid_ = false;
-}
 
-void NyaMission::ProcessMissionRun(void)
+void NyaMission::MissionRun(void)
 {
 	// targetÇÃèàóù
 	for (auto& e : mission_target_vector_)

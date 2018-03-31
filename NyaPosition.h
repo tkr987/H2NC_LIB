@@ -63,10 +63,11 @@ namespace H2NLIB {
 		void Collision(PositionHandle1* handle, eOBJECT::NUM group);
 		void Delete(PositionHandle1* handle);
 		void Delete(PositionHandle2* handle);
-		void Regist(PositionHandle1* handle);
-		void Regist(PositionHandle2* handle);
+		void Init(void);
 		bool InScreen(PositionHandle1* phx, int gap = 0);
 		void SettingCollision(eOBJECT::NUM group1, eOBJECT::NUM group2);
+		void Regist(PositionHandle1* handle);
+		void Regist(PositionHandle2* handle);
 		void Run(void);
 	private:
 		static std::vector<std::pair<eOBJECT::NUM, eOBJECT::NUM>> collision_group_vector_;

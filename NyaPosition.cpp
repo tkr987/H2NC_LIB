@@ -51,6 +51,17 @@ void NyaPosition::Delete(PositionHandle2* handle)
 
 }
 
+void NyaPosition::Init(void)
+{
+	collision_group_vector_.clear();
+	for (auto& e : collision_vector1_)
+		e.clear();
+	for (auto& e : collision_vector2_)
+		e.clear();
+	regist_list1_.clear();
+	regist_list2_.clear();
+}
+
 bool NyaPosition::InScreen(PositionHandle1* phx, int gap)
 {
 	if (phx->grid_x_ < SCREEN_MIN_X - gap)

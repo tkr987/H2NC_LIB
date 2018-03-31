@@ -21,8 +21,30 @@ TargetTeemoMain::~TargetTeemoMain()
 	delete ph_;
 }
 
+void TeemoTarget::Act(void)
+{	
+	nya_position_->Collision(teemo_main_.ph_, eOBJECT::NUM::TARGET1);
 
-TeemoTarget::TeemoTarget()
+	count_++;
+}
+
+void TeemoTarget::Draw(void)
+{
+	teemo_main_.gp_->draw_grid_cx_ = (int)teemo_main_.ph_->grid_x_;
+	teemo_main_.gp_->draw_grid_cy_ = (int)teemo_main_.ph_->grid_y_;
+	nya_graphic_->Draw(teemo_main_.gp_, eOBJECT::TARGET1);
+}
+
+void TeemoTarget::MissionEnd(void)
+{
+	nya_graphic_->DeleteGraphicFile(&teemo_main_.gp_->graphic_file_);
+
+	delete nya_device_;
+	delete nya_graphic_;
+	delete nya_position_;
+}
+
+void TeemoTarget::MissionStart(void)
 {
 	count_ = 0;
 
@@ -39,28 +61,3 @@ TeemoTarget::TeemoTarget()
 	teemo_main_.ph_->grid_x_ = 300;
 	teemo_main_.ph_->grid_y_ = 200;
 }
-
-
-TeemoTarget::~TeemoTarget()
-{
-	delete nya_device_;
-	delete nya_graphic_;
-	delete nya_position_;
-}
-
-
-void TeemoTarget::Act(void)
-{	
-	nya_position_->Collision(teemo_main_.ph_, eOBJECT::NUM::TARGET1);
-
-	count_++;
-}
-
-void TeemoTarget::Draw(void)
-{
-	teemo_main_.gp_->draw_grid_cx_ = (int)teemo_main_.ph_->grid_x_;
-	teemo_main_.gp_->draw_grid_cy_ = (int)teemo_main_.ph_->grid_y_;
-	nya_graphic_->Draw(teemo_main_.gp_, eOBJECT::TARGET1);
-}
-
-

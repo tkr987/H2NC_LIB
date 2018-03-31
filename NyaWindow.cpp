@@ -87,7 +87,7 @@ int NyaWindow::Init(string title)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v64");		// タイトル
+	SetMainWindowText("H2NC++LIB v65");		// タイトル
 	ChangeWindowMode(true);					// ウィンドウモード
 	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
 	if (DxLib_Init() == -1)					// 初期化
@@ -97,8 +97,8 @@ int NyaWindow::Init(string title)
 	SetDrawScreen(DX_SCREEN_BACK);			// 描画先グラフィック領域の指定
 
 	// 変数初期化
+	event_ = eEVENT::NUM::TITLE;
 	title_name_ = title;
-	process_ = ePROCESS::NUM::TITLE;
 
 	// コンストラクタでDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にインスタンスを生成する必要がある。
@@ -124,12 +124,13 @@ void NyaWindow::Run(void)
 	static long long debug_time_msec;
 
 
-	// 各プロセス処理
-	// プロセスの変更はここでおこなう
+	// *********************************************************
+	// 各イベント処理
+	// イベントの変更はNyaWindow::RunEventUpdate()でおこなう
+	// *********************************************************
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
 
 		ClearDrawScreen();
-
 
 		// ****************************
 		// 子オブジェクトの処理
@@ -140,7 +141,7 @@ void NyaWindow::Run(void)
 		RunChUser();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_font", white, 600, 600, "[600, 620] NyaWindow::ch_***::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 600, "[600, 600] NyaWindow::ch_***::Run() %d msec", (int)debug_time_msec);
 #else
 		RunChMission();
 		RunChUser();
@@ -155,7 +156,7 @@ void NyaWindow::Run(void)
 		nya_device_->Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_font", white, 600, 620, "[600, 640] NyaDevice::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 620, "[600, 620] NyaDevice::Run() %d msec", (int)debug_time_msec);
 #else 
 		nya_device_->Run();
 #endif
@@ -165,7 +166,7 @@ void NyaWindow::Run(void)
 		nya_effect_->Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_font", white, 600, 640, "[600, 660] NyaEffect::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 640, "[600, 640] NyaEffect::Run() %d msec", (int)debug_time_msec);
 #else 
 		nya_effect_->Run();
 #endif
@@ -175,7 +176,7 @@ void NyaWindow::Run(void)
 		nya_graphic_->Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_font", white, 600, 660, "[600, 680] NyaGraphic::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 660, "[600, 660] NyaGraphic::Run() %d msec", (int)debug_time_msec);
 #else 
 		nya_graphic_->Run();
 #endif
@@ -185,7 +186,7 @@ void NyaWindow::Run(void)
 		nya_position_->Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
-		NyaString::Write("debug_font", white, 600, 680, "[600, 700] NyaPosition::Run() %d msec", (int)debug_time_msec);
+		NyaString::Write("debug_font", white, 600, 680, "[600, 680] NyaPosition::Run() %d msec", (int)debug_time_msec);
 #else 
 		nya_position_->Run();
 #endif
@@ -215,10 +216,25 @@ void NyaWindow::Run(void)
 		// NyaWindow メンバ関数
 		// ***********************
 		RunFPS(1180, 660);
-		RunProcessUpdate();
+		RunEventUpdate();
 		RunTitle();
+
+		// *************
+		// GAME_END
+		// *************
+		GameEnd();
 	}
 
+}
+
+void NyaWindow::GameEnd(void)
+{
+	if (event_ != eEVENT::GAME_END)
+		return;
+
+	nya_design_->Init();
+	nya_graphic_->Init();
+	nya_position_->Init();
 }
 
 void NyaWindow::RunChMission(void)
@@ -226,20 +242,29 @@ void NyaWindow::RunChMission(void)
 	if (!ch_mission_.valid_)
 		return;
 
-	switch (process_) 
+	switch (event_) 
 	{
-	case ePROCESS::MISSION_LOAD:
+	case eEVENT::GAME_START:
+		break;
+	case eEVENT::MISSION_START:
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Load();
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionStart();
 		break;
-	case ePROCESS::MISSION_RUN:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->ProcessMissionRun();
+	case eEVENT::MISSION_RUN:
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
 		break;
-	case ePROCESS::NUM::MISSION_CONTINUE:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->ProcessMissionContinue();
+	case eEVENT::NUM::MISSION_RUN_CONTINUE:
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRunContinue();
 	break;
-	case ePROCESS::NUM::MISSION_DELETE:
-		ch_mission_.nya_mission_vector_[ch_mission_.index_]->ProcessMissionDelete();
+	case eEVENT::NUM::MISSION_RUN_CLEAR:
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRunClear();
+		break;
+	case eEVENT::NUM::MISSION_END:
+		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionEnd();
 		ch_mission_.index_++;
+		break;
+	case eEVENT::GAME_END:
+		ch_mission_.index_ = 0;
 		break;
 	}
 }
@@ -249,15 +274,27 @@ void NyaWindow::RunChUser(void)
 	if (!ch_user_.valid_)
 		return;
 
-	switch (process_) 
+	switch (event_) 
 	{
-	case ePROCESS::MISSION_RUN:
+	case eEVENT::GAME_START:
+		ch_user_.nya_user_->GameStart();
+		break;
+	case eEVENT::MISSION_START:
+		ch_user_.nya_user_->MissionStart();
+		break;
+	case eEVENT::MISSION_RUN:
 		ch_user_.nya_user_->Act();
 		ch_user_.nya_user_->Draw();
 		break;
-	case ePROCESS::NUM::MISSION_CLEAR:
-	case ePROCESS::NUM::MISSION_CONTINUE:
+	case eEVENT::NUM::MISSION_RUN_CLEAR:
+	case eEVENT::NUM::MISSION_RUN_CONTINUE:
 		ch_user_.nya_user_->Draw();
+		break;
+	case eEVENT::MISSION_END:
+		ch_user_.nya_user_->MissionEnd();
+		break;
+	case eEVENT::GAME_END:
+		ch_user_.nya_user_->GameEnd();
 		break;
 	}
 }
@@ -326,9 +363,9 @@ void NyaWindow::RunTitle(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 37, 37);
 
-	switch (process_) 
+	switch (event_) 
 	{
-	case ePROCESS::TITLE:
+	case eEVENT::TITLE:
 		NyaString::Write("window_title_font", white, 100, 70, "%s start", title_name_);
 		NyaString::Write("window_title_font", white, 50, 70, "=>");
 		break;
@@ -336,42 +373,52 @@ void NyaWindow::RunTitle(void)
 }
 
 
-void NyaWindow::RunProcessUpdate(void)
+void NyaWindow::RunEventUpdate(void)
 {
 	DesignHandleMissionClear* handle_mission_clear;
 	
-	switch (process_) 
+	switch (event_) 
 	{
-	case ePROCESS::TITLE:
+	case eEVENT::TITLE:
 		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			process_ = ePROCESS::NUM::MISSION_LOAD;
+			event_ = eEVENT::GAME_START;
 		break;
-	case ePROCESS::MISSION_LOAD:
-		process_ = ePROCESS::MISSION_RUN;
+	case eEVENT::GAME_START:
+		event_ = eEVENT::MISSION_START;
 		break;
-	case ePROCESS::MISSION_RUN:
+	case eEVENT::MISSION_START:
+		event_ = eEVENT::MISSION_RUN;
+		break;
+	case eEVENT::MISSION_RUN:
 		handle_mission_clear = nya_design_->GetHandleMissionClear();
 		if (handle_mission_clear->valid_)
+			event_ = eEVENT::MISSION_RUN_CLEAR;
+		break;
+	case eEVENT::MISSION_RUN_CONTINUE:
+		break;
+	case eEVENT::MISSION_RUN_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
 		{
-			process_ = ePROCESS::NUM::MISSION_CLEAR;
+			handle_mission_clear = nya_design_->GetHandleMissionClear();
 			handle_mission_clear->valid_ = false;
+			event_ = eEVENT::NUM::MISSION_END;
 		}
 		break;
-	case ePROCESS::NUM::MISSION_CLEAR:
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			process_ = ePROCESS::NUM::MISSION_DELETE;
-		break;
-	case ePROCESS::MISSION_CONTINUE:
-		break;
-	case ePROCESS::MISSION_DELETE:
+	case eEVENT::MISSION_END:
 		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
 		{
-			process_ = ePROCESS::NUM::TITLE;
+			event_ = eEVENT::REPLAY_SAVE;
 		}
 		else
 		{
-			process_ = ePROCESS::NUM::MISSION_LOAD;
+			event_ = eEVENT::NUM::MISSION_START;
 		}
+		break;
+	case eEVENT::REPLAY_SAVE:
+		event_ = eEVENT::GAME_END;
+		break;
+	case eEVENT::GAME_END:
+		event_ = eEVENT::TITLE;
 		break;
 	}
 }

@@ -53,20 +53,21 @@ namespace H2NLIB
 		NyaWindow();
 		~NyaWindow();
 	private:
-		ePROCESS::NUM process_;
-		std::string title_name_;
 		WindowUser ch_user_;
 		WindowMission ch_mission_;
+		eEVENT::NUM event_;
+		std::string title_name_;
 		NyaDesign* nya_design_;
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		NyaSound* nya_sound_;
+		void GameEnd(void);
 		void RunChMission(void);
 		void RunChUser(void);
 		void RunFPS(int x, int y);
-		void RunProcessUpdate(void);
+		void RunEventUpdate(void);
 		void RunTitle(void);
 	};
 

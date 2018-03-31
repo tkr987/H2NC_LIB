@@ -2,10 +2,11 @@
 #include "NyaSound.h"
 #include "NyaDesign.h"
 
+using namespace std;
 using namespace H2NLIB;
 
-std::vector<SoundFile> NyaSound::file_vector_;
-std::deque<SoundPropertyX> NyaSound::play_deque_;
+std::list<SoundFile> NyaSound::file_list_;
+std::deque<SoundProperty> NyaSound::play_deque_;
 
 NyaSound::NyaSound()
 {
@@ -19,48 +20,67 @@ NyaSound::~NyaSound()
 
 }
 
-void NyaSound::ChangeVolume(SoundPropertyX* spx, int volume)
+void NyaSound::ChangeVolume(SoundProperty* sp, int volume)
 {
-	ChangeVolumeSoundMem(255 * volume / 100, file_vector_[spx->file_id_].id_);
+	double change_value = 255.0 * (double)volume / 100.0;
+
+	ChangeVolumeSoundMem((int)change_value, sp->sound_file_.id_);
+}
+
+void NyaSound::DeleteSoundFile(SoundFile* file)
+{
+	// ファイルパスが同じファイルを削除する
+	for (list<SoundFile>::iterator it = file_list_.begin(); it != file_list_.end(); ++it)
+	{
+		if (it->pass_ == file->pass_)
+		{
+			DeleteSoundMem(it->id_);
+			file_list_.erase(it);
+			break;
+		}
+	}
+}
+
+void NyaSound::LoadSoundFile(std::string file_pass, SoundFile* file)
+{
+	list<SoundFile>::iterator it;
+	const SoundFile empty_file;
+
+	// ロード済みファイルなら新しくロードする必要ない
+	for (auto& e : file_list_)
+	{
+		if (e.pass_ == file_pass)
+			*file = e;
+	}
+
+	// サウンドファイルをメモリにロードする
+	file_list_.push_front(empty_file);
+	it = file_list_.begin();
+	it->id_ = LoadSoundMem(file_pass.c_str());
+	it->pass_ = file_pass;
+
+	// ロード結果を返す
+	*file = *it;
 }
 
 
-int NyaSound::LoadFile(std::string pass)
+void NyaSound::Play(const SoundProperty* sp)
 {
-	static SoundFile file;
-
-
-	file.pass_ = pass;
-	file.id_ = LoadSoundMem(pass.c_str());
-	file_vector_.push_back(file);
-
-	return ((int)file_vector_.size() - 1);
-}
-
-
-void NyaSound::Play(std::string pass, bool loop)
-{
-	PlaySoundFile(pass.c_str(), loop);
-}
-
-
-void NyaSound::Play(SoundPropertyX* spx)
-{
-	if (spx == nullptr)
+	if (sp == nullptr)
 		return;
 
-	play_deque_.push_back(*spx);
+	play_deque_.push_back(*sp);
 }
 
 
 void NyaSound::Run(void)
 {
-	static SoundPropertyX spx;
+	static SoundProperty* sp;
 
 	while (!play_deque_.empty())
 	{
-		spx = play_deque_.front();
-		PlaySoundMem(file_vector_[spx.file_id_].id_, DX_PLAYTYPE_BACK, spx.loop_);
+		sp = &play_deque_.front();
+		PlaySoundMem(sp->sound_file_.id_, DX_PLAYTYPE_BACK, sp->loop_);
 		play_deque_.pop_front();
 	}
 }

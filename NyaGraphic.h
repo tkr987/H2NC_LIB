@@ -96,13 +96,29 @@ namespace H2NLIB
 	class GraphicProperty3 
 	{
 	public:
-		GraphicFile graphic_file_;
+		double draw_grid_x1_;
+		double draw_grid_x2_;
+		double draw_grid_y1_;
+		double draw_grid_y2_;
 		int file_div_;
-		int draw_grid_x1_;
-		int draw_grid_y1_;
-		int draw_grid_x2_;
-		int draw_grid_y2_;
 		bool flag_trans_;
+		GraphicFile graphic_file_;
+		GraphicProperty3()
+		{
+			file_div_ = 0;
+			flag_trans_ = true;
+		}
+		GraphicProperty3& operator=(const GraphicProperty3& gp)
+		{
+			draw_grid_x1_ = gp.draw_grid_x1_;
+			draw_grid_y1_ = gp.draw_grid_y1_;
+			draw_grid_x2_ = gp.draw_grid_x2_;
+			draw_grid_y2_ = gp.draw_grid_y2_;
+			file_div_ = gp.file_div_;
+			graphic_file_ = gp.graphic_file_;
+			flag_trans_ = gp.flag_trans_;
+			return *this;
+		}
 	};
 
 	// DXLIB âÒì]ï`âÊä÷êîÇ…ëŒâû
@@ -361,9 +377,9 @@ namespace H2NLIB
 	class DrawDequeSet {
 	public:
 		std::deque<GraphicProperty1> gp1_deque_;
-		std::deque<GraphicProperty2> gpx2_deque_;
-		std::deque<GraphicProperty3> gpx3_deque_;
-		std::deque<GraphicProperty4> gpx4_deque_;
+		std::deque<GraphicProperty2> gp2_deque_;
+		std::deque<GraphicProperty3> gp3_deque_;
+		std::deque<GraphicProperty4> gp4_deque_;
 		std::deque<GraphicProperty5> gpx5_deque_;
 		std::deque<GraphicProperty6> gpx6_deque_;
 		std::deque<GraphicProperty7> gpx7_deque_;
@@ -376,23 +392,43 @@ namespace H2NLIB
 		std::deque<GraphicProperty6b> gpx6b_deque_;
 		std::deque<GraphicProperty7b> gpx7b_deque_;
 		std::deque<GraphicProperty8b> gpx8b_deque_;
+		void Clear(void)
+		{
+			gp1_deque_.clear();
+			gp2_deque_.clear();
+			gp3_deque_.clear();
+			gp4_deque_.clear();
+			gpx5_deque_.clear();
+			gpx6_deque_.clear();
+			gpx7_deque_.clear();
+			gpx8_deque_.clear();
+			gpx1b_deque_.clear();
+			gpx2b_deque_.clear();
+			gpx3b_deque_.clear();
+			gpx4b_deque_.clear();
+			gpx5b_deque_.clear();
+			gpx6b_deque_.clear();
+			gpx7b_deque_.clear();
+			gpx8b_deque_.clear();
+		}
 	};
 
 	class NyaGraphic {
 	public:
 		NyaGraphic();
 		~NyaGraphic();
-		void DeleteGraphicFile(GraphicFile file);
-		void Draw(GraphicProperty1* gp, eOBJECT::NUM layer);
+		void DeleteGraphicFile(GraphicFile* file);
+		void Draw(const GraphicProperty1* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty2* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty3* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty4* gp, eOBJECT::NUM layer);
+		void Draw(const GraphicProperty4* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty5* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty6* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty1b* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty2b* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty3b* gp, eOBJECT::NUM layer);
 		void Draw(GraphicProperty4b* gp, eOBJECT::NUM layer);
+		void Init(void);
 		void LoadGraphicFile(std::string file_pass, GraphicFile* file);
 		void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		void Run(void);

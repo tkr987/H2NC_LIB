@@ -58,19 +58,19 @@ void UserAI::Act(void)
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// 移動テスト
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::RIGHT))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::RIGHT))
 	{
 		main_.ph_->grid_x_ += 5;
 	}
-	else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::LEFT))
+	else if (NyaInput::GetKeyStateNow(eINPUT::NUM::LEFT))
 	{
 		main_.ph_->grid_x_ -= 5;
 	}
-	else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::UP))
+	else if (NyaInput::GetKeyStateNow(eINPUT::NUM::UP))
 	{
 		main_.ph_->grid_y_ -= 5;
 	}
-	else if (NyaInput::GetKeyFlagNow(eINPUT::NUM::DOWN))
+	else if (NyaInput::GetKeyStateNow(eINPUT::NUM::DOWN))
 	{
 		main_.ph_->grid_y_ += 5;
 	}
@@ -86,7 +86,7 @@ void UserAI::Act(void)
 		main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
 	// 攻撃テスト2
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
 	{
 		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_;
 		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;

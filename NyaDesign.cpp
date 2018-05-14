@@ -120,32 +120,32 @@ void NyaDesign::DrawInput(int x, int y)
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 	static tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::Q))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::Q))
 		NyaString::Write("design_input_font", red, x, y, "Å°");
 	NyaString::Write("design_input_font", white, x, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::W))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::W))
 		NyaString::Write("design_input_font", red, x + 50, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 50, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::E))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::E))
 		NyaString::Write("design_input_font", red, x + 100, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 100, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::R))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::R))
 		NyaString::Write("design_input_font", red, x + 150, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 150, y, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::SPACE))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::SPACE))
 		NyaString::Write("design_input_font", red, x + 200, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 200, y, "Å†");
 
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::UP))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::UP))
 		NyaString::Write("design_input_font", red, x + 275, y -120, "Å°");
 	NyaString::Write("design_input_font", white, x + 275, y - 120, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::RIGHT))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::RIGHT))
 		NyaString::Write("design_input_font", red, x + 325, y - 70, "Å°");
 	NyaString::Write("design_input_font", white, x + 325, y - 70, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::DOWN))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::DOWN))
 		NyaString::Write("design_input_font", red, x + 275, y - 20, "Å°");
 	NyaString::Write("design_input_font", white, x + 275, y -20, "Å†");
-	if (NyaInput::GetKeyFlagNow(eINPUT::NUM::LEFT))
+	if (NyaInput::GetKeyStateNow(eINPUT::NUM::LEFT))
 		NyaString::Write("design_input_font", red, x + 225, y - 70, "Å°");
 	NyaString::Write("design_input_font", white, x + 225, y - 70, "Å†");
 }

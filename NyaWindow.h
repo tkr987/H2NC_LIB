@@ -64,11 +64,12 @@ namespace H2NLIB
 		NyaPosition* nya_position_;
 		NyaSound* nya_sound_;
 		void GameEnd(void);
+		void SaveReplay(void);
 		void RunChMission(void);
 		void RunChUser(void);
-		void RunFPS(int x, int y);
 		void RunEventUpdate(void);
-		void RunTitle(void);
+		void Title(void);
+		void WaitFPS(int x, int y);
 	};
 
 }

@@ -1,4 +1,5 @@
 #include <chrono>
+#include <fstream>
 #include <tuple>
 #include "DxLib.h"
 #include "DebugPrint.h"
@@ -128,9 +129,15 @@ void NyaWindow::Run(void)
 	// 各イベント処理
 	// イベントの変更はNyaWindow::RunEventUpdate()でおこなう
 	// *********************************************************
-	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1) {
-
-		ClearDrawScreen();
+	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::NUM::WINDOW_CLOSE)
+	{
+		// ***********************
+		// NyaWindow メンバ関数
+		// タイトル処理
+		// リプレイの保存
+		// ***********************
+		Title();
+		SaveReplay();
 
 		// ****************************
 		// 子オブジェクトの処理
@@ -194,7 +201,7 @@ void NyaWindow::Run(void)
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
 		nya_sound_->Run();
-		NyaInput::Run();
+		NyaInput::Run(event_);
 		nya_design_->Run();
 		NyaString::Run();
 		debug_time_end = std::chrono::system_clock::now();
@@ -211,13 +218,15 @@ void NyaWindow::Run(void)
 		// 画面更新
 		// *************
 		ScreenFlip();
+		ClearDrawScreen();
 
 		// ***********************
 		// NyaWindow メンバ関数
+		// イベント更新
+		// フレーム時間を待つ
 		// ***********************
-		RunFPS(1180, 660);
 		RunEventUpdate();
-		RunTitle();
+		WaitFPS(1180, 660);
 
 		// *************
 		// GAME_END
@@ -229,13 +238,131 @@ void NyaWindow::Run(void)
 
 void NyaWindow::GameEnd(void)
 {
-	if (event_ != eEVENT::GAME_END)
+	if (event_ != eEVENT::MISSION_FINALIZE || event_ != eEVENT::MISSION_REPLAY_FINALIZE)
 		return;
 
 	nya_design_->Init();
 	nya_graphic_->Init();
 	nya_position_->Init();
 }
+
+
+/**
+@param リプレイの保存をする関数
+@note
+ フォントはタイトル画面を流用
+**/void NyaWindow::SaveReplay(void)
+{
+	string pass;
+	int x, y;
+	ifstream ifs;
+	tuple<int, int, int> white = make_tuple(255, 255, 255);
+	tuple<int, int, int> red = make_tuple(255, 0, 0);
+	static int select = 1;
+
+	if (event_ != eEVENT::NUM::REPLAY_SAVE)
+		return;
+
+	// ************
+	// 選択
+	// ************
+	if (NyaInput::IsPressKey(eINPUT::NUM::DOWN))
+		select = (select == 5) ? 1 : select + 1;
+	if (NyaInput::IsPressKey(eINPUT::NUM::UP))
+		select = (select == 1) ? 5 : select - 1;
+	x = 60;
+	y = 100 + select * 100;
+	NyaString::Write("window_title_font", red, x, y - 40, "★");
+
+
+	// ************
+	// タイトル
+	// ************
+	x = 60;
+	y = 100;
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "SAVE REPLAY");
+
+	// ************
+	// リプレイ
+	// ************
+	y += 100;
+	ifs.open("replay/repay1.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay1.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+	y += 100;
+	ifs.open("replay/repay2.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay2.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+	y += 100;
+	ifs.open("replay/repay3.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay3.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	y += 100;
+	ifs.close();
+	ifs.open("replay/repay4.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay4.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+
+	// ************
+	// 終了
+	// ************
+	y += 100;
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
+
+	// ファイルへの書き込み
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+	{
+		if (select == 1)
+			NyaInput::OutputFile("repay1.rep");
+		if (select == 2)
+			NyaInput::OutputFile("replay/repay2.rep");
+		if (select == 3)
+			NyaInput::OutputFile("replay/repay3.rep");
+		if (select == 4)
+			NyaInput::OutputFile("replay/repay4.rep");
+	}
+
+	// イベント更新
+	if (NyaInput::IsPressKey(eINPUT::ENTER) && select == 5)
+		event_ = eEVENT::MISSION_FINALIZE;
+}
+
 
 void NyaWindow::RunChMission(void)
 {
@@ -244,26 +371,33 @@ void NyaWindow::RunChMission(void)
 
 	switch (event_) 
 	{
-	case eEVENT::GAME_START:
+	case eEVENT::MISSION_INITIALIZE:
+	case eEVENT::MISSION_REPLAY_INITIALIZE:
 		break;
 	case eEVENT::MISSION_START:
+	case eEVENT::MISSION_REPLAY_START:
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->Load();
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionStart();
 		break;
 	case eEVENT::MISSION_RUN:
+	case eEVENT::MISSION_REPLAY_RUN:
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRun();
 		break;
 	case eEVENT::NUM::MISSION_RUN_CONTINUE:
+	case eEVENT::MISSION_REPLAY_RUN_CLEAR:
+	case eEVENT::MISSION_REPLAY_RUN_OVER:
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRunContinue();
 	break;
 	case eEVENT::NUM::MISSION_RUN_CLEAR:
+	case eEVENT::MISSION_REPLAY_END:
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionRunClear();
 		break;
 	case eEVENT::NUM::MISSION_END:
 		ch_mission_.nya_mission_vector_[ch_mission_.index_]->MissionEnd();
 		ch_mission_.index_++;
 		break;
-	case eEVENT::GAME_END:
+	case eEVENT::MISSION_FINALIZE:
+	case eEVENT::MISSION_REPLAY_FINALIZE:
 		ch_mission_.index_ = 0;
 		break;
 	}
@@ -276,33 +410,259 @@ void NyaWindow::RunChUser(void)
 
 	switch (event_) 
 	{
-	case eEVENT::GAME_START:
+	case eEVENT::MISSION_INITIALIZE:
+	case eEVENT::MISSION_REPLAY_INITIALIZE:
 		ch_user_.nya_user_->GameStart();
 		break;
 	case eEVENT::MISSION_START:
+	case eEVENT::MISSION_REPLAY_START:
 		ch_user_.nya_user_->MissionStart();
 		break;
 	case eEVENT::MISSION_RUN:
+	case eEVENT::MISSION_REPLAY_RUN:
 		ch_user_.nya_user_->Act();
 		ch_user_.nya_user_->Draw();
 		break;
 	case eEVENT::NUM::MISSION_RUN_CLEAR:
 	case eEVENT::NUM::MISSION_RUN_CONTINUE:
+	case eEVENT::MISSION_REPLAY_RUN_CLEAR:
+	case eEVENT::MISSION_REPLAY_RUN_OVER:
 		ch_user_.nya_user_->Draw();
 		break;
 	case eEVENT::MISSION_END:
+	case eEVENT::MISSION_REPLAY_END:
 		ch_user_.nya_user_->MissionEnd();
 		break;
-	case eEVENT::GAME_END:
+	case eEVENT::MISSION_FINALIZE:
+	case eEVENT::MISSION_REPLAY_FINALIZE:
 		ch_user_.nya_user_->GameEnd();
 		break;
 	}
 }
 
+
+
+
+void NyaWindow::RunEventUpdate(void)
+{
+	DesignHandleMissionClear* handle_mission_clear;
+	
+	switch (event_) 
+	{
+	case eEVENT::MISSION_INITIALIZE:
+		event_ = eEVENT::MISSION_START;
+		break;
+	case eEVENT::MISSION_START:
+		event_ = eEVENT::MISSION_RUN;
+		break;
+	case eEVENT::MISSION_RUN:
+		handle_mission_clear = nya_design_->GetHandleMissionClear();
+		if (handle_mission_clear->valid_)
+			event_ = eEVENT::MISSION_RUN_CLEAR;
+		break;
+	case eEVENT::MISSION_RUN_CONTINUE:
+		break;
+	case eEVENT::MISSION_RUN_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
+		{
+			handle_mission_clear = nya_design_->GetHandleMissionClear();
+			handle_mission_clear->valid_ = false;
+			event_ = eEVENT::NUM::MISSION_END;
+		}
+		break;
+	case eEVENT::MISSION_END:
+		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
+		{
+			event_ = eEVENT::REPLAY_SAVE;
+		}
+		else
+		{
+			event_ = eEVENT::NUM::MISSION_START;
+		}
+		break;
+	case eEVENT::MISSION_FINALIZE:
+		event_ = eEVENT::TITLE;
+		break;
+	case eEVENT::MISSION_REPLAY_INITIALIZE:
+		event_ = eEVENT::MISSION_REPLAY_START;
+		break;
+	case eEVENT::MISSION_REPLAY_START:
+		event_ = eEVENT::MISSION_REPLAY_RUN;
+		break;
+	case eEVENT::MISSION_REPLAY_RUN:
+		handle_mission_clear = nya_design_->GetHandleMissionClear();
+		if (handle_mission_clear->valid_)
+			event_ = eEVENT::MISSION_REPLAY_RUN_CLEAR;
+		break;
+	case eEVENT::MISSION_REPLAY_RUN_OVER:
+		break;
+	case eEVENT::MISSION_REPLAY_RUN_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
+		{
+			handle_mission_clear = nya_design_->GetHandleMissionClear();
+			handle_mission_clear->valid_ = false;
+			event_ = eEVENT::NUM::MISSION_REPLAY_END;
+		}
+		break;
+	case eEVENT::MISSION_REPLAY_END:
+		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
+		{
+			event_ = eEVENT::MISSION_REPLAY_FINALIZE;
+		}
+		else
+		{
+			event_ = eEVENT::NUM::MISSION_REPLAY_START;
+		}
+		break;
+	case eEVENT::MISSION_REPLAY_FINALIZE:
+		event_ = eEVENT::TITLE;
+		break;
+	}
+}
+
+
+
+void NyaWindow::Title(void)
+{
+	int x, y;
+	ifstream ifs;
+	tuple<int, int, int> white = make_tuple(255, 255, 255);
+	tuple<int, int, int> red = make_tuple(255, 0, 0);
+	static int select = 1;
+
+	if (event_ != eEVENT::TITLE)
+		return;
+
+	// ************
+	// 選択
+	// ************
+	if (NyaInput::IsPressKey(eINPUT::NUM::DOWN))
+		select = (select == 6) ? 1 : select + 1;
+	if (NyaInput::IsPressKey(eINPUT::NUM::UP))
+		select = (select == 1) ? 6 : select - 1;
+	x = 60;
+	y = select * 100;
+	NyaString::Write("window_title_font", red, x, y - 40, "★");
+
+
+	// ************
+	// タイトル
+	// ************
+	x = 60;
+	y = 100;
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission title");
+	NyaString::Write("window_title_font", white, x + 70, y, "%s", title_name_);
+
+	// ************
+	// リプレイ
+	// ************
+	y += 100;
+	ifs.open("replay/repay1.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay1.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+	y += 100;
+	ifs.open("replay/repay2.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay2.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+	y += 100;
+	ifs.open("replay/repay3.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay3.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+	y += 100;
+	ifs.open("replay/repay4.rep");
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
+	if (ifs.is_open())
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay4.rep");
+	}
+	else
+	{
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+	}
+	ifs.close();
+
+	// ************
+	// 終了
+	// ************
+	y += 100;
+	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
+
+	// *****************
+	// 選択の決定
+	// *****************
+	if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
+	{
+		if (select == 1)
+		{
+			event_ = eEVENT::MISSION_INITIALIZE;
+		}
+		else if (select == 2)
+		{
+			NyaInput::InputFile("replay/replay1.rep");
+			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
+		}
+		else if (select == 3)
+		{
+			NyaInput::InputFile("replay/replay2.rep");
+			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
+		}
+		else if (select == 4)
+		{
+			NyaInput::InputFile("replay/replay3.rep");
+			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
+		}
+		else if (select == 5)
+		{
+			NyaInput::InputFile("replay/replay4.rep");
+
+
+			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
+		}
+
+		else 
+		{
+			event_ = eEVENT::WINDOW_CLOSE;
+		}
+	}
+}
+
+
 /**
 @param FPS更新関数
+@note
+ フレーム時間を待つ
 **/
-void NyaWindow::RunFPS(int x, int y)
+void NyaWindow::WaitFPS(int x, int y)
 {
 
 	static	int frame_ave_ = 0;					//フレームレート平均
@@ -356,73 +716,3 @@ void NyaWindow::RunFPS(int x, int y)
 	frame_[frame_count_] = GetNowCount() - prev_time_;
 	prev_time_ = GetNowCount();
 }
-
-
-
-void NyaWindow::RunTitle(void)
-{
-	static tuple<int, int, int> white = make_tuple(255, 37, 37);
-
-	switch (event_) 
-	{
-	case eEVENT::TITLE:
-		NyaString::Write("window_title_font", white, 100, 70, "%s start", title_name_);
-		NyaString::Write("window_title_font", white, 50, 70, "=>");
-		break;
-	}
-}
-
-
-void NyaWindow::RunEventUpdate(void)
-{
-	DesignHandleMissionClear* handle_mission_clear;
-	
-	switch (event_) 
-	{
-	case eEVENT::TITLE:
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-			event_ = eEVENT::GAME_START;
-		break;
-	case eEVENT::GAME_START:
-		event_ = eEVENT::MISSION_START;
-		break;
-	case eEVENT::MISSION_START:
-		event_ = eEVENT::MISSION_RUN;
-		break;
-	case eEVENT::MISSION_RUN:
-		handle_mission_clear = nya_design_->GetHandleMissionClear();
-		if (handle_mission_clear->valid_)
-			event_ = eEVENT::MISSION_RUN_CLEAR;
-		break;
-	case eEVENT::MISSION_RUN_CONTINUE:
-		break;
-	case eEVENT::MISSION_RUN_CLEAR:
-		if (NyaInput::IsPressKey(eINPUT::NUM::ENTER))
-		{
-			handle_mission_clear = nya_design_->GetHandleMissionClear();
-			handle_mission_clear->valid_ = false;
-			event_ = eEVENT::NUM::MISSION_END;
-		}
-		break;
-	case eEVENT::MISSION_END:
-		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_vector_.size())
-		{
-			event_ = eEVENT::REPLAY_SAVE;
-		}
-		else
-		{
-			event_ = eEVENT::NUM::MISSION_START;
-		}
-		break;
-	case eEVENT::REPLAY_SAVE:
-		event_ = eEVENT::GAME_END;
-		break;
-	case eEVENT::GAME_END:
-		event_ = eEVENT::TITLE;
-		break;
-	}
-}
-
-
-
-

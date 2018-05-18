@@ -2,7 +2,8 @@
 
 #include "NyaTarget.h"
 
-namespace H2NLIB {
+namespace H2NLIB 
+{
 	class NyaDevice;
 	class NyaGraphic;
 	class NyaPosition;
@@ -25,10 +26,10 @@ public:
 class TargetExTeemo : public H2NLIB::NyaTarget
 {
 public:
+	TargetExTeemo();
+	~TargetExTeemo();
 	void Act(void);
 	void Draw(void);
-	void MissionEnd(void);
-	void MissionStart(void);
 private:
 	int count_;
 	H2NLIB::NyaDesign* nya_design_;

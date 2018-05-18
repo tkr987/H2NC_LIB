@@ -58,19 +58,19 @@ void UserAI::Act(void)
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// 移動テスト
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::RIGHT))
+	if (NyaInput::GetKeyStateNow(eINPUT::RIGHT))
 	{
 		main_.ph_->grid_x_ += 5;
 	}
-	else if (NyaInput::GetKeyStateNow(eINPUT::NUM::LEFT))
+	else if (NyaInput::GetKeyStateNow(eINPUT::LEFT))
 	{
 		main_.ph_->grid_x_ -= 5;
 	}
-	else if (NyaInput::GetKeyStateNow(eINPUT::NUM::UP))
+	else if (NyaInput::GetKeyStateNow(eINPUT::UP))
 	{
 		main_.ph_->grid_y_ -= 5;
 	}
-	else if (NyaInput::GetKeyStateNow(eINPUT::NUM::DOWN))
+	else if (NyaInput::GetKeyStateNow(eINPUT::DOWN))
 	{
 		main_.ph_->grid_y_ += 5;
 	}
@@ -86,15 +86,15 @@ void UserAI::Act(void)
 		main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
 	// 攻撃テスト2
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::Q) == true && count_ % 10 == 0)
+	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_ % 10 == 0)
 	{
 		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_;
 		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
-		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::NUM::USER_ATTACK1, eOBJECT::NUM::USER_ATTACK_EFFECT1);
+		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 	}
 
 	// 衝突判定
-	//nya_position_->Collision(ai_ph1_, eOBJECT::NUM::USER1);		
+	//nya_position_->Collision(ai_ph1_, eOBJECT::USER1);		
 
 	// その他
 	count_++;
@@ -112,7 +112,7 @@ void UserAI::Draw(void)
 	main_.gp_->draw_grid_cy_ = (int)main_.ph_->grid_y_;
 	if (count_ % 2 == 0)
 		main_.gp_->file_div_ = ++main_.gp_->file_div_ % 16;
-	nya_graphic_->Draw(main_.gp_, eOBJECT::NUM::USER1);
+	NyaGraphic::Draw(main_.gp_, eOBJECT::USER1);
 
 
 	// エフェクトテスト
@@ -127,7 +127,6 @@ void UserAI::GameStart()
 	nya_design_ = new NyaDesign;
 	nya_device_ = new NyaDevice;
 	nya_effect_ = new NyaEffect;
-	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
 
 	// user ai device 2 property
@@ -136,24 +135,24 @@ void UserAI::GameStart()
 	ai_device2_.gadget_dp_->move_angle_deg_ = -90;
 	ai_device2_.gadget_dp_->move_speed_ = 10;
 	ai_device2_.gadget_gp_->draw_angle_ = -90;
-	nya_graphic_->LoadGraphicFile("img/user_ai_gadget.png", &ai_device2_.gadget_gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile("img/user_ai_gadget.png", &ai_device2_.gadget_gp_->graphic_file_);
 	ai_device2_.effect_ep_->interval_time_frame_ = 2;
-	nya_graphic_->LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_device2_.effect_gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_device2_.effect_gp_->graphic_file_);
 
 	// user ai effect test property
 	ai_effect_test_.ep_->grid_x_ = 500;
 	ai_effect_test_.ep_->grid_y_ = 500;
 	ai_effect_test_.ep_->interval_time_frame_ = 10;
-	nya_graphic_->LoadGraphicFile(4, 2, "img/Death80.png", &ai_effect_test_.gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile(4, 2, "img/Death80.png", &ai_effect_test_.gp_->graphic_file_);
 
 	// user ai effect test 2 property
 	ai_effect_test2_.ep_->grid_x_ = 500;
 	ai_effect_test2_.ep_->grid_y_ = 450;
 	ai_effect_test2_.ep_->interval_time_frame_ = 10;
-	nya_graphic_->LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_effect_test2_.gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_effect_test2_.gp_->graphic_file_);
 
 	// user ai main property
-	nya_graphic_->LoadGraphicFile(8, 2, "img/user_ai.png", &main_.gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile(8, 2, "img/user_ai.png", &main_.gp_->graphic_file_);
 	main_.gp_->extend_rate_ = 0.4;
 	main_.gp_->draw_angle_ = 90;
 	main_.ph_->health_max_ = 100;
@@ -165,8 +164,8 @@ void UserAI::GameStart()
 	nya_position_->Regist(main_.ph_);
 
 	// 衝突判定設定
-	nya_position_->SettingCollision(eOBJECT::NUM::USER_ATTACK1, eOBJECT::NUM::TARGET1);
-	nya_position_->SettingCollision(eOBJECT::NUM::TARGET_ATTACK1, eOBJECT::NUM::USER1);
+	nya_position_->SettingCollision(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
+	nya_position_->SettingCollision(eOBJECT::TARGET_ATTACK1, eOBJECT::USER1);
 
 	// デバッグ
 	NyaString::SettingFont("teemo_font", 10, 2);
@@ -174,15 +173,14 @@ void UserAI::GameStart()
 
 void UserAI::GameEnd()
 {
-	nya_graphic_->DeleteGraphicFile(&ai_device2_.gadget_gp_->graphic_file_);
-	nya_graphic_->DeleteGraphicFile(&ai_device2_.effect_gp_->graphic_file_);
-	nya_graphic_->DeleteGraphicFile(&ai_effect_test_.gp_->graphic_file_);
-	nya_graphic_->DeleteGraphicFile(&ai_effect_test2_.gp_->graphic_file_);
-	nya_graphic_->DeleteGraphicFile(&main_.gp_->graphic_file_);
+	NyaGraphic::DeleteGraphicFile(&ai_device2_.gadget_gp_->graphic_file_);
+	NyaGraphic::DeleteGraphicFile(&ai_device2_.effect_gp_->graphic_file_);
+	NyaGraphic::DeleteGraphicFile(&ai_effect_test_.gp_->graphic_file_);
+	NyaGraphic::DeleteGraphicFile(&ai_effect_test2_.gp_->graphic_file_);
+	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
 
 	delete nya_design_;
 	delete nya_device_;
 	delete nya_effect_;
-	delete nya_graphic_;
 	delete nya_position_;
 }

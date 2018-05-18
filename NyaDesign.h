@@ -96,7 +96,7 @@ namespace H2NLIB
 		DesignHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
 		void Init(void);
 		void Run(void);
-		void SetSkillName(eSKILL::NUM skill, std::string set_name) { skill_info_[skill].name_ = set_name; }
+		void SetSkillName(eSKILL skill, std::string set_name) { skill_info_[static_cast<int>(skill)].name_ = set_name; }
 	private:
 		NyaSound* nya_sound_;
 		static unsigned int count_;
@@ -104,7 +104,7 @@ namespace H2NLIB
 		static DesignHandleMissionEx handle_mission_ex_;
 		static DesignHandleMissionWarning handle_mission_warning_;
 		static int instance_;
-		static DesignSkillInfo skill_info_[4];
+		static DesignSkillInfo skill_info_[static_cast<int>(eSKILL::sizeof_enum)];
 		static DesignUserInfo user_info_;
 		static std::pair<bool, int> clear_pair_;
 		void DrawBlack(int x, int y, int x2, int y2);

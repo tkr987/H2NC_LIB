@@ -9,15 +9,14 @@ using namespace H2NLIB;
 
 
 int NyaEffect::count_instance_ = 0;
-list<EffectAnimation1> NyaEffect::ea1_draw_list_[eOBJECT::NUM::sizeof_enum];
+list<EffectAnimation1> NyaEffect::ea1_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<EffectAnimation1> NyaEffect::ea1_wait_list_;
-list<EffectAnimation2> NyaEffect::ea2_draw_list_[eOBJECT::NUM::sizeof_enum];
+list<EffectAnimation2> NyaEffect::ea2_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<EffectAnimation2> NyaEffect::ea2_wait_list_;
 
 NyaEffect::NyaEffect()
 {
 
-	nya_graphic_ = new NyaGraphic;
 	nya_position_ = new NyaPosition;
 
 	// 初めてクラスのインスタンスが作られたときに初期化される
@@ -37,15 +36,14 @@ NyaEffect::NyaEffect()
 
 NyaEffect::~NyaEffect()
 {
-	delete nya_graphic_;
 	delete nya_position_;
 
 	// クラスのインスタンスが1つだけになったときメモリの解放
 	if (count_instance_ == 1)
 	{
-		for (int type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; type++)
+		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
 		{
-			for (auto& e : ea1_draw_list_[type])
+			for (auto& e : ea1_draw_list_[static_cast<int>(type)])
 			{
 				delete e.ep_;
 				delete e.gp_;
@@ -56,9 +54,9 @@ NyaEffect::~NyaEffect()
 			delete e.ep_;
 			delete e.gp_;
 		}
-		for (int type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; type++)
+		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
 		{
-			for (auto& e : ea2_draw_list_[type])
+			for (auto& e : ea2_draw_list_[static_cast<int>(type)])
 			{
 				delete e.ep_;
 				delete e.gp_;
@@ -95,7 +93,7 @@ NyaEffect::~NyaEffect()
  gp->file_div_;
  gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJECT::NUM layer)
+void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJECT layer)
 {
 	static list<EffectAnimation1>::iterator it_from, it_to;
 
@@ -110,8 +108,8 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJ
 
 
 
-	it_to = ea1_draw_list_[layer].begin();
-	ea1_draw_list_[layer].splice(it_to, move(ea1_wait_list_), it_from);
+	it_to = ea1_draw_list_[static_cast<int>(layer)].begin();
+	ea1_draw_list_[static_cast<int>(layer)].splice(it_to, move(ea1_wait_list_), it_from);
 }
 
 /**
@@ -135,7 +133,7 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJ
  gp->file_div_;
  gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJECT::NUM layer)
+void NyaEffect::Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJECT layer)
 {
 	static list<EffectAnimation2>::iterator it_from, it_to;
 
@@ -148,20 +146,20 @@ void NyaEffect::Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJ
 	it_from->gp_->file_div_ = 0;
 	*it_from->ep_ = *ep;
 
-	it_to = ea2_draw_list_[layer].begin();
-	ea2_draw_list_[layer].splice(it_to, move(ea2_wait_list_), it_from);
+	it_to = ea2_draw_list_[static_cast<int>(layer)].begin();
+	ea2_draw_list_[static_cast<int>(layer)].splice(it_to, move(ea2_wait_list_), it_from);
 }
 
 void NyaEffect::Run(void)
 {
-	for (int layer = eOBJECT::NUM::enum_zero; layer != eOBJECT::NUM::sizeof_enum; layer++)
+	for (eOBJECT layer = eOBJECT::enum_zero; layer != eOBJECT::sizeof_enum; ++layer)
 	{
-		DrawAnimation1((eOBJECT::NUM)layer);
-		DrawAnimation2((eOBJECT::NUM)layer);
+		DrawAnimation1(layer);
+		DrawAnimation2(layer);
 	}
 }
 
-void NyaEffect::DrawAnimation1(eOBJECT::NUM layer)
+void NyaEffect::DrawAnimation1(eOBJECT layer)
 {
 	static list<EffectAnimation1>::iterator it, it_delete;
 	static deque<list<EffectAnimation1>::iterator> delete_deque;
@@ -169,21 +167,21 @@ void NyaEffect::DrawAnimation1(eOBJECT::NUM layer)
 	// ************
 	// 削除処理
 	// ************
-	for (auto it = ea1_draw_list_[layer].begin(); it != ea1_draw_list_[layer].end(); ++it)
+	for (auto it = ea1_draw_list_[static_cast<int>(layer)].begin(); it != ea1_draw_list_[static_cast<int>(layer)].end(); ++it)
 	{
 		if (it->gp_->file_div_ == it->gp_->graphic_file_.div_total_)
 			delete_deque.push_back(it);
 	}
 	while (!delete_deque.empty())
 	{
-		ea1_wait_list_.splice(ea1_wait_list_.begin(), move(ea1_draw_list_[layer]), delete_deque.front());
+		ea1_wait_list_.splice(ea1_wait_list_.begin(), move(ea1_draw_list_[static_cast<int>(layer)]), delete_deque.front());
 		delete_deque.pop_front();
 	}
 
 	// ************
 	// 描画処理
 	// ************
-	for (auto& e : ea1_draw_list_[layer])
+	for (auto& e : ea1_draw_list_[static_cast<int>(layer)])
 	{		
 		e.gp_->draw_grid_cx_ = e.ep_->grid_x_;
 		e.gp_->draw_grid_cy_ = e.ep_->grid_y_;
@@ -200,7 +198,7 @@ void NyaEffect::DrawAnimation1(eOBJECT::NUM layer)
 	}
 }
 
-void NyaEffect::DrawAnimation2(eOBJECT::NUM layer)
+void NyaEffect::DrawAnimation2(eOBJECT layer)
 {
 
 }

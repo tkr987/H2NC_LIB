@@ -16,7 +16,7 @@ DesignHandleMissionClear NyaDesign::handle_mission_clear_;
 DesignHandleMissionEx NyaDesign::handle_mission_ex_;
 DesignHandleMissionWarning NyaDesign::handle_mission_warning_;
 int NyaDesign::instance_ = 0;
-DesignSkillInfo NyaDesign::skill_info_[4];
+DesignSkillInfo NyaDesign::skill_info_[static_cast<int>(eSKILL::sizeof_enum)];
 DesignUserInfo NyaDesign::user_info_;
 
 DesignHandleMissionWarning::DesignHandleMissionWarning()
@@ -83,10 +83,10 @@ NyaDesign::~NyaDesign()
 void NyaDesign::AddEXP(int x)
 {
 	user_info_.exp_ += x;
-	for (int skill_type = eSKILL::NUM::Q; skill_type != eSKILL::NUM::sizeof_enum; skill_type++)
+	for (eSKILL skill_type = eSKILL::Q; skill_type != eSKILL::sizeof_enum; ++skill_type)
 	{
-		if (skill_info_[skill_type].select_)
-			skill_info_[skill_type].exp_ += x;
+		if (skill_info_[static_cast<int>(skill_type)].select_)
+			skill_info_[static_cast<int>(skill_type)].exp_ += x;
 	}
 }
 
@@ -120,32 +120,32 @@ void NyaDesign::DrawInput(int x, int y)
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 	static tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::Q))
+	if (NyaInput::GetKeyStateNow(eINPUT::Q))
 		NyaString::Write("design_input_font", red, x, y, "Å°");
 	NyaString::Write("design_input_font", white, x, y, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::W))
+	if (NyaInput::GetKeyStateNow(eINPUT::W))
 		NyaString::Write("design_input_font", red, x + 50, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 50, y, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::E))
+	if (NyaInput::GetKeyStateNow(eINPUT::E))
 		NyaString::Write("design_input_font", red, x + 100, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 100, y, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::R))
+	if (NyaInput::GetKeyStateNow(eINPUT::R))
 		NyaString::Write("design_input_font", red, x + 150, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 150, y, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::SPACE))
+	if (NyaInput::GetKeyStateNow(eINPUT::SPACE))
 		NyaString::Write("design_input_font", red, x + 200, y, "Å°");
 	NyaString::Write("design_input_font", white, x + 200, y, "Å†");
 
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::UP))
+	if (NyaInput::GetKeyStateNow(eINPUT::UP))
 		NyaString::Write("design_input_font", red, x + 275, y -120, "Å°");
 	NyaString::Write("design_input_font", white, x + 275, y - 120, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::RIGHT))
+	if (NyaInput::GetKeyStateNow(eINPUT::RIGHT))
 		NyaString::Write("design_input_font", red, x + 325, y - 70, "Å°");
 	NyaString::Write("design_input_font", white, x + 325, y - 70, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::DOWN))
+	if (NyaInput::GetKeyStateNow(eINPUT::DOWN))
 		NyaString::Write("design_input_font", red, x + 275, y - 20, "Å°");
 	NyaString::Write("design_input_font", white, x + 275, y -20, "Å†");
-	if (NyaInput::GetKeyStateNow(eINPUT::NUM::LEFT))
+	if (NyaInput::GetKeyStateNow(eINPUT::LEFT))
 		NyaString::Write("design_input_font", red, x + 225, y - 70, "Å°");
 	NyaString::Write("design_input_font", white, x + 225, y - 70, "Å†");
 }

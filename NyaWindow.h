@@ -11,7 +11,6 @@ namespace H2NLIB
 	class NyaDesign;
 	class NyaDevice;
 	class NyaEffect;
-	class NyaGraphic;
 	class NyaInput;
 	class NyaMission;
 	class NyaPosition;
@@ -19,6 +18,7 @@ namespace H2NLIB
 	class NyaTarget;
 	class NyaUser;
 
+	// 子オブジェクトuser関連
 	class WindowUser
 	{
 	public:
@@ -30,12 +30,13 @@ namespace H2NLIB
 		}
 	};
 
+	// 子オブジェクトmission関連
 	class WindowMission
 	{
 	public:
 		bool valid_;
 		int index_;
-		std::vector<NyaMission*> nya_mission_vector_;
+		std::vector<NyaMission*> nya_mission_collection_;
 		WindowMission()
 		{
 			valid_ = false;
@@ -43,24 +44,26 @@ namespace H2NLIB
 		}
 	};
 
+	// nya window
 	class NyaWindow
 	{
 	public:
+		NyaWindow();
+		~NyaWindow();
 		void AddChMission(NyaMission*);
 		void AddChUser(NyaUser* user);
 		int Init(std::string title);
 		void Run(void);
-		NyaWindow();
-		~NyaWindow();
 	private:
+		eEVENT event_;
+		std::string title_;
+		// 子オブジェクト
 		WindowUser ch_user_;
 		WindowMission ch_mission_;
-		eEVENT::NUM event_;
-		std::string title_name_;
+		// nya class
 		NyaDesign* nya_design_;
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
-		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		NyaSound* nya_sound_;
 		void GameEnd(void);

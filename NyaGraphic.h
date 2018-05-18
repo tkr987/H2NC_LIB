@@ -10,6 +10,7 @@
 
 namespace H2NLIB
 {
+
 	class GraphicFile 
 	{
 	public:
@@ -417,30 +418,30 @@ namespace H2NLIB
 	public:
 		NyaGraphic();
 		~NyaGraphic();
-		void DeleteGraphicFile(GraphicFile* file);
-		void Draw(const GraphicProperty1* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty2* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty3* gp, eOBJECT::NUM layer);
-		void Draw(const GraphicProperty4* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty5* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty6* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty1b* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty2b* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty3b* gp, eOBJECT::NUM layer);
-		void Draw(GraphicProperty4b* gp, eOBJECT::NUM layer);
-		void Init(void);
-		void LoadGraphicFile(std::string file_pass, GraphicFile* file);
-		void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
-		void Run(void);
+		static void DeleteGraphicFile(GraphicFile* file);
+		static void Draw(const GraphicProperty1* gp, eOBJECT layer);
+		static void Draw(GraphicProperty2* gp, eOBJECT layer);
+		static void Draw(GraphicProperty3* gp, eOBJECT layer);
+		static void Draw(const GraphicProperty4* gp, eOBJECT layer);
+		static void Draw(GraphicProperty5* gp, eOBJECT layer);
+		static void Draw(GraphicProperty6* gp, eOBJECT layer);
+		static void Draw(GraphicProperty1b* gp, eOBJECT layer);
+		static void Draw(GraphicProperty2b* gp, eOBJECT layer);
+		static void Draw(GraphicProperty3b* gp, eOBJECT layer);
+		static void Draw(GraphicProperty4b* gp, eOBJECT layer);
+		static void Init(void);
+		static void LoadGraphicFile(std::string file_pass, GraphicFile* file);
+		static void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
+		static void Run(void);
 	private:
 		static int swing_x_;
 		static int swing_y_;
 		static std::list<GraphicFile> file_list_;
 		static std::vector<DrawDequeSet> layer_vector_;
 		static std::vector<bool> swing_vector_;
-		void DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y);
-		double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
-		double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
+		static void DrawAll(eOBJECT layer, int swing_x, int swing_y);
+		static double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
+		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
 	};
 
 }

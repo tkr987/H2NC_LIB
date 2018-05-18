@@ -5,7 +5,6 @@
 
 namespace H2NLIB {
 	class NyaDevice;
-	class NyaGraphic;
 	class NyaPosition;
 	class NyaString;
 	class DeviceProperty1;
@@ -32,7 +31,6 @@ public:
 private:
 	long count_;
 	H2NLIB::NyaDevice* nya_device_;
-	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
 	TargetTeemoMain teemo_main_;
 };

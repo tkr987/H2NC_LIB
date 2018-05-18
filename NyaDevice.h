@@ -69,7 +69,7 @@ namespace H2NLIB
 		DeviceProperty1* gadget_dp_;
 		GraphicProperty4* gadget_gp_;
 		PositionHandle1* gadget_ph_;
-		eOBJECT::NUM effect_type_;
+		eOBJECT effect_type_;
 		DeviceGadget1414();
 		~DeviceGadget1414();
 	};
@@ -85,8 +85,8 @@ namespace H2NLIB
 	public:
 		NyaDevice();
 		~NyaDevice();
-		void Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT::NUM gadget_type);
-		void Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT::NUM gadget_type, eOBJECT::NUM effect_type);
+		void Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT gadget_type);
+		void Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT gadget_type, eOBJECT effect_type);
 		void Attack2414(DeviceProperty2* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp);
 		void Run(void);
 	private:
@@ -94,13 +94,13 @@ namespace H2NLIB
 		NyaGraphic* nya_graphic_;
 		NyaPosition* nya_position_;
 		static int count_instance_;
-		static std::list<DeviceGadget14> dg14_attack_list_[eOBJECT::NUM::sizeof_enum];
+		static std::list<DeviceGadget14> dg14_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget14> dg14_wait_list_;
-		static std::list<DeviceGadget1414> dg1414_attack_list_[eOBJECT::NUM::sizeof_enum];
+		static std::list<DeviceGadget1414> dg1414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget1414> dg1414_wait_list_;
-		static std::list<DeviceGadget2414> dg2414_attack_list_[eOBJECT::NUM::sizeof_enum];
+		static std::list<DeviceGadget2414> dg2414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget2414> dg2414_wait_list_;
-		void MoveGadget(eOBJECT::NUM group);
+		void MoveGadget(eOBJECT group);
 		double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
 	};

@@ -13,29 +13,9 @@ using namespace H2NLIB;
 int NyaGraphic::swing_x_;
 int NyaGraphic::swing_y_;
 std::list<GraphicFile> NyaGraphic::file_list_;
-std::vector<DrawDequeSet> NyaGraphic::layer_vector_(eOBJECT::NUM::sizeof_enum);
-std::vector<bool> NyaGraphic::swing_vector_(eOBJECT::NUM::sizeof_enum);
+std::vector<DrawDequeSet> NyaGraphic::layer_vector_(static_cast<int>(eOBJECT::sizeof_enum));
+std::vector<bool> NyaGraphic::swing_vector_(static_cast<int>(eOBJECT::sizeof_enum));
 
-NyaGraphic::NyaGraphic()
-{
-	static bool first_call = true;
-
-	if (first_call) {
-		swing_x_ = 0;
-		swing_y_ = 0;
-		for (auto& e : swing_vector_)
-			e = false;
-		NyaString::SettingFont("debug_image_font", 15, 2);
-		first_call = false;
-	}
-
-}
-
-
-NyaGraphic::~NyaGraphic()
-{
-
-}
 
 void NyaGraphic::DeleteGraphicFile(GraphicFile* file)
 {
@@ -148,9 +128,9 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 @note
  DXLIB::DrawGraph() に対応。
 **/
-void NyaGraphic::Draw(const GraphicProperty1 *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(const GraphicProperty1 *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gp1_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gp1_deque_.push_back(*gp);
 }
 
 
@@ -161,9 +141,9 @@ void NyaGraphic::Draw(const GraphicProperty1 *gp, eOBJECT::NUM layer)
 @note
  DXLIB::DrawTurnGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty2 *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty2 *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gp2_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gp2_deque_.push_back(*gp);
 }
 
 
@@ -174,9 +154,9 @@ void NyaGraphic::Draw(GraphicProperty2 *gp, eOBJECT::NUM layer)
 @note
  DXLIB::DrawExtendGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty3 *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty3 *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gp3_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gp3_deque_.push_back(*gp);
 }
 
 /**
@@ -186,10 +166,10 @@ void NyaGraphic::Draw(GraphicProperty3 *gp, eOBJECT::NUM layer)
 @note
  DXLIB::DrawRotaGraph() に対応。
 **/
-void NyaGraphic::Draw(const GraphicProperty4 *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(const GraphicProperty4 *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gp4_deque_.push_back(*gp);
-	layer_vector_[layer].gp4_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
+	layer_vector_[static_cast<int>(layer)].gp4_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gp4_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
 }
 
 
@@ -200,10 +180,10 @@ void NyaGraphic::Draw(const GraphicProperty4 *gp, eOBJECT::NUM layer)
 @note
  DXLIB::DrawRotaGraph2() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty5 *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty5 *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gpx5_deque_.push_back(*gp);
-	layer_vector_[layer].gpx5_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
+	layer_vector_[static_cast<int>(layer)].gpx5_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gpx5_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
 }
 
 
@@ -214,10 +194,10 @@ void NyaGraphic::Draw(GraphicProperty5 *gp, eOBJECT::NUM layer)
 @note
  DXLIB::DrawRotaGraph3() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty6 *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty6 *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gpx6_deque_.push_back(*gp);
-	layer_vector_[layer].gpx6_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
+	layer_vector_[static_cast<int>(layer)].gpx6_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gpx6_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
 }
 
 /**
@@ -228,9 +208,9 @@ void NyaGraphic::Draw(GraphicProperty6 *gp, eOBJECT::NUM layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty1b *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty1b *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gpx1b_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gpx1b_deque_.push_back(*gp);
 }
 
 /**
@@ -241,9 +221,9 @@ void NyaGraphic::Draw(GraphicProperty1b *gp, eOBJECT::NUM layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawTurnGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty2b *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty2b *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gpx2b_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gpx2b_deque_.push_back(*gp);
 }
 
 /**
@@ -254,9 +234,9 @@ void NyaGraphic::Draw(GraphicProperty2b *gp, eOBJECT::NUM layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawExtendGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty3b *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty3b *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gpx3b_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gpx3b_deque_.push_back(*gp);
 }
 
 /**
@@ -268,13 +248,25 @@ void NyaGraphic::Draw(GraphicProperty3b *gp, eOBJECT::NUM layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty4b *gp, eOBJECT::NUM layer)
+void NyaGraphic::Draw(GraphicProperty4b *gp, eOBJECT layer)
 {
-	layer_vector_[layer].gpx4b_deque_.push_back(*gp);
+	layer_vector_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gp);
 }
 
 void NyaGraphic::Init(void)
 {
+	static bool first_call = true;
+
+	if (first_call)
+	{
+		swing_x_ = 0;
+		swing_y_ = 0;
+		for (auto& e : swing_vector_)
+			e = false;
+		NyaString::SettingFont("debug_image_font", 15, 2);
+		first_call = false;
+	}
+
 	swing_x_ = 0;
 	swing_y_ = 0;
 	file_list_.clear();
@@ -289,11 +281,12 @@ void NyaGraphic::Run(void)
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
 
 	// 振動処理
-	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++) {
-		if (swing_vector_[group]) {
-			DrawAll((eOBJECT::NUM)group, swing_x_, swing_y_);
+	for (eOBJECT group = eOBJECT::enum_zero; group != eOBJECT::sizeof_enum; ++group)
+	{
+		if (swing_vector_[static_cast<int>(group)]) {
+			DrawAll((eOBJECT)group, swing_x_, swing_y_);
 		} else {
-			DrawAll((eOBJECT::NUM)group, 0, 0);		
+			DrawAll((eOBJECT)group, 0, 0);		
 		}
 	}
 
@@ -310,7 +303,7 @@ void NyaGraphic::Run(void)
 @param swing_x x軸方向振動幅
 @param swing_y y軸方向振動幅
 **/
-void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
+void NyaGraphic::DrawAll(eOBJECT draw_layer, int swing_x, int swing_y)
 {
 	GraphicProperty1* gp1;
 	GraphicProperty2* gp2;
@@ -328,7 +321,8 @@ void NyaGraphic::DrawAll(eOBJECT::NUM layer, int swing_x, int swing_y)
 	static GraphicProperty6b* gpx6b;
 	static GraphicProperty7b* gpx7b;
 	static GraphicProperty8b* gpx8b;
-	
+	int layer = static_cast<int>(draw_layer);
+
 	while (!layer_vector_[layer].gp1_deque_.empty())
 	{
 		gp1 = &layer_vector_[layer].gp1_deque_.front();

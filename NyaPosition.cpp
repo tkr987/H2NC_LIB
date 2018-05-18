@@ -6,9 +6,9 @@
 using namespace std;
 using namespace H2NLIB;
 
-vector<pair<eOBJECT::NUM, eOBJECT::NUM>> NyaPosition::collision_group_vector_;
-vector<PositionHandle1*> NyaPosition::collision_vector1_[eOBJECT::NUM::sizeof_enum];
-vector<PositionHandle2*> NyaPosition::collision_vector2_[eOBJECT::NUM::sizeof_enum];
+vector<pair<eOBJECT, eOBJECT>> NyaPosition::collision_group_vector_;
+vector<PositionHandle1*> NyaPosition::collision_vector1_[static_cast<int>(eOBJECT::sizeof_enum)];
+vector<PositionHandle2*> NyaPosition::collision_vector2_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<PositionHandle1*> NyaPosition::regist_list1_;
 list<PositionHandle2*> NyaPosition::regist_list2_;
 
@@ -24,10 +24,10 @@ NyaPosition::~NyaPosition()
 }
 
 
-void NyaPosition::Collision(PositionHandle1* phx, eOBJECT::NUM group)
+void NyaPosition::Collision(PositionHandle1* phx, eOBJECT group)
 {
 	phx->collision_hit_ = false;
-	collision_vector1_[group].push_back(phx);
+	collision_vector1_[static_cast<int>(group)].push_back(phx);
 }
 
 
@@ -85,8 +85,8 @@ void NyaPosition::Run(void)
 	// 配列のクリア
 	for (auto& e : collision_group_vector_) 
 	{
-		collision_vector1_[e.first].clear();
-		collision_vector1_[e.second].clear();
+		collision_vector1_[static_cast<int>(e.first)].clear();
+		collision_vector1_[static_cast<int>(e.second)].clear();
 	}
 
 
@@ -98,12 +98,12 @@ void NyaPosition::Run(void)
  @param group2 セットする値２
  @note
  どのオブジェクトグループ同士で衝突判定処理をするのか設定するために使用する関数。
- 例えば、eOBJECT::NUM::USER1とeOBJECT::NUM::TARGET_ATTACK1を引数で指定しておけば、
+ 例えば、eOBJECT::USER1とeOBJECT::TARGET_ATTACK1を引数で指定しておけば、
  NyaPosition::Run()にてUSER1とTARGET_ATTACK1のオブジェクト同士の衝突判定を実行するようになる。
 **/
-void NyaPosition::SettingCollision(eOBJECT::NUM group1, eOBJECT::NUM group2)
+void NyaPosition::SettingCollision(eOBJECT group1, eOBJECT group2)
 {
-	pair<eOBJECT::NUM, eOBJECT::NUM> set;
+	pair<eOBJECT, eOBJECT> set;
 
 	// すでに同じオブジェクトグループが設定されてたら何もしないで終了
 	for (auto& e : collision_group_vector_) {
@@ -118,11 +118,11 @@ void NyaPosition::SettingCollision(eOBJECT::NUM group1, eOBJECT::NUM group2)
 	collision_group_vector_.push_back(set);
 }
 
-void NyaPosition::JudgeCollision1(eOBJECT::NUM object_group1, eOBJECT::NUM object_group2)
+void NyaPosition::JudgeCollision1(eOBJECT object_group1, eOBJECT object_group2)
 {
-	for (auto& e1 : collision_vector1_[object_group1])
+	for (auto& e1 : collision_vector1_[static_cast<int>(object_group1)])
 	{	
-		for (auto& e2 : collision_vector1_[object_group2])
+		for (auto& e2 : collision_vector1_[static_cast<int>(object_group2)])
 		{
 			// pow()してるのでabs()は不要
 			if (pow(e1->grid_x_ - e2->grid_x_, 2.0) + pow(e1->grid_y_ - e2->grid_y_, 2.0) < pow(e1->collision_range_ + e2->collision_range_, 2.0))
@@ -137,13 +137,13 @@ void NyaPosition::JudgeCollision1(eOBJECT::NUM object_group1, eOBJECT::NUM objec
 }
 
 
-void NyaPosition::JudgeCollision2(eOBJECT::NUM object_group1, eOBJECT::NUM object_group2)
+void NyaPosition::JudgeCollision2(eOBJECT object_group1, eOBJECT object_group2)
 {
 	double a, b, c;
 	double distance;
 
-	for (auto it1 = collision_vector2_[object_group1].begin(); it1 != collision_vector2_[object_group1].end(); ++it1) {	
-		for (auto it2 = collision_vector2_[object_group2].begin(); it2 != collision_vector2_[object_group2].end(); ++it2) {
+	for (auto it1 = collision_vector2_[static_cast<int>(object_group1)].begin(); it1 != collision_vector2_[static_cast<int>(object_group1)].end(); ++it1) {	
+		for (auto it2 = collision_vector2_[static_cast<int>(object_group2)].begin(); it2 != collision_vector2_[static_cast<int>(object_group2)].end(); ++it2) {
 
 			a = ((*it1)->grid_y_ - (*it1)->grid_y_pre_) /  ((*it1)->grid_x_ - (*it1)->grid_x_pre_);
 			b = -1;
@@ -168,7 +168,7 @@ void NyaPosition::JudgeCollision2(eOBJECT::NUM object_group1, eOBJECT::NUM objec
 			}
 		}
 	}
-	collision_vector2_[object_group1].clear();
-	collision_vector2_[object_group2].clear();
+	collision_vector2_[static_cast<int>(object_group1)].clear();
+	collision_vector2_[static_cast<int>(object_group2)].clear();
 }
 

@@ -8,7 +8,6 @@ namespace H2NLIB
 	class NyaDesign;
 	class NyaDevice;
 	class NyaEffect;
-	class NyaGraphic;
 	class NyaPosition;
 	class DeviceProperty1;
 	class EffectProperty1;
@@ -59,7 +58,6 @@ private:
 	H2NLIB::NyaDesign* nya_design_;
 	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaEffect* nya_effect_;
-	H2NLIB::NyaGraphic* nya_graphic_;
 	H2NLIB::NyaPosition* nya_position_;
 	UserAiDevice2 ai_device2_;
 	UserAiEffectTest ai_effect_test_;

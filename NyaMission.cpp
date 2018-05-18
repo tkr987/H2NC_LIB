@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "NyaBackground.h"
 #include "NyaDefine.h"
 #include "NyaDesign.h"
 #include "NyaGraphic.h"
@@ -10,32 +11,27 @@ using namespace std;
 using namespace H2NLIB;
 
 
-MissionBackSc::MissionBackSc()
-{
-	gp_ = new GraphicProperty1;
-	valid_ = false;
-}
-
-MissionBackSc::~MissionBackSc()
-{
-	delete gp_;
-}
-
 NyaMission::NyaMission()
 {
 	nya_design_ = new NyaDesign;
-	nya_graphic_ = new NyaGraphic;
 
 	// 変数初期化
 	count_ = 0;
+	background_ = nullptr;
 }
 
 NyaMission::~NyaMission()
 {
 	delete nya_design_;
-	delete nya_graphic_;
+	nya_design_ = nullptr;
+	delete background_;
+	background_ = nullptr;
 }
 
+void NyaMission::AddChBackground(NyaBackground* background)
+{
+	background_ = background;
+}
 
 void NyaMission::AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target)
 {
@@ -44,22 +40,7 @@ void NyaMission::AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* ta
 	add_mission_target.start_frame_ = FPS_MAX * start_time_sec;
 	add_mission_target.end_frame_ = FPS_MAX * end_time_sec;
 	add_mission_target.target_ = target;
-	mission_target_vector_.push_back(add_mission_target);
-}
-
-void NyaMission::LoadBackSc(string file_pass, eOBJECT::NUM draw_layer, double start_grid_x, double start_grid_y, double end_grid_y, unsigned int scroll_max_time_sec)
-{
-	if (mission_back_sc_.valid_)
-		return;
-
-	// 背景のロード
-	mission_back_sc_.draw_layer_ = draw_layer;
-	mission_back_sc_.gp_->draw_grid_x_ = start_grid_x;
-	mission_back_sc_.gp_->draw_grid_y_ = start_grid_y;
-	nya_graphic_->LoadGraphicFile(file_pass, &mission_back_sc_.gp_->graphic_file_);
-	mission_back_sc_.end_grid_y_ = end_grid_y;
-	mission_back_sc_.scroll_speed_per_frame_ = (double)mission_back_sc_.gp_->graphic_file_.size_y_ / (double)(scroll_max_time_sec * FPS_MAX);
-	mission_back_sc_.valid_ = true;
+	mission_target_collection_.push_back(add_mission_target);
 }
 
 void NyaMission::LoadSound()
@@ -72,58 +53,68 @@ void NyaMission::LoadSoundEx()
 
 }
 
-void NyaMission::MissionEnd(void)
+
+
+
+
+void NyaMission::Run(eEVENT check_event)
 {
-	// targetの処理
-	for (auto& it : mission_target_vector_)
-		it.target_->MissionEnd();
-
-	for (auto& e : mission_target_vector_)
-		delete e.target_;
-	mission_target_vector_.clear();
-
-	if (mission_back_sc_.valid_)
-	{ 
-		mission_back_sc_.valid_ = false;
-		nya_graphic_->DeleteGraphicFile(&mission_back_sc_.gp_->graphic_file_);
+	switch (check_event)
+	{
+	case eEVENT::MISSION_LOAD:
+		count_ = 0;
+		Load();
+		break;
+	case eEVENT::MISSION_RUN:
+	case eEVENT::MISSION_REPLAY_RUN:
+		RunEvent();
+		break;
+	case eEVENT::MISSION_CONTINUE:
+	case eEVENT::MISSION_REPLAY_OVER:
+	case eEVENT::MISSION_CLEAR:
+	case eEVENT::MISSION_REPLAY_CLEAR:
+		ClearEvent();
+	case eEVENT::MISSION_END:
+	case eEVENT::MISSION_REPLAY_END:
+		EndEvent();
+		break;
 	}
+
+	count_++;
 }
 
-void NyaMission::MissionStart(void)
-{
-	count_ = 0;
-	// targetの処理
-	for (auto& it : mission_target_vector_)
-		it.target_->MissionStart();
-}
-
-void NyaMission::MissionRunClear(void)
-{
-
-}
-
-
-void NyaMission::MissionRunContinue(void)
+/**
+@brief クリアイベントで処理する関数
+@note
+ コンテニューイベントでも使われる。
+**/
+void NyaMission::ClearEvent(void)
 {
 	static tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// targetの処理
-	for (auto& it : mission_target_vector_)
+	for (auto& e : mission_target_collection_)
 	{
-		if (it.start_frame_ <= count_ && count_ < it.end_frame_)
-			it.target_->Draw();
+		if (e.start_frame_ <= count_ && count_ < e.end_frame_)
+			e.target_->Draw();
 	}
 	
 	// 背景処理
-	if (mission_back_sc_.valid_)
-		nya_graphic_->Draw(mission_back_sc_.gp_, mission_back_sc_.draw_layer_);
+	if (background_ != nullptr)
+		background_->Draw();
 }
 
+void NyaMission::EndEvent(void)
+{
+		for (auto& e : mission_target_collection_)
+			delete e.target_;
+		mission_target_collection_.clear();
+}
 
-void NyaMission::MissionRun(void)
+void NyaMission::RunEvent(void)
 {
 	// targetの処理
-	for (auto& e : mission_target_vector_)
+	for (auto& e : mission_target_collection_)
 	{
 		if (e.start_frame_ <= count_ && count_ < e.end_frame_)
 		{
@@ -133,15 +124,9 @@ void NyaMission::MissionRun(void)
 	}
 	
 	// 背景処理
-	if (mission_back_sc_.valid_)
+	if (background_ != nullptr)
 	{
-		nya_graphic_->Draw(mission_back_sc_.gp_, mission_back_sc_.draw_layer_);
-		if (mission_back_sc_.gp_->draw_grid_y_ < mission_back_sc_.end_grid_y_)
-			mission_back_sc_.gp_->draw_grid_y_ += mission_back_sc_.scroll_speed_per_frame_;
+		background_->Act();
+		background_->Draw();
 	}
-
-	count_++;
 }
-
-
-

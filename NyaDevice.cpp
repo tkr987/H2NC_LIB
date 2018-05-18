@@ -13,11 +13,11 @@ using namespace H2NLIB;
 
 
 int NyaDevice::count_instance_ = 0;
-list<DeviceGadget14> NyaDevice::dg14_attack_list_[eOBJECT::NUM::sizeof_enum];
+list<DeviceGadget14> NyaDevice::dg14_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<DeviceGadget14> NyaDevice::dg14_wait_list_;
-list<DeviceGadget1414> NyaDevice::dg1414_attack_list_[eOBJECT::NUM::sizeof_enum];
+list<DeviceGadget1414> NyaDevice::dg1414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<DeviceGadget1414> NyaDevice::dg1414_wait_list_;
-list<DeviceGadget2414> NyaDevice::dg2414_attack_list_[eOBJECT::NUM::sizeof_enum];
+list<DeviceGadget2414> NyaDevice::dg2414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<DeviceGadget2414> NyaDevice::dg2414_wait_list_;
 
 DeviceGadget14::DeviceGadget14()
@@ -98,7 +98,7 @@ NyaDevice::~NyaDevice()
  この関数では下記メンバ変数は利用しないため、値を設定しても無視される。
  gadget_gp->pos_cx_; gadget_gp->pos_cy_;
 **/
-void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT::NUM gadget_type)
+void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT gadget_type)
 {
 	static list<DeviceGadget14>::iterator it_from, it_to;
 
@@ -120,11 +120,11 @@ void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicPr
 	it_from->gadget_ph_->health_max_ = 1;
 	it_from->gadget_ph_->health_now_ = 1;
 
-	it_to = dg14_attack_list_[gadget_type].begin();
-	dg14_attack_list_[gadget_type].splice(it_to, move(dg14_wait_list_), it_from);
+	it_to = dg14_attack_list_[static_cast<int>(gadget_type)].begin();
+	dg14_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg14_wait_list_), it_from);
 }
 
-void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT::NUM gadget_type, eOBJECT::NUM effect_type)
+void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT gadget_type, eOBJECT effect_type)
 {
 	static list<DeviceGadget1414>::iterator it_from, it_to;
 
@@ -149,8 +149,8 @@ void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProper
 	it_from->gadget_ph_->health_max_ = 1;
 	it_from->gadget_ph_->health_now_ = 1;
 
-	it_to = dg1414_attack_list_[gadget_type].begin();
-	dg1414_attack_list_[gadget_type].splice(it_to, move(dg1414_wait_list_), it_from);
+	it_to = dg1414_attack_list_[static_cast<int>(gadget_type)].begin();
+	dg1414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg1414_wait_list_), it_from);
 }
 
 void NyaDevice::Attack2414(DeviceProperty2* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp)
@@ -162,16 +162,16 @@ void NyaDevice::Run(void)
 {
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	for (int group = eOBJECT::NUM::enum_zero; group != eOBJECT::NUM::sizeof_enum; group++)
-		MoveGadget((eOBJECT::NUM)group);
+	for (eOBJECT group = eOBJECT::enum_zero; group != eOBJECT::sizeof_enum; ++group)
+		MoveGadget(group);
 
 
-	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", (int)dg14_attack_list_[eOBJECT::NUM::USER_ATTACK1].size());
+	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", (int)dg14_attack_list_[static_cast<int>(eOBJECT::USER_ATTACK1)].size());
 	NyaString::Write("debug_font", white, 50, 210, "[50, 210] wait list size = %d", (int)dg14_wait_list_.size());
 }
 
 
-void NyaDevice::MoveGadget(eOBJECT::NUM type)
+void NyaDevice::MoveGadget(eOBJECT type)
 {
 	static GraphicProperty4 gp;
 	static deque<list<DeviceGadget14>::iterator> dg14_delete_deque;
@@ -181,7 +181,7 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 	//***********************
 	// Gadget14 削除処理
 	//***********************
-	for (auto it = dg14_attack_list_[type].begin(); it != dg14_attack_list_[type].end(); ++it)
+	for (auto it = dg14_attack_list_[static_cast<int>(type)].begin(); it != dg14_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
 		// 表示領域の限界を超えた
 		// 他のオブジェクトと衝突した
@@ -196,14 +196,14 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 	}
 	while (!dg14_delete_deque.empty())
 	{
-		dg14_wait_list_.splice(dg14_wait_list_.begin(), move(dg14_attack_list_[type]), dg14_delete_deque.front());
+		dg14_wait_list_.splice(dg14_wait_list_.begin(), move(dg14_attack_list_[static_cast<int>(type)]), dg14_delete_deque.front());
 		dg14_delete_deque.pop_front();
 	}
 
 	//***********************
 	// Gadget1414 削除処理
 	//***********************
-	for (auto it = dg1414_attack_list_[type].begin(); it != dg1414_attack_list_[type].end(); ++it)
+	for (auto it = dg1414_attack_list_[static_cast<int>(type)].begin(); it != dg1414_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
 		// 表示領域の限界を超えた
 		// 他のオブジェクトと衝突した
@@ -221,14 +221,14 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 	}
 	while (!dg1414_delete_deque.empty())
 	{
-		dg1414_wait_list_.splice(dg1414_wait_list_.begin(), move(dg1414_attack_list_[type]), dg1414_delete_deque.front());
+		dg1414_wait_list_.splice(dg1414_wait_list_.begin(), move(dg1414_attack_list_[static_cast<int>(type)]), dg1414_delete_deque.front());
 		dg1414_delete_deque.pop_front();
 	}
 
 	//****************************
 	// gadget14 削除以外の処理
 	//****************************
-	for (auto& e : dg14_attack_list_[type])
+	for (auto& e : dg14_attack_list_[static_cast<int>(type)])
 	{
 		// 移動処理
 		e.gadget_ph_->grid_x_ += e.move_x_;
@@ -246,7 +246,7 @@ void NyaDevice::MoveGadget(eOBJECT::NUM type)
 	//****************************
 	// gadget1414 削除以外の処理
 	//****************************
-	for (auto& e : dg1414_attack_list_[type])
+	for (auto& e : dg1414_attack_list_[static_cast<int>(type)])
 	{
 		// 移動処理
 		e.gadget_ph_->grid_x_ += e.move_x_;

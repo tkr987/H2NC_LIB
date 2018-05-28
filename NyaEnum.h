@@ -37,16 +37,8 @@ namespace H2NLIB
 		USER_ATTACK_EFFECT1, USER_ATTACK_EFFECT2, USER_ATTACK_EFFECT3, USER_ATTACK_EFFECT4, USER_ATTACK_EFFECT5, 
 		USER_EFFECT1, USER_EFFECT2, USER_EFFECT3, USER_EFFECT4, USER_EFFECT5, 
 		sizeof_enum,
-	};
-	
-	inline eOBJECT& operator++(eOBJECT& object)
-	{
-		if (object != eOBJECT::sizeof_enum)
-			object = static_cast<eOBJECT>(static_cast<int>(object) + 1);
-		
-		return object;
-	}
-
+	};	
+	eOBJECT& operator++(eOBJECT& object);
 
 	// ************
 	//  イベント
@@ -54,13 +46,15 @@ namespace H2NLIB
 	enum class eEVENT
 	{
 		enum_zero,
-		TITLE, 
-		MISSION_INITIALIZE, MISSION_LOAD, MISSION_RUN, MISSION_CONTINUE, MISSION_CLEAR, MISSION_ALL_CLEAR, MISSION_END, MISSION_FINALIZE, 
-		MISSION_REPLAY_INITIALIZE, MISSION_REPLAY_LOAD, MISSION_REPLAY_RUN, MISSION_REPLAY_OVER, MISSION_REPLAY_CLEAR, MISSION_REPLAY_ALL_CLEAR, MISSION_REPLAY_END, MISSION_REPLAY_FINALIZE, 
-		REPLAY_SAVE, 
-		WINDOW_CLOSE, 
+		TITLE,
+		MISSION_INITIALIZE, MISSION_CREATE, MISSION_RUN, MISSION_CONTINUE, MISSION_CLEAR, MISSION_DELETE, MISSION_ALL_CLEAR, MISSION_FINALIZE,
+		MISSION_REPLAY_INITIALIZE, MISSION_REPLAY_CREATE, MISSION_REPLAY_RUN, MISSION_REPLAY_OVER, MISSION_REPLAY_CLEAR, MISSION_REPLAY_DELETE, MISSION_REPLAY_ALL_CLEAR, MISSION_REPLAY_FINALIZE,
+		REPLAY_SAVE,
+		WINDOW_CLOSE,
 		sizeof_enum,
 	};
+
+
 
 	// ************
 	//  スキル
@@ -73,13 +67,9 @@ namespace H2NLIB
 			sizeof_enum,
 	};
 
-	inline eSKILL& operator++(eSKILL& skill)
-	{
-		if (skill != eSKILL::sizeof_enum)
-			skill = static_cast<eSKILL>(static_cast<int>(skill) + 1);
-		
-		return skill;
-	}
+	eSKILL& operator++(eSKILL& enum_skill);
 
 }
+
+
 

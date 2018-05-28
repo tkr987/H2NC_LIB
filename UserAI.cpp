@@ -1,5 +1,5 @@
 #include <tuple>
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 #include "NyaDesign.h"
 #include "NyaDevice.h"
 #include "NyaEffect.h"

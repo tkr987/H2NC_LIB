@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 
 namespace H2NLIB
 {
@@ -18,26 +18,15 @@ namespace H2NLIB
 	class NyaTarget;
 	class NyaUser;
 
-	// 子オブジェクトuser関連
-	class WindowUser
-	{
-	public:
-		bool valid_;
-		NyaUser* nya_user_;
-		WindowUser()
-		{
-			valid_ = false;
-		}
-	};
 
 	// 子オブジェクトmission関連
-	class WindowMission
+	class ChildMission
 	{
 	public:
 		bool valid_;
 		int index_;
-		std::vector<NyaMission*> nya_mission_collection_;
-		WindowMission()
+		std::vector<NyaMission*> mission_collection_;
+		ChildMission()
 		{
 			valid_ = false;
 			index_ = 0;
@@ -50,28 +39,21 @@ namespace H2NLIB
 	public:
 		NyaWindow();
 		~NyaWindow();
-		void AddChMission(NyaMission*);
-		void AddChUser(NyaUser* user);
+		void AddChild(NyaMission* mission);
 		int Init(std::string title);
 		void Run(void);
 	private:
 		eEVENT event_;
 		std::string title_;
-		// 子オブジェクト
-		WindowUser ch_user_;
-		WindowMission ch_mission_;
-		// nya class
+		ChildMission child_mission_;
 		NyaDesign* nya_design_;
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
 		NyaPosition* nya_position_;
-		NyaSound* nya_sound_;
-		void GameEnd(void);
+		void Mission(void);
 		void SaveReplay(void);
-		void RunChMission(void);
-		void RunChUser(void);
-		void RunEventUpdate(void);
 		void Title(void);
+		void UpdateEvent(void);
 		void WaitFPS(int x, int y);
 	};
 

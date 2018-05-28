@@ -11,7 +11,7 @@ TeemoBackgroundMission1::TeemoBackgroundMission1()
 	gp_ = new GraphicProperty1;
 	gp_->draw_grid_x_ = 0;
 	gp_->draw_grid_y_ = -2560 + 720;
-	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile("img/back/back1.png", &gp_->graphic_file_);
 }
 
 

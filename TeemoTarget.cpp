@@ -1,4 +1,4 @@
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 #include "NyaDevice.h"
 #include "NyaGraphic.h"
 #include "NyaInput.h"
@@ -21,31 +21,14 @@ TargetTeemoMain::~TargetTeemoMain()
 	delete ph_;
 }
 
-void TeemoTarget::Act(void)
-{	
-	nya_position_->Collision(teemo_main_.ph_, eOBJECT::TARGET1);
-
-	count_++;
+void TeemoTarget::MissionClear(void)
+{
+	Draw();
 }
 
-void TeemoTarget::Draw(void)
+void TeemoTarget::MissionCreate(void)
 {
-	teemo_main_.gp_->draw_grid_cx_ = (int)teemo_main_.ph_->grid_x_;
-	teemo_main_.gp_->draw_grid_cy_ = (int)teemo_main_.ph_->grid_y_;
-	NyaGraphic::Draw(teemo_main_.gp_, eOBJECT::TARGET1);
-}
-
-void TeemoTarget::MissionEnd(void)
-{
-	NyaGraphic::DeleteGraphicFile(&teemo_main_.gp_->graphic_file_);
-
-	delete nya_device_;
-	delete nya_position_;
-}
-
-void TeemoTarget::MissionStart(void)
-{
-	count_ = 0;
+	count_frame_ = 0;
 
 	nya_device_ = new NyaDevice;
 	nya_position_ = new NyaPosition;
@@ -59,3 +42,29 @@ void TeemoTarget::MissionStart(void)
 	teemo_main_.ph_->grid_x_ = 300;
 	teemo_main_.ph_->grid_y_ = 200;
 }
+
+void TeemoTarget::MissionDelete(void)
+{
+	delete nya_device_;
+	delete nya_position_;
+}
+
+void TeemoTarget::MissionRun(void)
+{
+	Act();
+	Draw();
+}
+
+void TeemoTarget::Act(void)
+{	
+	nya_position_->Collision(teemo_main_.ph_, eOBJECT::TARGET1);
+}
+
+void TeemoTarget::Draw(void)
+{
+	teemo_main_.gp_->draw_grid_cx_ = (int)teemo_main_.ph_->grid_x_;
+	teemo_main_.gp_->draw_grid_cy_ = (int)teemo_main_.ph_->grid_y_;
+	NyaGraphic::Draw(teemo_main_.gp_, eOBJECT::TARGET1);
+	count_frame_++;
+}
+

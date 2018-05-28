@@ -27,7 +27,7 @@ DesignHandleMissionWarning::DesignHandleMissionWarning()
 
 DesignHandleMissionWarning::~DesignHandleMissionWarning()
 {
-	delete sp_;
+
 }
 
 
@@ -35,7 +35,6 @@ NyaDesign::NyaDesign()
 {
 	DesignSkillInfo init_skill_info;
 
-	nya_sound_ = new NyaSound;
 
 	// ‰Šú‰»‚·‚é‚Ì‚Í1‰ñ‚¾‚¯
 	if (instance_ == 0) {
@@ -75,7 +74,6 @@ NyaDesign::NyaDesign()
 
 NyaDesign::~NyaDesign()
 {
-	delete nya_sound_;
 
 	instance_--;
 }
@@ -194,7 +192,7 @@ void NyaDesign::DrawMissionWarning(void)
 
 	if (handle_mission_warning_.sound_valid_)
 	{
-		nya_sound_->Play(handle_mission_warning_.sp_);
+		NyaSound::Play(handle_mission_warning_.sp_);
 		handle_mission_warning_.sound_valid_ = false;
 	}
 

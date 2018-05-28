@@ -24,14 +24,16 @@ public:
 
 class TeemoTarget : public H2NLIB::NyaTarget {
 public:
-	void Act(void);
-	void Draw(void);
-	void MissionEnd(void);
-	void MissionStart(void);
+	void MissionClear(void);
+	void MissionCreate(void);
+	void MissionDelete(void);
+	void MissionRun(void);
 private:
-	long count_;
+	unsigned int count_frame_;
 	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaPosition* nya_position_;
 	TargetTeemoMain teemo_main_;
+	void Act(void);
+	void Draw(void);
 };
 

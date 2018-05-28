@@ -5,40 +5,28 @@
 #include <list>
 #include <string>
 #include <vector>
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 
 
 namespace H2NLIB
 {
 
 	class GraphicFile 
-	{
+	{	// ‰æ‘œƒtƒ@ƒCƒ‹\‘¢‘Ì
 	public:
+		std::vector<int> div_collection_;
 		int div_total_;
-		std::vector<int> div_vector_;
 		int div_x_;
 		int div_y_;
 		std::string pass_;
 		int size_x_;
 		int size_y_;
-		GraphicFile& operator=(const GraphicFile& file)
-		{
-			div_total_ = file.div_total_;
-			div_vector_.clear();
-			std::copy(file.div_vector_.begin(), file.div_vector_.end(), back_inserter(div_vector_));
-			div_x_ = file.div_x_;
-			div_y_ = file.div_y_;
-			pass_.clear();
-			pass_ = file.pass_;
-			size_x_ = file.size_x_;
-			size_y_ = file.size_y_;
-			return *this;
-		}
+		GraphicFile& operator=(const GraphicFile& file);
 	};
 
-	// **********************
-	// graphic property
-	// **********************
+	// ********************************
+	// ‚±‚±‚©‚çgraphic property‚Ì’è‹`
+	// ********************************
 
 	// DXLIB ’Êí•`‰æŠÖ”‚É‘Î‰
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
@@ -67,7 +55,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰
-	// int DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
+	// int DXLIB::DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ; ‚É‘Î‰
 	class GraphicProperty2 
 	{
 	public:
@@ -93,7 +81,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
-	// int DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
+	// int DXLIB::DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
 	class GraphicProperty3 
 	{
 	public:
@@ -123,7 +111,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
-	// int DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
+	// int DXLIB::DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
 	class GraphicProperty4 
 	{
 	public:
@@ -159,7 +147,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
-	// int DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
+	// int DXLIB::DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	class GraphicProperty5 
 	{
 	public:
@@ -176,7 +164,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
-	// int DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
+	// int DXLIB::DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	class GraphicProperty6 
 	{
 	public:
@@ -194,7 +182,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚É‘Î‰
-	// int DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
+	// int DXLIB::DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
 	class GraphicProperty7 
 	{
 	public:
@@ -212,7 +200,7 @@ namespace H2NLIB
 	};
 
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚É‘Î‰
-	// int DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
+	// int DXLIB::DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
 	class GraphicProperty8 
 	{
 	public:
@@ -229,8 +217,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB ’Êí•`‰æŠÖ”‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	class GraphicProperty1b 
 	{
 	public:
@@ -244,8 +232,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawTurnGraph( int x, int y, int GrHandle, int TransFlag ) ;
 	class GraphicProperty2b 
 	{
 	public:
@@ -259,8 +247,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawExtendGraph( int x1, int y1, int x2, int y2, int GrHandle , int TransFlag ) ;
 	class GraphicProperty3b 
 	{
 	public:
@@ -276,8 +264,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawRotaGraph( int x, int y, double ExtRate, double Angle, int GrHandle , int TransFlag , int TurnFlag ) ;
 	class GraphicProperty4b 
 	{
 	public:
@@ -294,8 +282,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawRotaGraph2( int x, int y, int cx, int cy, double ExtRate, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	class GraphicProperty5b 
 	{
 	public:
@@ -314,8 +302,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
 	class GraphicProperty6b 
 	{
 	public:
@@ -335,8 +323,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB ©—R•ÏŒ`•`‰æŠÖ”‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawModiGraph( int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4, int GrHandle , int TransFlag );
 	class GraphicProperty7b 
 	{
 	public:
@@ -356,8 +344,8 @@ namespace H2NLIB
 	};
 
 	// DXLIB w’è‹éŒ`•`‰æŠÖ”‚É‘Î‰
-	// int SetDrawBlendMode( int BlendMode , int Pal ) ;
-	// int DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
+	// int DXLIB::SetDrawBlendMode( int BlendMode , int Pal ) ;
+	// int DXLIB::DrawRectGraph( int DestX, int DestY, int SrcX, int SrcY, int Width, int Height, int GraphHandle, int TransFlag, int TurnFlag ) ;
 	class GraphicProperty8b 
 	{
 	public:
@@ -418,6 +406,7 @@ namespace H2NLIB
 	public:
 		NyaGraphic();
 		~NyaGraphic();
+		static void Clear(void);
 		static void DeleteGraphicFile(GraphicFile* file);
 		static void Draw(const GraphicProperty1* gp, eOBJECT layer);
 		static void Draw(GraphicProperty2* gp, eOBJECT layer);
@@ -429,17 +418,13 @@ namespace H2NLIB
 		static void Draw(GraphicProperty2b* gp, eOBJECT layer);
 		static void Draw(GraphicProperty3b* gp, eOBJECT layer);
 		static void Draw(GraphicProperty4b* gp, eOBJECT layer);
-		static void Init(void);
 		static void LoadGraphicFile(std::string file_pass, GraphicFile* file);
 		static void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		static void Run(void);
 	private:
-		static int swing_x_;
-		static int swing_y_;
-		static std::list<GraphicFile> file_list_;
-		static std::vector<DrawDequeSet> layer_vector_;
-		static std::vector<bool> swing_vector_;
-		static void DrawAll(eOBJECT layer, int swing_x, int swing_y);
+		static std::list<GraphicFile> file_collection_;
+		static std::vector<DrawDequeSet> layer_collection_;
+		static void DrawAll(eOBJECT layer);
 		static double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
 		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
 	};

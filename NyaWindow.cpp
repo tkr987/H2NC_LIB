@@ -2,7 +2,6 @@
 #include <fstream>
 #include <tuple>
 #include "DxLib.h"
-#include "DebugPrint.h"
 #include "NyaDevice.h"
 #include "NyaDesign.h"
 #include "NyaEffect.h"
@@ -31,18 +30,14 @@ NyaWindow::NyaWindow()
 NyaWindow::~NyaWindow()
 {
 	// 親オブジェクトのNyaWindowを破棄するときに子オブジェクトを破棄する
-	if (ch_user_.valid_)
-		delete ch_user_.nya_user_;
-
-	for (auto& it : ch_mission_.nya_mission_collection_)
-		delete it;
+	for (auto& e : child_mission_.mission_collection_)
+		delete e;
 
 	// nya class delete
 	delete nya_design_;
 	delete nya_device_;
 	delete nya_effect_;
 	delete nya_position_;
-	delete nya_sound_;
 
 	DxLib_End();
 }
@@ -52,29 +47,13 @@ NyaWindow::~NyaWindow()
 @param mission 追加するミッション
 @note
  NyaWindowの子オブジェクトとしてミッションが追加される。
- 子オブジェクトは親オブジェクト(NyaWindow)がdeleteされるときに自動的に削除される。
- なので、子オブジェクト自体はdeleteを書く必要はない。
+ 子オブジェクトは親オブジェクト(NyaWindow)がdeleteされるときに自動的に削除されるが、
+ ライブラリ使用者自身で削除したい場合はNyaWindow::Delete()を使う。
 **/
-void NyaWindow::AddChMission(NyaMission* mission)
+void NyaWindow::AddChild(NyaMission* mission)
 {
-	ch_mission_.valid_ = true;
-	ch_mission_.index_ = 0;
-	ch_mission_.nya_mission_collection_.push_back(mission);
-}
-
-/**
-@brief ユーザーを追加する関数
-@param mission 追加するユーザー
-@note
- NyaWindowの子オブジェクトとしてユーザーが追加される。
- 子オブジェクトは親オブジェクト(NyaWindow)がdeleteされるときに自動的に削除される。
- なので、子オブジェクト自体はdeleteを書く必要はない。
-**/
-
-void NyaWindow::AddChUser(NyaUser* user)
-{
-	ch_user_.valid_ = true;
-	ch_user_.nya_user_ = user;
+	child_mission_.valid_ = true;
+	child_mission_.mission_collection_.push_back(mission);
 }
 
 
@@ -108,7 +87,6 @@ int NyaWindow::Init(string title)
 	nya_device_ = new NyaDevice;
 	nya_effect_ = new NyaEffect;
 	nya_position_ = new NyaPosition;
-	nya_sound_ = new NyaSound;
 	
 	// 設定
 	NyaString::SettingFont("window_title_font", 30, 4);
@@ -134,9 +112,11 @@ void NyaWindow::Run(void)
 		// ***********************
 		// NyaWindow メンバ関数
 		// タイトル処理
+		// ミッション処理
 		// リプレイの保存
 		// ***********************
 		Title();
+		Mission();
 		SaveReplay();
 
 		// ****************************
@@ -144,8 +124,6 @@ void NyaWindow::Run(void)
 		// ****************************
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		RunChMission();
-		RunChUser();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 600, "[600, 600] NyaWindow::ch_***::Run() %d msec", (int)debug_time_msec);
@@ -200,7 +178,7 @@ void NyaWindow::Run(void)
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		nya_sound_->Run();
+		NyaSound::Run();
 		NyaInput::Run(event_);
 		nya_design_->Run();
 		NyaString::Run();
@@ -225,25 +203,10 @@ void NyaWindow::Run(void)
 		// イベント更新
 		// フレーム時間を待つ
 		// ***********************
-		RunEventUpdate();
+		UpdateEvent();
 		WaitFPS(1180, 660);
-
-		// *************
-		// GAME_END
-		// *************
-		GameEnd();
 	}
 
-}
-
-void NyaWindow::GameEnd(void)
-{
-	if (event_ != eEVENT::MISSION_FINALIZE || event_ != eEVENT::MISSION_REPLAY_FINALIZE)
-		return;
-
-	nya_design_->Init();
-	NyaGraphic::Init();
-	nya_position_->Init();
 }
 
 
@@ -364,62 +327,24 @@ void NyaWindow::GameEnd(void)
 }
 
 
-void NyaWindow::RunChMission(void)
+void NyaWindow::Mission(void)
 {
-	if (!ch_mission_.valid_)
+	if (!child_mission_.valid_)
 		return;
 
-	ch_mission_.nya_mission_collection_[ch_mission_.index_]->Run(event_);
-
-	// index 更新
-	switch (event_) 
-	{
-	case eEVENT::MISSION_INITIALIZE:
-	case eEVENT::MISSION_REPLAY_INITIALIZE:
-		ch_mission_.index_ = 0;
-		break;
-	case eEVENT::MISSION_END:
-		ch_mission_.index_++;
-		break;
-	case eEVENT::MISSION_FINALIZE:
-	case eEVENT::MISSION_REPLAY_FINALIZE:
-		break;
-	}
-}
-
-void NyaWindow::RunChUser(void)
-{
-	if (!ch_user_.valid_)
-		return;
+	// イベント毎に色々な処理を実行する
+	child_mission_.mission_collection_[child_mission_.index_]->Run(event_);
 
 	switch (event_) 
-	{
+	{	// インデックスの更新
 	case eEVENT::MISSION_INITIALIZE:
 	case eEVENT::MISSION_REPLAY_INITIALIZE:
-		ch_user_.nya_user_->GameStart();
+		child_mission_.index_ = 0;
 		break;
-	case eEVENT::MISSION_LOAD:
-	case eEVENT::MISSION_REPLAY_LOAD:
-		ch_user_.nya_user_->MissionStart();
-		break;
-	case eEVENT::MISSION_RUN:
-	case eEVENT::MISSION_REPLAY_RUN:
-		ch_user_.nya_user_->Act();
-		ch_user_.nya_user_->Draw();
-		break;
-	case eEVENT::MISSION_CLEAR:
-	case eEVENT::MISSION_CONTINUE:
-	case eEVENT::MISSION_REPLAY_CLEAR:
-	case eEVENT::MISSION_REPLAY_OVER:
-		ch_user_.nya_user_->Draw();
-		break;
-	case eEVENT::MISSION_END:
-	case eEVENT::MISSION_REPLAY_END:
-		ch_user_.nya_user_->MissionEnd();
-		break;
-	case eEVENT::MISSION_FINALIZE:
-	case eEVENT::MISSION_REPLAY_FINALIZE:
-		ch_user_.nya_user_->GameEnd();
+	case eEVENT::MISSION_DELETE:
+	case eEVENT::MISSION_REPLAY_DELETE:
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+			child_mission_.index_++;
 		break;
 	}
 }
@@ -427,16 +352,16 @@ void NyaWindow::RunChUser(void)
 
 
 
-void NyaWindow::RunEventUpdate(void)
+void NyaWindow::UpdateEvent(void)
 {
 	DesignHandleMissionClear* handle_mission_clear;
 	
 	switch (event_) 
 	{
 	case eEVENT::MISSION_INITIALIZE:
-		event_ = eEVENT::MISSION_LOAD;
+		event_ = eEVENT::MISSION_CREATE;
 		break;
-	case eEVENT::MISSION_LOAD:
+	case eEVENT::MISSION_CREATE:
 		event_ = eEVENT::MISSION_RUN;
 		break;
 	case eEVENT::MISSION_RUN:
@@ -451,26 +376,26 @@ void NyaWindow::RunEventUpdate(void)
 		{
 			handle_mission_clear = nya_design_->GetHandleMissionClear();
 			handle_mission_clear->valid_ = false;
-			event_ = eEVENT::MISSION_END;
+			event_ = eEVENT::MISSION_DELETE;
 		}
 		break;
-	case eEVENT::MISSION_END:
-		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_collection_.size())
+	case eEVENT::MISSION_DELETE:
+		if (child_mission_.index_ + 1 != child_mission_.mission_collection_.size())
 		{
 			event_ = eEVENT::REPLAY_SAVE;
 		}
 		else
 		{
-			event_ = eEVENT::MISSION_LOAD;
+			event_ = eEVENT::MISSION_DELETE;
 		}
 		break;
 	case eEVENT::MISSION_FINALIZE:
 		event_ = eEVENT::TITLE;
 		break;
 	case eEVENT::MISSION_REPLAY_INITIALIZE:
-		event_ = eEVENT::MISSION_REPLAY_LOAD;
+		event_ = eEVENT::MISSION_REPLAY_CREATE;
 		break;
-	case eEVENT::MISSION_REPLAY_LOAD:
+	case eEVENT::MISSION_REPLAY_CREATE:
 		event_ = eEVENT::MISSION_REPLAY_RUN;
 		break;
 	case eEVENT::MISSION_REPLAY_RUN:
@@ -485,17 +410,17 @@ void NyaWindow::RunEventUpdate(void)
 		{
 			handle_mission_clear = nya_design_->GetHandleMissionClear();
 			handle_mission_clear->valid_ = false;
-			event_ = eEVENT::MISSION_REPLAY_END;
+			event_ = eEVENT::MISSION_REPLAY_DELETE;
 		}
 		break;
-	case eEVENT::MISSION_REPLAY_END:
-		if (ch_mission_.index_ + 1 != ch_mission_.nya_mission_collection_.size())
+	case eEVENT::MISSION_REPLAY_DELETE:
+		if (child_mission_.index_ + 1 != child_mission_.mission_collection_.size())
 		{
 			event_ = eEVENT::MISSION_REPLAY_FINALIZE;
 		}
 		else
 		{
-			event_ = eEVENT::MISSION_REPLAY_LOAD;
+			event_ = eEVENT::MISSION_REPLAY_CREATE;
 		}
 		break;
 	case eEVENT::MISSION_REPLAY_FINALIZE:

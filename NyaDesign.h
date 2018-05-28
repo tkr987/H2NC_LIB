@@ -3,12 +3,11 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 
 
 namespace H2NLIB
 {
-	class NyaSound;
 	class SoundProperty;
 
 	class DesignHandleMissionClear
@@ -91,14 +90,13 @@ namespace H2NLIB
 		NyaDesign();
 		~NyaDesign();
 		void AddEXP(int);
-		DesignHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
-		DesignHandleMissionEx* GetHandleMissionEx(void) { return &handle_mission_ex_; }
-		DesignHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
-		void Init(void);
-		void Run(void);
-		void SetSkillName(eSKILL skill, std::string set_name) { skill_info_[static_cast<int>(skill)].name_ = set_name; }
+		static DesignHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
+		static DesignHandleMissionEx* GetHandleMissionEx(void) { return &handle_mission_ex_; }
+		static DesignHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
+		static void Init(void);
+		static void Run(void);
+		static void SetSkillName(eSKILL skill, std::string set_name) { skill_info_[static_cast<int>(skill)].name_ = set_name; }
 	private:
-		NyaSound* nya_sound_;
 		static unsigned int count_;
 		static DesignHandleMissionClear handle_mission_clear_;
 		static DesignHandleMissionEx handle_mission_ex_;
@@ -107,13 +105,13 @@ namespace H2NLIB
 		static DesignSkillInfo skill_info_[static_cast<int>(eSKILL::sizeof_enum)];
 		static DesignUserInfo user_info_;
 		static std::pair<bool, int> clear_pair_;
-		void DrawBlack(int x, int y, int x2, int y2);
-		void DrawLv(int x, int y);
-		void DrawSkill(int x, int y);
-		void DrawInput(int x, int y);
-		void DrawMissionClear(void);
-		void DrawMissionEx(void);
-		void DrawMissionWarning(void);
+		static void DrawBlack(int x, int y, int x2, int y2);
+		static void DrawLv(int x, int y);
+		static void DrawSkill(int x, int y);
+		static void DrawInput(int x, int y);
+		static void DrawMissionClear(void);
+		static void DrawMissionEx(void);
+		static void DrawMissionWarning(void);
 	};
 
 }

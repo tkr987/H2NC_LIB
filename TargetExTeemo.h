@@ -4,6 +4,7 @@
 
 namespace H2NLIB 
 {
+	class NyaDesign;
 	class NyaDevice;
 	class NyaGraphic;
 	class NyaPosition;

@@ -4,23 +4,25 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 
 
 namespace H2NLIB
 {
 	class NyaBackground;
-	class NyaDesign;
 	class NyaTarget;
-	class GraphicFile;
-	class GraphicProperty1;
+	class NyaUser;
 
-	// target
+	// ***************************************************************************************
+	// class MissionTarget
+	// NyaMission::AddChTarget()で登録された内容を格納するために宣言されたクラス
+	// start_timeやend_timeも保存されているので、NyaMission::Run()で処理することができる
+	// ***************************************************************************************
 	class MissionTarget
-	{
+	{		
 	public:
-		int start_frame_;
-		int end_frame_;
+		unsigned int start_frame_;
+		unsigned int end_frame_;
 		NyaTarget* target_;
 	};
 
@@ -29,20 +31,22 @@ namespace H2NLIB
 	public:
 		NyaMission();
 		virtual ~NyaMission();
-		virtual void Load(void) = 0;
-		void AddChBackground(NyaBackground* background);
-		void AddChTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
-		void LoadSound(void);
-		void LoadSoundEx(void);
+		virtual void Create(void) = 0;		// eEVENT::MISSION_CLEATEで実行される
+		virtual void Delete(void){}			// eEVENT::MISSION_DELETEで実行される
+		void AddChild(NyaBackground* background);
+		void AddChild(int start_time_sec, int end_time_sec, NyaTarget* target, unsigned int id);
+		void AddChild(NyaUser* user);
+		void DeleteBackground(void);
+		void DeleteTarget(void);
+		void DeleteUser(void);
 		void Run(eEVENT check_event);
 	private:
-		int count_;
-		NyaDesign* nya_design_;
-		NyaBackground* background_;
-		std::vector<MissionTarget> mission_target_collection_;
-		void ClearEvent(void);
-		void EndEvent(void);
-		void RunEvent(void);
+		// eEVENT::MISSION_RUNの状態のフレーム数をカウントする
+		// UINT_MAXを超えるミッションは正常動作しないので注意
+		unsigned int count_frame_;
+		static NyaBackground* background_;
+		static NyaUser* user_;
+		static std::vector<MissionTarget*> mission_target_collection_;
 	};
 
 }

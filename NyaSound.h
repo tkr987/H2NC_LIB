@@ -45,11 +45,11 @@ namespace H2NLIB
 	public:
 		NyaSound();
 		~NyaSound();
-		void ChangeVolume(SoundProperty* sp, int volume);
-		void DeleteSoundFile(SoundFile* file);
-		void LoadSoundFile(std::string pass, SoundFile* file);
-		void Play(const SoundProperty* sp);
-		void Run(void);
+		static void ChangeVolume(SoundProperty* sp, int volume);
+		static void DeleteSoundFile(SoundFile* file);
+		static void LoadSoundFile(std::string pass, SoundFile* file);
+		static void Play(const SoundProperty* sp);
+		static void Run(void);
 	private:
 		static std::list<SoundFile> file_list_;
 		static std::deque<SoundProperty> play_deque_;

@@ -2,7 +2,7 @@
 
 #include <deque>
 #include <string>
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 
 
 namespace H2NLIB {

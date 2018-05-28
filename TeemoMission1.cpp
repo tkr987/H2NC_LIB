@@ -7,19 +7,22 @@
 
 using namespace H2NLIB;
 
-void TeemoMission1::Load(void) 
+void TeemoMission1::Create(void) 
 {
+	// NyaUser user_ai = new UserAI;
 	NyaBackground* background_mission1_teemo = new TeemoBackgroundMission1;
 	NyaDesign* nya_design_ = new NyaDesign;
 	//NyaTarget* teemo_target = new TeemoTarget;
-	NyaTarget* target_ex_teemo = new TargetExTeemo;
+
+	// ユーザーを子オブジェクトとして追加
+	// AddChUser(user_ai);
 
 	// ターゲットを子オブジェクトとして追加
 	//AddChTarget(1, 30, teemo_target);
-	AddChTarget(5, 600, target_ex_teemo);
+	//AddChild(5, 600, new TargetExTeemo);
 
-	// スクロールする背景を子オブジェクトとして追加
-	AddChBackground(background_mission1_teemo);
+	// スクロールする背景やBGMを子オブジェクトとして追加
+	AddChild(background_mission1_teemo);
 
 	// あとでuser関数で設定するように移す可能性あり
 	nya_design_->SetSkillName(eSKILL::Q, "Skill Q (power)");
@@ -28,5 +31,12 @@ void TeemoMission1::Load(void)
 	nya_design_->SetSkillName(eSKILL::R, "Skill R (bomb)");
 
 	delete nya_design_;
+}
+
+void TeemoMission1::Delete(void)
+{
+	DeleteBackground();
+	DeleteTarget();
+	DeleteUser();
 }
 

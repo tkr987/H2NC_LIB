@@ -12,8 +12,6 @@
 #include "DxLib.h"
 #include "NyaWindow.h"
 #include "TeemoMission1.h"
-#include "TeemoMission2.h"
-#include "UserAI.h"
 
 // H2NC++LIB: happy 2 nya c++ library - DXLIB STGLIB
 
@@ -26,22 +24,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	H2NLIB::NyaWindow* nya_window = new H2NLIB::NyaWindow;
 	nya_window->Init("teemo on duty");
 
-	// user “o˜^
-	H2NLIB::NyaUser* teemo_user = new UserAI;
-	nya_window->AddChUser(teemo_user);
-
 	// mission ’Ç‰Á
 	H2NLIB::NyaMission* teemo_mission1 = new TeemoMission1;
-	//H2NLIB::NyaMission* teemo_mission2 = new TeemoMission2;
-	nya_window->AddChMission(teemo_mission1);
-	//nya_window->AddChMission(teemo_mission2);
+	nya_window->AddChild(teemo_mission1);
 
 	// Às
 	nya_window->Run();
 
 	// I—¹
 	delete nya_window;
-
 
 	return 0;
 }

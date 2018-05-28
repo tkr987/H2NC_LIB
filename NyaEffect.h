@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NyaDefine.h"
+#include "NyaEnum.h"
 #include <list>
 #include <string>
 #include <utility>

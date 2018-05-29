@@ -5,37 +5,52 @@
 using namespace std;
 using namespace H2NLIB;
 
-std::list<SoundFile> NyaSound::file_list_;
-std::deque<SoundProperty> NyaSound::play_deque_;
+std::list<SoundFile> NyaSound::file_collection_;
+std::deque<SoundProperty> NyaSound::play_collection_;
 
-NyaSound::NyaSound()
+//**********************
+// class SoundFile
+//**********************
+
+SoundFile& SoundFile::operator=(const SoundFile& file)
 {
+	id_ = file.id_;
+	pass_.clear();
+	pass_ = file.pass_;
+	return *this;
 }
 
+//***************************
+// class SoundProperty
+//***************************
 
-
-
-NyaSound::~NyaSound()
+SoundProperty& SoundProperty::operator=(SoundProperty& sp)
 {
-
+	loop_ = sp.loop_;
+	sound_file_ = sp.sound_file_;
+	return *this;
 }
 
-void NyaSound::ChangeVolume(SoundProperty* sp, int volume)
+//**********************
+// class NyaSound
+//**********************
+
+void NyaSound::ChangeVolume(SoundFile* file, int volume)
 {
 	double change_value = 255.0 * (double)volume / 100.0;
 
-	ChangeVolumeSoundMem((int)change_value, sp->sound_file_.id_);
+	ChangeVolumeSoundMem((int)change_value, file->id_);
 }
 
 void NyaSound::DeleteSoundFile(SoundFile* file)
 {
 	// ファイルパスが同じファイルを削除する
-	for (list<SoundFile>::iterator it = file_list_.begin(); it != file_list_.end(); ++it)
+	for (list<SoundFile>::iterator it = file_collection_.begin(); it != file_collection_.end(); ++it)
 	{
 		if (it->pass_ == file->pass_)
 		{
 			DeleteSoundMem(it->id_);
-			file_list_.erase(it);
+			file_collection_.erase(it);
 			break;
 		}
 	}
@@ -47,15 +62,18 @@ void NyaSound::LoadSoundFile(std::string file_pass, SoundFile* file)
 	const SoundFile empty_file;
 
 	// ロード済みファイルなら新しくロードする必要ない
-	for (auto& e : file_list_)
+	for (auto& e : file_collection_)
 	{
 		if (e.pass_ == file_pass)
+		{
 			*file = e;
+			return;
+		}
 	}
 
 	// サウンドファイルをメモリにロードする
-	file_list_.push_front(empty_file);
-	it = file_list_.begin();
+	file_collection_.push_front(empty_file);
+	it = file_collection_.begin();
 	it->id_ = LoadSoundMem(file_pass.c_str());
 	it->pass_ = file_pass;
 
@@ -69,19 +87,19 @@ void NyaSound::Play(const SoundProperty* sp)
 	if (sp == nullptr)
 		return;
 
-	play_deque_.push_back(*sp);
+	play_collection_.push_back(*sp);
 }
 
 
 void NyaSound::Run(void)
 {
-	static SoundProperty* sp;
+	SoundProperty* sp;
 
-	while (!play_deque_.empty())
+	while (!play_collection_.empty())
 	{
-		sp = &play_deque_.front();
+		sp = &play_collection_.front();
 		PlaySoundMem(sp->sound_file_.id_, DX_PLAYTYPE_BACK, sp->loop_);
-		play_deque_.pop_front();
+		play_collection_.pop_front();
 	}
 }
 

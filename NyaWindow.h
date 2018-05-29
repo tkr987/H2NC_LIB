@@ -7,14 +7,11 @@
 
 namespace H2NLIB
 {
-
-	class NyaDesign;
 	class NyaDevice;
 	class NyaEffect;
 	class NyaInput;
 	class NyaMission;
 	class NyaPosition;
-	class NyaSound;
 	class NyaTarget;
 	class NyaUser;
 
@@ -46,7 +43,6 @@ namespace H2NLIB
 		eEVENT event_;
 		std::string title_;
 		ChildMission child_mission_;
-		NyaDesign* nya_design_;
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
 		NyaPosition* nya_position_;

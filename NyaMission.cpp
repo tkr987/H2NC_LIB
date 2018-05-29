@@ -1,8 +1,8 @@
 #include "DxLib.h"
 #include "NyaBackground.h"
 #include "NyaEnum.h"
-#include "NyaDesign.h"
 #include "NyaGraphic.h"
+#include "NyaInterface.h"
 #include "NyaInput.h"
 #include "NyaMission.h"
 #include "NyaPosition.h"
@@ -33,7 +33,7 @@ NyaMission::~NyaMission()
 }
 
 /**
-@brief Backgroundを子オブジェクトとして追加する関数
+@brief backgroundを子オブジェクトとして追加する関数
 @param background 加えたいbackgroundを定義したクラス
 @note
  既に前ミッションで追加された内容がある場合、それらは破棄されて新規に内容が追加される。
@@ -66,6 +66,8 @@ void NyaMission::AddChild(int start_time_sec, int end_time_sec, NyaTarget* targe
 	// そうでなければ、sz - size()個だけオブジェクトcのコピーを追加する。
 	// https://cpprefjp.github.io/reference/vector/resize.html
 	// size以下の値についての挙動に自信がないので、size以下の内容をtempにコピーしてからリサイズすることにした
+	// 新しいミッションになる毎にmission_target_collection_を自動的に空にすれば簡単に実装できるが、
+	// 他のAddChild()と仕様を合わせることにした
 	//************************************************************************************************************
 	if (size < id + 1)
 	{
@@ -92,10 +94,10 @@ void NyaMission::AddChild(int start_time_sec, int end_time_sec, NyaTarget* targe
 }
 
 /**
-@brief userを子オブジェクトとして追加する関数
-@param user 加えたいuserを定義したクラス
-@note
- 既に前ミッションで追加された内容がある場合、それらは破棄されて新規に内容が追加される。
+ @brief userを子オブジェクトとして追加する関数
+ @param user 加えたいuserを定義したクラス
+ @note
+  既に前ミッションで追加された内容がある場合、それらは破棄されて新規に内容が追加される。
 **/
 void NyaMission::AddChild(NyaUser* user)
 {
@@ -135,29 +137,27 @@ void NyaMission::Run(eEVENT check_event)
 		break;
 	case eEVENT::MISSION_RUN:
 		count_frame_++;
-	case eEVENT::MISSION_CONTINUE:
-	case eEVENT::MISSION_CLEAR:
-	case eEVENT::MISSION_ALL_CLEAR:
-		//background_->Run(check_event);
-		user_->Run(check_event);
-		for (auto& e : mission_target_collection_)
-		{
-			if (e->start_frame_ <= count_frame_ && count_frame_ < e->end_frame_)
-			{
-				e->target_->Run(check_event);
-			}
-
-		}
 		break;
 	case eEVENT::MISSION_DELETE:
 		Delete();
 		break;
-	case eEVENT::MISSION_FINALIZE:
-	case eEVENT::MISSION_REPLAY_FINALIZE:
-		NyaDesign::Init();
-		NyaGraphic::Clear();
-		NyaPosition::Init();
-		break;
+	}
+
+	if (background_ != nullptr)
+		background_->Run(check_event);
+
+
+	if (user_ != nullptr)
+		user_->Run(check_event);
+
+
+	for (auto& e : mission_target_collection_)
+	{
+		if (e->start_frame_ <= count_frame_ && count_frame_ < e->end_frame_)
+		{
+			e->target_->Run(check_event);
+		}
+
 	}
 
 }

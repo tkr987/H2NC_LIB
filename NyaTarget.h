@@ -7,7 +7,7 @@ namespace H2NLIB
 
 	//****************************************************************************************
 	// class NyaTarget
-	// たいていの場合、MissionCreate(), MissionRun()は必須なので純粋仮想関数になっている。
+	// たいていの場合、MissionRun()は必須なので純粋仮想関数になっている。
 	// 他の仮想関数は必要に応じて定義すること。
 	//****************************************************************************************
 	class NyaTarget {
@@ -16,8 +16,6 @@ namespace H2NLIB
 		virtual ~NyaTarget(){}
 		virtual void MissionClear(void){}
 		virtual void MissionContinue(void){}
-		virtual void MissionCreate(void) = 0;
-		virtual void MissionDelete(void){}
 		virtual void MissionRun(void) = 0;
 		void Run(eEVENT check_event);
 	};

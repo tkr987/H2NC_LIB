@@ -138,6 +138,7 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 	// ロードする画像ファイルの分割サイズを計算
 	check_graphic_handle = LoadGraph(file_pass.c_str());
 	GetGraphSize(check_graphic_handle, &check_size_x, &check_size_y);
+
 	check_size_x /= div_x;
 	check_size_y /= div_y;
 	DeleteGraph(check_graphic_handle);
@@ -151,6 +152,8 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 	it->div_x_ = div_x;
 	it->div_y_ = div_y;
 	it->pass_ = file_pass;
+	it->size_x_ = check_size_x;
+	it->size_y_ = check_size_y;
 
 	// ロード結果を返す
 	*file = *it;
@@ -308,11 +311,8 @@ void NyaGraphic::Run(void)
 {
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
 
-	// 振動処理
-	for (eOBJECT group = eOBJECT::enum_zero; group != eOBJECT::sizeof_enum; ++group)
-	{
-		DrawAll(group);		
-	}
+	for (eOBJECT layer = eOBJECT::enum_zero; layer != eOBJECT::sizeof_enum; ++layer)
+		DrawAll(layer);		
 
 #ifdef __DEBUG__
 	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
@@ -324,8 +324,6 @@ void NyaGraphic::Run(void)
 /**
 @brief 全てのグラフィックデータを描画する関数
 @param layer 描画するレイヤー
-@param swing_x x軸方向振動幅
-@param swing_y y軸方向振動幅
 **/
 void NyaGraphic::DrawAll(eOBJECT draw_layer)
 {
@@ -345,7 +343,8 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	static GraphicProperty6b* gpx6b;
 	static GraphicProperty7b* gpx7b;
 	static GraphicProperty8b* gpx8b;
-	static int layer = static_cast<int>(draw_layer);
+	// static int layer = static_cast<int>(draw_layer);
+	int layer = static_cast<int>(draw_layer);
 
 	// 振動処理（未実装）
 	int swing_x = 0;

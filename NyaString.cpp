@@ -8,17 +8,6 @@ using namespace H2NLIB;
 deque<StringOutput> NyaString::string_output_deque_;
 map<string, int> NyaString::font_map_;
 
-NyaString::NyaString()
-{
-
-}
-
-
-NyaString::~NyaString()
-{
-
-}
-
 void NyaString::SettingFont(std::string font_name, int font_size, int font_thick)
 {
 	auto it = font_map_.find(font_name);
@@ -104,6 +93,25 @@ void NyaString::Write(string font, std::tuple<int, int, int> color, int grid_x, 
 	string_output_deque_.push_back(so);
 }
 
+void H2NLIB::NyaString::Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, unsigned int value)
+{
+	StringOutput so;
+
+	so.color_ = GetColor(get<0>(color), get<1>(color), get<2>(color));
+	try { so.font_ = font_map_.at(font); } catch(std::out_of_range&) { return; }
+	so.x_ = grid_x;
+	so.y_ = grid_y;
+	get<0>(so.write_string_) = false;
+	get<0>(so.write_value_int_) = false;
+	get<0>(so.write_value_double_) = false;
+	get<0>(so.write_value_string_) = false;
+	get<0>(so.write_value_unsigned_int_) = true;
+	get<1>(so.write_value_unsigned_int_) = str;
+	get<2>(so.write_value_unsigned_int_) = value;
+
+	string_output_deque_.push_back(so);
+}
+
 
 void NyaString::Run(void)
 {
@@ -125,6 +133,10 @@ void NyaString::Run(void)
 		{
 			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_string_).c_str(), get<2>(so.write_value_string_).c_str());
 		}
+		else if (get<0>(so.write_value_unsigned_int_)) 
+		{
+			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_unsigned_int_).c_str(), get<2>(so.write_value_unsigned_int_));
+		} 
 		else
 		{
 			DrawStringToHandle(so.x_, so.y_, get<1>(so.write_string_).c_str(), so.color_, so.font_);

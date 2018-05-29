@@ -15,13 +15,7 @@ namespace H2NLIB
 	public:
 		int id_;
 		std::string pass_;
-		SoundFile& operator=(const SoundFile& file)
-		{
-			id_ = file.id_;
-			pass_.clear();
-			pass_ = file.pass_;
-			return *this;
-		}
+		SoundFile& operator=(const SoundFile& file);
 	};
 
 	class SoundProperty
@@ -33,26 +27,22 @@ namespace H2NLIB
 		{
 			loop_ = false;
 		}
-		SoundProperty& operator=(SoundProperty& sp)
-		{
-			loop_ = sp.loop_;
-			sound_file_ = sp.sound_file_;
-		}
+		SoundProperty& operator=(SoundProperty& sp);
 	};
 
 	class NyaSound
 	{
 	public:
-		NyaSound();
-		~NyaSound();
-		static void ChangeVolume(SoundProperty* sp, int volume);
+		NyaSound(){}
+		~NyaSound(){}
+		static void ChangeVolume(SoundFile* file, int volume);
 		static void DeleteSoundFile(SoundFile* file);
 		static void LoadSoundFile(std::string pass, SoundFile* file);
 		static void Play(const SoundProperty* sp);
 		static void Run(void);
 	private:
-		static std::list<SoundFile> file_list_;
-		static std::deque<SoundProperty> play_deque_;
+		static std::list<SoundFile> file_collection_;
+		static std::deque<SoundProperty> play_collection_;
 	};
 
 }

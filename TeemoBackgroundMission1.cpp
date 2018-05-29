@@ -5,7 +5,6 @@
 using namespace H2NLIB;
 
 
-
 TeemoBackgroundMission1::TeemoBackgroundMission1()
 {
 	gp_ = new GraphicProperty1;
@@ -17,7 +16,19 @@ TeemoBackgroundMission1::TeemoBackgroundMission1()
 
 TeemoBackgroundMission1::~TeemoBackgroundMission1()
 {
+	NyaGraphic::DeleteGraphicFile(&gp_->graphic_file_);
 	delete gp_;
+}
+
+void TeemoBackgroundMission1::MissionRun(void)
+{
+	Act();
+	Draw();
+}
+
+void TeemoBackgroundMission1::MissionContinue(void)
+{
+	Draw();
 }
 
 

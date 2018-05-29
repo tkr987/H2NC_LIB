@@ -5,7 +5,6 @@
 
 namespace H2NLIB
 {
-	class NyaDesign;
 	class NyaDevice;
 	class NyaEffect;
 	class NyaPosition;
@@ -49,13 +48,10 @@ public:
 
 class UserAI : public H2NLIB::NyaUser {
 public:
-	void Act(void);
-	void Draw(void);
-	void GameEnd(void);
-	void GameStart(void);
+	UserAI();
+	void MissionRun(void);
 private:
-	long count_;
-	H2NLIB::NyaDesign* nya_design_;
+	unsigned int count_frame_;
 	H2NLIB::NyaDevice* nya_device_;
 	H2NLIB::NyaEffect* nya_effect_;
 	H2NLIB::NyaPosition* nya_position_;
@@ -65,5 +61,7 @@ private:
 	UserAiMain main_;
 	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
 	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
+	void Act(void);
+	void Draw(void);
 };
 

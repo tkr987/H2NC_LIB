@@ -31,8 +31,6 @@ namespace H2NLIB
 	public:
 		NyaMission();
 		virtual ~NyaMission();
-		virtual void Create(void) = 0;		// eEVENT::MISSION_CLEATEで実行される
-		virtual void Delete(void){}			// eEVENT::MISSION_DELETEで実行される
 		void AddChild(NyaBackground* background);
 		void AddChild(int start_time_sec, int end_time_sec, NyaTarget* target, unsigned int id);
 		void AddChild(NyaUser* user);
@@ -40,6 +38,19 @@ namespace H2NLIB
 		void DeleteTarget(void);
 		void DeleteUser(void);
 		void Run(eEVENT check_event);
+		/**
+		 @brief ミッション作成イベントで実行する処理を定義する関数
+		 @note
+		  eEVENT::MISSION_CREATEで実行される
+		**/
+		virtual void Create(void) = 0;
+		/**
+		 @brief ミッション削除イベントで実行する処理を定義する関数
+		 @note
+		  eEVENT::MISSION_DELETEで実行される
+		  Delete()の定義で処理を何も書かなかった場合、前のミッションのデータが引き継がれる
+		**/
+		virtual void Delete(void) = 0;
 	private:
 		// eEVENT::MISSION_RUNの状態のフレーム数をカウントする
 		// UINT_MAXを超えるミッションは正常動作しないので注意

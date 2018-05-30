@@ -113,7 +113,7 @@ void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicPr
 	*it_from->gadget_dp_ = *gadget_dp;
 	*it_from->gadget_gp_ = *gadget_gp;
 	it_from->gadget_ph_->collision_hit_ = false;
-	it_from->gadget_ph_->collision_pow_ = gadget_dp->collision_pow_;
+	it_from->gadget_ph_->collision_damage_ = gadget_dp->collision_pow_;
 	it_from->gadget_ph_->collision_range_ = gadget_dp->collision_range_;
 	it_from->gadget_ph_->grid_x_ = gadget_dp->create_x_;
 	it_from->gadget_ph_->grid_y_ = gadget_dp->create_y_;
@@ -142,7 +142,7 @@ void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProper
 	*it_from->gadget_dp_ = *gadget_dp;
 	*it_from->gadget_gp_ = *gadget_gp;
 	it_from->gadget_ph_->collision_hit_ = false;
-	it_from->gadget_ph_->collision_pow_ = gadget_dp->collision_pow_;
+	it_from->gadget_ph_->collision_damage_ = gadget_dp->collision_pow_;
 	it_from->gadget_ph_->collision_range_ = gadget_dp->collision_range_;
 	it_from->gadget_ph_->grid_x_ = gadget_dp->create_x_;
 	it_from->gadget_ph_->grid_y_ = gadget_dp->create_y_;

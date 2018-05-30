@@ -24,9 +24,9 @@ namespace H2NLIB
 		GraphicFile& operator=(const GraphicFile& file);
 	};
 
-	// ********************************
+	//*********************************
 	// Ç±Ç±Ç©ÇÁgraphic propertyÇÃíËã`
-	// ********************************
+	//*********************************
 
 	// DXLIB í èÌï`âÊä÷êîÇ…ëŒâû
 	// int DrawGraph( int x, int y, int GrHandle, int TransFlag ) ;
@@ -43,15 +43,7 @@ namespace H2NLIB
 			file_div_ = 0;
 			flag_trans_ = true;
 		}
-		GraphicProperty1& operator=(const GraphicProperty1& gp)
-		{
-			draw_grid_x_ = gp.draw_grid_x_;
-			draw_grid_y_ = gp.draw_grid_y_;
-			file_div_ = gp.file_div_;
-			flag_trans_ = gp.flag_trans_;
-			graphic_file_ = gp.graphic_file_;
-			return *this;
-		}
+		GraphicProperty1& operator=(const GraphicProperty1& gp);
 	};
 
 	// DXLIB LRîΩì]ï`âÊä÷êîÇ…ëŒâû
@@ -131,18 +123,7 @@ namespace H2NLIB
 			flag_turn_ = false;
 			flag_trans_ = true;
 		}
-		GraphicProperty4& operator=(const GraphicProperty4& gp)
-		{
-			draw_angle_ = gp.draw_angle_;
-			draw_grid_cx_ = gp.draw_grid_cx_;
-			draw_grid_cy_ = gp.draw_grid_cy_;
-			extend_rate_ = gp.extend_rate_;
-			file_div_ = gp.file_div_;
-			flag_turn_ = gp.flag_turn_;
-			flag_trans_ = gp.flag_trans_;
-			graphic_file_ = gp.graphic_file_;
-			return *this;
-		}
+		GraphicProperty4& operator=(const GraphicProperty4& gp);
 
 	};
 
@@ -363,7 +344,7 @@ namespace H2NLIB
 		int blend_mode_;
 	};
 
-	class DrawDequeSet {
+	class GraphicDrawSet {
 	public:
 		std::deque<GraphicProperty1> gp1_deque_;
 		std::deque<GraphicProperty2> gp2_deque_;
@@ -423,7 +404,7 @@ namespace H2NLIB
 		static void Run(void);
 	private:
 		static std::list<GraphicFile> file_collection_;
-		static std::vector<DrawDequeSet> layer_collection_;
+		static std::vector<GraphicDrawSet> layer_collection_;
 		static void DrawAll(eOBJECT layer);
 		static double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
 		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }

@@ -20,8 +20,7 @@ void TeemoMission1::Create(void)
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	//AddChTarget(1, 30, teemo_target);
-	//AddChild(5, 600, new TargetExTeemo, id++);
+	AddChild(5, 600, new TargetExTeemo, id++);
 
 	//**************************************
 	// ユーザーを子オブジェクトとして追加

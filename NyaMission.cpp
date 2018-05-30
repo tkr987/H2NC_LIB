@@ -73,7 +73,7 @@ void NyaMission::AddChild(int start_time_sec, int end_time_sec, NyaTarget* targe
 	{
 		temp_collection.resize(mission_target_collection_.size());
 		copy(mission_target_collection_.begin(), mission_target_collection_.end(), temp_collection.begin());
-		mission_target_collection_.resize(id);
+		mission_target_collection_.resize(id + 1);
 		copy(temp_collection.begin(), temp_collection.end(), mission_target_collection_.begin());
 		
 		// target‚ð“o˜^‚·‚é

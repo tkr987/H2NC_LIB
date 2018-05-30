@@ -91,15 +91,14 @@ UserAI::UserAI(void)
 	main_.gp_->draw_angle_ = 90;
 	main_.ph_->health_max_ = 1;
 	main_.ph_->health_now_ = 1;
-	main_.ph_->collision_pow_ = 1;
+	main_.ph_->collision_damage_ = 1;
 	main_.ph_->collision_range_ = 20;
 	main_.ph_->grid_x_ = 100;
 	main_.ph_->grid_y_ = 500;
-	nya_position_->Regist(main_.ph_);
 
 	// 衝突判定設定
-	nya_position_->SettingCollision(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
-	nya_position_->SettingCollision(eOBJECT::TARGET_ATTACK1, eOBJECT::USER1);
+	NyaPosition::CollisionSetting(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
+	NyaPosition::CollisionSetting(eOBJECT::TARGET_ATTACK1, eOBJECT::USER1);
 
 	// デバッグ
 	NyaString::SettingFont("teemo_font", 10, 2);

@@ -43,11 +43,10 @@ TargetExTeemo::TargetExTeemo(void)
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->graphic_file_);
 	main_.ph_->health_max_ = 100;
 	main_.ph_->health_now_ = 100;
-	main_.ph_->collision_pow_ = 1;
+	main_.ph_->collision_damage_ = 1;
 	main_.ph_->collision_range_ = 20;
 	main_.ph_->grid_x_ = 300;
 	main_.ph_->grid_y_ = 200;
-	nya_position_->Regist(main_.ph_);
 }
 
 TargetExTeemo::~TargetExTeemo(void)

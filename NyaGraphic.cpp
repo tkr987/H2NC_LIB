@@ -11,7 +11,7 @@ using namespace std;
 using namespace H2NLIB;
 
 std::list<GraphicFile> NyaGraphic::file_collection_;
-std::vector<DrawDequeSet> NyaGraphic::layer_collection_(static_cast<int>(eOBJECT::sizeof_enum));
+std::vector<GraphicDrawSet> NyaGraphic::layer_collection_(static_cast<int>(eOBJECT::sizeof_enum));
 
 //***************************
 // class GraphicFile
@@ -32,26 +32,59 @@ GraphicFile& GraphicFile::operator=(const GraphicFile& file)
 	return *this;
 }
 
+//***************************
+// class GraphicProperty
+//***************************
+
+GraphicProperty1& GraphicProperty1::operator=(const GraphicProperty1& gp)
+{
+	draw_grid_x_ = gp.draw_grid_x_;
+	draw_grid_y_ = gp.draw_grid_y_;
+	file_div_ = gp.file_div_;
+	flag_trans_ = gp.flag_trans_;
+	graphic_file_ = gp.graphic_file_;
+	return *this;
+}
+
+GraphicProperty4& GraphicProperty4::operator=(const GraphicProperty4& gp)
+{
+	draw_angle_ = gp.draw_angle_;
+	draw_grid_cx_ = gp.draw_grid_cx_;
+	draw_grid_cy_ = gp.draw_grid_cy_;
+	extend_rate_ = gp.extend_rate_;
+	file_div_ = gp.file_div_;
+	flag_turn_ = gp.flag_turn_;
+	flag_trans_ = gp.flag_trans_;
+	graphic_file_ = gp.graphic_file_;
+	return *this;
+}
+
 //**********************
 // class NyaGraphic
 //**********************
 
 NyaGraphic::NyaGraphic()
 {
-	static bool first_call = true;
 
-	if (first_call)
-	{
-#ifdef __DEBUG__
-		NyaString::SettingFont("debug_image_font", 15, 2);
-#endif
-		first_call = false;
-	}
 }
 
 NyaGraphic::~NyaGraphic()
 {
 	Clear();
+}
+
+void NyaGraphic::Clear(void)
+{
+	for (auto& e : file_collection_)
+	{
+		for (auto& e2 : e.div_collection_)
+			DeleteGraph(e2);
+		e.div_collection_.clear();
+	}
+
+	file_collection_.clear();
+	for (auto& e : layer_collection_)
+		e.Clear();
 }
 
 void NyaGraphic::DeleteGraphicFile(GraphicFile* file)
@@ -293,20 +326,6 @@ void NyaGraphic::Draw(GraphicProperty4b *gp, eOBJECT layer)
 	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gp);
 }
 
-void NyaGraphic::Clear(void)
-{
-	for (auto& e : file_collection_)
-	{
-		for (auto& e2 : e.div_collection_)
-			DeleteGraph(e2);
-		e.div_collection_.clear();
-	}
-
-	file_collection_.clear();
-	for (auto& e : layer_collection_)
-		e.Clear();
-}
-
 void NyaGraphic::Run(void)
 {
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
@@ -327,23 +346,22 @@ void NyaGraphic::Run(void)
 **/
 void NyaGraphic::DrawAll(eOBJECT draw_layer)
 {
-	static GraphicProperty1* gp1;
-	static GraphicProperty2* gp2;
-	static GraphicProperty3* gp3;
-	static GraphicProperty4* gp4;
-	static GraphicProperty5* gpx5;
-	static GraphicProperty6* gpx6;
-	static GraphicProperty7* gpx7;
-	static GraphicProperty8* gpx8;
-	static GraphicProperty1b* gpx1b;
-	static GraphicProperty2b* gpx2b;
-	static GraphicProperty3b* gpx3b;
-	static GraphicProperty4b* gpx4b;
-	static GraphicProperty5b* gpx5b;
-	static GraphicProperty6b* gpx6b;
-	static GraphicProperty7b* gpx7b;
-	static GraphicProperty8b* gpx8b;
-	// static int layer = static_cast<int>(draw_layer);
+	GraphicProperty1* gp1;
+	GraphicProperty2* gp2;
+	GraphicProperty3* gp3;
+	GraphicProperty4* gp4;
+	GraphicProperty5* gpx5;
+	GraphicProperty6* gpx6;
+	GraphicProperty7* gpx7;
+	GraphicProperty8* gpx8;
+	GraphicProperty1b* gpx1b;
+	GraphicProperty2b* gpx2b;
+	GraphicProperty3b* gpx3b;
+	GraphicProperty4b* gpx4b;
+	GraphicProperty5b* gpx5b;
+	GraphicProperty6b* gpx6b;
+	GraphicProperty7b* gpx7b;
+	GraphicProperty8b* gpx8b;
 	int layer = static_cast<int>(draw_layer);
 
 	// êUìÆèàóùÅiñ¢é¿ëïÅj

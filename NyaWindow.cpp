@@ -66,14 +66,14 @@ int NyaWindow::Init(string title)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("H2NC++LIB v67");		// タイトル
-	ChangeWindowMode(true);					// ウィンドウモード
-	SetGraphMode(1280, 720, 32);			// 画面サイズ, 色数
-	if (DxLib_Init() == -1)					// 初期化
-		return -1;							//
-	SetAlwaysRunFlag(true);					// 非アクティブ状態でも動作させる
-	SetUseDivGraphFlag(false);				// グラフィック描画分割方法
-	SetDrawScreen(DX_SCREEN_BACK);			// 描画先グラフィック領域の指定
+	SetMainWindowText("Happy 2 Nya C++ DXLIB wrapper v67");		// タイトル
+	ChangeWindowMode(true);										// ウィンドウモード
+	SetGraphMode(1280, 720, 32);								// 画面サイズ, 色数
+	if (DxLib_Init() == -1)										// 初期化
+		return -1;												//
+	SetAlwaysRunFlag(true);										// 非アクティブ状態でも動作させる
+	SetUseDivGraphFlag(false);									// グラフィック描画分割方法
+	SetDrawScreen(DX_SCREEN_BACK);								// 描画先グラフィック領域の指定
 
 	// コンストラクタでDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にインスタンスを生成する必要がある。
@@ -292,52 +292,36 @@ void NyaWindow::SaveReplay(void)
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay1.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 	y += 100;
 	ifs.open("replay/repay2.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay2.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 	y += 100;
 	ifs.open("replay/repay3.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay3.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	y += 100;
 	ifs.close();
 	ifs.open("replay/repay4.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay4.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 
 	//************
@@ -408,52 +392,36 @@ void NyaWindow::Title(void)
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay1.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 	y += 100;
 	ifs.open("replay/repay2.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay2.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 	y += 100;
 	ifs.open("replay/repay3.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay3.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 	y += 100;
 	ifs.open("replay/repay4.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
 	if (ifs.is_open())
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay4.rep");
-	}
 	else
-	{
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	}
 	ifs.close();
 
 	//******************

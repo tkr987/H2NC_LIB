@@ -4,7 +4,7 @@
 
 namespace H2NLIB
 {
-	class DeviceProperty1;
+	class GraphicProperty1;
 }
 
 class TeemoBackgroundMission1 : public H2NLIB::NyaBackground

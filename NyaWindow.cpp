@@ -43,12 +43,10 @@ NyaWindow::~NyaWindow()
 }
 
 /**
-@brief ミッションを追加する関数
-@param mission 追加するミッション
-@note
- NyaWindowの子オブジェクトとしてミッションが追加される。
- 子オブジェクトは親オブジェクト(NyaWindow)がdeleteされるときに自動的に削除されるが、
- ライブラリ使用者自身で削除したい場合はNyaWindow::Delete()を使う。
+ @brief ミッションを追加する関数
+ @param mission 追加するミッション
+ @note
+  NyaWindowの子オブジェクトとしてミッションが追加される。
 **/
 void NyaWindow::AddChild(NyaMission* mission)
 {
@@ -58,10 +56,10 @@ void NyaWindow::AddChild(NyaMission* mission)
 
 
 /**
-@brief 初期化関数
-@param name タイトルの設定
-@note
- 必ず最初に一度呼び出すこと。
+ @brief 初期化関数
+ @param name タイトルの設定
+ @note
+  必ず最初に一度呼び出すこと
 **/
 int NyaWindow::Init(string title)
 {
@@ -92,34 +90,33 @@ int NyaWindow::Init(string title)
 	return 0;
 }
 
-
+/**
+ @brief 実行関数
+ @note
+  ライブラリの全ての処理が実行される
+  よって、ライブラリ使用者はmain関数で必ず呼び出す必要がある
+**/
 void NyaWindow::Run(void)
 {
-	static tuple<int, int, int> white = make_tuple(255, 255, 255);
-	static std::chrono::system_clock::time_point debug_time_start, debug_time_end;
-	static long long debug_time_msec;
+	tuple<int, int, int> white = make_tuple(255, 255, 255);
+	std::chrono::system_clock::time_point debug_time_start, debug_time_end;
+	long long debug_time_msec;
 
-
-	// *********************************************************
-	// 各イベント処理
-	// イベントの変更はNyaWindow::RunEventUpdate()でおこなう
-	// *********************************************************
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
-		// ***********************
+		//***********************
 		// NyaWindow メンバ関数
-		// タイトル処理
+		// タイトル画面
 		// ミッション処理
-		// リプレイの保存
-		// ***********************
+		// リプレイ保存
+		//***********************
 		Title();
 		Mission();
 		SaveReplay();
 
-
-		// ******************
-		// 他クラスの処理
-		// ******************
+		//*******************
+		// ライブラリの処理
+		//*******************
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
@@ -177,28 +174,31 @@ void NyaWindow::Run(void)
 		NyaString::Run();
 #endif
 
-		// *************
-		// 画面更新
-		// *************
+		//**********************************
+		// 画面更新とフレームレートの処理
+		//**********************************
 		ScreenFlip();
 		ClearDrawScreen();
-
-		// ***********************
-		// NyaWindow メンバ関数
-		// イベント更新
-		// フレーム時間を待つ
-		// ***********************
-		UpdateEvent();
 		WaitFPS(1180, 660);
 	}
 
 }
 
-
+/**
+ @param ミッションの処理をする関数
+ @note
+  ミッションが登録されてない場合は何もしないでタイトルに戻る
+**/
 void NyaWindow::Mission(void)
 {
+	InterfaceHandleMissionClear* ihandle_mission_clear;
+	InterfaceHandleMissionEx* ihandle_mission_ex;
+
 	if (!child_mission_.valid_)
+	{
+		event_ = eEVENT::TITLE;
 		return;
+	}
 
 	// イベント毎にミッションの子オブジェクトであるuser, target, backgraoundの処理をおこなう
 	if (child_mission_.index_ < child_mission_.mission_collection_.size())
@@ -206,22 +206,54 @@ void NyaWindow::Mission(void)
 
 	switch (event_) 
 	{	// インデックスの更新
-	case eEVENT::MISSION_INITIALIZE:
-	case eEVENT::MISSION_REPLAY_INITIALIZE:
+	case eEVENT::TITLE:
+		// 現実的には最低でも1フレームはタイトル画面にいるのでindexは必ず更新される
 		child_mission_.index_ = 0;
 		break;
 	case eEVENT::MISSION_DELETE:
 	case eEVENT::MISSION_REPLAY_DELETE:
-			child_mission_.index_++;
+		child_mission_.index_++;
+		break;
+	}
+
+	switch (event_) 
+	{	// イベントの更新
+	case eEVENT::MISSION_CREATE:
+		event_ = eEVENT::MISSION_RUN;
+		break;
+	case eEVENT::MISSION_RUN:
+		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
+		if (ihandle_mission_clear->valid_)
+			event_ = eEVENT::MISSION_CLEAR;
+		break;
+	case eEVENT::MISSION_CONTINUE:
+		break;
+	case eEVENT::MISSION_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+			event_ = eEVENT::MISSION_DELETE;
+		break;
+	case eEVENT::MISSION_DELETE:
+		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
+		ihandle_mission_clear->valid_ = false;
+		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+		ihandle_mission_ex->valid_ = false;
+		if (child_mission_.index_ < child_mission_.mission_collection_.size())
+			event_ = eEVENT::MISSION_CREATE;
+		else
+			event_ = eEVENT::REPLAY_SAVE;
+		break;
+	case eEVENT::MISSION_FINALIZE:
+		event_ = eEVENT::TITLE;
 		break;
 	}
 }
 
 /**
-@param リプレイの保存をする関数
-@note
- フォントはタイトル画面を流用
-**/void NyaWindow::SaveReplay(void)
+ @param リプレイの保存をする関数
+ @note
+  フォントはタイトル画面を流用
+**/
+void NyaWindow::SaveReplay(void)
 {
 	string pass;
 	int x, y;
@@ -233,9 +265,9 @@ void NyaWindow::Mission(void)
 	if (event_ != eEVENT::REPLAY_SAVE)
 		return;
 
-	// ************
+	//************
 	// 選択
-	// ************
+	//************
 	if (NyaInput::IsPressKey(eINPUT::DOWN))
 		select = (select == 5) ? 1 : select + 1;
 	if (NyaInput::IsPressKey(eINPUT::UP))
@@ -245,16 +277,16 @@ void NyaWindow::Mission(void)
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
 
-	// ************
+	//************
 	// タイトル
-	// ************
+	//************
 	x = 60;
 	y = 100;
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "SAVE REPLAY");
 
-	// ************
+	//************
 	// リプレイ
-	// ************
+	//************
 	y += 100;
 	ifs.open("replay/repay1.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
@@ -308,9 +340,9 @@ void NyaWindow::Mission(void)
 	}
 	ifs.close();
 
-	// ************
+	//************
 	// 終了
-	// ************
+	//************
 	y += 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
@@ -342,35 +374,35 @@ void NyaWindow::Title(void)
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
-	static int select = 1;
+	static int select = 0;
 
 	if (event_ != eEVENT::TITLE)
 		return;
 
-	//************
-	// 選択
-	//************
+	//******************
+	// 選択の表示
+	//******************
 	if (NyaInput::IsPressKey(eINPUT::DOWN))
-		select = (select == 6) ? 1 : select + 1;
+		select = (select == 5) ? 0 : select + 1;
 	if (NyaInput::IsPressKey(eINPUT::UP))
-		select = (select == 1) ? 6 : select - 1;
+		select = (select == 0) ? 5 : select - 1;
 	x = 60;
-	y = select * 100;
+	y = (select + 1) * 100;
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
 
-	//************
-	// タイトル
-	//************
+	//******************
+	// タイトルの表示
+	//******************
 	x = 60;
 	y = 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission title");
 	NyaString::Write("window_title_font", white, x + 70, y, "%s", title_);
 
-	//************
-	// リプレイ
-	//************
+	//***********************
+	// リプレイの有無を表示
+	//***********************
 	y += 100;
 	ifs.open("replay/repay1.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
@@ -424,135 +456,52 @@ void NyaWindow::Title(void)
 	}
 	ifs.close();
 
-	//************
-	// 終了
-	//************
+	//******************
+	// 終了の表示
+	//******************
 	y += 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
 
-	//*****************
-	// 選択の決定
-	//*****************
+	//***********************
+	// 選択が決定された
+	//***********************
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
-	{
+	{	
+		// リプレイの実行
 		if (select == 1)
-		{
-			event_ = eEVENT::MISSION_INITIALIZE;
-		}
-		else if (select == 2)
-		{
 			NyaInput::InputFile("replay/replay1.rep");
-			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
-		}
-		else if (select == 3)
-		{
+		else if (select == 2)
 			NyaInput::InputFile("replay/replay2.rep");
-			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
-		}
-		else if (select == 4)
-		{
+		else if (select == 3)
 			NyaInput::InputFile("replay/replay3.rep");
-			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
-		}
-		else if (select == 5)
-		{
+		else if (select == 4)
 			NyaInput::InputFile("replay/replay4.rep");
 
-
-			event_ = eEVENT::MISSION_REPLAY_INITIALIZE;
-		}
-		else 
-		{
-			event_ = eEVENT::WINDOW_CLOSE;
-		}
-	}
-}
-
-
-void NyaWindow::UpdateEvent(void)
-{
-	InterfaceHandleMissionClear* ihandle_mission_clear;
-	
-	switch (event_) 
-	{
-	case eEVENT::MISSION_INITIALIZE:
-		event_ = eEVENT::MISSION_CREATE;
-		break;
-	case eEVENT::MISSION_CREATE:
-		event_ = eEVENT::MISSION_RUN;
-		break;
-	case eEVENT::MISSION_RUN:
-		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-		if (ihandle_mission_clear->valid_)
-			event_ = eEVENT::MISSION_CLEAR;
-		break;
-	case eEVENT::MISSION_CONTINUE:
-		break;
-	case eEVENT::MISSION_CLEAR:
-		if (NyaInput::IsPressKey(eINPUT::ENTER))
-		{
-			ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-			ihandle_mission_clear->valid_ = false;
-			event_ = eEVENT::MISSION_DELETE;
-		}
-		break;
-	case eEVENT::MISSION_DELETE:
-		if (child_mission_.index_ + 1 != child_mission_.mission_collection_.size())
-		{
-			event_ = eEVENT::REPLAY_SAVE;
-		}
-		else
-		{
-			event_ = eEVENT::MISSION_DELETE;
-		}
-		break;
-	case eEVENT::MISSION_FINALIZE:
-		event_ = eEVENT::TITLE;
-		break;
-	case eEVENT::MISSION_REPLAY_INITIALIZE:
-		event_ = eEVENT::MISSION_REPLAY_CREATE;
-		break;
-	case eEVENT::MISSION_REPLAY_CREATE:
-		event_ = eEVENT::MISSION_REPLAY_RUN;
-		break;
-	case eEVENT::MISSION_REPLAY_RUN:
-		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-		if (ihandle_mission_clear->valid_)
-			event_ = eEVENT::MISSION_REPLAY_CLEAR;
-		break;
-	case eEVENT::MISSION_REPLAY_OVER:
-		break;
-	case eEVENT::MISSION_REPLAY_CLEAR:
-		if (NyaInput::IsPressKey(eINPUT::ENTER))
-		{
-			ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-			ihandle_mission_clear->valid_ = false;
-			event_ = eEVENT::MISSION_REPLAY_DELETE;
-		}
-		break;
-	case eEVENT::MISSION_REPLAY_DELETE:
-		if (child_mission_.index_ + 1 != child_mission_.mission_collection_.size())
-		{
-			event_ = eEVENT::MISSION_REPLAY_FINALIZE;
-		}
-		else
-		{
+		switch (select)
+		{	// イベントの更新
+		case 0:
+			event_ = eEVENT::MISSION_CREATE;
+			break;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
 			event_ = eEVENT::MISSION_REPLAY_CREATE;
+			break;
+		case 5:
+			event_ = eEVENT::WINDOW_CLOSE;
+			break;
 		}
-		break;
-	case eEVENT::MISSION_REPLAY_FINALIZE:
-		event_ = eEVENT::TITLE;
-		break;
 	}
 }
 
 
 
 /**
-@param FPS更新関数
-@note
- フレーム時間を待つ
+ @param FPS更新関数
+ @note
+  フレームレートの処理をする
 **/
 void NyaWindow::WaitFPS(int x, int y)
 {

@@ -12,6 +12,7 @@
 #include "DxLib.h"
 #include "NyaWindow.h"
 #include "TeemoMission1.h"
+#include "TeemoMission2.h"
 
 // H2NC++LIB: happy 2 nya c++ library - DXLIB STGLIB
 
@@ -27,7 +28,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// mission ’Ç‰Á
 	H2NLIB::NyaMission* teemo_mission1 = new TeemoMission1;
 	nya_window->AddChild(teemo_mission1);
-
+	H2NLIB::NyaMission* teemo_mission2 = new TeemoMission2;
+	nya_window->AddChild(teemo_mission2);
 	// ŽÀs
 	nya_window->Run();
 

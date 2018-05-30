@@ -49,7 +49,6 @@ namespace H2NLIB
 		void Mission(void);
 		void SaveReplay(void);
 		void Title(void);
-		void UpdateEvent(void);
 		void WaitFPS(int x, int y);
 	};
 

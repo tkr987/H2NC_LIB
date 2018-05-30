@@ -1,29 +1,32 @@
+#include "NyaInterface.h"
+#include "TeemoBackgroundMission1.h"
 #include "TeemoMission2.h"
 #include "TeemoTarget.h"
 #include "TeemoTargetEx.h"
-#include "NyaTarget.h"
+#include "UserAI.h"
 
 using namespace H2NLIB;
 
 
-TeemoMission2::TeemoMission2()
+void TeemoMission2::Create(void)
 {
+	unsigned int id = 0;
+
+	//*****************************************************
+	// スクロールする背景やBGMを子オブジェクトとして追加
+	//*****************************************************
+	AddChild(new TeemoBackgroundMission1);
+
+	//*******************************************
+	// ターゲットを子オブジェクトとして追加
+	//*******************************************
+	AddChild(5, 600, new TargetExTeemo, id++);
 
 }
 
-
-TeemoMission2::~TeemoMission2()
+void TeemoMission2::Delete(void)
 {
-
-}
-
-void TeemoMission2::Load(void)
-{
-	//NyaTarget* teemo_target = new TeemoTarget;
-	//NyaTarget* teemo_target_ex = new TeemoTargetEx;
-
-	//AddChTarget(3, 180, teemo_target);
-	//AddChTarget(3, 180, teemo_target_ex);
-	//LoadBack("img/back3.png", -430, -2560 + 720, 2560 - 720, 180);
-
+	DeleteBackground();
+	DeleteTarget();
+	DeleteUser();
 }

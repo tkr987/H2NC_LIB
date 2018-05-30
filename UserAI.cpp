@@ -53,8 +53,6 @@ UserAiMain::~UserAiMain()
 	delete ph_;
 }
 
-
-
 UserAI::UserAI(void)
 {
 	nya_device_ = new NyaDevice;
@@ -86,9 +84,9 @@ UserAI::UserAI(void)
 	NyaGraphic::LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_effect_test2_.gp_->graphic_file_);
 
 	// user ai main property
-	NyaGraphic::LoadGraphicFile(8, 2, "user_ai.png", &main_.gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &main_.gp_->graphic_file_);
 	main_.gp_->extend_rate_ = 0.4;
-	main_.gp_->draw_angle_ = 90;
+	main_.gp_->draw_angle_ = 0;
 	main_.ph_->health_max_ = 1;
 	main_.ph_->health_now_ = 1;
 	main_.ph_->collision_damage_ = 1;
@@ -102,6 +100,11 @@ UserAI::UserAI(void)
 
 	// デバッグ
 	NyaString::SettingFont("teemo_font", 10, 2);
+}
+
+UserAI::~UserAI()
+{
+	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
 }
 
 void UserAI::MissionRun(void)

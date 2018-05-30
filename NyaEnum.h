@@ -15,18 +15,19 @@
 
 namespace H2NLIB
 {
-	// *****************
-	//  入力の種類
-	// *****************
+	//*****************
+	// 入力の種類
+	//*****************
 	enum class eINPUT
 	{ 
-		UP, RIGHT, DOWN, LEFT, Q, W, E, R, SPACE, ENTER, sizeof_enum, 
+		UP, RIGHT, DOWN, LEFT, Q, W, E, R, SPACE, ENTER,
+		sizeof_enum, 
 	};
 
 
-	// **********************
-	//  オブジェクトの種類
-	// **********************
+	//**********************
+	// オブジェクトの種類
+	//**********************
 	enum class eOBJECT 
 	{
 		enum_zero,
@@ -43,33 +44,36 @@ namespace H2NLIB
 	};	
 	eOBJECT& operator++(eOBJECT& object);
 
-	// ************
-	//  イベント
-	// ************
+	//*************
+	// イベント
+	//*************
 	enum class eEVENT
 	{
 		enum_zero,
 		TITLE,
-		MISSION_INITIALIZE, MISSION_CREATE, MISSION_RUN, MISSION_CONTINUE, MISSION_CLEAR, MISSION_DELETE, MISSION_ALL_CLEAR, MISSION_FINALIZE,
-		MISSION_REPLAY_INITIALIZE, MISSION_REPLAY_CREATE, MISSION_REPLAY_RUN, MISSION_REPLAY_OVER, MISSION_REPLAY_CLEAR, MISSION_REPLAY_DELETE, MISSION_REPLAY_ALL_CLEAR, MISSION_REPLAY_FINALIZE,
+		// MISSIONの状態遷移は3パターンある
+		// 1. コンテニューせずクリア
+		// INITIALIZE -> CREATE -> RUN -> CLEAR -> CREATE -> RUN -> ALL_CLEAR -> SAVE_REPLAY -> FINALIZE
+		// 2. コンテニューしてクリア
+		// CREATE -> RUN -> CONTINUE -> CLEAR -> CREATE -> RUN -> ALL_CLEAR -> FINALIZE
+		// 3. コンテニューせず諦める
+		// CREATE -> RUN -> CONTINUE -> OVER -> FINALIZE
+		MISSION_INITIALIZE, MISSION_CREATE, MISSION_RUN, MISSION_CONTINUE, MISSION_OVER, MISSION_CLEAR, MISSION_DELETE, MISSION_ALL_CLEAR, MISSION_FINALIZE,
+		MISSION_REPLAY_CREATE, MISSION_REPLAY_RUN, MISSION_REPLAY_OVER, MISSION_REPLAY_CLEAR, MISSION_REPLAY_DELETE, MISSION_REPLAY_ALL_CLEAR, MISSION_REPLAY_FINALIZE,
 		REPLAY_SAVE,
 		WINDOW_CLOSE,
 		sizeof_enum,
 	};
 
-
-
-	// ************
-	//  スキル
-	// ************
-
+	//************
+	// スキル
+	//************
 	enum class eSKILL
 	{
 			enum_zero, 
 			Q, W, E, R, 
 			sizeof_enum,
 	};
-
 	eSKILL& operator++(eSKILL& enum_skill);
 
 }

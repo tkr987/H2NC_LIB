@@ -1,5 +1,4 @@
 #include "NyaInterface.h"
-#include "NyaGraphic.h"
 #include "TeemoBackgroundMission1.h"
 #include "TeemoMission1.h"
 #include "TeemoTarget.h"

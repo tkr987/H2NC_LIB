@@ -49,6 +49,7 @@ public:
 class UserAI : public H2NLIB::NyaUser {
 public:
 	UserAI();
+	~UserAI();
 	void MissionRun(void);
 private:
 	unsigned int count_frame_;

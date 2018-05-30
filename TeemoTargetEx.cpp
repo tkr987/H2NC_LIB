@@ -32,8 +32,6 @@ TargetExTeemo::TargetExTeemo(void)
 
 	count_frame_ = 0;
 
-	nya_position_ = new NyaPosition;
-
 	// mission warning setting
 	handle_mission_warning = NyaInterface::GetHandleMissionWarning();
 	NyaSound::LoadSoundFile("sound/warning.wav", &handle_mission_warning->sp_->sound_file_);
@@ -58,8 +56,6 @@ TargetExTeemo::~TargetExTeemo(void)
 	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
 	ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
 	NyaSound::DeleteSoundFile(&ihandle_mission_warning->sp_->sound_file_);
-
-	delete nya_position_;
 }
 
 
@@ -89,7 +85,7 @@ void TargetExTeemo::Act(void)
 	}
 
 	// ’Êíˆ—
-	nya_position_->Collision(main_.ph_, eOBJECT::TARGET1);
+	NyaPosition::Collision(main_.ph_, eOBJECT::TARGET1);
 	count_frame_++;
 
 	// ƒwƒ‹ƒX‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çmission clear‚ð•\Ž¦‚·‚é

@@ -5,7 +5,6 @@
 namespace H2NLIB 
 {
 	class NyaDevice;
-	class NyaPosition;
 	class NyaSound;
 	class NyaString;
 	class DeviceProperty1;
@@ -30,7 +29,6 @@ public:
 	void MissionRun(void);
 private:
 	unsigned int count_frame_;
-	H2NLIB::NyaPosition* nya_position_;
 	TargetExTeemoMain main_;
 	void Act(void);
 	void Draw(void);

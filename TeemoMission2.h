@@ -5,8 +5,7 @@
 class TeemoMission2 : public H2NLIB::NyaMission
 {
 public:
-	TeemoMission2();
-	~TeemoMission2();
-	void Load(void);
+	void Create(void);
+	void Delete(void);
 };
 

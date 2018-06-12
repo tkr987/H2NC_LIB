@@ -5,28 +5,28 @@
 #include "NyaSound.h"
 #include "NyaString.h"
 #include "NyaTarget.h"
-#include "TeemoTargetEx.h"
+#include "TeemoTargetEx2.h"
 
 #define __DEBUG__
 
 using namespace std;
 using namespace H2NLIB;
 
-TargetExTeemoMain::TargetExTeemoMain()
+TargetExTeemo2Main::TargetExTeemo2Main()
 {
 	gp_ = new GraphicProperty4;
 	ph_ = new PositionHandle1;
 
 }
 
-TargetExTeemoMain::~TargetExTeemoMain()
+TargetExTeemo2Main::~TargetExTeemo2Main()
 {
 
 	delete gp_;
 	delete ph_;
 }
 
-TargetExTeemo::TargetExTeemo(void)
+TargetExTeemo2::TargetExTeemo2(void)
 {
 	InterfaceHandleMissionWarning* handle_mission_warning;
 
@@ -47,7 +47,7 @@ TargetExTeemo::TargetExTeemo(void)
 	main_.ph_->grid_y_ = 200;
 }
 
-TargetExTeemo::~TargetExTeemo(void)
+TargetExTeemo2::~TargetExTeemo2(void)
 {
 
 	InterfaceHandleMissionWarning* ihandle_mission_warning;
@@ -59,15 +59,15 @@ TargetExTeemo::~TargetExTeemo(void)
 }
 
 
-void TargetExTeemo::MissionRun(void)
+void TargetExTeemo2::MissionRun(void)
 {
 	Act();
 	Draw();
 }
 
-void TargetExTeemo::Act(void)
+void TargetExTeemo2::Act(void)
 {
-	InterfaceHandleMissionClear* ihandle_mission_clear;
+	InterfaceHandleMissionAllClear* ihandle_mission_all_clear;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 	InterfaceHandleMissionWarning* ihandle_mission_warning;
 
@@ -91,13 +91,13 @@ void TargetExTeemo::Act(void)
 	// ƒwƒ‹ƒX‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çmission clear‚ð•\Ž¦‚·‚é
 	if (main_.ph_->health_now_ <= 0)
 	{
-		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-		ihandle_mission_clear->valid_ = true;
+		ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
+		ihandle_mission_all_clear->valid_ = true;
 	}
 
 }
 
-void TargetExTeemo::Draw(void)
+void TargetExTeemo2::Draw(void)
 {
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);

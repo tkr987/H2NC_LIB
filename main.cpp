@@ -1,5 +1,3 @@
-
-
 // 2018”N
 //#if _DEBUG
 //#define _CRTDBG_MAP_ALLOC
@@ -30,6 +28,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	nya_window->AddChild(teemo_mission1);
 	H2NLIB::NyaMission* teemo_mission2 = new TeemoMission2;
 	nya_window->AddChild(teemo_mission2);
+
 	// ŽÀs
 	nya_window->Run();
 

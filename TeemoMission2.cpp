@@ -2,7 +2,7 @@
 #include "TeemoBackgroundMission1.h"
 #include "TeemoMission2.h"
 #include "TeemoTarget.h"
-#include "TeemoTargetEx.h"
+#include "TeemoTargetEx2.h"
 #include "UserAI.h"
 
 using namespace H2NLIB;
@@ -20,7 +20,7 @@ void TeemoMission2::Create(void)
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	AddChild(5, 600, new TargetExTeemo, id++);
+	AddChild(5, 600, new TargetExTeemo2, id++);
 
 }
 

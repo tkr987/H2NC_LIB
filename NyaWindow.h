@@ -15,7 +15,6 @@ namespace H2NLIB
 	class NyaTarget;
 	class NyaUser;
 
-
 	// 子オブジェクトmission関連
 	class ChildMission
 	{
@@ -41,12 +40,14 @@ namespace H2NLIB
 		void Run(void);
 	private:
 		eEVENT event_;
+		eEVENT event_next_;
 		std::string title_;
 		ChildMission child_mission_;
 		NyaDevice* nya_device_;
 		NyaEffect* nya_effect_;
 		NyaPosition* nya_position_;
 		void Mission(void);
+		void NotSaveReplay(void);
 		void SaveReplay(void);
 		void Title(void);
 		void WaitFPS(int x, int y);

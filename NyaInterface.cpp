@@ -12,11 +12,19 @@ using namespace std;
 using namespace H2NLIB;
 
 unsigned int NyaInterface::count_frame_;
+InterfaceHandleMissionAllClear NyaInterface::handle_mission_all_clear_;
 InterfaceHandleMissionClear NyaInterface::handle_mission_clear_;
 InterfaceHandleMissionEx NyaInterface::handle_mission_ex_;
 InterfaceHandleMissionWarning NyaInterface::handle_mission_warning_;
 std::vector<SkillInterface> NyaInterface::skill_collection_(static_cast<int>(eSKILL::sizeof_enum));
 DesignUserInfo NyaInterface::user_info_;
+
+InterfaceHandleMissionAllClear::InterfaceHandleMissionAllClear()
+{
+	draw_grid_x_ = INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_X;
+	draw_grid_y_ = INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_Y;
+	valid_ = false;
+}
 
 InterfaceHandleMissionClear::InterfaceHandleMissionClear()
 {
@@ -96,6 +104,7 @@ void NyaInterface::Run(void)
 {
 	DrawBlack(850, 0, 1280, 720);
 	DrawMissionClear();
+	DrawMissionAllClear();
 	DrawMissionEx();
 	DrawMissionWarning();
 	DrawSkill(875, 110);
@@ -152,6 +161,22 @@ void NyaInterface::DrawLIB(int x, int y)
 
 	NyaString::Write("interface_lib_font", white, x, y, "Happy");
 	NyaString::Write("interface_lib_font", white, x, y + 50, "2 Nya");
+}
+
+void NyaInterface::DrawMissionAllClear()
+{
+	int draw_grid_x, draw_grid_y;
+	const int black = GetColor(0, 0, 0);
+	const tuple<int, int, int> font_color = make_tuple(212, 212, 255);
+
+	if (!handle_mission_all_clear_.valid_)
+		return;
+
+	draw_grid_x = handle_mission_all_clear_.draw_grid_x_;
+	draw_grid_y = handle_mission_all_clear_.draw_grid_y_;
+	DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
+	NyaString::Write("design_mission_clear_big_font", font_color, draw_grid_x + 20, draw_grid_y + 25, "MISSION ALL CLEAR");
+	NyaString::Write("design_mission_clear_small_font", font_color, draw_grid_x + 80, draw_grid_y + 90, "PRESS ENTER KEY");
 }
 
 void NyaInterface::DrawMissionClear()

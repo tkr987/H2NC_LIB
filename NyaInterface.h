@@ -11,6 +11,15 @@ namespace H2NLIB
 {
 	class SoundProperty;
 
+	class InterfaceHandleMissionAllClear
+	{
+	public:
+		int draw_grid_x_;
+		int draw_grid_y_;
+		bool valid_;						// true‚È‚çmission all clear‚Æ•\Ž¦‚·‚é
+		InterfaceHandleMissionAllClear();
+	};
+
 	class InterfaceHandleMissionClear
 	{
 	public:
@@ -92,6 +101,10 @@ namespace H2NLIB
 		{
 			return &handle_mission_clear_;
 		}
+		static InterfaceHandleMissionAllClear* GetHandleMissionAllClear(void)
+		{
+			return &handle_mission_all_clear_;
+		}
 		static InterfaceHandleMissionEx* GetHandleMissionEx(void)
 		{
 			return &handle_mission_ex_;
@@ -123,6 +136,7 @@ namespace H2NLIB
 		}
 	private:
 		static unsigned int count_frame_;
+		static InterfaceHandleMissionAllClear handle_mission_all_clear_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleMissionEx handle_mission_ex_;
 		static InterfaceHandleMissionWarning handle_mission_warning_;
@@ -133,6 +147,7 @@ namespace H2NLIB
 		static void DrawLIB(int x, int y);
 		static void DrawSkill(int x, int y);
 		static void DrawInput(int x, int y);
+		static void DrawMissionAllClear(void);
 		static void DrawMissionClear(void);
 		static void DrawMissionEx(void);
 		static void DrawMissionWarning(void);

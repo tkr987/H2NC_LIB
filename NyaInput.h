@@ -4,13 +4,10 @@
 #include <string>
 #include "NyaEnum.h"
 
-
 namespace H2NLIB {
 
 	class NyaInput {
 	public:
-		NyaInput();
-		~NyaInput();
 		static void Run(const eEVENT check_event);
 		static bool IsHoldKey(eINPUT key) { return (state_pre_[static_cast<int>(key)] == true && state_now_[static_cast<int>(key)] == true) ? true : false; }
 		static bool IsPressKey(eINPUT key) { return (state_pre_[static_cast<int>(key)] == false && state_now_[static_cast<int>(key)] == true) ? true : false; }

@@ -132,13 +132,16 @@ void NyaMission::Run(eEVENT check_event)
 	switch (check_event)
 	{
 	case eEVENT::MISSION_CREATE:
+	case eEVENT::MISSION_REPLAY_CREATE:
 		count_frame_ = 0;
 		Create();
 		break;
 	case eEVENT::MISSION_RUN:
+	case eEVENT::MISSION_REPLAY_RUN:
 		count_frame_++;
 		break;
 	case eEVENT::MISSION_DELETE:
+	case eEVENT::MISSION_REPLAY_DELETE:
 		Delete();
 		break;
 	}
@@ -154,10 +157,7 @@ void NyaMission::Run(eEVENT check_event)
 	for (auto& e : mission_target_collection_)
 	{
 		if (e->start_frame_ <= count_frame_ && count_frame_ < e->end_frame_)
-		{
 			e->target_->Run(check_event);
-		}
-
 	}
 
 }

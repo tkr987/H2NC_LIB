@@ -65,11 +65,13 @@ UserAI::UserAI(void)
 	ai_device2_.gadget_dp_->collision_pow_ = 1.0;
 	ai_device2_.gadget_dp_->collision_range_ = 2.0;
 	ai_device2_.gadget_dp_->move_angle_deg_ = -90;
-	ai_device2_.gadget_dp_->move_speed_ = 10;
-	ai_device2_.gadget_gp_->draw_angle_ = -90;
-	NyaGraphic::LoadGraphicFile("img/user_ai_gadget.png", &ai_device2_.gadget_gp_->graphic_file_);
+	ai_device2_.gadget_dp_->move_speed_ = 20;
+	ai_device2_.gadget_gp_->draw_angle_ = 90;
+	ai_device2_.gadget_gp_->extend_rate_ = 0.1;
+	NyaGraphic::LoadGraphicFile("img/user/arms.png", &ai_device2_.gadget_gp_->graphic_file_);
 	ai_device2_.effect_ep_->interval_time_frame_ = 2;
-	NyaGraphic::LoadGraphicFile(4, 1, "img/user_ai_gadget_effect.png", &ai_device2_.effect_gp_->graphic_file_);
+	ai_device2_.effect_gp_->extend_rate_ = 1.0;
+	NyaGraphic::LoadGraphicFile(11, 1, "img/user/arms_effect2.png", &ai_device2_.effect_gp_->graphic_file_);
 
 	// user ai effect test property
 	ai_effect_test_.ep_->grid_x_ = 500;
@@ -86,7 +88,7 @@ UserAI::UserAI(void)
 	// user ai main property
 	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &main_.gp_->graphic_file_);
 	main_.gp_->extend_rate_ = 0.4;
-	main_.gp_->draw_angle_ = 0;
+	main_.gp_->draw_angle_ = 90;
 	main_.ph_->health_max_ = 1;
 	main_.ph_->health_now_ = 1;
 	main_.ph_->collision_damage_ = 1;
@@ -146,9 +148,15 @@ void UserAI::Act(void)
 		main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
 	// UŒ‚ƒeƒXƒg2
-	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 10 == 0)
+	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 6 == 0)
 	{
+		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_ -10;
+		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_;
+		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_ +10;
 		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
 		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 	}

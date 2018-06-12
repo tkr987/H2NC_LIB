@@ -1,5 +1,7 @@
 #include <chrono>
+#include <filesystem>
 #include <fstream>
+#include <string>
 #include <tuple>
 #include "DxLib.h"
 #include "NyaDevice.h"
@@ -18,6 +20,7 @@
 #define __DEBUG__
 
 using namespace std;
+using namespace std::experimental::filesystem;
 using namespace H2NLIB;
 
 
@@ -66,7 +69,7 @@ int NyaWindow::Init(string title)
 	// *****************
 	//  dxlib初期化
 	// *****************
-	SetMainWindowText("Happy 2 Nya C++ DXLIB wrapper v67");		// タイトル
+	SetMainWindowText("Happy 2 Nya C++ DXLIB wrapper v68");		// タイトル
 	ChangeWindowMode(true);										// ウィンドウモード
 	SetGraphMode(1280, 720, 32);								// 画面サイズ, 色数
 	if (DxLib_Init() == -1)										// 初期化
@@ -74,6 +77,9 @@ int NyaWindow::Init(string title)
 	SetAlwaysRunFlag(true);										// 非アクティブ状態でも動作させる
 	SetUseDivGraphFlag(false);									// グラフィック描画分割方法
 	SetDrawScreen(DX_SCREEN_BACK);								// 描画先グラフィック領域の指定
+
+	// ディレクトリ作成
+	create_directory("replay");
 
 	// コンストラクタでDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にインスタンスを生成する必要がある。
@@ -104,6 +110,14 @@ void NyaWindow::Run(void)
 
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
+
+		//*********************************************************************
+		// イベントの更新に使う変数をenum_zeroで初期化しておく
+		// NyaWindowのメンバ関数でevent_next_の値をenum_zero以外にしたとき
+		// Run()の最後にイベントを更新する処理をおこなう
+		//*********************************************************************
+		event_next_ = eEVENT::enum_zero;
+
 		//***********************
 		// NyaWindow メンバ関数
 		// タイトル画面
@@ -113,6 +127,7 @@ void NyaWindow::Run(void)
 		Title();
 		Mission();
 		SaveReplay();
+		NotSaveReplay();
 
 		//*******************
 		// ライブラリの処理
@@ -168,18 +183,26 @@ void NyaWindow::Run(void)
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 700, "[600, 700] Nya*****::Run() %d msec", (int)debug_time_msec);
 #else
-		nya_sound::Run();
-		NyaInput::Run();
-		nya_design_->Run();
+		NyaInput::Run(event_);
+		NyaInterface::Run();
+		NyaSound::Run();
 		NyaString::Run();
 #endif
 
-		//**********************************
-		// 画面更新とフレームレートの処理
-		//**********************************
+		//*****************************
+		// 画面更新
+		// フレームレートの処理
+		//*****************************
 		ScreenFlip();
 		ClearDrawScreen();
 		WaitFPS(1180, 660);
+
+		//*******************************************************************************
+		// enum_zeroでないならNyaWindowのメンバ関数でevent_next_を変更したということ
+		// enum_zeroでないならイベントの更新をする
+		//*******************************************************************************
+		if (event_next_ != eEVENT::enum_zero)
+			event_ = event_next_;
 	}
 
 }
@@ -191,12 +214,13 @@ void NyaWindow::Run(void)
 **/
 void NyaWindow::Mission(void)
 {
+	InterfaceHandleMissionAllClear* ihandle_mission_all_clear;
 	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 
 	if (!child_mission_.valid_)
 	{
-		event_ = eEVENT::TITLE;
+		event_next_ = eEVENT::TITLE;
 		return;
 	}
 
@@ -207,7 +231,7 @@ void NyaWindow::Mission(void)
 	switch (event_) 
 	{	// インデックスの更新
 	case eEVENT::TITLE:
-		// 現実的には最低でも1フレームはタイトル画面にいるのでindexは必ず更新される
+		// 最低でも1フレームはタイトル画面にいるのでindexは必ず更新される
 		child_mission_.index_ = 0;
 		break;
 	case eEVENT::MISSION_DELETE:
@@ -219,31 +243,81 @@ void NyaWindow::Mission(void)
 	switch (event_) 
 	{	// イベントの更新
 	case eEVENT::MISSION_CREATE:
-		event_ = eEVENT::MISSION_RUN;
+		event_next_ = eEVENT::MISSION_RUN;
 		break;
 	case eEVENT::MISSION_RUN:
 		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 		if (ihandle_mission_clear->valid_)
-			event_ = eEVENT::MISSION_CLEAR;
-		break;
-	case eEVENT::MISSION_CONTINUE:
+			event_next_ = eEVENT::MISSION_CLEAR;
+		ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
+		if (ihandle_mission_all_clear->valid_)
+			event_next_ = eEVENT::MISSION_ALL_CLEAR;
 		break;
 	case eEVENT::MISSION_CLEAR:
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
-			event_ = eEVENT::MISSION_DELETE;
+		{
+			ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
+			ihandle_mission_clear->valid_ = false;
+			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+			ihandle_mission_ex->valid_ = false;
+			event_next_ = eEVENT::MISSION_DELETE;
+		}
+		break;
+	case eEVENT::MISSION_ALL_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+		{
+			ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
+			ihandle_mission_all_clear->valid_ = false;
+			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+			ihandle_mission_ex->valid_ = false;
+			event_next_ = eEVENT::REPLAY_SAVE;		
+		}
 		break;
 	case eEVENT::MISSION_DELETE:
-		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-		ihandle_mission_clear->valid_ = false;
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->valid_ = false;
 		if (child_mission_.index_ < child_mission_.mission_collection_.size())
-			event_ = eEVENT::MISSION_CREATE;
+			event_next_ = eEVENT::MISSION_CREATE;
 		else
-			event_ = eEVENT::REPLAY_SAVE;
+			event_next_ = eEVENT::TITLE;
 		break;
-	case eEVENT::MISSION_FINALIZE:
-		event_ = eEVENT::TITLE;
+	//**************************************
+	// 以下はリプレイの再生時のイベント
+	//**************************************
+	case eEVENT::MISSION_REPLAY_CREATE:
+		event_next_ = eEVENT::MISSION_REPLAY_RUN;
+		break;
+	case eEVENT::MISSION_REPLAY_RUN:
+		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
+		if (ihandle_mission_clear->valid_)
+			event_next_ = eEVENT::MISSION_REPLAY_CLEAR;
+		ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
+		if (ihandle_mission_all_clear->valid_)
+			event_next_ = eEVENT::MISSION_REPLAY_ALL_CLEAR;
+		break;
+	case eEVENT::MISSION_REPLAY_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+		{
+			ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
+			ihandle_mission_clear->valid_ = false;
+			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+			ihandle_mission_ex->valid_ = false;
+			event_ = eEVENT::MISSION_REPLAY_DELETE;
+		}
+		break;
+	case eEVENT::MISSION_REPLAY_ALL_CLEAR:
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+		{
+			ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
+			ihandle_mission_all_clear->valid_ = false;
+			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+			ihandle_mission_ex->valid_ = false;
+			event_next_ = eEVENT::MISSION_REPLAY_DELETE;
+		}
+		break;
+	case eEVENT::MISSION_REPLAY_DELETE:
+		if (child_mission_.index_ < child_mission_.mission_collection_.size())
+			event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+		else
+			event_next_ = eEVENT::TITLE;
 		break;
 	}
 }
@@ -257,6 +331,7 @@ void NyaWindow::SaveReplay(void)
 {
 	string pass;
 	int x, y;
+	string date;
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -265,9 +340,9 @@ void NyaWindow::SaveReplay(void)
 	if (event_ != eEVENT::REPLAY_SAVE)
 		return;
 
-	//************
-	// 選択
-	//************
+	//************************************************
+	// カーソルキーの入力に応じて現在の選択を更新
+	//************************************************
 	if (NyaInput::IsPressKey(eINPUT::DOWN))
 		select = (select == 5) ? 1 : select + 1;
 	if (NyaInput::IsPressKey(eINPUT::UP))
@@ -276,62 +351,75 @@ void NyaWindow::SaveReplay(void)
 	y = 100 + select * 100;
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
-
-	//************
-	// タイトル
-	//************
+	//****************************
+	// 現イベントの名前を表示
+	//****************************
 	x = 60;
 	y = 100;
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "SAVE REPLAY");
 
-	//************
-	// リプレイ
-	//************
+	//*******************************************
+	// リプレイフォルダにあるファイルの表示
+	//*******************************************
 	y += 100;
-	ifs.open("replay/repay1.rep");
+	ifs.open("replay/replay1.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay1.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
 	y += 100;
-	ifs.open("replay/repay2.rep");
+	ifs.open("replay/replay2.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay2.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
 	y += 100;
-	ifs.open("replay/repay3.rep");
+	ifs.open("replay/replay3.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay3.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	y += 100;
 	ifs.close();
-	ifs.open("replay/repay4.rep");
+	ifs.open("replay/replay4.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay4.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
 
-	//************
-	// 終了
-	//************
+	//**************************
+	// 終了の選択肢を表示
+	//**************************
 	y += 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
 
+	//****************************
 	// ファイルへの書き込み
+	//****************************
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{
 		if (select == 1)
@@ -344,10 +432,42 @@ void NyaWindow::SaveReplay(void)
 			NyaInput::OutputFile("replay/replay4.rep");
 	}
 
-	// イベント更新
+	//******************
+	// イベントの更新
+	//******************
 	if (NyaInput::IsPressKey(eINPUT::ENTER) && select == 5)
-		event_ = eEVENT::MISSION_FINALIZE;
+		event_next_ = eEVENT::MISSION_DELETE;
 }
+
+/**
+ @param リプレイの保存をしない関数
+ @note
+  フォントはタイトル画面を流用
+  コンテニューしていたら全てのミッションクリア後にNotSaveReplay()が呼ばれる。
+**/
+void NyaWindow::NotSaveReplay(void)
+{
+	tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+	if (event_ != eEVENT::NOT_REPLAY_SAVE)
+		return;
+
+	NyaString::Write("window_title_font", white, 32, 100, "コンテニューしたので");
+	NyaString::Write("window_title_font", white, 32, 150, "リプレイの保存はできません");
+
+
+	//**************************
+	// 終了の選択肢を表示
+	//**************************
+	NyaString::Write("window_title_font", white, 32, 250, "PRESS ENTER");
+
+	//******************
+	// イベントの更新
+	//******************
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+		event_next_ = eEVENT::TITLE;
+}
+
 
 /**
  @brief タイトル画面の処理をする関数
@@ -355,6 +475,7 @@ void NyaWindow::SaveReplay(void)
 void NyaWindow::Title(void)
 {
 	int x, y;
+	string date;
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -374,7 +495,6 @@ void NyaWindow::Title(void)
 	y = (select + 1) * 100;
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
-
 	//******************
 	// タイトルの表示
 	//******************
@@ -388,38 +508,50 @@ void NyaWindow::Title(void)
 	// リプレイの有無を表示
 	//***********************
 	y += 100;
-	ifs.open("replay/repay1.rep");
+	ifs.open("replay/replay1.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay1.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
 	y += 100;
-	ifs.open("replay/repay2.rep");
+	ifs.open("replay/replay2.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay2.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
 	y += 100;
-	ifs.open("replay/repay3.rep");
+	ifs.open("replay/replay3.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay3.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
 	y += 100;
-	ifs.open("replay/repay4.rep");
+	ifs.open("replay/replay4.rep");
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
 	if (ifs.is_open())
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "replay4.rep");
+	{
+		getline(ifs, date);
+		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
+	}
 	else
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	ifs.close();
@@ -449,20 +581,21 @@ void NyaWindow::Title(void)
 		switch (select)
 		{	// イベントの更新
 		case 0:
-			event_ = eEVENT::MISSION_CREATE;
+			event_next_ = eEVENT::MISSION_CREATE;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
-			event_ = eEVENT::MISSION_REPLAY_CREATE;
+			event_next_ = eEVENT::MISSION_REPLAY_CREATE;
 			break;
 		case 5:
-			event_ = eEVENT::WINDOW_CLOSE;
+			event_next_ = eEVENT::WINDOW_CLOSE;
 			break;
 		}
 	}
 }
+
 
 
 
@@ -488,7 +621,8 @@ void NyaWindow::WaitFPS(int x, int y)
 
 
 #ifdef __DEBUG__
-	if (frame_ave_ != 0) {
+	if (frame_ave_ != 0) 
+	{
 		NyaString::Write("design_fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
 		NyaString::Write("design_fps_font", white, x, y + 20, "loop[%d ms]", ltime_ave_);
 		NyaString::Write("design_fps_font", white, x, y + 40, "wait[%d ms]", wtime_ave_);

@@ -16,10 +16,10 @@ namespace H2NLIB
 	class NyaGraphic;
 	class NyaPosition;
 	class EffectProperty1;
-	class GraphicProperty4;
+	class GraphicPropertyX4;
 	class PositionHandle1;
 
-	class DeviceProperty1
+	class DevicePropertyX1
 	{
 	public:
 		double collision_pow_;				//!< Õ“Ë—Í
@@ -30,7 +30,7 @@ namespace H2NLIB
 		double move_speed_;					//!< ˆÚ“®‘¬“x
 	};
 
-	class DeviceProperty2
+	class DevicePropertyX2
 	{
 	public:
 		double collision_pow_;				//!< Õ“Ë—Í
@@ -51,8 +51,8 @@ namespace H2NLIB
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
-		DeviceProperty1* gadget_dp_;
-		GraphicProperty4* gadget_gp_;
+		DevicePropertyX1* gadget_dp_;
+		GraphicPropertyX4* gadget_gp_;
 		PositionHandle1* gadget_ph_;
 		DeviceGadget14();
 		~DeviceGadget14();
@@ -65,9 +65,9 @@ namespace H2NLIB
 		double move_x_;
 		double move_y_;
 		EffectProperty1* effect_ep_;
-		GraphicProperty4* effect_gp_;
-		DeviceProperty1* gadget_dp_;
-		GraphicProperty4* gadget_gp_;
+		GraphicPropertyX4* effect_gp_;
+		DevicePropertyX1* gadget_dp_;
+		GraphicPropertyX4* gadget_gp_;
 		PositionHandle1* gadget_ph_;
 		eOBJECT effect_type_;
 		DeviceGadget1414();
@@ -85,9 +85,9 @@ namespace H2NLIB
 	public:
 		NyaDevice();
 		~NyaDevice();
-		void Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT gadget_type);
-		void Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT gadget_type, eOBJECT effect_type);
-		void Attack2414(DeviceProperty2* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp);
+		void Attack14(const DevicePropertyX1* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type);
+		void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectProperty1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type);
+		void Attack2414(DevicePropertyX2* gadget_dpx, GraphicPropertyX4* gadget_gpx, EffectProperty1* effect_epx, GraphicPropertyX4* effect_gpx);
 		void Run(void);
 	private:
 		NyaEffect* nya_effect_;

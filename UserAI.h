@@ -8,9 +8,9 @@ namespace H2NLIB
 	class NyaDevice;
 	class NyaEffect;
 	class NyaPosition;
-	class DeviceProperty1;
+	class DevicePropertyX1;
 	class EffectProperty1;
-	class GraphicProperty4;
+	class GraphicPropertyX4;
 	class PositionHandle1;
 	class DeviceOption;
 	class EffectOption;
@@ -19,10 +19,10 @@ namespace H2NLIB
 class UserAiDevice2
 {
 public:
-	H2NLIB::DeviceProperty1* gadget_dp_;
-	H2NLIB::GraphicProperty4* gadget_gp_;
+	H2NLIB::DevicePropertyX1* gadget_dp_;
+	H2NLIB::GraphicPropertyX4* gadget_gp_;
 	H2NLIB::EffectProperty1* effect_ep_;
-	H2NLIB::GraphicProperty4* effect_gp_;
+	H2NLIB::GraphicPropertyX4* effect_gp_;
 	UserAiDevice2();
 	~UserAiDevice2();
 };
@@ -31,7 +31,7 @@ class UserAiEffectTest
 {
 public:
 	H2NLIB::EffectProperty1* ep_;
-	H2NLIB::GraphicProperty4* gp_;
+	H2NLIB::GraphicPropertyX4* gp_;
 	UserAiEffectTest();
 	~UserAiEffectTest();
 };
@@ -39,7 +39,7 @@ public:
 struct UserAiMain
 {
 public:
-	H2NLIB::GraphicProperty4* gp_;
+	H2NLIB::GraphicPropertyX4* gp_;
 	H2NLIB::PositionHandle1* ph_;
 	UserAiMain();
 	~UserAiMain();

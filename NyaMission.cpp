@@ -27,9 +27,9 @@ NyaMission::~NyaMission()
 {
 	// 親オブジェクトであるNyaMissionが破棄されるときに
 	// 子オブジェクトも破棄する
-	DeleteBackground();
-	DeleteTarget();
-	DeleteUser();
+	ClearBackground();
+	ClearTarget();
+	ClearUser();
 }
 
 /**
@@ -40,7 +40,7 @@ NyaMission::~NyaMission()
 **/
 void NyaMission::AddChild(NyaBackground* background)
 {
-	DeleteBackground();
+	ClearBackground();
 	background_ = background;
 }
 
@@ -101,17 +101,17 @@ void NyaMission::AddChild(int start_time_sec, int end_time_sec, NyaTarget* targe
 **/
 void NyaMission::AddChild(NyaUser* user)
 {
-	DeleteUser();
+	ClearUser();
 	user_ = user;
 }
 
-void NyaMission::DeleteBackground(void)
+void NyaMission::ClearBackground(void)
 {
 	delete background_;
 	background_ = nullptr;
 }
 
-void NyaMission::DeleteTarget(void)
+void NyaMission::ClearTarget(void)
 {
 	for (auto& e : mission_target_collection_)
 	{ 
@@ -121,7 +121,7 @@ void NyaMission::DeleteTarget(void)
 	mission_target_collection_.clear();
 }
 
-void NyaMission::DeleteUser(void)
+void NyaMission::ClearUser(void)
 {
 	delete user_;
 	user_ = nullptr;

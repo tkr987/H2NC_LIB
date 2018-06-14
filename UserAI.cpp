@@ -15,10 +15,10 @@ using namespace H2NLIB;
 
 UserAiDevice2::UserAiDevice2()
 {
-	gadget_dp_ = new DeviceProperty1;
-	gadget_gp_ = new GraphicProperty4;
+	gadget_dp_ = new DevicePropertyX1;
+	gadget_gp_ = new GraphicPropertyX4;
 	effect_ep_ = new EffectProperty1;
-	effect_gp_ = new GraphicProperty4;
+	effect_gp_ = new GraphicPropertyX4;
 }
 
 UserAiDevice2::~UserAiDevice2()
@@ -32,7 +32,7 @@ UserAiDevice2::~UserAiDevice2()
 UserAiEffectTest::UserAiEffectTest()
 {
 	ep_ = new EffectProperty1;
-	gp_ = new GraphicProperty4;
+	gp_ = new GraphicPropertyX4;
 }
 
 UserAiEffectTest::~UserAiEffectTest()
@@ -43,7 +43,7 @@ UserAiEffectTest::~UserAiEffectTest()
 
 UserAiMain::UserAiMain()
 {
-	gp_ = new H2NLIB::GraphicProperty4;
+	gp_ = new H2NLIB::GraphicPropertyX4;
 	ph_ = new H2NLIB::PositionHandle1;
 }
 

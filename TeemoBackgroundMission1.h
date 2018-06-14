@@ -4,7 +4,7 @@
 
 namespace H2NLIB
 {
-	class GraphicProperty1;
+	class GraphicPropertyX1;
 }
 
 class TeemoBackgroundMission1 : public H2NLIB::NyaBackground
@@ -12,10 +12,11 @@ class TeemoBackgroundMission1 : public H2NLIB::NyaBackground
 public:
 	TeemoBackgroundMission1();
 	~TeemoBackgroundMission1();
-	void MissionRun(void);
+	void MissionClear(void);
 	void MissionContinue(void);
+	void MissionRun(void);
 private:
-	H2NLIB::GraphicProperty1* gp_;
+	H2NLIB::GraphicPropertyX1* gp_;
 	void Act(void);
 	void Draw(void);
 };

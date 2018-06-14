@@ -214,7 +214,7 @@ void NyaWindow::Run(void)
 **/
 void NyaWindow::Mission(void)
 {
-	InterfaceHandleMissionAllClear* ihandle_mission_all_clear;
+	InterfaceHandleMissionAllOver* ihandle_mission_all_over;
 	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 
@@ -249,8 +249,8 @@ void NyaWindow::Mission(void)
 		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 		if (ihandle_mission_clear->valid_)
 			event_next_ = eEVENT::MISSION_CLEAR;
-		ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
-		if (ihandle_mission_all_clear->valid_)
+		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
+		if (ihandle_mission_all_over->valid_)
 			event_next_ = eEVENT::MISSION_ALL_CLEAR;
 		break;
 	case eEVENT::MISSION_CLEAR:
@@ -266,8 +266,8 @@ void NyaWindow::Mission(void)
 	case eEVENT::MISSION_ALL_CLEAR:
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
 		{
-			ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
-			ihandle_mission_all_clear->valid_ = false;
+			ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
+			ihandle_mission_all_over->valid_ = false;
 			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 			ihandle_mission_ex->valid_ = false;
 			event_next_ = eEVENT::REPLAY_SAVE;		
@@ -289,8 +289,8 @@ void NyaWindow::Mission(void)
 		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 		if (ihandle_mission_clear->valid_)
 			event_next_ = eEVENT::MISSION_REPLAY_CLEAR;
-		ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
-		if (ihandle_mission_all_clear->valid_)
+		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
+		if (ihandle_mission_all_over->valid_)
 			event_next_ = eEVENT::MISSION_REPLAY_ALL_CLEAR;
 		break;
 	case eEVENT::MISSION_REPLAY_CLEAR:
@@ -306,8 +306,8 @@ void NyaWindow::Mission(void)
 	case eEVENT::MISSION_REPLAY_ALL_CLEAR:
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
 		{
-			ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
-			ihandle_mission_all_clear->valid_ = false;
+			ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
+			ihandle_mission_all_over->valid_ = false;
 			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 			ihandle_mission_ex->valid_ = false;
 			event_next_ = eEVENT::MISSION_REPLAY_DELETE;
@@ -501,7 +501,7 @@ void NyaWindow::Title(void)
 	x = 60;
 	y = 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "Åô");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission title");
+	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission");
 	NyaString::Write("window_title_font", white, x + 70, y, "%s", title_);
 
 	//***********************

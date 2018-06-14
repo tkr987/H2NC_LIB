@@ -12,7 +12,7 @@ namespace H2NLIB
 
 	class NyaGraphic;
 	class NyaPosition;
-	class GraphicProperty4;
+	class GraphicPropertyX4;
 	class PositionHandle1;
 
 
@@ -39,7 +39,7 @@ namespace H2NLIB
 	public:
 		int count_;
 		EffectProperty1* ep_;
-		GraphicProperty4* gp_;
+		GraphicPropertyX4* gp_;
 	};
 
 	class EffectAnimation2
@@ -47,7 +47,7 @@ namespace H2NLIB
 	public:
 		int count_;
 		EffectProperty2* ep_;
-		GraphicProperty4* gp_;
+		GraphicPropertyX4* gp_;
 	};
 
 	class NyaEffect
@@ -55,8 +55,8 @@ namespace H2NLIB
 	public:
 		NyaEffect();
 		~NyaEffect();
-		void Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJECT layer);
-		void Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJECT layer);
+		void Draw(const EffectProperty1* ep, const GraphicPropertyX4* gp, eOBJECT layer);
+		void Draw(const EffectProperty2* ep, const GraphicPropertyX4* gp, eOBJECT layer);
 		void Run(void);
 	private:
 		NyaGraphic* nya_graphic_;

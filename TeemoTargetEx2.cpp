@@ -14,7 +14,7 @@ using namespace H2NLIB;
 
 TargetExTeemo2Main::TargetExTeemo2Main()
 {
-	gp_ = new GraphicProperty4;
+	gp_ = new GraphicPropertyX4;
 	ph_ = new PositionHandle1;
 
 }
@@ -34,8 +34,8 @@ TargetExTeemo2::TargetExTeemo2(void)
 
 	// mission warning setting
 	handle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::LoadSoundFile("sound/warning.wav", &handle_mission_warning->sp_->sound_file_);
-	NyaSound::ChangeVolume(&handle_mission_warning->sp_->sound_file_, 20);
+	NyaSound::LoadSoundFile("sound/warning.wav", &handle_mission_warning->spx_->file_);
+	NyaSound::ChangeVolume(&handle_mission_warning->spx_->file_, 20);
 
 	// target ex teemo main property
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->graphic_file_);
@@ -55,7 +55,7 @@ TargetExTeemo2::~TargetExTeemo2(void)
 	// 使用したグラフィックデータなどはデストラクタで破棄する
 	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
 	ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::DeleteSoundFile(&ihandle_mission_warning->sp_->sound_file_);
+	NyaSound::DeleteSoundFile(&ihandle_mission_warning->spx_->file_);
 }
 
 
@@ -67,7 +67,7 @@ void TargetExTeemo2::MissionRun(void)
 
 void TargetExTeemo2::Act(void)
 {
-	InterfaceHandleMissionAllClear* ihandle_mission_all_clear;
+	InterfaceHandleMissionAllOver* ihandle_mission_all_over;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 	InterfaceHandleMissionWarning* ihandle_mission_warning;
 
@@ -91,8 +91,8 @@ void TargetExTeemo2::Act(void)
 	// ヘルスが0以下になったらmission clearを表示する
 	if (main_.ph_->health_now_ <= 0)
 	{
-		ihandle_mission_all_clear = NyaInterface::GetHandleMissionAllClear();
-		ihandle_mission_all_clear->valid_ = true;
+		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
+		ihandle_mission_all_over->valid_ = true;
 	}
 
 }

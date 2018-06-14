@@ -26,7 +26,7 @@ void TeemoMission2::Create(void)
 
 void TeemoMission2::Delete(void)
 {
-	DeleteBackground();
-	DeleteTarget();
-	DeleteUser();
+	ClearBackground();
+	ClearTarget();
+	ClearUser();
 }

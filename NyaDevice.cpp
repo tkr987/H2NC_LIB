@@ -22,8 +22,8 @@ list<DeviceGadget2414> NyaDevice::dg2414_wait_list_;
 
 DeviceGadget14::DeviceGadget14()
 {
-	gadget_dp_ = new DeviceProperty1;
-	gadget_gp_ = new GraphicProperty4;
+	gadget_dp_ = new DevicePropertyX1;
+	gadget_gp_ = new GraphicPropertyX4;
 	gadget_ph_ = new PositionHandle1;
 }
 
@@ -37,9 +37,9 @@ DeviceGadget14::~DeviceGadget14()
 DeviceGadget1414::DeviceGadget1414()
 {
 	effect_ep_ = new EffectProperty1;
-	effect_gp_ = new GraphicProperty4;
-	gadget_dp_ = new DeviceProperty1;
-	gadget_gp_ = new GraphicProperty4;
+	effect_gp_ = new GraphicPropertyX4;
+	gadget_dp_ = new DevicePropertyX1;
+	gadget_gp_ = new GraphicPropertyX4;
 	gadget_ph_ = new PositionHandle1;
 }
 
@@ -98,7 +98,7 @@ NyaDevice::~NyaDevice()
  この関数では下記メンバ変数は利用しないため、値を設定しても無視される。
  gadget_gp->pos_cx_; gadget_gp->pos_cy_;
 **/
-void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicProperty4* const gadget_gp, eOBJECT gadget_type)
+void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dp, const GraphicPropertyX4* const gadget_gp, eOBJECT gadget_type)
 {
 	static list<DeviceGadget14>::iterator it_from, it_to;
 
@@ -124,7 +124,7 @@ void NyaDevice::Attack14(const DeviceProperty1* const gadget_dp, const GraphicPr
 	dg14_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg14_wait_list_), it_from);
 }
 
-void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProperty4* gadget_gp, const EffectProperty1* effect_ep, const GraphicProperty4* effect_gp, eOBJECT gadget_type, eOBJECT effect_type)
+void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dp, const GraphicPropertyX4* gadget_gp, const EffectProperty1* effect_ep, const GraphicPropertyX4* effect_gp, eOBJECT gadget_type, eOBJECT effect_type)
 {
 	static list<DeviceGadget1414>::iterator it_from, it_to;
 
@@ -153,7 +153,7 @@ void NyaDevice::Attack1414(const DeviceProperty1* gadget_dp, const GraphicProper
 	dg1414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg1414_wait_list_), it_from);
 }
 
-void NyaDevice::Attack2414(DeviceProperty2* gadget_dp, GraphicProperty4* gadget_gp, EffectProperty1* effect_ep, GraphicProperty4* effect_gp)
+void NyaDevice::Attack2414(DevicePropertyX2* gadget_dp, GraphicPropertyX4* gadget_gp, EffectProperty1* effect_ep, GraphicPropertyX4* effect_gp)
 {
 
 }
@@ -173,7 +173,7 @@ void NyaDevice::Run(void)
 
 void NyaDevice::MoveGadget(eOBJECT type)
 {
-	static GraphicProperty4 gp;
+	static GraphicPropertyX4 gp;
 	static deque<list<DeviceGadget14>::iterator> dg14_delete_deque;
 	static deque<list<DeviceGadget1414>::iterator> dg1414_delete_deque;
 

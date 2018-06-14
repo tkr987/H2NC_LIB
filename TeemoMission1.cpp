@@ -10,6 +10,7 @@ using namespace H2NLIB;
 void TeemoMission1::Create(void) 
 {
 	unsigned int id = 0;
+	InterfaceHandleMissionSkill* ihandle_mission_skill;
 
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
@@ -29,15 +30,17 @@ void TeemoMission1::Create(void)
 	//******************
 	// interface 設定
 	//******************
-	NyaInterface::SetSkillName(eSKILL::Q, "Skill Q (power)");
-	NyaInterface::SetSkillName(eSKILL::W, "Skill W (wave)");
-	NyaInterface::SetSkillName(eSKILL::E, "Skill E (bit)");
-	NyaInterface::SetSkillName(eSKILL::R, "Skill R (bomb)");
+	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::Q)] = "Skill Q (power)";
+	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::W)] = "Passive W (bit)";
+	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::E)] = "Passive E (speed)";
+	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::R)] = "Skill R (ult)";
 }
 
 void TeemoMission1::Delete(void)
 {
-	DeleteBackground();
-	DeleteTarget();
+	// user以外は次のミッションに引き継がないので初期化しておく
+	ClearBackground();
+	ClearTarget();
 }
 

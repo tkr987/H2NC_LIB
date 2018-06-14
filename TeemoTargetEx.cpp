@@ -14,7 +14,7 @@ using namespace H2NLIB;
 
 TargetExTeemoMain::TargetExTeemoMain()
 {
-	gp_ = new GraphicProperty4;
+	gp_ = new GraphicPropertyX4;
 	ph_ = new PositionHandle1;
 
 }
@@ -32,10 +32,10 @@ TargetExTeemo::TargetExTeemo(void)
 
 	count_frame_ = 0;
 
-	// mission warning setting
+	// mission warning handle 設定
 	handle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::LoadSoundFile("sound/warning.wav", &handle_mission_warning->sp_->sound_file_);
-	NyaSound::ChangeVolume(&handle_mission_warning->sp_->sound_file_, 20);
+	NyaSound::LoadSoundFile("sound/warning.wav", &handle_mission_warning->spx_->file_);
+	NyaSound::ChangeVolume(&handle_mission_warning->spx_->file_, 20);
 
 	// target ex teemo main property
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->graphic_file_);
@@ -55,7 +55,7 @@ TargetExTeemo::~TargetExTeemo(void)
 	// 使用したグラフィックデータなどはデストラクタで破棄する
 	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
 	ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::DeleteSoundFile(&ihandle_mission_warning->sp_->sound_file_);
+	NyaSound::DeleteSoundFile(&ihandle_mission_warning->spx_->file_);
 }
 
 

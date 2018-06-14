@@ -7,7 +7,7 @@ using namespace H2NLIB;
 
 TeemoBackgroundMission1::TeemoBackgroundMission1()
 {
-	gp_ = new GraphicProperty1;
+	gp_ = new GraphicPropertyX1;
 	gp_->draw_grid_x_ = 0;
 	gp_->draw_grid_y_ = -2560 + 720;
 	NyaGraphic::LoadGraphicFile("img/back/back1.png", &gp_->graphic_file_);
@@ -20,9 +20,8 @@ TeemoBackgroundMission1::~TeemoBackgroundMission1()
 	delete gp_;
 }
 
-void TeemoBackgroundMission1::MissionRun(void)
+void TeemoBackgroundMission1::MissionClear(void)
 {
-	Act();
 	Draw();
 }
 
@@ -31,6 +30,11 @@ void TeemoBackgroundMission1::MissionContinue(void)
 	Draw();
 }
 
+void TeemoBackgroundMission1::MissionRun(void)
+{
+	Act();
+	Draw();
+}
 
 void TeemoBackgroundMission1::Act(void)
 {

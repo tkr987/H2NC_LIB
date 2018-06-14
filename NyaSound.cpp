@@ -1,12 +1,11 @@
 #include "DxLib.h"
 #include "NyaSound.h"
-#include "NyaDesign.h"
 
 using namespace std;
 using namespace H2NLIB;
 
 std::list<SoundFile> NyaSound::file_collection_;
-std::deque<SoundProperty> NyaSound::play_collection_;
+std::deque<SoundPropertyX> NyaSound::play_collection_;
 
 //**********************
 // class SoundFile
@@ -21,13 +20,13 @@ SoundFile& SoundFile::operator=(const SoundFile& file)
 }
 
 //***************************
-// class SoundProperty
+// class SoundPropertyX
 //***************************
 
-SoundProperty& SoundProperty::operator=(SoundProperty& sp)
+SoundPropertyX& SoundPropertyX::operator=(SoundPropertyX& sp)
 {
 	loop_ = sp.loop_;
-	sound_file_ = sp.sound_file_;
+	file_ = sp.file_;
 	return *this;
 }
 
@@ -59,7 +58,7 @@ void NyaSound::DeleteSoundFile(SoundFile* file)
 void NyaSound::LoadSoundFile(std::string file_pass, SoundFile* file)
 {
 	list<SoundFile>::iterator it;
-	const SoundFile empty_file;
+	SoundFile new_file;
 
 	// ロード済みファイルなら新しくロードする必要ない
 	for (auto& e : file_collection_)
@@ -72,33 +71,33 @@ void NyaSound::LoadSoundFile(std::string file_pass, SoundFile* file)
 	}
 
 	// サウンドファイルをメモリにロードする
-	file_collection_.push_front(empty_file);
-	it = file_collection_.begin();
-	it->id_ = LoadSoundMem(file_pass.c_str());
-	it->pass_ = file_pass;
+	new_file.id_ = LoadSoundMem(file_pass.c_str());
+	new_file.pass_ = file_pass;
+	file_collection_.push_front(new_file);
 
 	// ロード結果を返す
-	*file = *it;
+	if (file != nullptr)
+		*file = new_file;
 }
 
 
-void NyaSound::Play(const SoundProperty* sp)
+void NyaSound::Play(const SoundPropertyX* spx)
 {
-	if (sp == nullptr)
+	if (spx == nullptr)
 		return;
 
-	play_collection_.push_back(*sp);
+	play_collection_.push_back(*spx);
 }
 
 
 void NyaSound::Run(void)
 {
-	SoundProperty* sp;
+	SoundPropertyX* sp;
 
 	while (!play_collection_.empty())
 	{
 		sp = &play_collection_.front();
-		PlaySoundMem(sp->sound_file_.id_, DX_PLAYTYPE_BACK, sp->loop_);
+		PlaySoundMem(sp->file_.id_, DX_PLAYTYPE_BACK, sp->loop_);
 		play_collection_.pop_front();
 	}
 }

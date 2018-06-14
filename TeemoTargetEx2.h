@@ -9,15 +9,15 @@ namespace H2NLIB
 	class NyaDevice;
 	class NyaSound;
 	class NyaString;
-	class DeviceProperty1;
-	class GraphicProperty4;
+	class DevicePropertyX1;
+	class GraphicPropertyX4;
 	class PositionHandle1;
 }
 
 class TargetExTeemo2Main
 {
 public:
-	H2NLIB::GraphicProperty4* gp_;
+	H2NLIB::GraphicPropertyX4* gp_;
 	H2NLIB::PositionHandle1* ph_;
 	TargetExTeemo2Main();
 	~TargetExTeemo2Main();

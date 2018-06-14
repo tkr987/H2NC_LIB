@@ -33,10 +33,10 @@ GraphicFile& GraphicFile::operator=(const GraphicFile& file)
 }
 
 //***************************
-// class GraphicProperty
+// class GraphicPropertyX
 //***************************
 
-GraphicProperty1& GraphicProperty1::operator=(const GraphicProperty1& gp)
+GraphicPropertyX1& GraphicPropertyX1::operator=(const GraphicPropertyX1& gp)
 {
 	draw_grid_x_ = gp.draw_grid_x_;
 	draw_grid_y_ = gp.draw_grid_y_;
@@ -46,7 +46,7 @@ GraphicProperty1& GraphicProperty1::operator=(const GraphicProperty1& gp)
 	return *this;
 }
 
-GraphicProperty4& GraphicProperty4::operator=(const GraphicProperty4& gp)
+GraphicPropertyX4& GraphicPropertyX4::operator=(const GraphicPropertyX4& gp)
 {
 	draw_angle_ = gp.draw_angle_;
 	draw_grid_cx_ = gp.draw_grid_cx_;
@@ -201,7 +201,7 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 @note
  DXLIB::DrawGraph() に対応。
 **/
-void NyaGraphic::Draw(const GraphicProperty1 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX1 *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gp1_deque_.push_back(*gp);
 }
@@ -214,7 +214,7 @@ void NyaGraphic::Draw(const GraphicProperty1 *gp, eOBJECT layer)
 @note
  DXLIB::DrawTurnGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty2 *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX2 *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gp2_deque_.push_back(*gp);
 }
@@ -227,7 +227,7 @@ void NyaGraphic::Draw(GraphicProperty2 *gp, eOBJECT layer)
 @note
  DXLIB::DrawExtendGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty3 *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX3 *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gp3_deque_.push_back(*gp);
 }
@@ -239,7 +239,7 @@ void NyaGraphic::Draw(GraphicProperty3 *gp, eOBJECT layer)
 @note
  DXLIB::DrawRotaGraph() に対応。
 **/
-void NyaGraphic::Draw(const GraphicProperty4 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX4 *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gp4_deque_.push_back(*gp);
 	layer_collection_[static_cast<int>(layer)].gp4_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
@@ -253,7 +253,7 @@ void NyaGraphic::Draw(const GraphicProperty4 *gp, eOBJECT layer)
 @note
  DXLIB::DrawRotaGraph2() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty5 *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX5 *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx5_deque_.push_back(*gp);
 	layer_collection_[static_cast<int>(layer)].gpx5_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
@@ -267,7 +267,7 @@ void NyaGraphic::Draw(GraphicProperty5 *gp, eOBJECT layer)
 @note
  DXLIB::DrawRotaGraph3() に対応。
 **/
-void NyaGraphic::Draw(GraphicProperty6 *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX6 *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx6_deque_.push_back(*gp);
 	layer_collection_[static_cast<int>(layer)].gpx6_deque_.back().draw_angle_ = AngleToRad(gp->draw_angle_);
@@ -281,7 +281,7 @@ void NyaGraphic::Draw(GraphicProperty6 *gp, eOBJECT layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty1b *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX1b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx1b_deque_.push_back(*gp);
 }
@@ -294,7 +294,7 @@ void NyaGraphic::Draw(GraphicProperty1b *gp, eOBJECT layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawTurnGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty2b *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX2b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx2b_deque_.push_back(*gp);
 }
@@ -307,7 +307,7 @@ void NyaGraphic::Draw(GraphicProperty2b *gp, eOBJECT layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawExtendGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty3b *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX3b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx3b_deque_.push_back(*gp);
 }
@@ -321,7 +321,7 @@ void NyaGraphic::Draw(GraphicProperty3b *gp, eOBJECT layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicProperty4b *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX4b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gp);
 }
@@ -346,22 +346,22 @@ void NyaGraphic::Run(void)
 **/
 void NyaGraphic::DrawAll(eOBJECT draw_layer)
 {
-	GraphicProperty1* gp1;
-	GraphicProperty2* gp2;
-	GraphicProperty3* gp3;
-	GraphicProperty4* gp4;
-	GraphicProperty5* gpx5;
-	GraphicProperty6* gpx6;
-	GraphicProperty7* gpx7;
-	GraphicProperty8* gpx8;
-	GraphicProperty1b* gpx1b;
-	GraphicProperty2b* gpx2b;
-	GraphicProperty3b* gpx3b;
-	GraphicProperty4b* gpx4b;
-	GraphicProperty5b* gpx5b;
-	GraphicProperty6b* gpx6b;
-	GraphicProperty7b* gpx7b;
-	GraphicProperty8b* gpx8b;
+	GraphicPropertyX1* gp1;
+	GraphicPropertyX2* gp2;
+	GraphicPropertyX3* gp3;
+	GraphicPropertyX4* gp4;
+	GraphicPropertyX5* gpx5;
+	GraphicPropertyX6* gpx6;
+	GraphicPropertyX7* gpx7;
+	GraphicPropertyX8* gpx8;
+	GraphicPropertyX1b* gpx1b;
+	GraphicPropertyX2b* gpx2b;
+	GraphicPropertyX3b* gpx3b;
+	GraphicPropertyX4b* gpx4b;
+	GraphicPropertyX5b* gpx5b;
+	GraphicPropertyX6b* gpx6b;
+	GraphicPropertyX7b* gpx7b;
+	GraphicPropertyX8b* gpx8b;
 	int layer = static_cast<int>(draw_layer);
 
 	// 振動処理（未実装）

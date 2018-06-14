@@ -26,7 +26,7 @@ NyaEffect::NyaEffect()
 		for (auto& e : ea1_wait_list_)
 		{
 			e.ep_ = new EffectProperty1;
-			e.gp_ = new GraphicProperty4;
+			e.gp_ = new GraphicPropertyX4;
 		}
 	}
 
@@ -93,7 +93,7 @@ NyaEffect::~NyaEffect()
  gp->file_div_;
  gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJECT layer)
+void NyaEffect::Draw(const EffectProperty1* ep, const GraphicPropertyX4* gp, eOBJECT layer)
 {
 	static list<EffectAnimation1>::iterator it_from, it_to;
 
@@ -133,7 +133,7 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicProperty4* gp, eOBJ
  gp->file_div_;
  gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty2* ep, const GraphicProperty4* gp, eOBJECT layer)
+void NyaEffect::Draw(const EffectProperty2* ep, const GraphicPropertyX4* gp, eOBJECT layer)
 {
 	static list<EffectAnimation2>::iterator it_from, it_to;
 

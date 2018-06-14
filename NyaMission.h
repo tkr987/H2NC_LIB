@@ -34,9 +34,9 @@ namespace H2NLIB
 		void AddChild(NyaBackground* background);
 		void AddChild(int start_time_sec, int end_time_sec, NyaTarget* target, unsigned int id);
 		void AddChild(NyaUser* user);
-		void DeleteBackground(void);
-		void DeleteTarget(void);
-		void DeleteUser(void);
+		void ClearBackground(void);
+		void ClearTarget(void);
+		void ClearUser(void);
 		void Run(eEVENT check_event);
 		/**
 		 @brief ミッション作成イベントで実行する処理を定義する関数

@@ -79,11 +79,11 @@ void NyaInput::Run(eEVENT check_event)
 
 	// 前フレームのキー状態をセット
 	state_pre_[static_cast<int>(eINPUT::UP)]		= state_now_[static_cast<int>(eINPUT::UP)];
-    state_pre_[static_cast<int>(eINPUT::RIGHT)]		= state_now_[static_cast<int>(eINPUT::RIGHT)];
-    state_pre_[static_cast<int>(eINPUT::DOWN)]		= state_now_[static_cast<int>(eINPUT::DOWN)];
-    state_pre_[static_cast<int>(eINPUT::LEFT)]		= state_now_[static_cast<int>(eINPUT::LEFT)];
-    state_pre_[static_cast<int>(eINPUT::Q)]			= state_now_[static_cast<int>(eINPUT::Q)];
-    state_pre_[static_cast<int>(eINPUT::W)]			= state_now_[static_cast<int>(eINPUT::W)];
+	state_pre_[static_cast<int>(eINPUT::RIGHT)]		= state_now_[static_cast<int>(eINPUT::RIGHT)];
+	state_pre_[static_cast<int>(eINPUT::DOWN)]		= state_now_[static_cast<int>(eINPUT::DOWN)];
+	state_pre_[static_cast<int>(eINPUT::LEFT)]		= state_now_[static_cast<int>(eINPUT::LEFT)];
+	state_pre_[static_cast<int>(eINPUT::Q)]			= state_now_[static_cast<int>(eINPUT::Q)];
+	state_pre_[static_cast<int>(eINPUT::W)]			= state_now_[static_cast<int>(eINPUT::W)];
 	state_pre_[static_cast<int>(eINPUT::E)]			= state_now_[static_cast<int>(eINPUT::E)];
 	state_pre_[static_cast<int>(eINPUT::R)]			= state_now_[static_cast<int>(eINPUT::R)];
 	state_pre_[static_cast<int>(eINPUT::SPACE)]		= state_now_[static_cast<int>(eINPUT::SPACE)];

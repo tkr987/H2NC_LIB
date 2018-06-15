@@ -14,20 +14,18 @@ namespace H2NLIB
 	class PositionHandle1 
 	{
 	public:
-		bool collision_hit_;		// 衝突したかどうか
-		double collision_damage_;	// 衝突したときに与えるダメージ
-		double collision_range_;	// 衝突範囲
-		double health_max_;			// ヘルス最大値
-		double health_now_;			// 現在のヘルス
+		int collision_hit_;			// 衝突したときに与えられたダメージ(1フレーム毎に0クリアされる)
+		int collision_power_;		// 衝突したときに与えるダメージ
+		int collision_range_;		// 衝突範囲
+		int health_;				// 現在のヘルス
 		double grid_x_;				// オブジェクト（ハンドル）のX座標
 		double grid_y_;				// オブジェクト（ハンドル）のY座標
 		PositionHandle1()
 		{
-			collision_hit_ = false;
-			collision_damage_ = 1;
+			collision_hit_ = 0;
+			collision_power_ = 1;
 			collision_range_ = 10;
-			health_max_ = 1;
-			health_now_ = 1;
+			health_ = 1;
 			grid_x_ = 0;
 			grid_y_ = 0;
 		}
@@ -43,8 +41,7 @@ namespace H2NLIB
 		bool collision_hit_;
 		double collision_pow_;
 		double collision_range_;
-		double health_max_;
-		double health_now_;
+		double health_;
 		double grid_x_;
 		double grid_x_pre_;
 		double grid_y_;
@@ -54,8 +51,7 @@ namespace H2NLIB
 			collision_hit_ = false;
 			collision_pow_ = 1;
 			collision_range_ = 10;
-			health_max_ = 1;
-			health_now_ = 1;
+			health_ = 1;
 			grid_x_ = 0;
 			grid_x_pre_ = 0;
 			grid_y_ = 0;
@@ -85,6 +81,7 @@ namespace H2NLIB
 	private:
 		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_group_combination_;
 		static std::vector<CollisionHandleSet> collision_collection_;
+		static void ClearCollisionHit(eOBJECT object_type);
 		static void JudgeCollision1(eOBJECT, eOBJECT);
 		static void JudgeCollision2(eOBJECT, eOBJECT);
 	};

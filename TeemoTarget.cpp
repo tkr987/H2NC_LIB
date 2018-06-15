@@ -35,9 +35,8 @@ void TeemoTarget::MissionCreate(void)
 	
 	// target teemo main property
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &teemo_main_.gp_->graphic_file_);
-	teemo_main_.ph_->health_max_ = 100;
-	teemo_main_.ph_->health_now_ = 100;
-	teemo_main_.ph_->collision_damage_ = 1;
+	teemo_main_.ph_->health_ = 100;
+	teemo_main_.ph_->collision_power_ = 1;
 	teemo_main_.ph_->collision_range_ = 20;
 	teemo_main_.ph_->grid_x_ = 300;
 	teemo_main_.ph_->grid_y_ = 200;

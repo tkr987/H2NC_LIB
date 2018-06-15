@@ -15,6 +15,7 @@ namespace H2NLIB
 class TargetExTeemoMain
 {
 public:
+	const unsigned int health_max_;
 	H2NLIB::GraphicPropertyX4* gp_;
 	H2NLIB::PositionHandle1* ph_;
 	TargetExTeemoMain();

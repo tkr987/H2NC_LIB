@@ -22,8 +22,8 @@ namespace H2NLIB
 	class DevicePropertyX1
 	{
 	public:
-		double collision_pow_;				//!< Õ“Ë—Í
-		double collision_range_;			//!< Õ“Ë”ÍˆÍ
+		int collision_power_;				//!< Õ“Ë—Í
+		int collision_range_;				//!< Õ“Ë”ÍˆÍ
 		double create_x_;					//!< ¶¬xÀ•W
 		double create_y_;					//!< ¶¬yÀ•W	
 		double move_angle_deg_;				//!< ˆÚ“®Šp“x
@@ -33,8 +33,8 @@ namespace H2NLIB
 	class DevicePropertyX2
 	{
 	public:
-		double collision_pow_;				//!< Õ“Ë—Í
-		double collision_range_;			//!< Õ“Ë”ÍˆÍ
+		int collision_power_;				//!< Õ“Ë—Í
+		int collision_range_;				//!< Õ“Ë”ÍˆÍ
 		double create_x_;					//!< ¶¬xÀ•W
 		double create_y_;					//!< ¶¬yÀ•W	
 		double draw_angle_deg_;				//!< •`‰æŠp‘¬“x

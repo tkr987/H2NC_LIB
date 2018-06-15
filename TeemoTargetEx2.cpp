@@ -12,7 +12,7 @@
 using namespace std;
 using namespace H2NLIB;
 
-TargetExTeemo2Main::TargetExTeemo2Main()
+TargetExTeemo2Main::TargetExTeemo2Main() : health_max_(200) 
 {
 	gp_ = new GraphicPropertyX4;
 	ph_ = new PositionHandle1;
@@ -39,9 +39,8 @@ TargetExTeemo2::TargetExTeemo2(void)
 
 	// target ex teemo main property
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->graphic_file_);
-	main_.ph_->health_max_ = 200;
-	main_.ph_->health_now_ = 200;
-	main_.ph_->collision_damage_ = 1;
+	main_.ph_->health_ = main_.health_max_;
+	main_.ph_->collision_power_ = 1;
 	main_.ph_->collision_range_ = 20;
 	main_.ph_->grid_x_ = 300;
 	main_.ph_->grid_y_ = 200;
@@ -89,7 +88,7 @@ void TargetExTeemo2::Act(void)
 	count_frame_++;
 
 	// ヘルスが0以下になったらmission clearを表示する
-	if (main_.ph_->health_now_ <= 0)
+	if (main_.ph_->health_ <= 0)
 	{
 		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
 		ihandle_mission_all_over->valid_ = true;
@@ -109,10 +108,10 @@ void TargetExTeemo2::Draw(void)
 
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.ph_->health_now_) 
+	if (0 < main_.ph_->health_) 
 	{
 		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = main_.ph_->health_now_ / main_.ph_->health_max_ * 100;
+		ihandle_mission_ex->value_ = main_.ph_->health_ / main_.health_max_ * 100;
 	}
 	else
 	{
@@ -121,7 +120,7 @@ void TargetExTeemo2::Draw(void)
 	}
 
 #ifdef __DEBUG__
-	NyaString::Write("debug_font", white, 50, 90, "[50, 790] target ex health = %d", (int)main_.ph_->health_now_);
+	NyaString::Write("debug_font", white, 50, 90, "[50, 790] target ex health = %d", (int)main_.ph_->health_);
 #endif
 }
 

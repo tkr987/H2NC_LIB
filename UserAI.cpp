@@ -7,26 +7,26 @@
 #include "NyaInterface.h"
 #include "NyaPosition.h"
 #include "NyaString.h"
-#include "UserAI.h"
+#include "UserAi.h"
 
 using namespace std;
 using namespace H2NLIB;
 
 
-UserAiDevice2::UserAiDevice2()
+UserAiDevice::UserAiDevice()
 {
-	gadget_dp_ = new DevicePropertyX1;
-	gadget_gp_ = new GraphicPropertyX4;
-	effect_ep_ = new EffectProperty1;
-	effect_gp_ = new GraphicPropertyX4;
+	gadget_dpx_ = new DevicePropertyX1;
+	gadget_gpx_ = new GraphicPropertyX4;
+	effect_epx_ = new EffectProperty1;
+	effect_gpx_ = new GraphicPropertyX4;
 }
 
-UserAiDevice2::~UserAiDevice2()
+UserAiDevice::~UserAiDevice()
 {
-	delete gadget_dp_;
-	delete gadget_gp_;
-	delete effect_ep_;
-	delete effect_gp_;
+	delete gadget_dpx_;
+	delete gadget_gpx_;
+	delete effect_epx_;
+	delete effect_gpx_;
 }
 
 UserAiEffectTest::UserAiEffectTest()
@@ -53,25 +53,29 @@ UserAiMain::~UserAiMain()
 	delete ph_;
 }
 
-UserAI::UserAI(void)
+UserAi::UserAi(void)
 {
 	nya_device_ = new NyaDevice;
 	nya_effect_ = new NyaEffect;
 	nya_position_ = new NyaPosition;
+	InterfaceHandleMissionSkill* ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
 
 	count_frame_ = 0;
 
+	// interface
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)] = 200;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)] = 400;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)] = 600;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)] = 800;
+
 	// user ai device 2 property
-	ai_device2_.gadget_dp_->collision_pow_ = 1.0;
-	ai_device2_.gadget_dp_->collision_range_ = 2.0;
-	ai_device2_.gadget_dp_->move_angle_deg_ = -90;
-	ai_device2_.gadget_dp_->move_speed_ = 20;
-	ai_device2_.gadget_gp_->draw_angle_ = 90;
-	ai_device2_.gadget_gp_->extend_rate_ = 0.1;
-	NyaGraphic::LoadGraphicFile("img/user/arms.png", &ai_device2_.gadget_gp_->graphic_file_);
-	ai_device2_.effect_ep_->interval_time_frame_ = 2;
-	ai_device2_.effect_gp_->extend_rate_ = 1.0;
-	NyaGraphic::LoadGraphicFile(11, 1, "img/user/arms_effect2.png", &ai_device2_.effect_gp_->graphic_file_);
+	user_device_.gadget_dpx_->collision_range_ = 2;
+	user_device_.gadget_dpx_->move_speed_ = 20;
+	user_device_.gadget_gpx_->extend_rate_ = 0.1;
+	NyaGraphic::LoadGraphicFile("img/user/arms.png", &user_device_.gadget_gpx_->graphic_file_);
+	user_device_.effect_epx_->interval_time_frame_ = 2;
+	user_device_.effect_gpx_->extend_rate_ = 1.0;
+	NyaGraphic::LoadGraphicFile(11, 1, "img/user/arms_effect2.png", &user_device_.effect_gpx_->graphic_file_);
 
 	// user ai effect test property
 	ai_effect_test_.ep_->grid_x_ = 500;
@@ -88,10 +92,9 @@ UserAI::UserAI(void)
 	// user ai main property
 	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &main_.gp_->graphic_file_);
 	main_.gp_->extend_rate_ = 0.4;
-	main_.gp_->draw_angle_ = 90;
-	main_.ph_->health_max_ = 1;
-	main_.ph_->health_now_ = 1;
-	main_.ph_->collision_damage_ = 1;
+	main_.gp_->draw_angle_ = 0;
+	main_.ph_->health_ = 1;
+	main_.ph_->collision_power_ = 1;
 	main_.ph_->collision_range_ = 20;
 	main_.ph_->grid_x_ = 100;
 	main_.ph_->grid_y_ = 500;
@@ -104,20 +107,21 @@ UserAI::UserAI(void)
 	NyaString::SettingFont("teemo_font", 10, 2);
 }
 
-UserAI::~UserAI()
+UserAi::~UserAi()
 {
 	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
 }
 
-void UserAI::MissionRun(void)
+void UserAi::MissionRun(void)
 {
 	Act();
 	Draw();
 }
 
-void UserAI::Act(void)
+void UserAi::Act(void)
 {
-	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+	InterfaceHandleMissionSkill *ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// 移動テスト
 	if (NyaInput::GetKeyStateNow(eINPUT::RIGHT))
@@ -147,19 +151,23 @@ void UserAI::Act(void)
 	if (SCREEN_MAX_Y < main_.ph_->grid_y_)
 		main_.ph_->grid_y_ = SCREEN_MAX_Y;
 
-	// 攻撃テスト2
-	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 6 == 0)
+	// 攻撃処理
+	Act_Attack();
+
+	//スキルの選択肢を更新
+	if (NyaInput::IsPressKey(eINPUT::SPACE))
 	{
-		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_ -10;
-		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
-		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
-		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_;
-		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
-		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
-		ai_device2_.gadget_dp_->create_x_ = main_.ph_->grid_x_ +10;
-		ai_device2_.gadget_dp_->create_y_ = main_.ph_->grid_y_;
-		nya_device_->Attack1414(ai_device2_.gadget_dp_, ai_device2_.gadget_gp_, ai_device2_.effect_ep_, ai_device2_.effect_gp_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		if      (ihandle_mission_skill->select_ == eSKILL::Q)
+			ihandle_mission_skill->select_ = eSKILL::W;
+		else if (ihandle_mission_skill->select_ == eSKILL::W)
+			ihandle_mission_skill->select_ = eSKILL::E;
+		else if (ihandle_mission_skill->select_ == eSKILL::E)
+			ihandle_mission_skill->select_ = eSKILL::R;
+		else
+			ihandle_mission_skill->select_ = eSKILL::Q;
 	}
+
+
 
 	// 衝突判定
 	//nya_position_->Collision(ai_ph1_, eOBJECT::USER1);		
@@ -173,7 +181,222 @@ void UserAI::Act(void)
 	NyaString::Write("teemo_font", white, 50, 130, "[50, 130] teemo y = %d", (int)main_.ph_->grid_y_);
 }
 
-void UserAI::Draw(void)
+/**
+@brief 攻撃処理関数
+@note
+ 攻撃力の設定
+ - W true MAX power
+ lv0 = 3, lv1 = 6+2, lv2 = 9+4, lv3 = 12+6, lv4 = 15+8
+ - W false (bit true) MAX power
+ lv0 = 3, lv1 = 7, lv2 = 11, lv3 = 15, lv4 = 19 
+**/
+void UserAi::Act_Attack(void)
+{
+	InterfaceHandleMissionSkill *ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	int exp_q = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::Q)];
+	int lv1_exp_q = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)];
+	int lv2_exp_q = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)];
+	int lv3_exp_q = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)];
+	int lv4_exp_q = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)];
+	int exp_w = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::W)];
+	int lv1_exp_w = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)];
+	int lv2_exp_w = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)];
+	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
+	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
+
+	//***********************
+	// 低速移動時の攻撃
+	//***********************
+	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && NyaInput::GetKeyStateNow(eINPUT::W) == true && count_frame_ % 6 == 0)
+	{	// 3wave
+		if(exp_q < lv1_exp_q)
+			user_device_.gadget_dpx_->collision_power_ = 1;
+		else if(lv1_exp_q <= exp_q && exp_q < lv2_exp_q)
+			user_device_.gadget_dpx_->collision_power_ = 2;
+		else if(lv2_exp_q <= exp_q && exp_q < lv3_exp_q)
+			user_device_.gadget_dpx_->collision_power_ = 3;
+		else if(lv3_exp_q <= exp_q && exp_q < lv4_exp_q)
+			user_device_.gadget_dpx_->collision_power_ = 4;
+		else
+			user_device_.gadget_dpx_->collision_power_ = 5;
+		user_device_.gadget_dpx_->move_angle_deg_ = -90;
+		user_device_.gadget_gpx_->draw_angle_ = 90;
+		user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -10;
+		user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_;
+		user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +10;
+		user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		if (lv1_exp_w <= exp_w)
+		{	// 1wave + 1wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90;
+			user_device_.gadget_gpx_->draw_angle_ = 90;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -20;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +20;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+		if (lv2_exp_w <= exp_w)
+		{	// 1wave + 1wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90;
+			user_device_.gadget_gpx_->draw_angle_ = 90;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -30;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +30;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+		if (lv3_exp_w <= exp_w)
+		{	// 1wave + 1wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90;
+			user_device_.gadget_gpx_->draw_angle_ = 90;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -40;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +40;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+		if (lv4_exp_w <= exp_w)
+		{	// 1wave + 1wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90;
+			user_device_.gadget_gpx_->draw_angle_ = 90;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -50;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +50;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+
+	}
+	//***********************
+	// 高速移動時の攻撃
+	//***********************
+	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && NyaInput::GetKeyStateNow(eINPUT::W) == false && count_frame_ % 6 == 0)
+	{	// 3wave
+		user_device_.gadget_dpx_->collision_power_ = 1;
+		user_device_.gadget_dpx_->move_angle_deg_ = -90;
+		user_device_.gadget_gpx_->draw_angle_ = 90;
+		user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -10;
+		user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_;
+		user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +10;
+		user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_;
+		nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		if (lv1_exp_w <= exp_w)
+		{	// 2wave + 2wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 5;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 5;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -40;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 5;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 5;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -30;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 5;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 5;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +30;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 5;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 5;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +40;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+		if (lv2_exp_w <= exp_w)
+		{	// 2wave + 2wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 10;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 10;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -70;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 10;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 10;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -60;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 10;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 10;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +60;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 10;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 10;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +70;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+		if (lv3_exp_w <= exp_w)
+		{	// 2wave + 2wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 15;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 15;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -100;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 15;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 15;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -90;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 15;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 15;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +90;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 15;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 15;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +100;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+		if (lv4_exp_w <= exp_w)
+		{	// 2wave + 2wave
+			user_device_.gadget_dpx_->collision_power_ = 1;
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 20;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 20;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -130;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 - 20;
+			user_device_.gadget_gpx_->draw_angle_ = 90 - 20;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ -120;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 20;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 20;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +120;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			user_device_.gadget_dpx_->move_angle_deg_ = -90 + 20;
+			user_device_.gadget_gpx_->draw_angle_ = 90 + 20;
+			user_device_.gadget_dpx_->create_x_ = main_.ph_->grid_x_ +130;
+			user_device_.gadget_dpx_->create_y_ = main_.ph_->grid_y_ +30;
+			nya_device_->Attack1414(user_device_.gadget_dpx_, user_device_.gadget_gpx_, user_device_.effect_epx_, user_device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		}
+	}
+}
+
+void UserAi::Draw(void)
 {
 	// 描画テスト
 	main_.gp_->draw_grid_cx_ = (int)main_.ph_->grid_x_;
@@ -181,8 +404,6 @@ void UserAI::Draw(void)
 	if (count_frame_ % 2 == 0)
 		main_.gp_->file_div_ = ++main_.gp_->file_div_ % 16;
 	NyaGraphic::Draw(main_.gp_, eOBJECT::USER1);
-
-
 
 	// エフェクトテスト
 	if (count_frame_ % 200 == 0)

@@ -90,7 +90,7 @@ InterfaceHandleMissionEx::InterfaceHandleMissionEx()
 void NyaInterface::Init(void)
 {
 	count_frame_ = 0;
-	NyaString::SettingFont("design_exp_font", 18, 2);
+	NyaString::SettingFont("interface_exp_font", 18, 2);
 	NyaString::SettingFont("design_fps_font", 14, 2);
 	NyaString::SettingFont("interface_lib_font", 50, 6);
 	NyaString::SettingFont("design_mission_clear_big_font", 50, 2);
@@ -216,8 +216,8 @@ void NyaInterface::DrawMissionEx(void)
 void NyaInterface::DrawMissionWarning(void)
 {
 	int draw_grid_x, draw_grid_y;
-	int black = GetColor(0, 0, 0);
-	tuple<int, int, int> red = make_tuple(255, 0, 0);
+	const int black = GetColor(0, 0, 0);
+	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
 	// 効果音再生
 	if (handle_mission_warning_.sound_valid_)
@@ -248,11 +248,14 @@ void NyaInterface::DrawSkill(int x, int y)
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
+	// スキル選択肢の表示
+	NyaString::Write("design_skill_font", red, x, y + 90 * (static_cast<int>(handle_mission_skill_.select_) - 1), "★");
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
 		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1), "☆");
 		NyaString::Write("design_skill_font", white, x + 50, y + 90 * (skill - 1), handle_mission_skill_.name_[skill]);
 	}
+	// スキルのレベルと経験値の表示
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
 		unsigned int exp = handle_mission_skill_.exp_[skill];
@@ -260,30 +263,30 @@ void NyaInterface::DrawSkill(int x, int y)
 		unsigned int lv2_exp = handle_mission_skill_.lv2_exp_[skill];
 		unsigned int lv3_exp = handle_mission_skill_.lv3_exp_[skill];
 		unsigned int lv4_exp = handle_mission_skill_.lv4_exp_[skill];
-		NyaString::Write("design_exp_font", white, x + 150, y + 90 * (skill - 1) + 40, "Exp : %u pt", exp);
+		NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 40, "Exp : %u pt", exp);
 		if (exp < lv1_exp)
 		{
-			NyaString::Write("design_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv1_exp);
+			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv1_exp);
 		}
 		else if (lv1_exp <= exp && exp < lv2_exp)
 		{
 			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■□□□");
-			NyaString::Write("design_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv2_exp);
+			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv2_exp);
 		}
 		else if (lv2_exp <= exp && exp < lv3_exp)
 		{
 			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■□□");
-			NyaString::Write("design_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv3_exp);
+			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv3_exp);
 		}
 		else if (lv3_exp <= exp && exp < lv4_exp)
 		{
 			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■□");
-			NyaString::Write("design_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
+			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
 		}
 		else if (lv4_exp <= exp)
 		{
 			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■■");
-			NyaString::Write("design_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
+			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
 		}
 		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1) + 45, "□□□□");
 	}

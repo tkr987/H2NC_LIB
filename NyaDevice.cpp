@@ -112,13 +112,12 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dp, const GraphicP
 	it_from->move_y_ = sin(it_from->move_angle_rad_) * gadget_dp->move_speed_;
 	*it_from->gadget_dp_ = *gadget_dp;
 	*it_from->gadget_gp_ = *gadget_gp;
-	it_from->gadget_ph_->collision_hit_ = false;
-	it_from->gadget_ph_->collision_damage_ = gadget_dp->collision_pow_;
+	it_from->gadget_ph_->collision_hit_ = 0;
+	it_from->gadget_ph_->collision_power_ = gadget_dp->collision_power_;
 	it_from->gadget_ph_->collision_range_ = gadget_dp->collision_range_;
 	it_from->gadget_ph_->grid_x_ = gadget_dp->create_x_;
 	it_from->gadget_ph_->grid_y_ = gadget_dp->create_y_;
-	it_from->gadget_ph_->health_max_ = 1;
-	it_from->gadget_ph_->health_now_ = 1;
+	it_from->gadget_ph_->health_ = 1;
 
 	it_to = dg14_attack_list_[static_cast<int>(gadget_type)].begin();
 	dg14_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg14_wait_list_), it_from);
@@ -141,13 +140,12 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dp, const GraphicPrope
 	*it_from->effect_gp_ = *effect_gp;
 	*it_from->gadget_dp_ = *gadget_dp;
 	*it_from->gadget_gp_ = *gadget_gp;
-	it_from->gadget_ph_->collision_hit_ = false;
-	it_from->gadget_ph_->collision_damage_ = gadget_dp->collision_pow_;
+	it_from->gadget_ph_->collision_hit_ = 0;
+	it_from->gadget_ph_->collision_power_ = gadget_dp->collision_power_;
 	it_from->gadget_ph_->collision_range_ = gadget_dp->collision_range_;
 	it_from->gadget_ph_->grid_x_ = gadget_dp->create_x_;
 	it_from->gadget_ph_->grid_y_ = gadget_dp->create_y_;
-	it_from->gadget_ph_->health_max_ = 1;
-	it_from->gadget_ph_->health_now_ = 1;
+	it_from->gadget_ph_->health_ = 1;
 
 	it_to = dg1414_attack_list_[static_cast<int>(gadget_type)].begin();
 	dg1414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg1414_wait_list_), it_from);
@@ -189,7 +187,7 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		{
 			dg14_delete_deque.push_back(it);
 		}
-		else if (it->gadget_ph_->collision_hit_)
+		else if (it->gadget_ph_->collision_hit_ != 0)
 		{
 			dg14_delete_deque.push_back(it);
 		}
@@ -211,7 +209,7 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		{
 			dg1414_delete_deque.push_back(it);
 		}
-		else if (it->gadget_ph_->collision_hit_)
+		else if (it->gadget_ph_->collision_hit_ != 0)
 		{
 			it->effect_ep_->grid_x_ = (int)it->gadget_ph_->grid_x_;
 			it->effect_ep_->grid_y_ = (int)it->gadget_ph_->grid_y_;

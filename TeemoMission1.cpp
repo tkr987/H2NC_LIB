@@ -25,7 +25,7 @@ void TeemoMission1::Create(void)
 	//**************************************
 	// ユーザーを子オブジェクトとして追加
 	//**************************************
-	AddChild(new UserAI);
+	AddChild(new UserAi);
 
 	//******************
 	// interface 設定

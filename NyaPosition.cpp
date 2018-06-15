@@ -20,7 +20,6 @@ vector<CollisionHandleSet> NyaPosition::collision_collection_(static_cast<int>(e
 **/
 void NyaPosition::Collision(PositionHandle1* phandle, eOBJECT group)
 {
-	phandle->collision_hit_ = false;
 	collision_collection_[static_cast<int>(group)].handle1_collection_.push_back(phandle);
 }
 
@@ -79,14 +78,27 @@ bool NyaPosition::InScreen(PositionHandle1* phandle, int gap)
 **/
 void NyaPosition::Run(void)
 {
+	// 衝突判定をする前に衝突ダメージを0クリアしておく
+	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
+		ClearCollisionHit(type);
+
 	// CollisionSettingで設定したオブジェクトグループの組み合わせで衝突判定をおこなう
 	for (auto& e : collision_group_combination_)
 		JudgeCollision1(e.first, e.second);
 
-	// 毎フレームCollisionHandleSetのクリアをする
+	// 毎フレーム登録されたCollisionHandleSetのクリアをする
 	for (auto& e : collision_collection_) 
 		e.handle1_collection_.clear();
 }
+
+void NyaPosition::ClearCollisionHit(eOBJECT object_type)
+{
+	for (auto& e : collision_collection_[static_cast<int>(object_type)].handle1_collection_)
+		e->collision_hit_ = 0;
+	for (auto& e : collision_collection_[static_cast<int>(object_type)].handle2_collection_)
+		e->collision_hit_ = 0;
+}
+
 
 /**
  @brief 衝突判定を実行する関数１
@@ -103,10 +115,10 @@ void NyaPosition::JudgeCollision1(eOBJECT object_group1, eOBJECT object_group2)
 			if ((e1->grid_x_ - e2->grid_x_) * (e1->grid_x_ - e2->grid_x_) + (e1->grid_y_ - e2->grid_y_) * (e1->grid_y_ - e2->grid_y_) 
 				< (e1->collision_range_ + e2->collision_range_) * (e1->collision_range_ + e2->collision_range_))
 			{
-				e1->health_now_ -= e2->collision_damage_;
-				e2->health_now_ -= e1->collision_damage_;
-				e1->collision_hit_ = true;
-				e2->collision_hit_ = true;
+				e1->collision_hit_ += e2->collision_power_;
+				e2->collision_hit_ += e1->collision_power_;
+				e1->health_ -= e2->collision_power_;
+				e2->health_ -= e1->collision_power_;
 			}
 		}
 	}

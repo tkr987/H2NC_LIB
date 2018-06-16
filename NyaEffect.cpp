@@ -5,71 +5,40 @@
 using namespace std;
 using namespace H2NLIB;
 
-#define EFFECT_MAX_DEFAULT 10000
 
-
-int NyaEffect::count_instance_ = 0;
 list<EffectAnimation1> NyaEffect::ea1_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<EffectAnimation1> NyaEffect::ea1_wait_list_;
+list<EffectAnimation1> NyaEffect::ea1_wait_list_(EFFECT_MAX_DEFAULT);
 list<EffectAnimation2> NyaEffect::ea2_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<EffectAnimation2> NyaEffect::ea2_wait_list_;
+list<EffectAnimation2> NyaEffect::ea2_wait_list_(EFFECT_MAX_DEFAULT);
 
-NyaEffect::NyaEffect()
+EffectAnimation1::EffectAnimation1()
 {
-
-	nya_position_ = new NyaPosition;
-
-	// 初めてクラスのインスタンスが作られたときに初期化される
-	if (count_instance_ == 0)
-	{
-		ea1_wait_list_.resize(EFFECT_MAX_DEFAULT);
-		for (auto& e : ea1_wait_list_)
-		{
-			e.ep_ = new EffectProperty1;
-			e.gp_ = new GraphicPropertyX4;
-		}
-	}
-
-	count_instance_++;
+	count_ = 0;
+	epx_ = new EffectPropertyX1;
+	gpx_ = new GraphicPropertyX4;
 }
 
-
-NyaEffect::~NyaEffect()
+EffectAnimation1::~EffectAnimation1()
 {
-	delete nya_position_;
+	delete epx_;
+	epx_ = nullptr;
+	delete gpx_;
+	gpx_ = nullptr;
+}
 
-	// クラスのインスタンスが1つだけになったときメモリの解放
-	if (count_instance_ == 1)
-	{
-		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
-		{
-			for (auto& e : ea1_draw_list_[static_cast<int>(type)])
-			{
-				delete e.ep_;
-				delete e.gp_;
-			}
-		}
-		for (auto& e : ea1_wait_list_)
-		{
-			delete e.ep_;
-			delete e.gp_;
-		}
-		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
-		{
-			for (auto& e : ea2_draw_list_[static_cast<int>(type)])
-			{
-				delete e.ep_;
-				delete e.gp_;
-			}
-		}
-		for (auto& e : ea2_wait_list_)
-		{
-			delete e.ep_;
-			delete e.gp_;
-		}
-	}
+EffectAnimation2::EffectAnimation2()
+{
+	count_ = 0;
+	epx_ = new EffectPropertyX2;
+	gpx_ = new GraphicPropertyX4;
+}
 
-	count_instance_--;
+EffectAnimation2::~EffectAnimation2()
+{
+	delete epx_;
+	epx_ = nullptr;
+	delete gpx_;
+	gpx_ = nullptr;
 }
 
 
@@ -88,12 +57,12 @@ NyaEffect::~NyaEffect()
  gp->extend_rate_;
  gp->flag_turn_;
  gp->flag_trans_;
- gp_->graphic_file_
+ gp_->file_
  この関数では下記メンバ変数は利用しないため、値を設定しても無視される。
  gp->file_div_;
  gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty1* ep, const GraphicPropertyX4* gp, eOBJECT layer)
+void NyaEffect::Draw(const EffectPropertyX1* epx, const GraphicPropertyX4* gpx, eOBJECT layer)
 {
 	static list<EffectAnimation1>::iterator it_from, it_to;
 
@@ -102,9 +71,9 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicPropertyX4* gp, eOB
 	
 	it_from = ea1_wait_list_.begin();
 	it_from->count_ = 0;
-	*it_from->ep_ = *ep;
-	*it_from->gp_ = *gp;
-	it_from->gp_->file_div_ = 0;
+	*it_from->epx_ = *epx;
+	*it_from->gpx_ = *gpx;
+	it_from->gpx_->file_div_ = 0;
 
 
 
@@ -133,7 +102,7 @@ void NyaEffect::Draw(const EffectProperty1* ep, const GraphicPropertyX4* gp, eOB
  gp->file_div_;
  gp->int draw_grid_cx_; gp->int draw_grid_cy_;
 **/
-void NyaEffect::Draw(const EffectProperty2* ep, const GraphicPropertyX4* gp, eOBJECT layer)
+void NyaEffect::Draw(const EffectPropertyX2* epx, const GraphicPropertyX4* gpx, eOBJECT layer)
 {
 	static list<EffectAnimation2>::iterator it_from, it_to;
 
@@ -142,9 +111,9 @@ void NyaEffect::Draw(const EffectProperty2* ep, const GraphicPropertyX4* gp, eOB
 	
 	it_from = ea2_wait_list_.begin();
 	it_from->count_ = 0;
-	*it_from->gp_ = *gp;
-	it_from->gp_->file_div_ = 0;
-	*it_from->ep_ = *ep;
+	*it_from->gpx_ = *gpx;
+	it_from->gpx_->file_div_ = 0;
+	*it_from->epx_ = *epx;
 
 	it_to = ea2_draw_list_[static_cast<int>(layer)].begin();
 	ea2_draw_list_[static_cast<int>(layer)].splice(it_to, move(ea2_wait_list_), it_from);
@@ -169,7 +138,7 @@ void NyaEffect::DrawAnimation1(eOBJECT layer)
 	// ************
 	for (auto it = ea1_draw_list_[static_cast<int>(layer)].begin(); it != ea1_draw_list_[static_cast<int>(layer)].end(); ++it)
 	{
-		if (it->gp_->file_div_ == it->gp_->graphic_file_.div_total_)
+		if (it->gpx_->file_div_ == it->gpx_->file_.div_total_)
 			delete_deque.push_back(it);
 	}
 	while (!delete_deque.empty())
@@ -183,16 +152,14 @@ void NyaEffect::DrawAnimation1(eOBJECT layer)
 	// ************
 	for (auto& e : ea1_draw_list_[static_cast<int>(layer)])
 	{		
-		e.gp_->draw_grid_cx_ = e.ep_->grid_x_;
-		e.gp_->draw_grid_cy_ = e.ep_->grid_y_;
-		nya_graphic_->Draw(e.gp_, layer);
+		e.gpx_->draw_grid_cx_ = e.epx_->grid_x_;
+		e.gpx_->draw_grid_cy_ = e.epx_->grid_y_;
+		NyaGraphic::Draw(e.gpx_, layer);
 
 		e.count_++;
-		if (e.count_ == e.ep_->interval_time_frame_)
+		if (e.count_ == e.epx_->interval_time_frame_)
 		{
-
-
-			e.gp_->file_div_++;
+			e.gpx_->file_div_++;
 			e.count_ = 0;
 		}
 	}

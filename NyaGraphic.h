@@ -35,15 +35,11 @@ namespace H2NLIB
 	public:
 		double draw_grid_x_;
 		double draw_grid_y_;
+		GraphicFile file_;
 		int file_div_;
 		bool flag_trans_;
-		GraphicFile graphic_file_;
-		GraphicPropertyX1()
-		{
-			file_div_ = 0;
-			flag_trans_ = true;
-		}
-		GraphicPropertyX1& operator=(const GraphicPropertyX1& gp);
+		GraphicPropertyX1();
+		GraphicPropertyX1& operator=(const GraphicPropertyX1& gpx);
 	};
 
 	// DXLIB LRîΩì]ï`âÊä÷êîÇ…ëŒâû
@@ -55,7 +51,7 @@ namespace H2NLIB
 		double draw_grid_y_;
 		int file_div_;
 		bool flag_trans_;
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		GraphicPropertyX2()
 		{
 			file_div_ = 0;
@@ -66,7 +62,7 @@ namespace H2NLIB
 			draw_grid_x_ = gp.draw_grid_x_;
 			draw_grid_y_ = gp.draw_grid_y_;
 			file_div_ = gp.file_div_;
-			graphic_file_ = gp.graphic_file_;
+			file_ = gp.file_;
 			flag_trans_ = gp.flag_trans_;
 			return *this;
 		}
@@ -83,21 +79,21 @@ namespace H2NLIB
 		double draw_grid_y2_;
 		int file_div_;
 		bool flag_trans_;
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		GraphicPropertyX3()
 		{
 			file_div_ = 0;
 			flag_trans_ = true;
 		}
-		GraphicPropertyX3& operator=(const GraphicPropertyX3& gp)
+		GraphicPropertyX3& operator=(const GraphicPropertyX3& gpx)
 		{
-			draw_grid_x1_ = gp.draw_grid_x1_;
-			draw_grid_y1_ = gp.draw_grid_y1_;
-			draw_grid_x2_ = gp.draw_grid_x2_;
-			draw_grid_y2_ = gp.draw_grid_y2_;
-			file_div_ = gp.file_div_;
-			graphic_file_ = gp.graphic_file_;
-			flag_trans_ = gp.flag_trans_;
+			draw_grid_x1_ = gpx.draw_grid_x1_;
+			draw_grid_y1_ = gpx.draw_grid_y1_;
+			draw_grid_x2_ = gpx.draw_grid_x2_;
+			draw_grid_y2_ = gpx.draw_grid_y2_;
+			file_div_ = gpx.file_div_;
+			file_ = gpx.file_;
+			flag_trans_ = gpx.flag_trans_;
 			return *this;
 		}
 	};
@@ -111,18 +107,11 @@ namespace H2NLIB
 		double draw_grid_cx_;
 		double draw_grid_cy_;
 		double extend_rate_;
+		GraphicFile file_;
 		int file_div_;
 		bool flag_turn_;
 		bool flag_trans_;
-		GraphicFile graphic_file_;
-		GraphicPropertyX4()
-		{
-			draw_angle_ = 0;
-			extend_rate_ = 1.0;
-			file_div_ = 0;
-			flag_turn_ = false;
-			flag_trans_ = true;
-		}
+		GraphicPropertyX4();
 		GraphicPropertyX4& operator=(const GraphicPropertyX4& gp);
 
 	};
@@ -132,7 +121,7 @@ namespace H2NLIB
 	class GraphicPropertyX5 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x_;
 		int pos_y_;
@@ -149,7 +138,7 @@ namespace H2NLIB
 	class GraphicPropertyX6 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x_;
 		int pos_y_;
@@ -167,7 +156,7 @@ namespace H2NLIB
 	class GraphicPropertyX7 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x1_;
 		int pos_x2_;
@@ -185,7 +174,7 @@ namespace H2NLIB
 	class GraphicPropertyX8 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_dx_;
 		int pos_dy_;
@@ -203,7 +192,7 @@ namespace H2NLIB
 	class GraphicPropertyX1b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x_;
 		int pos_y_;
@@ -218,7 +207,7 @@ namespace H2NLIB
 	class GraphicPropertyX2b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x_;
 		int pos_y_;
@@ -233,7 +222,7 @@ namespace H2NLIB
 	class GraphicPropertyX3b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x1_;
 		int pos_y1_;
@@ -250,7 +239,7 @@ namespace H2NLIB
 	class GraphicPropertyX4b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_cx_;
 		int pos_cy_;
@@ -268,7 +257,7 @@ namespace H2NLIB
 	class GraphicPropertyX5b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x_;
 		int pos_y_;
@@ -288,7 +277,7 @@ namespace H2NLIB
 	class GraphicPropertyX6b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x_;
 		int pos_y_;
@@ -309,7 +298,7 @@ namespace H2NLIB
 	class GraphicPropertyX7b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_x1_;
 		int pos_x2_;
@@ -330,7 +319,7 @@ namespace H2NLIB
 	class GraphicPropertyX8b 
 	{
 	public:
-		GraphicFile graphic_file_;
+		GraphicFile file_;
 		int file_div_;
 		int pos_dx_;
 		int pos_dy_;
@@ -346,10 +335,10 @@ namespace H2NLIB
 
 	class GraphicDrawSet {
 	public:
-		std::deque<GraphicPropertyX1> gp1_deque_;
-		std::deque<GraphicPropertyX2> gp2_deque_;
-		std::deque<GraphicPropertyX3> gp3_deque_;
-		std::deque<GraphicPropertyX4> gp4_deque_;
+		std::deque<GraphicPropertyX1> gpx1_deque_;
+		std::deque<GraphicPropertyX2> gpx2_deque_;
+		std::deque<GraphicPropertyX3> gpx3_deque_;
+		std::deque<GraphicPropertyX4> gpx4_deque_;
 		std::deque<GraphicPropertyX5> gpx5_deque_;
 		std::deque<GraphicPropertyX6> gpx6_deque_;
 		std::deque<GraphicPropertyX7> gpx7_deque_;
@@ -364,10 +353,10 @@ namespace H2NLIB
 		std::deque<GraphicPropertyX8b> gpx8b_deque_;
 		void Clear(void)
 		{
-			gp1_deque_.clear();
-			gp2_deque_.clear();
-			gp3_deque_.clear();
-			gp4_deque_.clear();
+			gpx1_deque_.clear();
+			gpx2_deque_.clear();
+			gpx3_deque_.clear();
+			gpx4_deque_.clear();
 			gpx5_deque_.clear();
 			gpx6_deque_.clear();
 			gpx7_deque_.clear();
@@ -392,7 +381,7 @@ namespace H2NLIB
 		static void Draw(const GraphicPropertyX1* gp, eOBJECT layer);
 		static void Draw(GraphicPropertyX2* gp, eOBJECT layer);
 		static void Draw(GraphicPropertyX3* gp, eOBJECT layer);
-		static void Draw(const GraphicPropertyX4* gp, eOBJECT layer);
+		static void Draw(const GraphicPropertyX4* gpx, eOBJECT layer);
 		static void Draw(GraphicPropertyX5* gp, eOBJECT layer);
 		static void Draw(GraphicPropertyX6* gp, eOBJECT layer);
 		static void Draw(GraphicPropertyX1b* gp, eOBJECT layer);

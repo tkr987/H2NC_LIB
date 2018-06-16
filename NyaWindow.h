@@ -43,8 +43,6 @@ namespace H2NLIB
 		eEVENT event_next_;
 		std::string title_;
 		ChildMission child_mission_;
-		NyaDevice* nya_device_;
-		NyaEffect* nya_effect_;
 		NyaPosition* nya_position_;
 		void Mission(void);
 		void NotSaveReplay(void);

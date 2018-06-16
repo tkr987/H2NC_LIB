@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #include "NyaTarget.h"
 
 namespace H2NLIB 

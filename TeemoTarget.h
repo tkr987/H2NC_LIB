@@ -4,8 +4,6 @@
 
 
 namespace H2NLIB {
-	class NyaDevice;
-	class NyaPosition;
 	class NyaString;
 	class DevicePropertyX1;
 	class GraphicPropertyX4;
@@ -30,8 +28,6 @@ public:
 	void MissionRun(void);
 private:
 	unsigned int count_frame_;
-	H2NLIB::NyaDevice* nya_device_;
-	H2NLIB::NyaPosition* nya_position_;
 	TargetTeemoMain teemo_main_;
 	void Act(void);
 	void Draw(void);

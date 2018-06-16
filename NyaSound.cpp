@@ -55,7 +55,7 @@ void NyaSound::DeleteSoundFile(SoundFile* file)
 	}
 }
 
-void NyaSound::LoadSoundFile(std::string file_pass, SoundFile* file)
+void NyaSound::LoadFile(std::string file_pass, SoundFile* file)
 {
 	list<SoundFile>::iterator it;
 	SoundFile new_file;

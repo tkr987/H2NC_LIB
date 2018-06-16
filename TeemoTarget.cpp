@@ -29,23 +29,19 @@ void TeemoTarget::MissionClear(void)
 void TeemoTarget::MissionCreate(void)
 {
 	count_frame_ = 0;
-
-	nya_device_ = new NyaDevice;
-	nya_position_ = new NyaPosition;
 	
 	// target teemo main property
-	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &teemo_main_.gp_->graphic_file_);
-	teemo_main_.ph_->health_ = 100;
+	NyaGraphic::LoadGraphicFile("img/target/teemo_ex3b.png", &teemo_main_.gp_->file_);
+	teemo_main_.ph_->health_ = 1000;
 	teemo_main_.ph_->collision_power_ = 1;
 	teemo_main_.ph_->collision_range_ = 20;
-	teemo_main_.ph_->grid_x_ = 300;
-	teemo_main_.ph_->grid_y_ = 200;
+	teemo_main_.ph_->grid_x_ = -100;
+	teemo_main_.ph_->grid_y_ = -100;
 }
 
 void TeemoTarget::MissionDelete(void)
 {
-	delete nya_device_;
-	delete nya_position_;
+
 }
 
 void TeemoTarget::MissionRun(void)
@@ -56,7 +52,7 @@ void TeemoTarget::MissionRun(void)
 
 void TeemoTarget::Act(void)
 {	
-	nya_position_->Collision(teemo_main_.ph_, eOBJECT::TARGET1);
+	NyaPosition::Collision(teemo_main_.ph_, eOBJECT::TARGET1);
 }
 
 void TeemoTarget::Draw(void)

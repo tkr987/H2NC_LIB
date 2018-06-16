@@ -34,11 +34,11 @@ TargetExTeemo2::TargetExTeemo2(void)
 
 	// mission warning setting
 	handle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::LoadSoundFile("sound/warning.wav", &handle_mission_warning->spx_->file_);
+	NyaSound::LoadFile("sound/warning.wav", &handle_mission_warning->spx_->file_);
 	NyaSound::ChangeVolume(&handle_mission_warning->spx_->file_, 20);
 
 	// target ex teemo main property
-	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->graphic_file_);
+	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->file_);
 	main_.ph_->health_ = main_.health_max_;
 	main_.ph_->collision_power_ = 1;
 	main_.ph_->collision_range_ = 20;
@@ -52,7 +52,7 @@ TargetExTeemo2::~TargetExTeemo2(void)
 	InterfaceHandleMissionWarning* ihandle_mission_warning;
 
 	// 使用したグラフィックデータなどはデストラクタで破棄する
-	NyaGraphic::DeleteGraphicFile(&main_.gp_->graphic_file_);
+	NyaGraphic::DeleteGraphicFile(&main_.gp_->file_);
 	ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
 	NyaSound::DeleteSoundFile(&ihandle_mission_warning->spx_->file_);
 }

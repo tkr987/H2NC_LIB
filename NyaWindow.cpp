@@ -38,8 +38,6 @@ NyaWindow::~NyaWindow()
 		delete e;
 
 	// nya class delete
-	delete nya_device_;
-	delete nya_effect_;
 	delete nya_position_;
 
 	DxLib_End();
@@ -83,8 +81,6 @@ int NyaWindow::Init(string title)
 
 	// コンストラクタでDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にインスタンスを生成する必要がある。
-	nya_device_ = new NyaDevice;
-	nya_effect_ = new NyaEffect;
 	NyaInterface::Init();
 	nya_position_ = new NyaPosition;
 	
@@ -135,7 +131,7 @@ void NyaWindow::Run(void)
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		nya_device_->Run();
+		NyaDevice::Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 620, "[600, 620] NyaDevice::Run() %d msec", (int)debug_time_msec);
@@ -145,7 +141,7 @@ void NyaWindow::Run(void)
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		nya_effect_->Run();
+		NyaEffect::Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 640, "[600, 640] NyaEffect::Run() %d msec", (int)debug_time_msec);

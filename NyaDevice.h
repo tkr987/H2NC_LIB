@@ -12,10 +12,7 @@
 namespace H2NLIB
 {
 
-	class NyaEffect;
-	class NyaGraphic;
-	class NyaPosition;
-	class EffectProperty1;
+	class EffectPropertyX1;
 	class GraphicPropertyX4;
 	class PositionHandle1;
 
@@ -51,9 +48,9 @@ namespace H2NLIB
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
-		DevicePropertyX1* gadget_dp_;
-		GraphicPropertyX4* gadget_gp_;
-		PositionHandle1* gadget_ph_;
+		DevicePropertyX1* gadget_dpx_;
+		GraphicPropertyX4* gadget_gpx_;
+		PositionHandle1* gadget_phandle_;
 		DeviceGadget14();
 		~DeviceGadget14();
 	};
@@ -64,11 +61,11 @@ namespace H2NLIB
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
-		EffectProperty1* effect_ep_;
-		GraphicPropertyX4* effect_gp_;
-		DevicePropertyX1* gadget_dp_;
-		GraphicPropertyX4* gadget_gp_;
-		PositionHandle1* gadget_ph_;
+		EffectPropertyX1* effect_epx_;
+		GraphicPropertyX4* effect_gpx_;
+		DevicePropertyX1* gadget_dpx_;
+		GraphicPropertyX4* gadget_gpx_;
+		PositionHandle1* gadget_phandle_;
 		eOBJECT effect_type_;
 		DeviceGadget1414();
 		~DeviceGadget1414();
@@ -81,28 +78,23 @@ namespace H2NLIB
 	};
 
 
-	class NyaDevice {
+	class NyaDevice
+	{
 	public:
-		NyaDevice();
-		~NyaDevice();
-		void Attack14(const DevicePropertyX1* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type);
-		void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectProperty1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type);
-		void Attack2414(DevicePropertyX2* gadget_dpx, GraphicPropertyX4* gadget_gpx, EffectProperty1* effect_epx, GraphicPropertyX4* effect_gpx);
-		void Run(void);
+		static void Attack14(const DevicePropertyX1* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type);
+		static void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type);
+		static void Attack2414(DevicePropertyX2* gadget_dpx, GraphicPropertyX4* gadget_gpx, EffectPropertyX1* effect_epx, GraphicPropertyX4* effect_gpx);
+		static void Run(void);
 	private:
-		NyaEffect* nya_effect_;
-		NyaGraphic* nya_graphic_;
-		NyaPosition* nya_position_;
-		static int count_instance_;
 		static std::list<DeviceGadget14> dg14_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget14> dg14_wait_list_;
 		static std::list<DeviceGadget1414> dg1414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget1414> dg1414_wait_list_;
 		static std::list<DeviceGadget2414> dg2414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget2414> dg2414_wait_list_;
-		void MoveGadget(eOBJECT group);
-		double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
-		double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
+		static void MoveGadget(eOBJECT group);
+		static double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
+		static double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
 	};
 
 }

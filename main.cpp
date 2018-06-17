@@ -27,10 +27,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// mission ’Ç‰Á
 	H2NLIB::NyaMission* teemo_mission1 = new TeemoMission1;
 	nya_window->AddChild(teemo_mission1);
-//	H2NLIB::NyaMission* teemo_mission2 = new TeemoMission2;
-//	nya_window->AddChild(teemo_mission2);
-	H2NLIB::NyaMission* teemo_mission4 = new TeemoMission4;
-	nya_window->AddChild(teemo_mission4);
+	H2NLIB::NyaMission* teemo_mission2 = new TeemoMission2;
+	nya_window->AddChild(teemo_mission2);
+//	H2NLIB::NyaMission* teemo_mission4 = new TeemoMission4;
+//	nya_window->AddChild(teemo_mission4);
 
 	// ŽÀs
 	nya_window->Run();

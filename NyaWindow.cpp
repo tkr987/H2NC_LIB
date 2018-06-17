@@ -419,13 +419,13 @@ void NyaWindow::SaveReplay(void)
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{
 		if (select == 1)
-			NyaInput::OutputFile("replay/replay1.rep");
+			NyaInput::OutputReplay("replay/replay1.rep");
 		if (select == 2)
-			NyaInput::OutputFile("replay/replay2.rep");
+			NyaInput::OutputReplay("replay/replay2.rep");
 		if (select == 3)
-			NyaInput::OutputFile("replay/replay3.rep");
+			NyaInput::OutputReplay("replay/replay3.rep");
 		if (select == 4)
-			NyaInput::OutputFile("replay/replay4.rep");
+			NyaInput::OutputReplay("replay/replay4.rep");
 	}
 
 	//******************
@@ -471,7 +471,7 @@ void NyaWindow::NotSaveReplay(void)
 void NyaWindow::Title(void)
 {
 	int x, y;
-	string date;
+	string date, seed;
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -509,6 +509,7 @@ void NyaWindow::Title(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
 	}
@@ -521,6 +522,7 @@ void NyaWindow::Title(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
 	}
@@ -533,6 +535,7 @@ void NyaWindow::Title(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
 	}
@@ -545,6 +548,7 @@ void NyaWindow::Title(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
 	}
@@ -564,15 +568,18 @@ void NyaWindow::Title(void)
 	//***********************
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{	
-		// リプレイの実行
-		if (select == 1)
-			NyaInput::InputFile("replay/replay1.rep");
+		if (select == 0)
+			NyaInput::InitRand();	
+		else if (select == 1)
+			NyaInput::InputReplay("replay/replay1.rep");
 		else if (select == 2)
-			NyaInput::InputFile("replay/replay2.rep");
+			NyaInput::InputReplay("replay/replay2.rep");
 		else if (select == 3)
-			NyaInput::InputFile("replay/replay3.rep");
+			NyaInput::InputReplay("replay/replay3.rep");
 		else if (select == 4)
-			NyaInput::InputFile("replay/replay4.rep");
+			NyaInput::InputReplay("replay/replay4.rep");
+
+
 
 		switch (select)
 		{	// イベントの更新

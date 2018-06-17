@@ -91,10 +91,8 @@ void TeemoTargetEx4::Draw(void)
 	if (count_frame_ < FPS_MAX * 5)
 	{
 		NyaString::Write("warning_logo_font", red, 225, 200, "WARNING");
-		NyaString::Write("ex_logo_font", red, 190, 300, "EX BOSS");
+		NyaString::Write("ex_logo_font", red, 180, 300, "EX BOSS");
 	}
-
-
 
 	// –{‘Ì‚Ì•`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;

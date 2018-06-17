@@ -344,9 +344,10 @@ void NyaGraphic::Draw(GraphicPropertyX3b *gp, eOBJECT layer)
  DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
  ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX4b *gp, eOBJECT layer)
+void NyaGraphic::Draw(GraphicPropertyX4b *gpx, eOBJECT layer)
 {
-	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gp);
+	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gpx);
+	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.back().draw_angle_ = AngleToRad(gpx->draw_angle_);
 }
 
 void NyaGraphic::Run(void)

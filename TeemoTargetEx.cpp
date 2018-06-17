@@ -12,7 +12,7 @@
 using namespace std;
 using namespace H2NLIB;
 
-TargetExTeemoMain::TargetExTeemoMain() : health_max_(1000) 
+TargetExTeemoMain::TargetExTeemoMain() : health_max_(500) 
 {
 	gp_ = new GraphicPropertyX4;
 	ph_ = new PositionHandle1;
@@ -41,7 +41,7 @@ TargetExTeemo::TargetExTeemo(void)
 
 	// target ex teemo main property
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->file_);
-	main_.ph_->health_ = 1000;
+	main_.ph_->health_ = main_.health_max_;
 	main_.ph_->collision_power_ = 1;
 	main_.ph_->collision_range_ = 20;
 	main_.ph_->grid_x_ = 300;

@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
+#include <random>
 #include "DxLib.h"
 #include "NyaInput.h"
 
@@ -9,17 +9,47 @@
 using namespace std;
 using namespace H2NLIB;
 
-std::deque<int> NyaInput::save_state_collection_;
+stringstream NyaInput::output_seed_;
+stringstream NyaInput::output_date_;
+deque<int> NyaInput::save_state_collection_;
 bool NyaInput::state_now_[static_cast<int>(eINPUT::sizeof_enum)];
 bool NyaInput::state_pre_[static_cast<int>(eINPUT::sizeof_enum)];
 
+void NyaInput::InitRand(void)
+{
+	int seed = 0;
+	time_t system_time;
+	tm local_time;
 
-void NyaInput::InputFile(string file_name)
+	output_date_.clear();
+	output_seed_.clear();
+
+	system_time = time(nullptr);
+	localtime_s(&local_time, &system_time);
+	seed = local_time.tm_year + local_time.tm_mon + local_time.tm_mday + local_time.tm_hour + local_time.tm_min;
+	std::mt19937 mt(seed);
+	output_seed_ << seed;
+	output_date_ << local_time.tm_year+1900;
+	output_date_ << "/";
+	output_date_ << local_time.tm_mon + 1;
+	output_date_ << "/";
+	output_date_ << local_time.tm_mday;
+	output_date_ << " ";
+	output_date_ << local_time.tm_hour;
+	output_date_ << ":";
+	output_date_ << local_time.tm_min;
+}
+
+void NyaInput::InputReplay(string file_name)
 {
 	string line;
 	ifstream ifs(file_name);
 
-	// 1行目は日時なので読み飛ばす
+	// 1行目は乱数のシード
+	getline(ifs, line);
+	std::mt19937 mt(std::atoi(line.c_str()));
+
+	// 2行目は日時なので読み飛ばす
 	getline(ifs, line);
 	
 	// リプレイファイルに書かれたキー入力の内容を全て読み込む
@@ -32,35 +62,17 @@ void NyaInput::InputFile(string file_name)
 	ifs.close();
 }
 
-void NyaInput::OutputFile(string file_name)
+void NyaInput::OutputReplay(string file_name)
 {
 	ofstream ofs(file_name);
-	time_t time_;
-	tm local_time;
-	stringstream output_time;
 
 	if (!save_state_collection_.empty())
 	{
-
-
-
-		time_ = time(nullptr);
-		localtime_s(&local_time, &time_);
-//		output_time << "20";
-		output_time << local_time.tm_year+1900;
-//		output_time << local_time.tm_year-100;
-		output_time << "/";
-		output_time << local_time.tm_mon + 1;
-		output_time << "/";
-		output_time << local_time.tm_mday;
-		output_time << " ";
-		output_time << local_time.tm_hour;
-		output_time << ":";
-		output_time << local_time.tm_min;
-		ofs << output_time.str();
+		ofs << output_seed_.str();
+		ofs << endl;
+		ofs << output_date_.str();
 		ofs << endl;
 	}
-
 
 	while (!save_state_collection_.empty())
 	{

@@ -122,25 +122,16 @@ void NyaString::Run(void)
 		so = string_output_deque_.front();
 
 		if (get<0>(so.write_value_int_))
-		{
 			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_int_).c_str(), get<2>(so.write_value_int_));
-		}
 		else if (get<0>(so.write_value_double_)) 
-		{
 			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_double_).c_str(), get<2>(so.write_value_double_));
-		} 
 		else if (get<0>(so.write_value_string_))
-		{
 			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_string_).c_str(), get<2>(so.write_value_string_).c_str());
-		}
 		else if (get<0>(so.write_value_unsigned_int_)) 
-		{
 			DrawFormatStringToHandle(so.x_, so.y_, so.color_, so.font_, get<1>(so.write_value_unsigned_int_).c_str(), get<2>(so.write_value_unsigned_int_));
-		} 
 		else
-		{
 			DrawStringToHandle(so.x_, so.y_, get<1>(so.write_string_).c_str(), so.color_, so.font_);
-		}
+
 		string_output_deque_.pop_front();
 	}
 }

@@ -1,4 +1,5 @@
 #include <cmath>
+#include <deque>
 #include <tuple>
 #include "NyaEnum.h"
 #include "NyaPosition.h"
@@ -6,8 +7,9 @@
 using namespace std;
 using namespace H2NLIB;
 
-vector<pair<eOBJECT, eOBJECT>> NyaPosition::collision_group_combination_;
+vector<pair<eOBJECT, eOBJECT>> NyaPosition::collision_pair_collection_;
 vector<CollisionHandleSet> NyaPosition::collision_collection_(static_cast<int>(eOBJECT::sizeof_enum));
+list<PositionMove> NyaPosition::move_collection_;
 
 /**
  @brief 衝突判定処理するハンドルを登録する関数
@@ -18,7 +20,7 @@ vector<CollisionHandleSet> NyaPosition::collision_collection_(static_cast<int>(e
   なお、登録されたハンドルはフレーム毎にクリアされるので、
   判定処理をし続けたいときは１フレーム毎にCollision()で登録し直す必要がある
 **/
-void NyaPosition::Collision(PositionHandle1* phandle, eOBJECT group)
+void NyaPosition::Collide(PositionHandle1* phandle, eOBJECT group)
 {
 	collision_collection_[static_cast<int>(group)].handle1_collection_.push_back(phandle);
 }
@@ -31,12 +33,12 @@ void NyaPosition::Collision(PositionHandle1* phandle, eOBJECT group)
   この関数の引数を使って設定すると、
   group1のオブジェクトとgroup2のオブジェクト同士で衝突判定をするようになる
 **/
-void NyaPosition::CollisionSetting(eOBJECT group1, eOBJECT group2)
+void NyaPosition::CollisionPair(eOBJECT group1, eOBJECT group2)
 {
 	pair<eOBJECT, eOBJECT> set;
 
 	// すでに同じオブジェクトグループが設定されてたら何もしないで終了
-	for (auto& e : collision_group_combination_) {
+	for (auto& e : collision_pair_collection_) {
 		if (e.first == group1 && e.second == group2)
 			return;
 		if (e.first == group2 && e.second == group1)
@@ -45,7 +47,29 @@ void NyaPosition::CollisionSetting(eOBJECT group1, eOBJECT group2)
 
 	set.first = group1;
 	set.second = group2;
-	collision_group_combination_.push_back(set);
+	collision_pair_collection_.push_back(set);
+}
+
+/**
+@brief 移動関数
+@param handle 移動させるハンドル
+@param angle 移動角度
+@param max_frame 移動時間(フレーム単位)
+@param length 移動距離
+@note
+ handleを角度angleでmax_frameかけてlengthだけ移動させる
+**/
+void NyaPosition::Move(PositionHandle1* handle, double angle, unsigned int max_frame, int length)
+{
+	PositionMove new_move;
+
+	new_move.frame_ = 0;
+	new_move.max_frame_ = max_frame;
+	new_move.handle1_ = handle;
+	new_move.handle2_ = nullptr;
+	new_move.move_x_ = length * cos(AngleToRad(angle)) / max_frame;
+	new_move.move_y_ = length * sin(AngleToRad(angle)) / max_frame;
+	move_collection_.push_back(new_move);
 }
 
 /**
@@ -83,12 +107,45 @@ void NyaPosition::Run(void)
 		ClearCollisionHit(type);
 
 	// CollisionSettingで設定したオブジェクトグループの組み合わせで衝突判定をおこなう
-	for (auto& e : collision_group_combination_)
+	for (auto& e : collision_pair_collection_)
 		JudgeCollision1(e.first, e.second);
 
 	// 毎フレーム登録されたCollisionHandleSetのクリアをする
 	for (auto& e : collision_collection_) 
 		e.handle1_collection_.clear();
+
+	// 移動処理を指定されたハンドルに対して座標の計算をおこなう
+	CalculateMove();
+}
+
+void H2NLIB::NyaPosition::CalculateMove(void)
+{
+	list<PositionMove>::iterator remove_it;
+	deque<list<PositionMove>::iterator> gabage_collection;
+
+	for (auto it = move_collection_.begin(); it != move_collection_.end(); ++it)
+	{
+		if (it->handle1_ != nullptr)
+		{
+			it->handle1_->grid_x_ += it->move_x_;
+			it->handle1_->grid_y_ += it->move_y_;
+		}
+		else
+		{
+			it->handle2_->grid_x_ += it->move_x_;
+			it->handle2_->grid_y_ += it->move_y_;
+		}
+		it->frame_++;
+		if (it->max_frame_ <= it->frame_)
+			gabage_collection.push_back(it);
+	}
+
+	while (!gabage_collection.empty())
+	{
+		remove_it = gabage_collection.front();
+		move_collection_.erase(remove_it);
+		gabage_collection.pop_front();
+	}
 }
 
 void NyaPosition::ClearCollisionHit(eOBJECT object_type)
@@ -161,4 +218,6 @@ void NyaPosition::JudgeCollision2(eOBJECT object_group1, eOBJECT object_group2)
 	//	}
 	//}
 }
+
+
 

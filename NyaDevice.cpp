@@ -212,7 +212,7 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		NyaGraphic::Draw(e.gadget_gpx_, type);
 
 		// Õ“Ë”»’èˆ—
-		NyaPosition::Collision(e.gadget_phandle_, type);
+		NyaPosition::Collide(e.gadget_phandle_, type);
 	}
 
 	//****************************
@@ -230,7 +230,7 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		NyaGraphic::Draw(e.gadget_gpx_, type);
 
 		// Õ“Ë”»’èˆ—
-		NyaPosition::Collision(e.gadget_phandle_, type);
+		NyaPosition::Collide(e.gadget_phandle_, type);
 	}
 
 }

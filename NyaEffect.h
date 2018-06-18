@@ -9,7 +9,6 @@
 
 namespace H2NLIB 
 {
-
 	class GraphicPropertyX4;
 	class PositionHandle1;
 

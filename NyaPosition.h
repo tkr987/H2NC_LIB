@@ -1,5 +1,6 @@
 #pragma once
 
+#include <list>
 #include <vector>
 #include <utility>
 
@@ -14,20 +15,20 @@ namespace H2NLIB
 	class PositionHandle1 
 	{
 	public:
-		int collision_hit_;			// 衝突したときに与えられたダメージ(1フレーム毎に0クリアされる)
-		int collision_power_;		// 衝突したときに与えるダメージ
-		int collision_range_;		// 衝突範囲
-		int health_;				// 現在のヘルス
-		double grid_x_;				// オブジェクト（ハンドル）のX座標
-		double grid_y_;				// オブジェクト（ハンドル）のY座標
+		int collision_hit_;				// 衝突したときに与えられたダメージ(1フレーム毎に0クリアされる)
+		int collision_power_;			// 衝突したときに与えるダメージ
+		int collision_range_;			// 衝突範囲
+		int health_;					// 現在のヘルス
+		double grid_x_;					// オブジェクト（ハンドル）のX座標
+		double grid_y_;					// オブジェクト（ハンドル）のY座標
 		PositionHandle1()
 		{
 			collision_hit_ = 0;
 			collision_power_ = 1;
 			collision_range_ = 10;
 			health_ = 1;
-			grid_x_ = 0;
-			grid_y_ = 0;
+			grid_x_ = -1000;
+			grid_y_ = -1000;
 		}
 	};
 
@@ -59,6 +60,17 @@ namespace H2NLIB
 		}
 	};
 
+	class PositionMove
+	{
+	public:
+		unsigned int frame_;
+		unsigned int max_frame_;
+		double move_x_;
+		double move_y_;
+		PositionHandle1* handle1_;
+		PositionHandle2* handle2_;
+	};
+
 	//**********************************************************
 	// class CollisionHandleSet
 	//**********************************************************
@@ -72,18 +84,24 @@ namespace H2NLIB
 	//**********************************************************
 	// class NyaPosition
 	//**********************************************************
-	class NyaPosition {
+	class NyaPosition
+	{
 	public:
-		static void Collision(PositionHandle1* handle, eOBJECT group);
-		static void CollisionSetting(eOBJECT group1, eOBJECT group2);
+		static void Collide(PositionHandle1* handle, eOBJECT group);
+		static void CollisionPair(eOBJECT group1, eOBJECT group2);
 		static bool InScreen(PositionHandle1* phx, int gap = 0);
+		static void Move(PositionHandle1* handle, double angle, unsigned int max_frame, int length);
 		static void Run(void);
 	private:
-		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_group_combination_;
+		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_pair_collection_;
 		static std::vector<CollisionHandleSet> collision_collection_;
+		static std::list<PositionMove> move_collection_;
 		static void ClearCollisionHit(eOBJECT object_type);
 		static void JudgeCollision1(eOBJECT, eOBJECT);
 		static void JudgeCollision2(eOBJECT, eOBJECT);
+		static void CalculateMove(void);
+		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
+
 	};
 
 

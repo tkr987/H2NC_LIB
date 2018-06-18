@@ -80,14 +80,13 @@ void TargetExTeemo::Act(void)
 	{
 		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 		ihandle_mission_ex->valid_ = true;
-		ihandle_mission_ex->value_ = 100;
 		ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
 		ihandle_mission_warning->draw_valid_ = true;
 		ihandle_mission_warning->sound_valid_ = true;
 	}
 
 	// ’Êíˆ—
-	NyaPosition::Collision(main_.ph_, eOBJECT::TARGET1);
+	NyaPosition::Collide(main_.ph_, eOBJECT::TARGET1);
 	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
 	ihandle_mission_skill->exp_[static_cast<int>(ihandle_mission_skill->select_)] += main_.ph_->collision_hit_;
 	count_frame_++;

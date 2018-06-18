@@ -52,9 +52,6 @@ namespace H2NLIB
 		~InterfaceHandleMissionWarning();
 	};
 
-	//*****************************************************
-	// class SkillInterface
-	//*****************************************************
 	class InterfaceHandleMissionSkill
 	{
 	public:
@@ -66,6 +63,7 @@ namespace H2NLIB
 		std::array<std::string, static_cast<int>(eSKILL::sizeof_enum)> name_;
 		static eSKILL select_;		// åªç›ëIëÇµÇƒÇ¢ÇÈÉXÉLÉã
 		InterfaceHandleMissionSkill();
+		void Clear(void);
 	};
 
 	class NyaInterface {

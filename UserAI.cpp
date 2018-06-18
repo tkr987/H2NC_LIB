@@ -131,8 +131,8 @@ UserAi::UserAi(void)
 	main_.phandle_->grid_y_ = 500;
 
 	// 衝突判定設定
-	NyaPosition::CollisionSetting(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
-	NyaPosition::CollisionSetting(eOBJECT::TARGET_ATTACK1, eOBJECT::USER1);
+	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
+	NyaPosition::CollisionPair(eOBJECT::TARGET_ATTACK1, eOBJECT::USER1);
 
 	// デバッグ
 	NyaString::SettingFont("teemo_font", 10, 2);
@@ -665,7 +665,7 @@ void UserAi::Act_AttackEx(void)
 	// ウルト実行時間を超えたらウルトを終了させる
 	//************************************************
 	device_ex_.count_ult_frame_++;
-	if (FPS_MAX * 5 < device_ex_.count_ult_frame_)
+	if (MAX_FPS * 5 < device_ex_.count_ult_frame_)
 	{
 		device_ex_.count_ult_frame_ = 0;
 		device_ex_.valid_ = false;

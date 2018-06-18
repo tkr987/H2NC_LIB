@@ -107,6 +107,10 @@ void NyaWindow::Run(void)
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
 
+		// TODO
+		// mission all clear と add_child(mission) の関係
+		// nya interface skill の初期化(ミッション→リプレイのとき不具合)
+
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
 		// NyaWindowのメンバ関数でevent_next_の値をenum_zero以外にしたとき
@@ -327,7 +331,7 @@ void NyaWindow::SaveReplay(void)
 {
 	string pass;
 	int x, y;
-	string date;
+	string date, seed;
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -363,6 +367,7 @@ void NyaWindow::SaveReplay(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
 	}
@@ -375,6 +380,7 @@ void NyaWindow::SaveReplay(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
 	}
@@ -387,6 +393,7 @@ void NyaWindow::SaveReplay(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
 	}
@@ -399,6 +406,7 @@ void NyaWindow::SaveReplay(void)
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
 	if (ifs.is_open())
 	{
+		getline(ifs, seed);
 		getline(ifs, date);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
 	}
@@ -476,6 +484,7 @@ void NyaWindow::Title(void)
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
 	static int select = 0;
+	InterfaceHandleMissionSkill* ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
 
 	if (event_ != eEVENT::TITLE)
 		return;
@@ -568,6 +577,10 @@ void NyaWindow::Title(void)
 	//***********************
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{	
+		ihandle_mission_skill->Clear();		// スキルのUIをクリア
+
+		// ミッションの開始なら乱数の初期化をする
+		// リプレイの開始ならリプレイファイルを読み込む
 		if (select == 0)
 			NyaInput::InitRand();	
 		else if (select == 1)
@@ -578,8 +591,6 @@ void NyaWindow::Title(void)
 			NyaInput::InputReplay("replay/replay3.rep");
 		else if (select == 4)
 			NyaInput::InputReplay("replay/replay4.rep");
-
-
 
 		switch (select)
 		{	// イベントの更新
@@ -613,13 +624,13 @@ void NyaWindow::WaitFPS(int x, int y)
 	static	int frame_ave_ = 0;					//フレームレート平均
 	static	int wtime_ave_ = 0;					//wait時間平均
 	static	int ltime_ave_ = 0;					//loop時間平均
-	static	int frame_[FPS_MAX] = {};			//フレームレート
-	static	int ltime_[FPS_MAX] = {};			//loop時間
-	static	int wtime_[FPS_MAX] = {};			//wait時間
+	static	int frame_[MAX_FPS] = {};			//フレームレート
+	static	int ltime_[MAX_FPS] = {};			//loop時間
+	static	int wtime_[MAX_FPS] = {};			//wait時間
 	static	int prev_time_ = 0;					//1フレーム前の時間
-	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
+	static	int frame_count_ = 0;				//現在のフレーム(0～MAX_FPS-1)
 	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
-	static tuple<int, int, int> white = make_tuple(255, 255, 255);
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 
 
@@ -636,27 +647,27 @@ void NyaWindow::WaitFPS(int x, int y)
 #endif
 
 
-	frame_count_ = ++all_frame_count_ % FPS_MAX;
+	frame_count_ = ++all_frame_count_ % MAX_FPS;
 	/*平均算出*/
-	if (frame_count_ == FPS_MAX - 1)
+	if (frame_count_ == MAX_FPS - 1)
 	{
 		frame_ave_ = 0;
 		ltime_ave_ = 0;
 		wtime_ave_ = 0;
-		for (int i = 0; i < FPS_MAX; i++)
+		for (int i = 0; i < MAX_FPS; i++)
 		{
 			frame_ave_ += frame_[i];
 			ltime_ave_ += ltime_[i];
 			wtime_ave_ += wtime_[i];
 		}
-		frame_ave_ = frame_ave_ / FPS_MAX;
-		ltime_ave_ = ltime_ave_ / FPS_MAX;
-		wtime_ave_ = wtime_ave_ / FPS_MAX;
+		frame_ave_ = frame_ave_ / MAX_FPS;
+		ltime_ave_ = ltime_ave_ / MAX_FPS;
+		wtime_ave_ = wtime_ave_ / MAX_FPS;
 	}
 
 	ltime_[frame_count_] = GetNowCount() - prev_time_;
 	/*wait処理*/
-	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
+	wtime_[frame_count_] = (1000 / MAX_FPS) - ltime_[frame_count_];
 	if (0 < wtime_[frame_count_])
 		Sleep(wtime_[frame_count_]);
 	frame_[frame_count_] = GetNowCount() - prev_time_;

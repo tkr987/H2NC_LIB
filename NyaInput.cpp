@@ -31,12 +31,18 @@ void NyaInput::InitRand(void)
 	output_seed_ << seed;
 	output_date_ << local_time.tm_year+1900;
 	output_date_ << "/";
+	if (local_time.tm_mon < 9)
+		output_date_ << "0";
 	output_date_ << local_time.tm_mon + 1;
 	output_date_ << "/";
 	output_date_ << local_time.tm_mday;
 	output_date_ << " ";
+	if (local_time.tm_hour < 10)
+		output_date_ << "0";
 	output_date_ << local_time.tm_hour;
 	output_date_ << ":";
+	if (local_time.tm_min < 10)
+		output_date_ << "0";
 	output_date_ << local_time.tm_min;
 }
 

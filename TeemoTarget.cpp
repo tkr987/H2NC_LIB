@@ -52,7 +52,7 @@ void TeemoTarget::MissionRun(void)
 
 void TeemoTarget::Act(void)
 {	
-	NyaPosition::Collision(teemo_main_.ph_, eOBJECT::TARGET1);
+	NyaPosition::Collide(teemo_main_.ph_, eOBJECT::TARGET1);
 }
 
 void TeemoTarget::Draw(void)

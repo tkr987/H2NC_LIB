@@ -2,7 +2,7 @@
 
 #define DEVICE_GADGET_MAX_DEFAULT					10000
 #define EFFECT_MAX_DEFAULT							10000
-#define FPS_MAX										60
+#define MAX_FPS										60
 //#define INTERFACE_SKILL_MAX_LV						4
 #define INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_X		225
 #define INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_Y		200
@@ -10,8 +10,6 @@
 #define SCREEN_MIN_Y								0
 #define SCREEN_MAX_X								850
 #define SCREEN_MAX_Y								750
-#define SCREEN_MIN_X								0
-#define SCREEN_MIN_Y								0
 
 
 

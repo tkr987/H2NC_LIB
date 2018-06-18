@@ -1,4 +1,5 @@
 #include <tuple>
+#include "NyaEnum.h"
 #include "NyaGraphic.h"
 #include "NyaInterface.h"
 #include "NyaPosition.h"
@@ -6,8 +7,28 @@
 #include "NyaString.h"
 #include "TeemoTargetEx4.h"
 
+#define __DEBUG__
+
 using namespace std;
 using namespace H2NLIB;
+
+
+TeemoEx4Cube::TeemoEx4Cube()
+{
+	gpx_ = new GraphicPropertyX4;
+	gpx_->extend_rate_ = 0.4;
+	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	phandle_ = new PositionHandle1;
+	phandle_->collision_range_ = 20;
+}
+
+TeemoEx4Cube::~TeemoEx4Cube()
+{
+	delete gpx_;
+	gpx_ = nullptr;
+	delete phandle_;
+	phandle_ = nullptr;
+}
 
 TeemoEx4Main::TeemoEx4Main() : health_max_(1000)
 {
@@ -36,7 +57,7 @@ TeemoTargetEx4::TeemoTargetEx4()
 	main_.phandle_->health_ = 1000;
 	main_.phandle_->collision_power_ = 1;
 	main_.phandle_->collision_range_ = 20;
-	main_.phandle_->grid_x_ =  300;
+	main_.phandle_->grid_x_ =  SCREEN_MAX_X / 2;
 	main_.phandle_->grid_y_ = -100;
 
 	// フォント設定
@@ -54,8 +75,23 @@ TeemoTargetEx4::~TeemoTargetEx4()
 
 void TeemoTargetEx4::MissionRun(void)
 {
-	Act1();
-	Draw();
+	static int mode = 1;
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+	switch (mode)
+	{
+	case 1:
+		Act1();
+		Draw1();
+		break;
+	}
+
+
+
+#ifdef __DEBUG__
+		NyaString::Write("design_fps_font", white, 50, 90, "[50, 90] count_frame = %u", count_frame_);
+#endif
+	count_frame_++;
 }
 
 void TeemoTargetEx4::Act1(void)
@@ -75,29 +111,46 @@ void TeemoTargetEx4::Act1(void)
 	}
 
 	// 移動処理
-	if (main_.phandle_->grid_y_ < 200)
+	if (main_.phandle_->grid_y_ < 100)
 		main_.phandle_->grid_y_++;
 
-
-	count_frame_++;
+	if (count_frame_ == 350)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_;
+			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_;
+			NyaPosition::Move(cube1_collection_[i].phandle_, i * 45, MAX_FPS * 3, 140);
+		}
+	}
 }
 
-void TeemoTargetEx4::Draw(void)
+void TeemoTargetEx4::Draw1(void)
 {
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	if (count_frame_ < FPS_MAX * 5)
+	if (count_frame_ < MAX_FPS * 5)
 	{
-		NyaString::Write("warning_logo_font", red, 225, 200, "WARNING");
-		NyaString::Write("ex_logo_font", red, 180, 300, "EX BOSS");
+		NyaString::Write("warning_logo_font", red, 300, 200, "WARNING");
+		NyaString::Write("ex_logo_font", red, 255, 300, "EX BOSS");
 	}
 
-	// 本体の描画
+	// main描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+
+	// cube描画
+	for (int i = 0; i < 8; i++)
+	{
+		if (count_frame_ % 5 == 0)
+			cube1_collection_[i].gpx_->file_div_ = ++cube1_collection_[i].gpx_->file_div_ % 5;
+		cube1_collection_[i].gpx_->draw_grid_cx_ = cube1_collection_[i].phandle_->grid_x_;
+		cube1_collection_[i].gpx_->draw_grid_cy_ = cube1_collection_[i].phandle_->grid_y_;
+		NyaGraphic::Draw(cube1_collection_[i].gpx_, eOBJECT::TARGET1);
+	}
 
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する

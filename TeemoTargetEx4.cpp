@@ -1,4 +1,6 @@
 #include <tuple>
+#include "NyaDevice.h"
+#include "NyaEffect.h"
 #include "NyaEnum.h"
 #include "NyaGraphic.h"
 #include "NyaInterface.h"
@@ -12,23 +14,50 @@
 using namespace std;
 using namespace H2NLIB;
 
-
-TeemoEx4Cube::TeemoEx4Cube()
+TeemoEx4Cube1::TeemoEx4Cube1()
 {
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	move_angle_ = 0;
 	phandle_ = new PositionHandle1;
 	phandle_->collision_range_ = 20;
 }
 
-TeemoEx4Cube::~TeemoEx4Cube()
+TeemoEx4Cube1::~TeemoEx4Cube1()
 {
 	delete gpx_;
 	gpx_ = nullptr;
 	delete phandle_;
 	phandle_ = nullptr;
 }
+
+TeemoExBullet41::TeemoExBullet41()
+{
+	dpx_ = new DevicePropertyX1;
+	dpx_->collision_power_ = 1;
+	dpx_->collision_range_ = 2;
+	dpx_->move_speed_ = 8;
+	gadget_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	epx_ = new EffectPropertyX1;
+	epx_->interval_time_frame_ = 120;
+	effect_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+};
+
+TeemoExBullet41::~TeemoExBullet41()
+{
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+}
+
 
 TeemoEx4Main::TeemoEx4Main() : health_max_(1000)
 {
@@ -52,7 +81,7 @@ TeemoTargetEx4::TeemoTargetEx4()
 	NyaSound::LoadFile("sound/warning.wav", &warning_spx_->file_);
 	NyaSound::ChangeVolume(&warning_spx_->file_, 20);
 
-	// main メンバを初期化
+	// main メンバの初期化
 	NyaGraphic::LoadGraphicFile("img/target/teemo_ex4.png", &main_.gpx_->file_);
 	main_.phandle_->health_ = 1000;
 	main_.phandle_->collision_power_ = 1;
@@ -96,8 +125,8 @@ void TeemoTargetEx4::MissionRun(void)
 
 void TeemoTargetEx4::Act1(void)
 {
-	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
+	InterfaceHandleMissionSkill *ihandle_mission_skill;
 
 	// 行動開始1フレーム目
 	// mission ex モードをtrueにする
@@ -114,13 +143,40 @@ void TeemoTargetEx4::Act1(void)
 	if (main_.phandle_->grid_y_ < 100)
 		main_.phandle_->grid_y_++;
 
+	// 衝突判定　衝突ダメージだけ経験値を追加
+	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
+	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill->AddExp(main_.phandle_->collision_hit_);
+
 	if (count_frame_ == 350)
 	{
 		for (int i = 0; i < 8; i++)
 		{
+			cube1_collection_[i].move_angle_ = i * 45;
 			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_;
 			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_;
+			NyaPosition::Move(cube1_collection_[i].phandle_, i * 45, MAX_FPS * 3, 130);
+		}
+	}
+
+	if (600 <= count_frame_)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			cube1_collection_[i].move_angle_ += 5;
+			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_ + 130 * cos(AngleToRad(cube1_collection_[i].move_angle_));
+			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_ + 130 * sin(AngleToRad(cube1_collection_[i].move_angle_));
 			NyaPosition::Move(cube1_collection_[i].phandle_, i * 45, MAX_FPS * 3, 140);
+			if (count_frame_ % 15 == 0)
+			{
+				bullet1_.dpx_->create_x_ = cube1_collection_[i].phandle_->grid_x_;
+				bullet1_.dpx_->create_y_ = cube1_collection_[i].phandle_->grid_y_;
+				for (int bullet_index = -11; bullet_index < 12; bullet_index++)
+				{
+					bullet1_.dpx_->move_angle_deg_ = cube1_collection_[i].move_angle_ + (bullet_index * 2);
+					NyaDevice::Attack1414(bullet1_.dpx_, bullet1_.gadget_gpx_, bullet1_.epx_, bullet1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+				}
+			}
 		}
 	}
 }

@@ -25,6 +25,7 @@ namespace H2NLIB
 		double create_y_;					//!< ¶¬yÀ•W	
 		double move_angle_deg_;				//!< ˆÚ“®Šp“x
 		double move_speed_;					//!< ˆÚ“®‘¬“x
+		DevicePropertyX1();
 	};
 
 	class DevicePropertyX2
@@ -45,6 +46,7 @@ namespace H2NLIB
 	class DeviceGadget14
 	{
 	public:
+		bool clear_;
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
@@ -58,6 +60,7 @@ namespace H2NLIB
 	class DeviceGadget1414
 	{
 	public:
+		bool clear_;
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
@@ -84,6 +87,7 @@ namespace H2NLIB
 		static void Attack14(const DevicePropertyX1* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type);
 		static void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type);
 		static void Attack2414(DevicePropertyX2* gadget_dpx, GraphicPropertyX4* gadget_gpx, EffectPropertyX1* effect_epx, GraphicPropertyX4* effect_gpx);
+		static void Clear(eOBJECT type);
 		static void Run(void);
 	private:
 		static std::list<DeviceGadget14> dg14_attack_list_[(int)eOBJECT::sizeof_enum];

@@ -783,7 +783,9 @@ void UserAi::Act_Move(void)
 		main_.phandle_->grid_y_ = SCREEN_MAX_Y;
 }
 
-
+/**
+ @brief ÉEÉãÉgÇÃé¿çs
+**/
 void UserAi::Act_Ult(void)
 {
 	InterfaceHandleMissionSkill* ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
@@ -796,6 +798,11 @@ void UserAi::Act_Ult(void)
 	if (NyaInput::IsPressKey(eINPUT::R) && lv1_exp_r <= exp_r && !device_ex_.valid_)
 	{
 		device_ex_.valid_ = true;
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK2);
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK3);
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK4);
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK5);
 		if (lv1_exp_r <= exp_r && exp_r < lv2_exp_r)
 			ihandle_mission_skill->exp_[static_cast<int>(eSKILL::R)] -= lv1_exp_r;
 		else if (lv2_exp_r <= exp_r && exp_r < lv3_exp_r)
@@ -805,8 +812,6 @@ void UserAi::Act_Ult(void)
 		else if (lv4_exp_r <= exp_r)
 			ihandle_mission_skill->exp_[static_cast<int>(eSKILL::R)] -= (lv4_exp_r - lv3_exp_r);
 	}
-
-
 }
 
 

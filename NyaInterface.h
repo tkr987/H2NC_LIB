@@ -63,6 +63,7 @@ namespace H2NLIB
 		std::array<std::string, static_cast<int>(eSKILL::sizeof_enum)> name_;
 		static eSKILL select_;		// åªç›ëIëÇµÇƒÇ¢ÇÈÉXÉLÉã
 		InterfaceHandleMissionSkill();
+		void AddExp(unsigned int value);
 		void Clear(void);
 	};
 
@@ -72,34 +73,20 @@ namespace H2NLIB
 		~NyaInterface();
 		static void Init(void);
 		static void Run(void);
-		static InterfaceHandleMissionClear* GetHandleMissionClear(void)
-		{
-			return &handle_mission_clear_;
-		}
-		static InterfaceHandleMissionAllOver* GetHandleMissionAllOver(void)
-		{
-			return &handle_mission_all_over_;
-		}
-		static InterfaceHandleMissionEx* GetHandleMissionEx(void)
-		{
-			return &handle_mission_ex_;
-		}
-		static InterfaceHandleMissionSkill* GetHandleMissionSkill(void)
-		{
-			return &handle_mission_skill_;
-		}
-		static InterfaceHandleMissionWarning* GetHandleMissionWarning(void)
-		{ 
-			return &handle_mission_warning_;
-		}
+		static InterfaceHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
+		static InterfaceHandleMissionAllOver* GetHandleMissionAllOver(void) { return &handle_mission_all_over_; }
+		static InterfaceHandleMissionEx* GetHandleMissionEx(void) { return &handle_mission_ex_; }
+		static InterfaceHandleMissionSkill* GetHandleMissionSkill(void) { return &handle_mission_skill_; }
+		static InterfaceHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
 	private:
+		static std::pair<bool, int> clear_pair_;
 		static unsigned int count_frame_;
 		static InterfaceHandleMissionAllOver handle_mission_all_over_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleMissionEx handle_mission_ex_;
 		static InterfaceHandleMissionSkill handle_mission_skill_;
 		static InterfaceHandleMissionWarning handle_mission_warning_;
-		static std::pair<bool, int> clear_pair_;
+		static std::string title_;
 		static void DrawBlack(int x, int y, int x2, int y2);
 		static void DrawLIB(int x, int y);
 		static void DrawSkill(int x, int y);

@@ -49,6 +49,14 @@ DeviceGadget1414::~DeviceGadget1414()
 	delete gadget_phandle_;
 }
 
+DevicePropertyX1::DevicePropertyX1()
+{
+	collision_power_ = 1;				//!< 衝突力
+	collision_range_ = 1;				//!< 衝突範囲
+	move_angle_deg_ = 0;				//!< 移動角度
+	move_speed_ = 1;					//!< 移動速度
+}
+
 /**
 @brief 攻撃関数
 @param dpx デバイスプロパティ
@@ -80,6 +88,7 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dp, const GraphicP
 		return;
 
 	it_from = dg14_wait_list_.begin();
+	it_from->clear_ = false;
 	it_from->move_angle_rad_ = AngleToRad(gadget_dp->move_angle_deg_);
 	it_from->move_x_ = cos(it_from->move_angle_rad_) * gadget_dp->move_speed_;
 	it_from->move_y_ = sin(it_from->move_angle_rad_) * gadget_dp->move_speed_;
@@ -105,6 +114,7 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 		return;
 
 	it_from = dg1414_wait_list_.begin();
+	it_from->clear_ = false;
 	it_from->effect_type_ = effect_type;
 	it_from->move_angle_rad_ = AngleToRad(gadget_dpx->move_angle_deg_);
 	it_from->move_x_ = cos(it_from->move_angle_rad_) * gadget_dpx->move_speed_;
@@ -129,13 +139,21 @@ void NyaDevice::Attack2414(DevicePropertyX2* gadget_dpx, GraphicPropertyX4* gadg
 
 }
 
+void NyaDevice::Clear(eOBJECT type)
+{
+	for (auto& e : dg14_attack_list_[static_cast<int>(type)])
+		e.clear_ = true;
+	for (auto& e : dg1414_attack_list_[static_cast<int>(type)])
+		e.clear_ = true;
+}
+
 
 void NyaDevice::Run(void)
 {
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	for (eOBJECT group = eOBJECT::enum_zero; group != eOBJECT::sizeof_enum; ++group)
-		MoveGadget(group);
+	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
+		MoveGadget(type);
 
 
 	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", (int)dg14_attack_list_[static_cast<int>(eOBJECT::USER_ATTACK1)].size());
@@ -157,11 +175,16 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	{
 		// 表示領域の限界を超えた
 		// 他のオブジェクトと衝突した
+		// (強制的にダメージを与えられるなどして)ヘルスが0以下になった
 		if (!NyaPosition::InScreen(it->gadget_phandle_))
 		{
 			dg14_delete_deque.push_back(it);
 		}
 		else if (it->gadget_phandle_->collision_hit_ != 0)
+		{
+			dg14_delete_deque.push_back(it);
+		}
+		else if (it->clear_)
 		{
 			dg14_delete_deque.push_back(it);
 		}
@@ -172,9 +195,10 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		dg14_delete_deque.pop_front();
 	}
 
-	//***********************
+	//*******************************************
 	// Gadget1414 削除処理
-	//***********************
+	// 削除するときにエフェクト描画もおこなう
+	//*******************************************
 	for (auto it = dg1414_attack_list_[static_cast<int>(type)].begin(); it != dg1414_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
 		// 表示領域の限界を超えた
@@ -184,6 +208,13 @@ void NyaDevice::MoveGadget(eOBJECT type)
 			dg1414_delete_deque.push_back(it);
 		}
 		else if (it->gadget_phandle_->collision_hit_ != 0)
+		{
+			it->effect_epx_->grid_x_ = (int)it->gadget_phandle_->grid_x_;
+			it->effect_epx_->grid_y_ = (int)it->gadget_phandle_->grid_y_;
+			NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
+			dg1414_delete_deque.push_back(it);
+		}
+		else if (it->clear_)
 		{
 			it->effect_epx_->grid_x_ = (int)it->gadget_phandle_->grid_x_;
 			it->effect_epx_->grid_y_ = (int)it->gadget_phandle_->grid_y_;

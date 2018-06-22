@@ -39,6 +39,11 @@ InterfaceHandleMissionSkill::InterfaceHandleMissionSkill()
 	Clear();
 }
 
+void InterfaceHandleMissionSkill::AddExp(unsigned int value)
+{
+	exp_[static_cast<int>(select_)] += value;
+}
+
 void InterfaceHandleMissionSkill::Clear(void)
 {
 	for (int i = 0; i < static_cast<int>(eSKILL::sizeof_enum); i++)

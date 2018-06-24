@@ -78,16 +78,16 @@ void NyaMission::AddChild(int start_time_sec, int end_time_sec, NyaTarget* targe
 		
 		// target‚ğ“o˜^‚·‚é
 		mission_target_collection_[id] = new MissionTarget;
-		mission_target_collection_[id]->start_frame_ = start_time_sec * MAX_FPS;
-		mission_target_collection_[id]->end_frame_ = end_time_sec * MAX_FPS;
+		mission_target_collection_[id]->start_frame_ = start_time_sec * FPS_MAX;
+		mission_target_collection_[id]->end_frame_ = end_time_sec * FPS_MAX;
 		mission_target_collection_[id]->target_ = target;
 	}
 	else
 	{
 		delete mission_target_collection_[id]->target_;
 		mission_target_collection_[id]->target_ = nullptr;
-		mission_target_collection_[id]->start_frame_ = MAX_FPS * start_time_sec;
-		mission_target_collection_[id]->end_frame_ = MAX_FPS * end_time_sec;
+		mission_target_collection_[id]->start_frame_ = FPS_MAX * start_time_sec;
+		mission_target_collection_[id]->end_frame_ = FPS_MAX * end_time_sec;
 		mission_target_collection_[id]->target_ = target;
 	}
 

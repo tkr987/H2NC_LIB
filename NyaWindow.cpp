@@ -581,6 +581,7 @@ void NyaWindow::Title(void)
 
 		// ミッションの開始なら乱数の初期化をする
 		// リプレイの開始ならリプレイファイルを読み込む
+		// (リプレイファイル読み込み関数内で乱数の初期化がされる)
 		if (select == 0)
 			NyaInput::InitRand();	
 		else if (select == 1)
@@ -624,11 +625,11 @@ void NyaWindow::WaitFPS(int x, int y)
 	static	int frame_ave_ = 0;					//フレームレート平均
 	static	int wtime_ave_ = 0;					//wait時間平均
 	static	int ltime_ave_ = 0;					//loop時間平均
-	static	int frame_[MAX_FPS] = {};			//フレームレート
-	static	int ltime_[MAX_FPS] = {};			//loop時間
-	static	int wtime_[MAX_FPS] = {};			//wait時間
+	static	int frame_[FPS_MAX] = {};			//フレームレート
+	static	int ltime_[FPS_MAX] = {};			//loop時間
+	static	int wtime_[FPS_MAX] = {};			//wait時間
 	static	int prev_time_ = 0;					//1フレーム前の時間
-	static	int frame_count_ = 0;				//現在のフレーム(0～MAX_FPS-1)
+	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
 	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
@@ -647,27 +648,27 @@ void NyaWindow::WaitFPS(int x, int y)
 #endif
 
 
-	frame_count_ = ++all_frame_count_ % MAX_FPS;
+	frame_count_ = ++all_frame_count_ % FPS_MAX;
 	/*平均算出*/
-	if (frame_count_ == MAX_FPS - 1)
+	if (frame_count_ == FPS_MAX - 1)
 	{
 		frame_ave_ = 0;
 		ltime_ave_ = 0;
 		wtime_ave_ = 0;
-		for (int i = 0; i < MAX_FPS; i++)
+		for (int i = 0; i < FPS_MAX; i++)
 		{
 			frame_ave_ += frame_[i];
 			ltime_ave_ += ltime_[i];
 			wtime_ave_ += wtime_[i];
 		}
-		frame_ave_ = frame_ave_ / MAX_FPS;
-		ltime_ave_ = ltime_ave_ / MAX_FPS;
-		wtime_ave_ = wtime_ave_ / MAX_FPS;
+		frame_ave_ = frame_ave_ / FPS_MAX;
+		ltime_ave_ = ltime_ave_ / FPS_MAX;
+		wtime_ave_ = wtime_ave_ / FPS_MAX;
 	}
 
 	ltime_[frame_count_] = GetNowCount() - prev_time_;
 	/*wait処理*/
-	wtime_[frame_count_] = (1000 / MAX_FPS) - ltime_[frame_count_];
+	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
 	if (0 < wtime_[frame_count_])
 		Sleep(wtime_[frame_count_]);
 	frame_[frame_count_] = GetNowCount() - prev_time_;

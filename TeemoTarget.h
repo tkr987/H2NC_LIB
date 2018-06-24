@@ -7,14 +7,14 @@ namespace H2NLIB {
 	class NyaString;
 	class DevicePropertyX1;
 	class GraphicPropertyX4;
-	class PositionHandle1;
+	class PositionHandle;
 }
 
 struct TargetTeemoMain
 {
 public:
 	H2NLIB::GraphicPropertyX4* gp_;
-	H2NLIB::PositionHandle1* ph_;
+	H2NLIB::PositionHandle* ph_;
 	TargetTeemoMain();
 	~TargetTeemoMain();
 };

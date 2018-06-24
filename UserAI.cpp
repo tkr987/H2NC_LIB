@@ -6,6 +6,7 @@
 #include "NyaInput.h"
 #include "NyaInterface.h"
 #include "NyaPosition.h"
+#include "NyaSound.h"
 #include "NyaString.h"
 #include "UserAi.h"
 
@@ -20,6 +21,26 @@ UserAiDevice::UserAiDevice()
 	gadget_gpx_ = new GraphicPropertyX4;
 	effect_epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
+	for (int i = 0; i < 6; i++)
+		spx_[i] = new SoundPropertyX;
+	NyaSound::LoadFile("sound/user_attack1.wav", &spx_[0]->file_);
+	NyaSound::LoadFile("sound/user_attack2.wav", &spx_[1]->file_);
+	NyaSound::LoadFile("sound/user_attack3.wav", &spx_[2]->file_);
+	NyaSound::LoadFile("sound/user_attack4.wav", &spx_[3]->file_);
+	NyaSound::LoadFile("sound/user_attack5.wav", &spx_[4]->file_);
+	NyaSound::LoadFile("sound/user_attack6.wav", &spx_[5]->file_);
+	for (int i = 0; i < 6; i++)
+		NyaSound::ChangeVolume(&spx_[i]->file_, 50);
+	for (int i = 0; i < 6; i++)
+		spx_ex_[i] = new SoundPropertyX;
+	NyaSound::LoadFile("sound/user_attack_ex1.wav", &spx_ex_[0]->file_);
+	NyaSound::LoadFile("sound/user_attack_ex2.wav", &spx_ex_[1]->file_);
+	NyaSound::LoadFile("sound/user_attack_ex3.wav", &spx_ex_[2]->file_);
+	NyaSound::LoadFile("sound/user_attack_ex4.wav", &spx_ex_[3]->file_);
+	NyaSound::LoadFile("sound/user_attack_ex5.wav", &spx_ex_[4]->file_);
+	NyaSound::LoadFile("sound/user_attack_ex6.wav", &spx_ex_[5]->file_);
+	for (int i = 0; i < 6; i++)
+		NyaSound::ChangeVolume(&spx_ex_[i]->file_, 20);
 }
 
 UserAiDevice::~UserAiDevice()
@@ -34,6 +55,16 @@ UserAiDevice::~UserAiDevice()
 	effect_epx_ = nullptr;
 	delete effect_gpx_;
 	effect_gpx_ = nullptr;
+	for (int i = 0; i < 6; i++)
+	{
+		delete spx_[i];
+		spx_[i] = nullptr;
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		delete spx_ex_[i];
+		spx_ex_[i] = nullptr;
+	}
 }
 
 UserAiDeviceEx::UserAiDeviceEx()
@@ -62,7 +93,7 @@ UserAiDeviceEx::~UserAiDeviceEx()
 UserAiMain::UserAiMain()
 {
 	gpx_ = new GraphicPropertyX4;
-	phandle_ = new PositionHandle1;
+	phandle_ = new PositionHandle;
 }
 
 UserAiMain::~UserAiMain()
@@ -101,8 +132,8 @@ UserAi::UserAi(void)
 	// device プロパティ
 	device_.bit_gpx_->extend_rate_ = 0.5;
 	NyaGraphic::LoadGraphicFile(16, 1,"img/user/bit.png", &device_.bit_gpx_->file_);
-	device_.gadget_dpx_->collision_range_ = 2;
-	device_.gadget_dpx_->move_speed_ = 20;
+	device_.gadget_dpx_->collision_range_ = 10;
+	device_.gadget_dpx_->move_speed_ = 40;
 	device_.gadget_gpx_->extend_rate_ = 0.1;
 	NyaGraphic::LoadGraphicFile("img/user/arms.png", &device_.gadget_gpx_->file_);
 	device_.effect_epx_->interval_time_frame_ = 2;
@@ -203,6 +234,7 @@ void UserAi::Act(void)
 **/
 void UserAi::Act_Attack(void)
 {
+	int device_collision_accuracy = 1;
 	InterfaceHandleMissionSkill *ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
 	int exp_q = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::Q)];
 	int lv1_exp_q = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)];
@@ -214,10 +246,19 @@ void UserAi::Act_Attack(void)
 	int lv2_exp_w = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)];
 	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
 	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
+	static int sound_index = 0;
 
 	// ウルト実行中ならば、この関数では何もしない
 	if (device_ex_.valid_)
 		return;
+
+	// 発射音の再生
+	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 6 == 0)
+	{
+		NyaSound::Play(device_.spx_[sound_index]);
+		sound_index = (++sound_index) % 6;
+	}
+
 
 	//***********************
 	// 低速移動時の攻撃
@@ -238,13 +279,13 @@ void UserAi::Act_Attack(void)
 		device_.gadget_gpx_->draw_angle_ = 90;
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +10;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		if (lv1_exp_w <= exp_w)
 		{	// 1wave + 1wave
 			device_.gadget_dpx_->collision_power_ = 1;
@@ -252,10 +293,10 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -20;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +20;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 		if (lv2_exp_w <= exp_w)
 		{	// 1wave + 1wave
@@ -264,10 +305,10 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -30;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +30;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 		if (lv3_exp_w <= exp_w)
 		{	// 1wave + 1wave
@@ -276,10 +317,10 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +40;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 		if (lv4_exp_w <= exp_w)
 		{	// 1wave + 1wave
@@ -288,10 +329,10 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -50;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +50;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 
 	}
@@ -305,13 +346,13 @@ void UserAi::Act_Attack(void)
 		device_.gadget_gpx_->draw_angle_ = 90;
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +10;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		if (lv1_exp_w <= exp_w)
 		{	// 2wave + 2wave
 			device_.gadget_dpx_->collision_power_ = 1;
@@ -319,22 +360,22 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90 - 5;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 5;
 			device_.gadget_gpx_->draw_angle_ = 90 - 5;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -30;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 5;
 			device_.gadget_gpx_->draw_angle_ = 90 + 5;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +30;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 5;
 			device_.gadget_gpx_->draw_angle_ = 90 + 5;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +40;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 		if (lv2_exp_w <= exp_w)
 		{	// 2wave + 2wave
@@ -343,22 +384,22 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90 - 10;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -70;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 10;
 			device_.gadget_gpx_->draw_angle_ = 90 - 10;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -60;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 10;
 			device_.gadget_gpx_->draw_angle_ = 90 + 10;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +60;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 10;
 			device_.gadget_gpx_->draw_angle_ = 90 + 10;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +70;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 		if (lv3_exp_w <= exp_w)
 		{	// 2wave + 2wave
@@ -367,22 +408,22 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90 - 15;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -100;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 15;
 			device_.gadget_gpx_->draw_angle_ = 90 - 15;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -90;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 15;
 			device_.gadget_gpx_->draw_angle_ = 90 + 15;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +90;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 15;
 			device_.gadget_gpx_->draw_angle_ = 90 + 15;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +100;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 		if (lv4_exp_w <= exp_w)
 		{	// 2wave + 2wave
@@ -391,22 +432,22 @@ void UserAi::Act_Attack(void)
 			device_.gadget_gpx_->draw_angle_ = 90 - 20;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -130;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 20;
 			device_.gadget_gpx_->draw_angle_ = 90 - 20;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -120;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 20;
 			device_.gadget_gpx_->draw_angle_ = 90 + 20;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +120;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 			device_.gadget_dpx_->move_angle_deg_ = -90 + 20;
 			device_.gadget_gpx_->draw_angle_ = 90 + 20;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +130;
 			device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		}
 	}
 }
@@ -433,10 +474,19 @@ void UserAi::Act_AttackEx(void)
 	int lv2_exp_w = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)];
 	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
 	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
+	static int sound_index = 0;
 
 	// ウルト実行中でないなら、この関数では何もしない
 	if (!device_ex_.valid_)
 		return;
+
+	// 発射音の再生
+	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 6 == 0)
+	{
+		NyaSound::Play(device_.spx_ex_[sound_index]);
+		sound_index = (++sound_index) % 6;
+	}
+
 
 	//***********************
 	// 低速移動時の攻撃
@@ -458,15 +508,15 @@ void UserAi::Act_AttackEx(void)
 		device_ex_.gadget_gpx_->draw_angle_ = 90;
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
 		device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+		device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_;
 		device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+		device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +10;
 		device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+		device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		if (lv1_exp_w <= exp_w)
 		{	// 1wave + 1wave
@@ -475,11 +525,11 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -25;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +25;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 		if (lv2_exp_w <= exp_w)
@@ -489,11 +539,11 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +40;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 		if (lv3_exp_w <= exp_w)
@@ -503,11 +553,11 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -55;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +55;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 		if (lv4_exp_w <= exp_w)
@@ -517,11 +567,11 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -70;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +70;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 
@@ -536,15 +586,15 @@ void UserAi::Act_AttackEx(void)
 		device_ex_.gadget_gpx_->draw_angle_ = 90;
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
 		device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+		device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_;
 		device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+		device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +10;
 		device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
-		device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+		device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		if (lv1_exp_w <= exp_w)
 		{	// 2wave + 2wave
@@ -553,25 +603,25 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 5;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 5;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 5;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -30;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 5;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 5;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +30;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 5;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 5;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +40;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 		if (lv2_exp_w <= exp_w)
@@ -581,25 +631,25 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 10;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -70;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 10;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 10;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -60;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 10;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 10;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +60;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 10;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 10;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +70;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 		if (lv3_exp_w <= exp_w)
@@ -609,25 +659,25 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 15;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -100;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 15;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 15;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -90;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 15;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 15;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +90;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 15;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 15;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +100;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 		if (lv4_exp_w <= exp_w)
@@ -637,25 +687,25 @@ void UserAi::Act_AttackEx(void)
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 20;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -130;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 20;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 - 20;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -120;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 20;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 20;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +120;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 + 20;
 			device_ex_.gadget_gpx_->draw_angle_ = 90 + 20;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +130;
 			device_ex_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_ +30;
-			device_ex_.effect_gpx_->draw_angle_ = rand() % 360;
+			device_ex_.effect_gpx_->draw_angle_ = NyaInput::GetRand(0.0, 360.0);
 			NyaDevice::Attack1414(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1);
 		}
 	}
@@ -665,7 +715,7 @@ void UserAi::Act_AttackEx(void)
 	// ウルト実行時間を超えたらウルトを終了させる
 	//************************************************
 	device_ex_.count_ult_frame_++;
-	if (MAX_FPS * 5 < device_ex_.count_ult_frame_)
+	if (FPS_MAX * 5 < device_ex_.count_ult_frame_)
 	{
 		device_ex_.count_ult_frame_ = 0;
 		device_ex_.valid_ = false;

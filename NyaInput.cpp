@@ -1,7 +1,6 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <random>
 #include "DxLib.h"
 #include "NyaInput.h"
 
@@ -9,6 +8,7 @@
 using namespace std;
 using namespace H2NLIB;
 
+mt19937 NyaInput::mt_rand_;
 stringstream NyaInput::output_seed_;
 stringstream NyaInput::output_date_;
 deque<int> NyaInput::save_state_collection_;
@@ -17,7 +17,7 @@ bool NyaInput::state_pre_[static_cast<int>(eINPUT::sizeof_enum)];
 
 void NyaInput::InitRand(void)
 {
-	int seed = 0;
+	int seed_value = 0;
 	time_t system_time;
 	tm local_time;
 
@@ -26,9 +26,9 @@ void NyaInput::InitRand(void)
 
 	system_time = time(nullptr);
 	localtime_s(&local_time, &system_time);
-	seed = local_time.tm_year + local_time.tm_mon + local_time.tm_mday + local_time.tm_hour + local_time.tm_min;
-	std::mt19937 mt(seed);
-	output_seed_ << seed;
+	seed_value = local_time.tm_year + local_time.tm_mon + local_time.tm_mday + local_time.tm_hour + local_time.tm_min;
+	mt_rand_.seed(seed_value);
+	output_seed_ << seed_value;
 	output_date_ << local_time.tm_year+1900;
 	output_date_ << "/";
 	if (local_time.tm_mon < 9)
@@ -53,7 +53,7 @@ void NyaInput::InputReplay(string file_name)
 
 	// 1行目は乱数のシード
 	getline(ifs, line);
-	std::mt19937 mt(std::atoi(line.c_str()));
+	mt_rand_.seed(std::atoi(line.c_str()));
 
 	// 2行目は日時なので読み飛ばす
 	getline(ifs, line);

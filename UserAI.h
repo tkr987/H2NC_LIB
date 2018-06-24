@@ -9,9 +9,8 @@ namespace H2NLIB
 	class DevicePropertyX1;
 	class EffectPropertyX1;
 	class GraphicPropertyX4;
-	class PositionHandle1;
-	class DeviceOption;
-	class EffectOption;
+	class PositionHandle;
+	class SoundPropertyX;
 }
 
 class UserAiDevice
@@ -22,6 +21,8 @@ public:
 	H2NLIB::GraphicPropertyX4* gadget_gpx_;
 	H2NLIB::EffectPropertyX1* effect_epx_;
 	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	H2NLIB::SoundPropertyX* spx_[6];
+	H2NLIB::SoundPropertyX* spx_ex_[6];
 	UserAiDevice();
 	~UserAiDevice();
 };
@@ -44,7 +45,7 @@ struct UserAiMain
 {
 public:
 	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle1* phandle_;
+	H2NLIB::PositionHandle* phandle_;
 	UserAiMain();
 	~UserAiMain();
 };
@@ -61,8 +62,8 @@ private:
 	UserAiDevice device_;
 	UserAiDeviceEx device_ex_;
 	UserAiMain main_;
-	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
-	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
+//	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
+//	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
 	void Act(void);
 	void Act_Attack(void);
 	void Act_AttackEx(void);

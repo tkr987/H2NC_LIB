@@ -9,7 +9,7 @@ namespace H2NLIB
 	class NyaString;
 	class DevicePropertyX1;
 	class GraphicPropertyX4;
-	class PositionHandle1;
+	class PositionHandle;
 }
 
 class TargetExTeemo2Main
@@ -17,7 +17,7 @@ class TargetExTeemo2Main
 public:
 	const unsigned int health_max_;
 	H2NLIB::GraphicPropertyX4* gp_;
-	H2NLIB::PositionHandle1* ph_;
+	H2NLIB::PositionHandle* ph_;
 	TargetExTeemo2Main();
 	~TargetExTeemo2Main();
 };

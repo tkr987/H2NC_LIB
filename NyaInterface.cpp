@@ -67,7 +67,7 @@ InterfaceHandleMissionWarning::InterfaceHandleMissionWarning()
 	draw_grid_x_ = 225;
 	draw_grid_y_ = 200;
 	draw_frame_ = 0;
-	draw_frame_max_ = MAX_FPS * 5;
+	draw_frame_max_ = FPS_MAX * 5;
 	draw_valid_ = false;
 	sound_valid_ = false;
 	spx_ = new SoundPropertyX;

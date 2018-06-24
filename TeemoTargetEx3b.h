@@ -5,14 +5,14 @@
 namespace H2NLIB {
 	class DevicePropertyX1;
 	class GraphicPropertyX4;
-	class PositionHandle1;
+	class PositionHandle;
 }
 
 class TeemoEx3bMain
 {
 public:
 	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle1* phandle_;
+	H2NLIB::PositionHandle* phandle_;
 	TeemoEx3bMain();
 	~TeemoEx3bMain();
 };

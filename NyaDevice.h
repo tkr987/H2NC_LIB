@@ -2,6 +2,7 @@
 
 
 #include "NyaEnum.h"
+#include <array>
 #include <list>
 #include <string>
 #include <utility>
@@ -14,32 +15,32 @@ namespace H2NLIB
 
 	class EffectPropertyX1;
 	class GraphicPropertyX4;
-	class PositionHandle1;
+	class PositionHandle;
 
 	class DevicePropertyX1
 	{
 	public:
-		int collision_power_;				//!< 衝突力
-		int collision_range_;				//!< 衝突範囲
-		double create_x_;					//!< 生成x座標
-		double create_y_;					//!< 生成y座標	
-		double move_angle_deg_;				//!< 移動角度
-		double move_speed_;					//!< 移動速度
+		int collision_power_;					//!< 衝突力
+		int collision_range_;					//!< 衝突範囲
+		double create_x_;						//!< 生成x座標
+		double create_y_;						//!< 生成y座標	
+		double move_angle_deg_;					//!< 移動角度
+		double move_speed_;						//!< 移動速度
 		DevicePropertyX1();
 	};
 
 	class DevicePropertyX2
 	{
 	public:
-		int collision_power_;				//!< 衝突力
-		int collision_range_;				//!< 衝突範囲
-		double create_x_;					//!< 生成x座標
-		double create_y_;					//!< 生成y座標	
-		double draw_angle_deg_;				//!< 描画角速度
-		double move_angle_deg_;				//!< 移動角度
-		double move_angle_deg_speed_;		//!< 移動角速度
-		double move_speed_;					//!< 移動速度
-		double move_speed_accel_;			//!< 移動速度の加速度
+		int collision_power_;					//!< 衝突力
+		int collision_range_;					//!< 衝突範囲
+		double create_x_;						//!< 生成x座標
+		double create_y_;						//!< 生成y座標	
+		double draw_angle_deg_;					//!< 描画角速度
+		double move_angle_deg_;					//!< 移動角度
+		double move_angle_deg_speed_;			//!< 移動角速度
+		double move_speed_;						//!< 移動速度
+		DevicePropertyX2();
 	};
 
 
@@ -47,12 +48,14 @@ namespace H2NLIB
 	{
 	public:
 		bool clear_;
+		unsigned int collision_accuracy_;
+		double move_angle_deg_;
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
 		DevicePropertyX1* gadget_dpx_;
 		GraphicPropertyX4* gadget_gpx_;
-		PositionHandle1* gadget_phandle_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget14();
 		~DeviceGadget14();
 	};
@@ -61,15 +64,17 @@ namespace H2NLIB
 	{
 	public:
 		bool clear_;
+		unsigned int collision_accuracy_;
+		double move_angle_deg_;
 		double move_angle_rad_;
 		double move_x_;
 		double move_y_;
+		eOBJECT effect_type_;
 		EffectPropertyX1* effect_epx_;
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX1* gadget_dpx_;
 		GraphicPropertyX4* gadget_gpx_;
-		PositionHandle1* gadget_phandle_;
-		eOBJECT effect_type_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget1414();
 		~DeviceGadget1414();
 	};
@@ -77,16 +82,29 @@ namespace H2NLIB
 	class DeviceGadget2414
 	{
 	public:
-
+		bool clear_;
+		unsigned int collision_accuracy_;
+		double move_angle_deg_;
+		double move_angle_rad_;
+		double move_x_;
+		double move_y_;
+		eOBJECT effect_type_;
+		EffectPropertyX1* effect_epx_;
+		GraphicPropertyX4* effect_gpx_;
+		DevicePropertyX2* gadget_dpx_;
+		GraphicPropertyX4* gadget_gpx_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		DeviceGadget2414();
+		~DeviceGadget2414();
 	};
 
 
 	class NyaDevice
 	{
 	public:
-		static void Attack14(const DevicePropertyX1* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type);
-		static void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type);
-		static void Attack2414(DevicePropertyX2* gadget_dpx, GraphicPropertyX4* gadget_gpx, EffectPropertyX1* effect_epx, GraphicPropertyX4* effect_gpx);
+		static void Attack14(const DevicePropertyX1* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type, unsigned int collision_accuracy = 1);
+		static void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
+		static void Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Clear(eOBJECT type);
 		static void Run(void);
 	private:

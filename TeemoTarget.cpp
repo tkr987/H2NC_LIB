@@ -12,7 +12,7 @@ using namespace H2NLIB;
 TargetTeemoMain::TargetTeemoMain()
 {
 	gp_ = new GraphicPropertyX4;
-	ph_ = new PositionHandle1;
+	ph_ = new PositionHandle;
 }
 
 TargetTeemoMain::~TargetTeemoMain()

@@ -15,7 +15,7 @@ using namespace H2NLIB;
 TargetExTeemoMain::TargetExTeemoMain() : health_max_(500) 
 {
 	gp_ = new GraphicPropertyX4;
-	ph_ = new PositionHandle1;
+	ph_ = new PositionHandle;
 
 }
 
@@ -88,7 +88,7 @@ void TargetExTeemo::Act(void)
 	// ’Êíˆ—
 	NyaPosition::Collide(main_.ph_, eOBJECT::TARGET1);
 	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
-	ihandle_mission_skill->exp_[static_cast<int>(ihandle_mission_skill->select_)] += main_.ph_->collision_hit_;
+	ihandle_mission_skill->exp_[static_cast<int>(ihandle_mission_skill->select_)] += main_.ph_->collision_hit_damage_;
 	count_frame_++;
 
 	// ƒwƒ‹ƒX‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çmission clear‚ð•\Ž¦‚·‚é

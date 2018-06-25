@@ -195,7 +195,7 @@ void NyaWindow::Run(void)
 		//*****************************
 		ScreenFlip();
 		ClearDrawScreen();
-		WaitFPS(1180, 660);
+		WaitFPS(1010, 695);
 
 		//*******************************************************************************
 		// enum_zeroÇ≈Ç»Ç¢Ç»ÇÁNyaWindowÇÃÉÅÉìÉoä÷êîÇ≈event_next_ÇïœçXÇµÇΩÇ∆Ç¢Ç§Ç±Ç∆
@@ -639,8 +639,8 @@ void NyaWindow::WaitFPS(int x, int y)
 	if (frame_ave_ != 0) 
 	{
 		NyaString::Write("design_fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
-		NyaString::Write("design_fps_font", white, x, y + 20, "loop[%d ms]", ltime_ave_);
-		NyaString::Write("design_fps_font", white, x, y + 40, "wait[%d ms]", wtime_ave_);
+		NyaString::Write("design_fps_font", white, x + 100, y, "loop[%d ms]", ltime_ave_);
+		NyaString::Write("design_fps_font", white, x + 180, y, "wait[%d ms]", wtime_ave_);
 	}
 #else
 	if (frame_ave_ != 0)

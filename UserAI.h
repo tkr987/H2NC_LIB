@@ -5,7 +5,6 @@
 
 namespace H2NLIB
 {
-	class NyaPosition;
 	class DevicePropertyX1;
 	class EffectPropertyX1;
 	class GraphicPropertyX4;
@@ -58,12 +57,9 @@ public:
 	void MissionRun(void);
 private:
 	unsigned int count_frame_;
-	H2NLIB::NyaPosition* nya_position_;
 	UserAiDevice device_;
 	UserAiDeviceEx device_ex_;
 	UserAiMain main_;
-//	std::pair<H2NLIB::DeviceOption*, int> device_option_pair_;
-//	std::pair<H2NLIB::EffectOption*, int> effect_option_pair_;
 	void Act(void);
 	void Act_Attack(void);
 	void Act_AttackEx(void);

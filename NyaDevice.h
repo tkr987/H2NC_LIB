@@ -24,6 +24,7 @@ namespace H2NLIB
 		int collision_range_;					//!< Õ“Ë”ÍˆÍ
 		double create_x_;						//!< ¶¬xÀ•W
 		double create_y_;						//!< ¶¬yÀ•W	
+		unsigned int delay_time_frame_;			//!< ’x‰„ŽžŠÔ(ƒtƒŒ[ƒ€’PˆÊ)
 		double move_angle_deg_;					//!< ˆÚ“®Šp“x
 		double move_speed_;						//!< ˆÚ“®‘¬“x
 		DevicePropertyX1();
@@ -36,6 +37,7 @@ namespace H2NLIB
 		int collision_range_;					//!< Õ“Ë”ÍˆÍ
 		double create_x_;						//!< ¶¬xÀ•W
 		double create_y_;						//!< ¶¬yÀ•W	
+		unsigned int delay_time_frame_;			//!< ’x‰„ŽžŠÔ(ƒtƒŒ[ƒ€’PˆÊ)
 		double draw_angle_deg_;					//!< •`‰æŠp‘¬“x
 		double move_angle_deg_;					//!< ˆÚ“®Šp“x
 		double move_angle_deg_speed_;			//!< ˆÚ“®Šp‘¬“x
@@ -49,6 +51,7 @@ namespace H2NLIB
 	public:
 		bool clear_;
 		unsigned int collision_accuracy_;
+		unsigned int count_frame_;
 		double move_angle_deg_;
 		double move_angle_rad_;
 		double move_x_;
@@ -65,6 +68,7 @@ namespace H2NLIB
 	public:
 		bool clear_;
 		unsigned int collision_accuracy_;
+		unsigned int count_frame_;
 		double move_angle_deg_;
 		double move_angle_rad_;
 		double move_x_;
@@ -84,6 +88,7 @@ namespace H2NLIB
 	public:
 		bool clear_;
 		unsigned int collision_accuracy_;
+		unsigned int count_frame_;
 		double move_angle_deg_;
 		double move_angle_rad_;
 		double move_x_;

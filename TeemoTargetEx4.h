@@ -24,17 +24,6 @@ public:
 	~TeemoExBullet41();
 };
 
-class TeemoExDevice42
-{
-public:
-	H2NLIB::DevicePropertyX2* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice42();
-	~TeemoExDevice42();
-};
-
 class TeemoExDevice421
 {
 public:
@@ -44,6 +33,17 @@ public:
 	H2NLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice421();
 	~TeemoExDevice421();
+};
+
+class TeemoExDevice422
+{
+public:
+	H2NLIB::DevicePropertyX1* dpx_;
+	H2NLIB::GraphicPropertyX4* gadget_gpx_;
+	H2NLIB::EffectPropertyX1* epx_;
+	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	TeemoExDevice422();
+	~TeemoExDevice422();
 };
 
 class TeemoEx4Cube1
@@ -59,7 +59,9 @@ public:
 class TeemoExCube42
 {
 public:
-	TeemoExDevice42 device2_;
+	double device_x_;
+	double device_y_;
+	TeemoExDevice422 device22_;
 	H2NLIB::GraphicPropertyX4* gpx_;
 	H2NLIB::PositionHandle* phandle_;
 	TeemoExCube42();

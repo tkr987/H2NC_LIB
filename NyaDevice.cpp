@@ -97,6 +97,7 @@ DevicePropertyX1::DevicePropertyX1()
 {
 	collision_power_ = 1;
 	collision_range_ = 1;
+	delay_time_frame_ = 0;
 	move_angle_deg_ = 0;
 	move_speed_ = 1;
 }
@@ -105,6 +106,7 @@ DevicePropertyX2::DevicePropertyX2()
 {
 	collision_power_ = 1;
 	collision_range_ = 1;
+	delay_time_frame_ = 0;
 	draw_angle_deg_ = 0;
 	move_angle_deg_ = 0;
 	move_angle_deg_speed_ = 0;
@@ -137,6 +139,7 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dpx, const Graphic
 	it_from = dg14_wait_list_.begin();
 	it_from->clear_ = false;
 	it_from->collision_accuracy_ = collision_accuracy;
+	it_from->count_frame_ = 0;
 	it_from->move_angle_deg_ = gadget_dpx->move_angle_deg_;
 	it_from->move_angle_rad_ = AngleToRad(gadget_dpx->move_angle_deg_);
 	it_from->move_x_ = cos(it_from->move_angle_rad_) * gadget_dpx->move_speed_;
@@ -189,6 +192,7 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 	it_from = dg1414_wait_list_.begin();
 	it_from->clear_ = false;
 	it_from->collision_accuracy_ = collision_accuracy;
+	it_from->count_frame_ = 0;
 	it_from->effect_type_ = effect_type;
 	it_from->move_angle_deg_ = gadget_dpx->move_angle_deg_;
 	it_from->move_angle_rad_ = AngleToRad(gadget_dpx->move_angle_deg_);
@@ -244,6 +248,7 @@ void NyaDevice::Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicProp
 	it_from = dg2414_wait_list_.begin();
 	it_from->clear_ = false;
 	it_from->collision_accuracy_ = collision_accuracy;
+	it_from->count_frame_ = 0;
 	it_from->effect_type_ = effect_type;
 	it_from->move_angle_deg_ = gadget_dpx->move_angle_deg_;
 	it_from->move_angle_rad_ = AngleToRad(gadget_dpx->move_angle_deg_);
@@ -300,12 +305,21 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	deque<list<DeviceGadget1414>::iterator> dg1414_delete_deque;
 	deque<list<DeviceGadget2414>::iterator> dg2414_delete_deque;
 
+	//*************************************************************************
+	//*************************************************************************
+	// 遅延フレームを超えない限り衝突判定と移動処理と描画をしないようにする
+	//*************************************************************************
+	//*************************************************************************
 
 	//***********************
 	// Gadget14 削除処理
 	//***********************
 	for (auto it = dg14_attack_list_[static_cast<int>(type)].begin(); it != dg14_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
+		// フレームカウントが遅延時間に達していないなら何もしない
+		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
+			continue;
+
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
@@ -336,6 +350,13 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	//****************************
 	for (auto& e : dg14_attack_list_[static_cast<int>(type)])
 	{
+		// count_frame_の初期値は0になっている
+		// delay_time_frame_が1なら1フレームは何もしないようにしたい
+		// したがって、インクリメントしてから判定してるのでcount_frame_ - 1で比較
+		e.count_frame_++;
+		if (e.count_frame_ - 1 < e.gadget_dpx_->delay_time_frame_)
+			continue;
+
 		// 衝突判定処理
 		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
 		{
@@ -356,6 +377,10 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	//*******************************************
 	for (auto it = dg1414_attack_list_[static_cast<int>(type)].begin(); it != dg1414_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
+		// フレームカウントが遅延時間に達していないなら何もしない
+		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
+			continue;
+
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
@@ -395,6 +420,13 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	//****************************
 	for (auto& e : dg1414_attack_list_[static_cast<int>(type)])
 	{
+		// count_frame_の初期値は0になっている
+		// delay_time_frame_が1なら1フレームは何もしないようにしたい
+		// したがって、インクリメントしてから判定してるのでcount_frame_ - 1で比較
+		e.count_frame_++;
+		if (e.count_frame_ - 1 < e.gadget_dpx_->delay_time_frame_)
+			continue;
+
 		// 移動処理と衝突判定処理
 		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
 		{
@@ -417,6 +449,10 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	//*******************************************
 	for (auto it = dg2414_attack_list_[static_cast<int>(type)].begin(); it != dg2414_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
+		// フレームカウントが遅延時間に達していないなら何もしない
+		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
+			continue;
+
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
@@ -455,6 +491,13 @@ void NyaDevice::MoveGadget(eOBJECT type)
 	//****************************
 	for (auto& e : dg2414_attack_list_[static_cast<int>(type)])
 	{
+		// count_frame_の初期値は0になっている
+		// delay_time_frame_が1なら1フレームは何もしないようにしたい
+		// したがって、インクリメントしてから判定してるのでcount_frame_ - 1で比較
+		e.count_frame_++;
+		if (e.count_frame_ - 1 < e.gadget_dpx_->delay_time_frame_)
+			continue;
+
 		// 移動処理と衝突判定処理
 		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
 		{

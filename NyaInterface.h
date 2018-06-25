@@ -38,6 +38,13 @@ namespace H2NLIB
 		InterfaceHandleMissionEx();
 	};
 
+	class InterfaceHandleMissionLife
+	{
+	public:
+		int value_;
+		InterfaceHandleMissionLife();
+	};
+
 	class InterfaceHandleMissionWarning
 	{
 	public:
@@ -76,6 +83,7 @@ namespace H2NLIB
 		static InterfaceHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
 		static InterfaceHandleMissionAllOver* GetHandleMissionAllOver(void) { return &handle_mission_all_over_; }
 		static InterfaceHandleMissionEx* GetHandleMissionEx(void) { return &handle_mission_ex_; }
+		static InterfaceHandleMissionLife* GetHandleMissionLife(void) { return &handle_mission_life_; }
 		static InterfaceHandleMissionSkill* GetHandleMissionSkill(void) { return &handle_mission_skill_; }
 		static InterfaceHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
 	private:
@@ -85,6 +93,7 @@ namespace H2NLIB
 		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleMissionEx handle_mission_ex_;
 		static InterfaceHandleMissionSkill handle_mission_skill_;
+		static InterfaceHandleMissionLife handle_mission_life_;
 		static InterfaceHandleMissionWarning handle_mission_warning_;
 		static std::string title_;
 		static void DrawBlack(int x, int y, int x2, int y2);
@@ -94,6 +103,7 @@ namespace H2NLIB
 		static void DrawMissionAllOver(void);
 		static void DrawMissionClear(void);
 		static void DrawMissionEx(void);
+		static void DrawMissionUserLife(int x, int y);
 		static void DrawMissionWarning(void);
 	};
 

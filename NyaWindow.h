@@ -7,13 +7,9 @@
 
 namespace H2NLIB
 {
-	class NyaDevice;
-	class NyaEffect;
-	class NyaInput;
+	class NyaEnding;
 	class NyaMission;
-	class NyaPosition;
-	class NyaTarget;
-	class NyaUser;
+	class NyaOpening;
 
 	// 子オブジェクトmission関連
 	class ChildMission
@@ -22,30 +18,29 @@ namespace H2NLIB
 		bool valid_;
 		int index_;
 		std::vector<NyaMission*> mission_collection_;
-		ChildMission()
-		{
-			valid_ = false;
-			index_ = 0;
-		}
+		ChildMission();
 	};
 
 	// nya window
+	// H2N C++ DXLIB STG wrapper: happy 2 nya C++ DXLIB STG wrapper
 	class NyaWindow
 	{
 	public:
-		NyaWindow();
+		NyaWindow(std::string title);
 		~NyaWindow();
+		void AddChild(NyaOpening* opening);
 		void AddChild(NyaMission* mission);
-		int Init(std::string title);
 		void Run(void);
 	private:
 		eEVENT event_;
 		eEVENT event_next_;
-		std::string title_;
+		H2NLIB::NyaEnding* ending_;
 		ChildMission child_mission_;
-		NyaPosition* nya_position_;
+		H2NLIB::NyaOpening* opening_;
+		void Ending(void);
 		void Mission(void);
 		void NotSaveReplay(void);
+		void Opening(void);
 		void SaveReplay(void);
 		void Title(void);
 		void WaitFPS(int x, int y);

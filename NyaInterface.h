@@ -12,6 +12,7 @@ namespace H2NLIB
 {
 	class SoundPropertyX;
 
+
 	class InterfaceHandleMissionAllOver
 	{
 	public:
@@ -74,6 +75,14 @@ namespace H2NLIB
 		void Clear(void);
 	};
 
+	class InterfaceHandleTitle
+	{
+	public:
+		std::string name_;
+		InterfaceHandleTitle();
+	};
+
+
 	class NyaInterface {
 	public:
 		NyaInterface();
@@ -86,8 +95,8 @@ namespace H2NLIB
 		static InterfaceHandleMissionLife* GetHandleMissionLife(void) { return &handle_mission_life_; }
 		static InterfaceHandleMissionSkill* GetHandleMissionSkill(void) { return &handle_mission_skill_; }
 		static InterfaceHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
+		static InterfaceHandleTitle* GetHandleTitle(void) { return &handle_title_; }
 	private:
-		static std::pair<bool, int> clear_pair_;
 		static unsigned int count_frame_;
 		static InterfaceHandleMissionAllOver handle_mission_all_over_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
@@ -95,16 +104,17 @@ namespace H2NLIB
 		static InterfaceHandleMissionSkill handle_mission_skill_;
 		static InterfaceHandleMissionLife handle_mission_life_;
 		static InterfaceHandleMissionWarning handle_mission_warning_;
-		static std::string title_;
+		static InterfaceHandleTitle handle_title_;
 		static void DrawBlack(int x, int y, int x2, int y2);
 		static void DrawLIB(int x, int y);
-		static void DrawSkill(int x, int y);
-		static void DrawInput(int x, int y);
 		static void DrawMissionAllOver(void);
 		static void DrawMissionClear(void);
 		static void DrawMissionEx(void);
-		static void DrawMissionUserLife(int x, int y);
 		static void DrawMissionWarning(void);
+		static void DrawTitle(int x, int y);
+		static void DrawUserInput(int x, int y);
+		static void DrawUserLife(int x, int y);
+		static void DrawUserSkill(int x, int y);
 	};
 
 }

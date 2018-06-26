@@ -19,6 +19,7 @@ InterfaceHandleMissionEx NyaInterface::handle_mission_ex_;
 InterfaceHandleMissionSkill NyaInterface::handle_mission_skill_;
 InterfaceHandleMissionLife NyaInterface::handle_mission_life_;
 InterfaceHandleMissionWarning NyaInterface::handle_mission_warning_;
+InterfaceHandleTitle NyaInterface::handle_title_;
 eSKILL InterfaceHandleMissionSkill::select_;
 
 InterfaceHandleMissionAllOver::InterfaceHandleMissionAllOver()
@@ -97,6 +98,12 @@ InterfaceHandleMissionEx::InterfaceHandleMissionEx()
 	value_ = 100;
 }
 
+H2NLIB::InterfaceHandleTitle::InterfaceHandleTitle()
+{
+	name_ = "no_title";
+}
+
+
 /**
  @brief èâä˙âªä÷êî
  @note
@@ -105,6 +112,7 @@ InterfaceHandleMissionEx::InterfaceHandleMissionEx()
 void NyaInterface::Init(void)
 {
 	count_frame_ = 0;
+	NyaString::SettingFont("interface_title_font", 20, 6);
 	NyaString::SettingFont("interface_exp_font", 18, 2);
 	NyaString::SettingFont("design_fps_font", 14, 2);
 	NyaString::SettingFont("interface_lib_font", 50, 6);
@@ -124,14 +132,15 @@ void NyaInterface::Init(void)
 void NyaInterface::Run(void)
 {
 	DrawBlack(850, 0, 1280, 720);
+	DrawTitle(875, 30);
+	DrawUserLife(875, 75);
+	DrawUserSkill(875, 135);
+	DrawLIB(910, 520);
+	DrawUserInput(875, 640);
 	DrawMissionEx();
 	DrawMissionWarning();
 	DrawMissionClear();
 	DrawMissionAllOver();
-	DrawMissionUserLife(875, 75);
-	DrawSkill(875, 135);
-	DrawLIB(910, 520);
-	DrawInput(875, 640);
 }
 
 void NyaInterface::DrawBlack(int x, int y, int x2, int y2) 
@@ -141,7 +150,13 @@ void NyaInterface::DrawBlack(int x, int y, int x2, int y2)
 	DrawBox(x, y, x2, y2, color , true);
 }
 
-void NyaInterface::DrawInput(int x, int y)
+void NyaInterface::DrawTitle(int x, int y)
+{
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_);
+}
+
+void NyaInterface::DrawUserInput(int x, int y)
 {
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -230,7 +245,7 @@ void NyaInterface::DrawMissionEx(void)
 	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_mission_ex_.value_ / 100.0), 15, red, true);
 }
 
-void NyaInterface::DrawMissionUserLife(int x, int y)
+void NyaInterface::DrawUserLife(int x, int y)
 {
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
@@ -283,7 +298,7 @@ void NyaInterface::DrawMissionWarning(void)
 	}	
 }
 
-void NyaInterface::DrawSkill(int x, int y)
+void NyaInterface::DrawUserSkill(int x, int y)
 {
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
@@ -350,5 +365,4 @@ void NyaInterface::DrawSkill(int x, int y)
 		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1) + 45, "Å†Å†Å†Å†");
 	}
 }
-
 

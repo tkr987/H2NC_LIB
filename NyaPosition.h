@@ -55,8 +55,8 @@ namespace H2NLIB
 		static void Collide(PositionHandle* handle, eOBJECT group);
 		static void CollisionPair(eOBJECT group1, eOBJECT group2);
 		static bool InScreen(PositionHandle* phx, int gap = 0);
-		static void MoveAngleMode(PositionHandle* handle, double angle, int length, unsigned int max_frame);
-		static void MoveGridMode(PositionHandle* handle, int end_x, int end_y, unsigned int max_frame);
+		static void MoveAngleMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);
+		static void MoveGridMode(PositionHandle* handle, double end_x, double end_y, unsigned int max_frame);
 		static void Run(void);
 	private:
 		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_pair_collection_;

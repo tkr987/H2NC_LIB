@@ -59,7 +59,7 @@ void NyaPosition::CollisionPair(eOBJECT type1, eOBJECT type2)
 @note
  handle‚ðŠp“xangle‚Åmax_frame‚©‚¯‚Älength‚¾‚¯ˆÚ“®‚³‚¹‚é
 **/
-void NyaPosition::MoveAngleMode(PositionHandle* handle, double angle, int length, unsigned int max_frame)
+void NyaPosition::MoveAngleMode(PositionHandle* handle, double angle, double length, unsigned int max_frame)
 {
 	PositionMove new_move;
 
@@ -80,15 +80,15 @@ void NyaPosition::MoveAngleMode(PositionHandle* handle, double angle, int length
 @note
  handle‚ðŠp“xangle‚Åmax_frame‚©‚¯‚Älength‚¾‚¯ˆÚ“®‚³‚¹‚é
 **/
-void NyaPosition::MoveGridMode(PositionHandle* handle, int end_x,  int end_y, unsigned int max_frame)
+void NyaPosition::MoveGridMode(PositionHandle* handle, double end_x,  double end_y, unsigned int max_frame)
 {
 	PositionMove new_move;
 
 	new_move.frame_ = 0;
 	new_move.max_frame_ = max_frame;
 	new_move.handle_ = handle;
-	new_move.move_x_ = ((double)end_x - (double)handle->grid_x_) / (double)max_frame;
-	new_move.move_y_ = ((double)end_y - (double)handle->grid_y_) / (double)max_frame;
+	new_move.move_x_ = (end_x - handle->grid_x_) / (double)max_frame;
+	new_move.move_y_ = (end_y - handle->grid_y_) / (double)max_frame;
 	move_collection_.push_back(new_move);
 }
 

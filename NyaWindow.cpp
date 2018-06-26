@@ -6,10 +6,12 @@
 #include "DxLib.h"
 #include "NyaDevice.h"
 #include "NyaEffect.h"
+#include "NyaEnding.h"
 #include "NyaGraphic.h"
 #include "NyaInput.h"
 #include "NyaInterface.h"
 #include "NyaMission.h"
+#include "NyaOpening.h"
 #include "NyaPosition.h"
 #include "NyaSound.h"
 #include "NyaString.h"
@@ -24,23 +26,11 @@ using namespace std::experimental::filesystem;
 using namespace H2NLIB;
 
 
-NyaWindow::NyaWindow()
+
+H2NLIB::ChildMission::ChildMission()
 {
-	// メンバ変数の初期化
-	event_ = eEVENT::TITLE;
-}
-
-
-NyaWindow::~NyaWindow()
-{
-	// 親オブジェクトのNyaWindowを破棄するときに子オブジェクトを破棄する
-	for (auto& e : child_mission_.mission_collection_)
-		delete e;
-
-	// nya class delete
-	delete nya_position_;
-
-	DxLib_End();
+	index_ = 0;
+	valid_ = false;
 }
 
 /**
@@ -55,41 +45,53 @@ void NyaWindow::AddChild(NyaMission* mission)
 	child_mission_.mission_collection_.push_back(mission);
 }
 
-
-/**
- @brief 初期化関数
- @param name タイトルの設定
- @note
-  必ず最初に一度呼び出すこと
-**/
-int NyaWindow::Init(string title)
+NyaWindow::NyaWindow(string title)
 {
-	// *****************
-	//  dxlib初期化
-	// *****************
-	SetMainWindowText("Happy 2 Nya C++ DXLIB wrapper v68");		// タイトル
-	ChangeWindowMode(true);										// ウィンドウモード
-	SetGraphMode(1280, 720, 32);								// 画面サイズ, 色数
-	if (DxLib_Init() == -1)										// 初期化
-		return -1;												//
-	SetAlwaysRunFlag(true);										// 非アクティブ状態でも動作させる
-	SetUseDivGraphFlag(false);									// グラフィック描画分割方法
-	SetDrawScreen(DX_SCREEN_BACK);								// 描画先グラフィック領域の指定
+	InterfaceHandleTitle* ihandle_title;
+
+	//******************
+	// DXLIB初期化
+	//******************
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v69");		// タイトル
+	ChangeWindowMode(true);											// ウィンドウモード
+	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
+	DxLib_Init();													// 初期化
+	SetAlwaysRunFlag(true);											// 非アクティブ状態でも動作させる
+	SetUseDivGraphFlag(false);										// グラフィック描画分割方法
+	SetDrawScreen(DX_SCREEN_BACK);									// 描画先グラフィック領域の指定
 
 	// ディレクトリ作成
 	create_directory("replay");
 
-	// コンストラクタでDXLIB関数を利用する可能性があるので
-	// DXLIB初期化後にインスタンスを生成する必要がある。
+	// 各クラス内でDXLIB関数を利用する可能性があるので
+	// DXLIB初期化後にInit()を呼び出す必要がある。
 	NyaInterface::Init();
-	nya_position_ = new NyaPosition;
+	ihandle_title = NyaInterface::GetHandleTitle();
+	ihandle_title->name_ = title;
 	
-	// NyaWindowの各種設定
-	title_ = title;
+	// フォント設定
 	NyaString::SettingFont("window_title_font", 30, 4);
 	NyaString::SettingFont("debug_font", 10, 2);
 
-	return 0;
+	// メンバ変数の初期化
+	event_ = eEVENT::TITLE;
+	ending_ = nullptr;
+	opening_ = nullptr;
+}
+
+
+NyaWindow::~NyaWindow(void)
+{
+	// 親オブジェクトのNyaWindowを破棄するときに子オブジェクトを破棄する
+	for (auto& e : child_mission_.mission_collection_)
+		delete e;
+
+	DxLib_End();
+}
+
+void H2NLIB::NyaWindow::AddChild(NyaOpening * opening)
+{
+	opening_ = opening;
 }
 
 /**
@@ -110,6 +112,7 @@ void NyaWindow::Run(void)
 		// TODO
 		// mission all clear と add_child(mission) の関係
 		// nya interface skill の初期化(ミッション→リプレイのとき不具合)
+		// save replay or not save replay 状態遷移確認
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -125,7 +128,9 @@ void NyaWindow::Run(void)
 		// リプレイ保存
 		//***********************
 		Title();
+		Opening();
 		Mission();
+		Ending();
 		SaveReplay();
 		NotSaveReplay();
 
@@ -140,7 +145,7 @@ void NyaWindow::Run(void)
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 620, "[600, 620] NyaDevice::Run() %d msec", (int)debug_time_msec);
 #else 
-		nya_device_->Run();
+		NyaDevice::Run();
 #endif
 
 #ifdef __DEBUG__
@@ -150,7 +155,7 @@ void NyaWindow::Run(void)
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 640, "[600, 640] NyaEffect::Run() %d msec", (int)debug_time_msec);
 #else 
-		nya_effect_->Run();
+		NyaEffect::Run();
 #endif
 
 #ifdef __DEBUG__
@@ -160,17 +165,17 @@ void NyaWindow::Run(void)
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 660, "[600, 660] NyaGraphic::Run() %d msec", (int)debug_time_msec);
 #else 
-		nya_graphic::Run();
+		NyaGraphic::Run();
 #endif
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		nya_position_->Run();
+		NyaPosition::Run();
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 680, "[600, 680] NyaPosition::Run() %d msec", (int)debug_time_msec);
 #else 
-		nya_position_->Run();
+		NyaPosition::Run();
 #endif
 
 #ifdef __DEBUG__
@@ -208,7 +213,38 @@ void NyaWindow::Run(void)
 }
 
 /**
- @param ミッションの処理をする関数
+@brief エンディングの処理をする関数
+@note
+ エンディングが登録されてないときは何もせず次のイベントに遷移する
+**/
+void NyaWindow::Ending(void)
+{
+	switch(event_)
+	{
+		case eEVENT::ENDING_LOAD:
+			if (ending_ == nullptr)
+				event_next_ = eEVENT::REPLAY_SAVE;
+			else
+			{
+				ending_->Load();
+				event_next_ = eEVENT::ENDING_RUN;
+			}
+			break;
+		case eEVENT::ENDING_RUN:
+			ending_->Run();
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+			event_next_ = eEVENT::ENDING_DELETE;
+			break;
+		case eEVENT::ENDING_DELETE:
+			ending_->Delete();
+			event_next_ = eEVENT::REPLAY_SAVE;
+			break;
+	}
+}
+
+
+/**
+ @brief ミッションの処理をする関数
  @note
   ミッションが登録されてない場合は何もしないでタイトルに戻る
 **/
@@ -270,7 +306,7 @@ void NyaWindow::Mission(void)
 			ihandle_mission_all_over->valid_ = false;
 			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 			ihandle_mission_ex->valid_ = false;
-			event_next_ = eEVENT::REPLAY_SAVE;		
+			event_next_ = eEVENT::ENDING_LOAD;
 		}
 		break;
 	case eEVENT::MISSION_DELETE:
@@ -472,6 +508,36 @@ void NyaWindow::NotSaveReplay(void)
 		event_next_ = eEVENT::TITLE;
 }
 
+/**
+@brief オープニングの処理をする関数
+@note
+ オープニングが登録されてないときは何もせず次のイベントに遷移する
+**/
+void NyaWindow::Opening(void)
+{
+	switch(event_)
+	{
+		case eEVENT::OPENING_LOAD:
+			if (opening_ == nullptr)
+				event_next_ = eEVENT::MISSION_CREATE;
+			else
+			{
+				opening_->Load();
+				event_next_ = eEVENT::OPENING_RUN;
+			}
+			break;
+		case eEVENT::OPENING_RUN:
+			opening_->Run();
+		if (NyaInput::IsPressKey(eINPUT::ENTER))
+			event_next_ = eEVENT::OPENING_DELETE;
+			break;
+		case eEVENT::OPENING_DELETE:
+			opening_->Delete();
+			event_next_ = eEVENT::MISSION_CREATE;
+			break;
+	}
+}
+
 
 /**
  @brief タイトル画面の処理をする関数
@@ -485,6 +551,7 @@ void NyaWindow::Title(void)
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
 	static int select = 0;
 	InterfaceHandleMissionSkill* ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	InterfaceHandleTitle* ihandle_title = NyaInterface::GetHandleTitle();
 
 	if (event_ != eEVENT::TITLE)
 		return;
@@ -507,7 +574,7 @@ void NyaWindow::Title(void)
 	y = 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission");
-	NyaString::Write("window_title_font", white, x + 70, y, "%s", title_);
+	NyaString::Write("window_title_font", white, x + 70, y, "%s", ihandle_title->name_);
 
 	//***********************
 	// リプレイの有無を表示
@@ -596,13 +663,16 @@ void NyaWindow::Title(void)
 		switch (select)
 		{	// イベントの更新
 		case 0:
-			event_next_ = eEVENT::MISSION_CREATE;
+				event_next_ = eEVENT::OPENING_LOAD;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
-			event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			if (opening_ == nullptr)
+				event_next_ = eEVENT::MISSION_CREATE;
+			else
+				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
 			break;
 		case 5:
 			event_next_ = eEVENT::WINDOW_CLOSE;
@@ -674,3 +744,5 @@ void NyaWindow::WaitFPS(int x, int y)
 	frame_[frame_count_] = GetNowCount() - prev_time_;
 	prev_time_ = GetNowCount();
 }
+
+

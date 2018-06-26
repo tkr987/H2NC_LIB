@@ -25,6 +25,8 @@ namespace H2NLIB
 		double create_x_;						//!< ¶¬xÀ•W
 		double create_y_;						//!< ¶¬yÀ•W	
 		unsigned int delay_time_frame_;			//!< ’x‰„ŽžŠÔ(ƒtƒŒ[ƒ€’PˆÊ)
+		double draw_angle_deg_;					//!< •`‰æŠp“x
+		double draw_angle_speed_deg_;			//!< •`‰æŠp‘¬“x
 		double move_angle_deg_;					//!< ˆÚ“®Šp“x
 		double move_speed_;						//!< ˆÚ“®‘¬“x
 		DevicePropertyX1();
@@ -38,9 +40,10 @@ namespace H2NLIB
 		double create_x_;						//!< ¶¬xÀ•W
 		double create_y_;						//!< ¶¬yÀ•W	
 		unsigned int delay_time_frame_;			//!< ’x‰„ŽžŠÔ(ƒtƒŒ[ƒ€’PˆÊ)
-		double draw_angle_deg_;					//!< •`‰æŠp‘¬“x
+		double draw_angle_deg_;					//!< •`‰æŠp“x
+		double draw_angle_speed_deg_;			//!< •`‰æŠp‘¬“x
 		double move_angle_deg_;					//!< ˆÚ“®Šp“x
-		double move_angle_deg_speed_;			//!< ˆÚ“®Šp‘¬“x
+		double move_angle_speed_deg_;			//!< ˆÚ“®Šp‘¬“x
 		double move_speed_;						//!< ˆÚ“®‘¬“x
 		DevicePropertyX2();
 	};
@@ -119,7 +122,7 @@ namespace H2NLIB
 		static std::list<DeviceGadget1414> dg1414_wait_list_;
 		static std::list<DeviceGadget2414> dg2414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget2414> dg2414_wait_list_;
-		static void MoveGadget(eOBJECT group);
+		static void CalculateGadget(eOBJECT group);
 		static double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		static double AngleToRad(double x) { return (x * 3.14159 / 180.0); }
 	};

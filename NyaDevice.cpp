@@ -98,6 +98,7 @@ DevicePropertyX1::DevicePropertyX1()
 	collision_power_ = 1;
 	collision_range_ = 1;
 	delay_time_frame_ = 0;
+	draw_angle_deg_ = 0;
 	move_angle_deg_ = 0;
 	move_speed_ = 1;
 }
@@ -108,8 +109,9 @@ DevicePropertyX2::DevicePropertyX2()
 	collision_range_ = 1;
 	delay_time_frame_ = 0;
 	draw_angle_deg_ = 0;
+	draw_angle_speed_deg_ = 0;
 	move_angle_deg_ = 0;
-	move_angle_deg_speed_ = 0;
+	move_angle_speed_deg_ = 0;
 	move_speed_ = 1;
 }
 
@@ -274,6 +276,12 @@ void NyaDevice::Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicProp
 	dg2414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg2414_wait_list_), it_from);
 }
 
+/**
+ @brief クリア関数
+ @param type クリアするオブジェクトタイプ
+ @note
+  引数で指定したtypeのgadgetを全てクリアする
+**/
 void NyaDevice::Clear(eOBJECT type)
 {
 	for (auto& e : dg14_attack_list_[static_cast<int>(type)])
@@ -290,7 +298,7 @@ void NyaDevice::Run(void)
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
-		MoveGadget(type);
+		CalculateGadget(type);
 
 
 	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", 10000 - (int)dg1414_wait_list_.size());
@@ -298,18 +306,12 @@ void NyaDevice::Run(void)
 }
 
 
-void NyaDevice::MoveGadget(eOBJECT type)
+void NyaDevice::CalculateGadget(eOBJECT type)
 {
 	GraphicPropertyX4 gp;
 	deque<list<DeviceGadget14>::iterator> dg14_delete_deque;
 	deque<list<DeviceGadget1414>::iterator> dg1414_delete_deque;
 	deque<list<DeviceGadget2414>::iterator> dg2414_delete_deque;
-
-	//*************************************************************************
-	//*************************************************************************
-	// 遅延フレームを超えない限り衝突判定と移動処理と描画をしないようにする
-	//*************************************************************************
-	//*************************************************************************
 
 	//***********************
 	// Gadget14 削除処理
@@ -368,6 +370,7 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		// 描画処理
 		e.gadget_gpx_->draw_grid_cx_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_;
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
+		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
 	}
 
@@ -438,8 +441,8 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		// 描画処理
 		e.gadget_gpx_->draw_grid_cx_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_;
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
+		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
-
 	}
 
 
@@ -507,7 +510,7 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		}
 
 		// 角速度の処理
-		e.move_angle_deg_ += e.gadget_dpx_->move_angle_deg_speed_;
+		e.move_angle_deg_ += e.gadget_dpx_->move_angle_speed_deg_;
 		e.move_angle_rad_ = AngleToRad(e.move_angle_deg_);
 		e.move_x_ = cos(e.move_angle_rad_) * e.gadget_dpx_->move_speed_;
 		e.move_x_ /= e.collision_accuracy_;
@@ -517,7 +520,9 @@ void NyaDevice::MoveGadget(eOBJECT type)
 		// 描画処理
 		e.gadget_gpx_->draw_grid_cx_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_;
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
+		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
 }
 

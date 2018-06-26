@@ -103,7 +103,7 @@ namespace H2NLIB
 	class GraphicPropertyX4 
 	{
 	public:
-		double draw_angle_;
+		double draw_angle_deg_;
 		double draw_grid_cx_;
 		double draw_grid_cy_;
 		double extend_rate_;
@@ -127,7 +127,7 @@ namespace H2NLIB
 		int pos_y_;
 		int pos_cx_;
 		int pos_cy_;
-		double draw_angle_;
+		double draw_angle_deg_;
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
@@ -144,7 +144,7 @@ namespace H2NLIB
 		int pos_y_;
 		int pos_cx_;
 		int pos_cy_;
-		double draw_angle_;
+		double draw_angle_deg_;
 		double extend_ratex_;
 		double extend_ratey_;
 		bool flag_turn_;
@@ -243,7 +243,7 @@ namespace H2NLIB
 		int file_div_;
 		int pos_cx_;
 		int pos_cy_;
-		double draw_angle_;
+		double draw_angle_deg_;
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
@@ -263,7 +263,7 @@ namespace H2NLIB
 		int pos_y_;
 		int pos_cx_;
 		int pos_cy_;
-		double draw_angle_;
+		double draw_angle_deg_;
 		double extend_rate_;
 		bool flag_turn_;
 		bool flag_trans_;
@@ -283,7 +283,7 @@ namespace H2NLIB
 		int pos_y_;
 		int pos_cx_;
 		int pos_cy_;
-		double draw_angle_;
+		double draw_angle_deg_;
 		double extend_ratex_;
 		double extend_ratey_;
 		bool flag_turn_;

@@ -276,12 +276,28 @@ TeemoExCube43::~TeemoExCube43()
 
 TeemoEx4Main::TeemoEx4Main() : health_max_(1000)
 {
+	death1_epx_ = new EffectPropertyX1;
+	death1_epx_->interval_time_frame_ = 3;
+	death1_gpx_ = new GraphicPropertyX4;
+	death1_gpx_->extend_rate_ = 0.5;
+	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death1_gpx_->file_);
+
+	death2_epx_ = new EffectPropertyX1;
+	death2_epx_->interval_time_frame_ = 3;
+	death2_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile(8, 8, "img/target/death2.png", &death2_gpx_->file_);
+
 	gpx_ = new GraphicPropertyX4;
 	phandle_ = new PositionHandle;
 }
 
 TeemoEx4Main::~TeemoEx4Main()
 {
+	NyaGraphic::DeleteGraphicFile(&death1_gpx_->file_);
+	delete death1_epx_;
+	death1_epx_ = nullptr;
+	delete death1_gpx_;
+	death1_gpx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
 	delete phandle_;
@@ -341,11 +357,20 @@ void TeemoTargetEx4::MissionRun(void)
 		{
 			count_frame_ = 0;
 			mode = 3;
+			NyaGraphic::Swing();
 		}
 		break;
 	case 3:
 		Act3();
 		Draw3();
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
+		{
+			count_frame_ = 0;
+			mode = 4;
+		}
+		break;
+	case 4:
+		Draw4();
 		break;
 	}
 
@@ -820,6 +845,49 @@ void TeemoTargetEx4::Draw3(void)
 		cube3_collection_[i].gpx_->draw_grid_cx_ = cube3_collection_[i].phandle_->grid_x_;
 		cube3_collection_[i].gpx_->draw_grid_cy_ = cube3_collection_[i].phandle_->grid_y_;
 		NyaGraphic::Draw(cube3_collection_[i].gpx_, eOBJECT::TARGET1);
+	}
+
+	// ヘルスバー(%)の表示をする
+	// ただし、ヘルス0以下のときゲージ0(%)として表示する
+	if (0 < main_.phandle_->health_) 
+	{
+		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
+	}
+	else
+	{
+		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
+		ihandle_mission_ex->value_ = 0;
+	}
+}
+
+void TeemoTargetEx4::Draw4(void)
+{
+	InterfaceHandleMissionEx* ihandle_mission_ex;
+
+	if (count_frame_ < 30 * 7)
+	{
+		if (count_frame_ % 30 == 0)
+		{	//小爆発処理
+			main_.death1_epx_->grid_x_ = main_.phandle_->grid_x_ + NyaInput::GetRand(-30, 30);
+			main_.death1_epx_->grid_y_ = main_.phandle_->grid_y_ + NyaInput::GetRand(-30, 30);
+			NyaEffect::Draw(main_.death1_epx_, main_.death1_gpx_, eOBJECT::TARGET_EFFECT1);
+		}
+	}
+
+	if (count_frame_ == 30 * 8)
+	{	// 大爆発処理
+		main_.death2_epx_->grid_x_ = main_.phandle_->grid_x_;
+		main_.death2_epx_->grid_y_ = main_.phandle_->grid_y_;
+		NyaEffect::Draw(main_.death2_epx_, main_.death2_gpx_, eOBJECT::TARGET_EFFECT1);
+		NyaGraphic::Swing();
+	}
+
+	if (count_frame_ < 30 * 10)
+	{	// main描画
+		main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+		main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+		NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	}
 
 	// ヘルスバー(%)の表示をする

@@ -142,6 +142,10 @@ public:
 	TeemoExDevice423 device23_;
 	TeemoExDevice424 device24_;
 	TeemoExDevice431 device31_;
+	H2NLIB::EffectPropertyX1* death1_epx_;
+	H2NLIB::GraphicPropertyX4* death1_gpx_;
+	H2NLIB::EffectPropertyX1* death2_epx_;
+	H2NLIB::GraphicPropertyX4* death2_gpx_;
 	H2NLIB::GraphicPropertyX4* gpx_;
 	H2NLIB::PositionHandle* phandle_;
 	TeemoEx4Main();
@@ -168,6 +172,7 @@ private:
 	void Draw2(void);
 	void Act3(void);
 	void Draw3(void);
+	void Draw4(void);
 	static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
 };
 

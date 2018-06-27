@@ -372,6 +372,14 @@ namespace H2NLIB
 		}
 	};
 
+	class GraphicSwing
+	{	// êUìÆÇï\åªÇ∑ÇÈÉNÉâÉX
+	public:
+		unsigned int count_;
+		int grid_x_;
+		GraphicSwing();
+	};
+
 	class NyaGraphic {
 	public:
 		NyaGraphic();
@@ -391,9 +399,12 @@ namespace H2NLIB
 		static void LoadGraphicFile(std::string file_pass, GraphicFile* file);
 		static void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		static void Run(void);
+		static void Swing(void);
 	private:
 		static std::list<GraphicFile> file_collection_;
 		static std::vector<GraphicDrawSet> layer_collection_;
+		static GraphicSwing swing_;
+		static void CalculateSwing(void);
 		static void DrawAll(eOBJECT layer);
 		static double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
 		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }

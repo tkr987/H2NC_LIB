@@ -331,6 +331,7 @@ void TeemoTargetEx4::MissionRun(void)
 		{
 			count_frame_ = 0;
 			mode = 2;
+			NyaGraphic::Swing();
 		}
 		break;
 	case 2:

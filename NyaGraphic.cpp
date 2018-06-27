@@ -12,6 +12,7 @@ using namespace H2NLIB;
 
 std::list<GraphicFile> NyaGraphic::file_collection_;
 std::vector<GraphicDrawSet> NyaGraphic::layer_collection_(static_cast<int>(eOBJECT::sizeof_enum));
+GraphicSwing NyaGraphic::swing_;
 
 //***************************
 // class GraphicFile
@@ -76,6 +77,12 @@ GraphicPropertyX4& GraphicPropertyX4::operator=(const GraphicPropertyX4& gpx)
 	flag_turn_ = gpx.flag_turn_;
 	flag_trans_ = gpx.flag_trans_;
 	return *this;
+}
+
+H2NLIB::GraphicSwing::GraphicSwing()
+{
+	count_ = 0;
+	grid_x_ = 0;
 }
 
 //**********************
@@ -346,23 +353,77 @@ void NyaGraphic::Draw(GraphicPropertyX4b *gpx, eOBJECT layer)
 	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gpx);
 }
 
+/**
+@brief 全ての処理を実行する関数
+@note
+ NyaWindow内で自動的に実行されるので、ライブラリ使用者が呼び出す必要はない。
+**/
 void NyaGraphic::Run(void)
 {
 	static tuple<int, int, int> color = make_tuple(255, 255, 255);
 
+	CalculateSwing();
 	for (eOBJECT layer = eOBJECT::enum_zero; layer != eOBJECT::sizeof_enum; ++layer)
-		DrawAll(layer);		
+		DrawAll(layer);
 
 #ifdef __DEBUG__
 	NyaString::Write("debug_image_font", color, 50, 230, "[50, 230] file_vec.size = %d", (int)file_vector_.size());
 #endif
-
 }
 
+/**
+@brief 振動命令を出す関数
+**/
+void H2NLIB::NyaGraphic::Swing(void)
+{
+	// 振動をカウントする変数count_が8以下のとき振動するので、count_を0に初期化する
+	// 振動のx座標も0に初期化する
+	// よって、連続で呼び出された場合は振動の値が0になり再処理される
+	swing_.count_ = 0;
+	swing_.grid_x_ = 0;
+}
+
+/**
+@brief 振動処理の計算をする関数
+**/
+void NyaGraphic::CalculateSwing(void)
+{
+	if (swing_.count_ < 8)
+	{
+		if (swing_.count_ == 0 || swing_.count_ == 4)
+		{	// 初期位置から右へ振動
+			if (swing_.grid_x_ < 16)
+				swing_.grid_x_ += 8;
+			else
+				swing_.count_++;
+		}
+		else if (swing_.count_ == 1 || swing_.count_ == 5)
+		{	// 右から初期位置へ振動
+			if (swing_.grid_x_ != 0)
+				swing_.grid_x_ -= 8;
+			else
+				swing_.count_++;
+		}
+		else if (swing_.count_ == 2 || swing_.count_ == 6)
+		{	// 初期位置から左へ振動
+			if (-16 < swing_.grid_x_)
+				swing_.grid_x_ -= 8;
+			else
+				swing_.count_++;
+		}
+		else if (swing_.count_ == 3 || swing_.count_ == 7)
+		{	// 左から初期位置へ振動
+			if (swing_.grid_x_ != 0)
+				swing_.grid_x_ += 8;
+			else
+				swing_.count_++;
+		}
+	}
+}
 
 /**
 @brief 全てのグラフィックデータを描画する関数
-@param layer 描画するレイヤー
+@param draw_layer 描画するレイヤー
 **/
 void NyaGraphic::DrawAll(eOBJECT draw_layer)
 {
@@ -384,73 +445,70 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	GraphicPropertyX8b* gpx8b;
 	int layer = static_cast<int>(draw_layer);
 
-	// 振動処理（未実装）
-	int swing_x = 0;
-	int swing_y = 0;
-
+	// ここから描画処理
 	while (!layer_collection_[layer].gpx1_deque_.empty())
 	{
 		gp1 = &layer_collection_[layer].gpx1_deque_.front();
-		DrawGraph((int)(gp1->draw_grid_x_ + swing_x), (int)(gp1->draw_grid_y_ + swing_y), 
+		DrawGraph((int)(gp1->draw_grid_x_ + swing_.grid_x_), (int)(gp1->draw_grid_y_), 
 			gp1->file_.div_collection_[gp1->file_div_], gp1->flag_trans_);
 		layer_collection_[layer].gpx1_deque_.pop_front();
 	}
 	while (!layer_collection_[layer].gpx2_deque_.empty())
 	{
 		gp2 = &layer_collection_[layer].gpx2_deque_.front();
-		DrawTurnGraph((int)(gp2->draw_grid_x_ + swing_x), (int)(gp2->draw_grid_y_ + swing_y),
+		DrawTurnGraph((int)(gp2->draw_grid_x_ + swing_.grid_x_), (int)(gp2->draw_grid_y_),
 			gp2->file_.div_collection_[gp2->file_div_], gp2->flag_trans_);
 		layer_collection_[layer].gpx2_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx3_deque_.empty()) 
 	{
 		gp3 = &layer_collection_.at(layer).gpx3_deque_.front();
-		DrawExtendGraph((int)(gp3->draw_grid_x1_ + swing_x), (int)(gp3->draw_grid_y1_+ swing_y),
-			(int)(gp3->draw_grid_x2_ + swing_x), (int)(gp3->draw_grid_y2_ + swing_y), 
+		DrawExtendGraph((int)(gp3->draw_grid_x1_ + swing_.grid_x_), (int)(gp3->draw_grid_y1_),
+			(int)(gp3->draw_grid_x2_ + swing_.grid_x_), (int)(gp3->draw_grid_y2_), 
 			gp3->file_.div_collection_[gp3->file_div_], gp3->flag_trans_);
 		layer_collection_.at(layer).gpx3_deque_.pop_front();
 	}
 	while (!layer_collection_[layer].gpx4_deque_.empty())
 	{
 		gp4 = &layer_collection_[layer].gpx4_deque_.front();
-		DrawRotaGraph((int)(gp4->draw_grid_cx_ + swing_x), (int)(gp4->draw_grid_cy_ + swing_y), 
+		DrawRotaGraph((int)(gp4->draw_grid_cx_ + swing_.grid_x_), (int)(gp4->draw_grid_cy_), 
 			gp4->extend_rate_, AngleToRad(gp4->draw_angle_deg_),
 			gp4->file_.div_collection_[gp4->file_div_], gp4->flag_trans_, gp4->flag_turn_);
 		layer_collection_[layer].gpx4_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx5_deque_.empty()) {
 		gpx5 = &layer_collection_.at(layer).gpx5_deque_.front();
-		DrawRotaGraph2(gpx5->pos_x_ + swing_x, gpx5->pos_y_ + swing_y, 
-			gpx5->pos_cx_ + swing_x, gpx5->pos_cy_ + swing_y, gpx5->extend_rate_, AngleToRad(gpx5->draw_angle_deg_), 
+		DrawRotaGraph2(gpx5->pos_x_ + swing_.grid_x_, gpx5->pos_y_, 
+			gpx5->pos_cx_ + swing_.grid_x_, gpx5->pos_cy_, gpx5->extend_rate_, AngleToRad(gpx5->draw_angle_deg_), 
 			gpx5->file_.div_collection_[gpx5->file_div_], gpx5->flag_trans_, gpx5->flag_turn_);
 		layer_collection_.at(layer).gpx5_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx6_deque_.empty()) {
 		gpx6 = &layer_collection_.at(layer).gpx6_deque_.front();
-		DrawRotaGraph3(gpx6->pos_x_ + swing_x, gpx6->pos_y_ + swing_y, 
-			gpx6->pos_cx_ + swing_x, gpx6->pos_cy_ + swing_y, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
+		DrawRotaGraph3(gpx6->pos_x_ + swing_.grid_x_, gpx6->pos_y_, 
+			gpx6->pos_cx_ + swing_.grid_x_, gpx6->pos_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
 			gpx6->file_.div_collection_[gpx6->file_div_], gpx6->flag_trans_, gpx6->flag_turn_);
 		layer_collection_.at(layer).gpx6_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx7_deque_.empty()) {
 		gpx7 = &layer_collection_.at(layer).gpx7_deque_.front();
 		DrawModiGraph(
-			gpx7->pos_x1_ + swing_x, gpx7->pos_y1_ + swing_y, gpx7->pos_x2_ + swing_x, gpx7->pos_y2_ + swing_y, 
-			gpx7->pos_x3_ + swing_x, gpx7->pos_y3_ + swing_y, gpx7->pos_x4_ + swing_x, gpx7->pos_y4_ + swing_y,
+			gpx7->pos_x1_ + swing_.grid_x_, gpx7->pos_y1_, gpx7->pos_x2_ + swing_.grid_x_, gpx7->pos_y2_, 
+			gpx7->pos_x3_ + swing_.grid_x_, gpx7->pos_y3_, gpx7->pos_x4_ + swing_.grid_x_, gpx7->pos_y4_,
 			gpx7->file_.div_collection_[gpx7->file_div_], gpx7->flag_trans_);
 		layer_collection_.at(layer).gpx7_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx8_deque_.empty()) {
 		gpx8 = &layer_collection_.at(layer).gpx8_deque_.front();
-		DrawRectGraph(gpx8->pos_dx_ + swing_x, gpx8->pos_dy_ + swing_y, 
-			gpx8->pos_sx_ + swing_x, gpx8->pos_sy_ + swing_y, gpx8->val_width_, gpx8->val_height_, 
+		DrawRectGraph(gpx8->pos_dx_ + swing_.grid_x_, gpx8->pos_dy_, 
+			gpx8->pos_sx_ + swing_.grid_x_, gpx8->pos_sy_, gpx8->val_width_, gpx8->val_height_, 
 			gpx8->file_.div_collection_[gpx8->file_div_], gpx8->flag_trans_, gpx8->flag_turn_);
 		layer_collection_.at(layer).gpx8_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx1b_deque_.empty()) {
 		gpx1b = &layer_collection_.at(layer).gpx1b_deque_.front();
 		SetDrawBlendMode(gpx1b->blend_mode_, gpx1b->blend_alpha_);
-		DrawGraph(gpx1b->pos_x_ + swing_x, gpx1b->pos_y_ + swing_y, 
+		DrawGraph(gpx1b->pos_x_ + swing_.grid_x_, gpx1b->pos_y_, 
 			gpx1b->file_.div_collection_[gpx1b->file_div_], gpx1b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx1b_deque_.pop_front();
@@ -458,7 +516,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx2b_deque_.empty()) {
 		gpx2b = &layer_collection_.at(layer).gpx2b_deque_.front();
 		SetDrawBlendMode(gpx2b->blend_mode_, gpx2b->blend_alpha_);
-		DrawTurnGraph(gpx2b->pos_x_ + swing_x, gpx2b->pos_y_ + swing_y,
+		DrawTurnGraph(gpx2b->pos_x_ + swing_.grid_x_, gpx2b->pos_y_,
 			gpx2b->file_.div_collection_[gpx2b->file_div_], gpx2b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx2b_deque_.pop_front();
@@ -466,8 +524,8 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx3b_deque_.empty()) {
 		gpx3b = &layer_collection_.at(layer).gpx3b_deque_.front();
 		SetDrawBlendMode(gpx3b->blend_mode_, gpx3b->blend_alpha_);
-		DrawExtendGraph(gpx3b->pos_x1_ + swing_x, gpx3b->pos_y1_+ swing_y,
-			gpx3b->pos_x2_ + swing_x, gpx3b->pos_y2_ + swing_y, 
+		DrawExtendGraph(gpx3b->pos_x1_ + swing_.grid_x_, gpx3b->pos_y1_,
+			gpx3b->pos_x2_ + swing_.grid_x_, gpx3b->pos_y2_, 
 			gpx3b->file_.div_collection_[gpx3b->file_div_], gpx3b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx3b_deque_.pop_front();
@@ -475,7 +533,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx4b_deque_.empty()) {
 		gpx4b = &layer_collection_.at(layer).gpx4b_deque_.front();
 		SetDrawBlendMode(gpx4b->blend_mode_, gpx4b->blend_alpha_);
-		DrawRotaGraph(gpx4b->pos_cx_ + swing_x, gpx4b->pos_cy_ + swing_y, gpx4b->extend_rate_, AngleToRad(gpx4b->draw_angle_deg_),
+		DrawRotaGraph(gpx4b->pos_cx_ + swing_.grid_x_, gpx4b->pos_cy_, gpx4b->extend_rate_, AngleToRad(gpx4b->draw_angle_deg_),
 			gpx4b->file_.div_collection_[gpx4b->file_div_], gpx4b->flag_trans_, gpx4b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx4b_deque_.pop_front();
@@ -483,8 +541,8 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx5b_deque_.empty()) {
 		gpx5b = &layer_collection_.at(layer).gpx5b_deque_.front();
 		SetDrawBlendMode(gpx5b->blend_mode_, gpx5b->blend_alpha_);
-		DrawRotaGraph2(gpx5b->pos_x_ + swing_x, gpx5b->pos_y_ + swing_y, 
-			gpx5b->pos_cx_ + swing_x, gpx5b->pos_cy_ + swing_y, gpx5b->extend_rate_, AngleToRad(gpx5b->draw_angle_deg_), 
+		DrawRotaGraph2(gpx5b->pos_x_ + swing_.grid_x_, gpx5b->pos_y_, 
+			gpx5b->pos_cx_ + swing_.grid_x_, gpx5b->pos_cy_, gpx5b->extend_rate_, AngleToRad(gpx5b->draw_angle_deg_), 
 			gpx5b->file_.div_collection_[gpx5b->file_div_], gpx5b->flag_trans_, gpx5b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx5b_deque_.pop_front();
@@ -492,8 +550,8 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx6b_deque_.empty()) {
 		gpx6b = &layer_collection_.at(layer).gpx6b_deque_.front();
 		SetDrawBlendMode(gpx6b->blend_mode_, gpx6b->blend_alpha_);
-		DrawRotaGraph3(gpx6b->pos_x_ + swing_x, gpx6b->pos_y_ + swing_y, 
-			gpx6b->pos_cx_ + swing_x, gpx6b->pos_cy_ + swing_y, gpx6b->extend_ratex_, gpx6b->extend_ratey_, AngleToRad(gpx6b->draw_angle_deg_),
+		DrawRotaGraph3(gpx6b->pos_x_ + swing_.grid_x_, gpx6b->pos_y_, 
+			gpx6b->pos_cx_ + swing_.grid_x_, gpx6b->pos_cy_, gpx6b->extend_ratex_, gpx6b->extend_ratey_, AngleToRad(gpx6b->draw_angle_deg_),
 			gpx6b->file_.div_collection_[gpx6b->file_div_], gpx6b->flag_trans_, gpx6b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx6b_deque_.pop_front();
@@ -502,8 +560,8 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 		gpx7b = &layer_collection_.at(layer).gpx7b_deque_.front();
 		SetDrawBlendMode(gpx7b->blend_mode_, gpx7b->blend_alpha_);
 		DrawModiGraph(
-			gpx7b->pos_x1_ + swing_x, gpx7b->pos_y1_ + swing_y, gpx7b->pos_x2_ + swing_x, gpx7b->pos_y2_ + swing_y, 
-			gpx7b->pos_x3_ + swing_x, gpx7b->pos_y3_ + swing_y, gpx7b->pos_x4_ + swing_x, gpx7b->pos_y4_ + swing_y,
+			gpx7b->pos_x1_ + swing_.grid_x_, gpx7b->pos_y1_, gpx7b->pos_x2_ + swing_.grid_x_, gpx7b->pos_y2_, 
+			gpx7b->pos_x3_ + swing_.grid_x_, gpx7b->pos_y3_, gpx7b->pos_x4_ + swing_.grid_x_, gpx7b->pos_y4_,
 			gpx7b->file_.div_collection_[gpx7b->file_div_], gpx7b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx7_deque_.pop_front();
@@ -511,11 +569,12 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx8_deque_.empty()) {
 		gpx8b = &layer_collection_.at(layer).gpx8b_deque_.front();
 		SetDrawBlendMode(gpx8b->blend_mode_, gpx8b->blend_alpha_);
-		DrawRectGraph(gpx8b->pos_dx_ + swing_x, gpx8b->pos_dy_ + swing_y, 
-			gpx8b->pos_sx_ + swing_x, gpx8b->pos_sy_ + swing_y, gpx8b->val_width_, gpx8b->val_height_, 
+		DrawRectGraph(gpx8b->pos_dx_ + swing_.grid_x_, gpx8b->pos_dy_, 
+			gpx8b->pos_sx_ + swing_.grid_x_, gpx8b->pos_sy_, gpx8b->val_width_, gpx8b->val_height_, 
 			gpx8b->file_.div_collection_[gpx8b->file_div_], gpx8b->flag_trans_, gpx8b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx8b_deque_.pop_front();
 	}
 }
+
 

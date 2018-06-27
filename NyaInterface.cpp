@@ -132,7 +132,7 @@ void NyaInterface::Init(void)
 void NyaInterface::Run(void)
 {
 	DrawBlack(850, 0, 1280, 720);
-	DrawTitle(875, 30);
+	DrawTitle(875, 35);
 	DrawUserLife(875, 75);
 	DrawUserSkill(875, 135);
 	DrawLIB(910, 520);
@@ -152,7 +152,8 @@ void NyaInterface::DrawBlack(int x, int y, int x2, int y2)
 
 void NyaInterface::DrawTitle(int x, int y)
 {
-	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+	const tuple<int, int, int> white = make_tuple(212, 227, 255);
+
 	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_);
 }
 

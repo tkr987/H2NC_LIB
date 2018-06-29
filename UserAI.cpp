@@ -116,15 +116,24 @@ UserAiDeviceEx::~UserAiDeviceEx()
 UserAiMain::UserAiMain()
 {
 	gpx_ = new GraphicPropertyX4;
-	phandle_ = new PositionHandle;
+	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &gpx_->file_);
+	gpx_->extend_rate_ = 0.4;
+	gpx_->draw_angle_deg_ = 0;
+
+	phandle_ = NyaPosition::CreateHandle();
+	phandle_->health_ = 1;
+	phandle_->collision_power_ = 1;
+	phandle_->collision_range_ = 20;
+	phandle_->grid_x_ = 100;
+	phandle_->grid_y_ = 500;
+	phandle_->name_ = "user_main_handle";
 }
 
 UserAiMain::~UserAiMain()
 {
 	delete gpx_;
 	gpx_ = nullptr;
-	delete phandle_;
-	phandle_ = nullptr;
+	NyaPosition::DeleteHandle(phandle_);
 }
 
 UserAi::UserAi(void)
@@ -161,16 +170,6 @@ UserAi::UserAi(void)
 	device_ex_.effect_epx_->interval_time_frame_ = 2;
 	device_ex_.effect_gpx_->extend_rate_ = 0.5;
 	NyaGraphic::LoadGraphicFile(8, 2, "img/user/attack_ex_effect.png", &device_ex_.effect_gpx_->file_);
-
-	// user ai main property
-	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &main_.gpx_->file_);
-	main_.gpx_->extend_rate_ = 0.4;
-	main_.gpx_->draw_angle_deg_ = 0;
-	main_.phandle_->health_ = 1;
-	main_.phandle_->collision_power_ = 1;
-	main_.phandle_->collision_range_ = 20;
-	main_.phandle_->grid_x_ = 100;
-	main_.phandle_->grid_y_ = 500;
 
 	// Õ“Ë”»’èÝ’è
 	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);

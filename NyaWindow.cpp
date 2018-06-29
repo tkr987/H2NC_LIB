@@ -26,7 +26,6 @@ using namespace std::experimental::filesystem;
 using namespace H2NLIB;
 
 
-
 H2NLIB::ChildMission::ChildMission()
 {
 	index_ = 0;
@@ -52,7 +51,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v69");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v71");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -124,7 +123,9 @@ void NyaWindow::Run(void)
 		//***********************
 		// NyaWindow メンバ関数
 		// タイトル画面
+		// オープニング処理
 		// ミッション処理
+		// エンディング処理
 		// リプレイ保存
 		//***********************
 		Title();
@@ -134,9 +135,11 @@ void NyaWindow::Run(void)
 		SaveReplay();
 		NotSaveReplay();
 
-		//*******************
+		//******************************************************
 		// ライブラリの処理
-		//*******************
+		// 引数なしの関数は常に実行される
+		// eventを引数に取る関数はイベントによって処理が変わる
+		//*******************************************************
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();

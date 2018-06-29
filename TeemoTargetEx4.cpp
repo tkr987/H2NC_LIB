@@ -165,7 +165,7 @@ TeemoExCube42::TeemoExCube42()
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
-	phandle_ = new PositionHandle;
+	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
@@ -174,8 +174,7 @@ TeemoExCube42::~TeemoExCube42()
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
-	delete phandle_;
-	phandle_ = nullptr;
+	NyaPosition::DeleteHandle(phandle_);
 }
 
 
@@ -241,7 +240,7 @@ TeemoEx4Cube1::TeemoEx4Cube1()
 	gpx_->extend_rate_ = 0.4;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	move_angle_ = 0;
-	phandle_ = new PositionHandle;
+	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
@@ -250,8 +249,7 @@ TeemoEx4Cube1::~TeemoEx4Cube1()
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
-	delete phandle_;
-	phandle_ = nullptr;
+	NyaPosition::DeleteHandle(phandle_);
 }
 
 TeemoExCube43::TeemoExCube43()
@@ -259,7 +257,7 @@ TeemoExCube43::TeemoExCube43()
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
-	phandle_ = new PositionHandle;
+	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
@@ -268,8 +266,7 @@ TeemoExCube43::~TeemoExCube43()
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
-	delete phandle_;
-	phandle_ = nullptr;
+	NyaPosition::DeleteHandle(phandle_);
 }
 
 
@@ -288,7 +285,7 @@ TeemoEx4Main::TeemoEx4Main() : health_max_(1000)
 	NyaGraphic::LoadGraphicFile(8, 8, "img/target/death2.png", &death2_gpx_->file_);
 
 	gpx_ = new GraphicPropertyX4;
-	phandle_ = new PositionHandle;
+	phandle_ = NyaPosition::CreateHandle();
 }
 
 TeemoEx4Main::~TeemoEx4Main()

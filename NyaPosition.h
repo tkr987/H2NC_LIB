@@ -1,13 +1,14 @@
 #pragma once
 
 #include <list>
+#include <string>
 #include <vector>
 #include <utility>
 
+#include "NyaEnum.h"
+
 namespace H2NLIB
 {
-	enum class eOBJECT;
-
 	//**********************************************************
 	// class PositionHandle
 	// このクラスを使うと衝突判定をすることができる
@@ -23,6 +24,7 @@ namespace H2NLIB
 		int health_;					// 現在のヘルス
 		double grid_x_;					// オブジェクト（ハンドル）のX座標
 		double grid_y_;					// オブジェクト（ハンドル）のY座標
+		std::string name_;				// ハンドルの名前
 		PositionHandle()
 		{
 			collision_hit_damage_ = 0;
@@ -34,6 +36,7 @@ namespace H2NLIB
 			grid_x_ = -1000;
 			grid_y_ = -1000;
 		}
+		~PositionHandle(){}
 	};
 
 	class PositionMove
@@ -52,21 +55,28 @@ namespace H2NLIB
 	class NyaPosition
 	{
 	public:
-		static void Collide(PositionHandle* handle, eOBJECT group);
-		static void CollisionPair(eOBJECT group1, eOBJECT group2);
-		static bool InScreen(PositionHandle* phx, int gap = 0);
+		static double Angle(PositionHandle* handle1, PositionHandle* handle2);
+		static void Collide(PositionHandle* handle, eOBJECT type);
+		static void CollisionPair(eOBJECT type1, eOBJECT type2);
+		static PositionHandle* CreateHandle(void);
+		static void CreateHandle(PositionHandle * new_handle);
+		static void DeleteHandle(PositionHandle* delete_handle);
+		static void FindHandle(std::string name, PositionHandle* handle);
+		static void FindHandle(std::string name, std::vector<PositionHandle*>* handle);
+		static bool InScreen(PositionHandle* handle, int gap = 0);
 		static void MoveAngleMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);
 		static void MoveGridMode(PositionHandle* handle, double end_x, double end_y, unsigned int max_frame);
 		static void Run(void);
 	private:
 		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_pair_collection_;
 		static std::vector<PositionHandle*> collision_collection_[static_cast<int>(eOBJECT::sizeof_enum)];
+		static std::list<PositionHandle*> handle_collection_;
 		static std::list<PositionMove> move_collection_;
 		static void ClearCollisionHit(eOBJECT object_type);
 		static void JudgeCollision(eOBJECT, eOBJECT);
 		static void CalculateMove(void);
 		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
-
+		static double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
 	};
 
 

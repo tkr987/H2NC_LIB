@@ -21,7 +21,9 @@ namespace H2NLIB
 		std::string pass_;
 		int size_x_;
 		int size_y_;
-		GraphicFile& operator=(const GraphicFile& file);
+//		GraphicFile(){}
+//		GraphicFile(const GraphicFile& file);
+//		GraphicFile& operator=(const GraphicFile& file);
 	};
 
 	//*********************************
@@ -112,7 +114,7 @@ namespace H2NLIB
 		bool flag_turn_;
 		bool flag_trans_;
 		GraphicPropertyX4();
-		GraphicPropertyX4& operator=(const GraphicPropertyX4& gp);
+//		GraphicPropertyX4& operator=(const GraphicPropertyX4& gpx);
 
 	};
 

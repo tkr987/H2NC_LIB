@@ -1,28 +1,35 @@
 #include <cmath>
 #include <deque>
+#include "NyaPosition.h"
 #include "NyaDevice.h"
 #include "NyaEffect.h"
 #include "NyaGraphic.h"
-#include "NyaPosition.h"
 #include "NyaString.h"
+
+#define __DEBUG__
 
 using namespace std;
 using namespace H2NLIB;
 
 
-list<DeviceGadget14> NyaDevice::dg14_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<DeviceGadget14> NyaDevice::dg14_wait_list_(DEVICE_GADGET_MAX_DEFAULT);
-list<DeviceGadget1414> NyaDevice::dg1414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<DeviceGadget1414> NyaDevice::dg1414_wait_list_(DEVICE_GADGET_MAX_DEFAULT);
-list<DeviceGadget2414> NyaDevice::dg2414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<DeviceGadget2414> NyaDevice::dg2414_wait_list_(DEVICE_GADGET_MAX_DEFAULT);
+list<DeviceGadget14> NyaDevice::gadget14_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
+list<DeviceGadget14> NyaDevice::gadget14_wait_list_;
+list<DeviceGadget24> NyaDevice::gadget24_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
+list<DeviceGadget24> NyaDevice::gadget24_wait_list_;
+list<DeviceGadget1414> NyaDevice::gadget1414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
+list<DeviceGadget1414> NyaDevice::gadget1414_wait_list_;
+list<DeviceGadget2414> NyaDevice::gadget2414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
+list<DeviceGadget2414> NyaDevice::gadget2414_wait_list_;
 
 DeviceGadget14::DeviceGadget14()
 {
 	gadget_dpx_ = new DevicePropertyX1;
 	gadget_gpx_ = new GraphicPropertyX4;
 	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
+	{	// デストラクタの処理と統一させるためnew演算子で動的生成する
 		gadget_phandle_collection_[i] = new PositionHandle;
+		NyaPosition::CreateHandle(gadget_phandle_collection_[i]);
+	}
 }
 
 DeviceGadget14::~DeviceGadget14()
@@ -32,11 +39,36 @@ DeviceGadget14::~DeviceGadget14()
 	delete gadget_gpx_;
 	gadget_gpx_ = nullptr;
 	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
-	{
+	{	// コンストラクタの処理と統一するためNyaPosition::DeleteHandle(PositionHandle*)でなくdeleteを使う
 		delete gadget_phandle_collection_[i];
 		gadget_phandle_collection_[i] = nullptr;
 	}
 }
+
+DeviceGadget24::DeviceGadget24()
+{
+	gadget_dpx_ = new DevicePropertyX2;
+	gadget_gpx_ = new GraphicPropertyX4;
+	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
+	{	// デストラクタの処理と統一させるためnew演算子で動的生成する
+		gadget_phandle_collection_[i] = new PositionHandle;
+		NyaPosition::CreateHandle(gadget_phandle_collection_[i]);
+	}
+}
+
+DeviceGadget24::~DeviceGadget24()
+{
+	delete gadget_dpx_;
+	gadget_dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
+	{	// コンストラクタの処理と統一するためNyaPosition::DeleteHandle(PositionHandle*)でなくdeleteを使う
+		delete gadget_phandle_collection_[i];
+		gadget_phandle_collection_[i] = nullptr;
+	}
+}
+
 
 DeviceGadget1414::DeviceGadget1414()
 {
@@ -45,7 +77,10 @@ DeviceGadget1414::DeviceGadget1414()
 	gadget_dpx_ = new DevicePropertyX1;
 	gadget_gpx_ = new GraphicPropertyX4;
 	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
+	{	// デストラクタの処理と統一させるためnew演算子で動的生成する
 		gadget_phandle_collection_[i] = new PositionHandle;
+		NyaPosition::CreateHandle(gadget_phandle_collection_[i]);
+	}
 }
 
 DeviceGadget1414::~DeviceGadget1414()
@@ -59,7 +94,7 @@ DeviceGadget1414::~DeviceGadget1414()
 	delete gadget_gpx_;
 	gadget_gpx_ = nullptr;
 	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
-	{
+	{	// コンストラクタの処理と統一するためNyaPosition::DeleteHandle(PositionHandle*)でなくdeleteを使う
 		delete gadget_phandle_collection_[i];
 		gadget_phandle_collection_[i] = nullptr;
 	}
@@ -73,7 +108,10 @@ H2NLIB::DeviceGadget2414::DeviceGadget2414()
 	gadget_dpx_ = new DevicePropertyX2;
 	gadget_gpx_ = new GraphicPropertyX4;
 	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
+	{	// デストラクタの処理と統一させるためnew演算子で動的生成する
 		gadget_phandle_collection_[i] = new PositionHandle;
+		NyaPosition::CreateHandle(gadget_phandle_collection_[i]);
+	}
 }
 
 H2NLIB::DeviceGadget2414::~DeviceGadget2414()
@@ -87,7 +125,7 @@ H2NLIB::DeviceGadget2414::~DeviceGadget2414()
 	delete gadget_gpx_;
 	gadget_gpx_ = nullptr;
 	for (int i = 0; i < DEVICE_COLLISION_MAX_ACCURACY; i++)
-	{
+	{	// コンストラクタの処理と統一するためNyaPosition::DeleteHandle(PositionHandle*)でなくdeleteを使う
 		delete gadget_phandle_collection_[i];
 		gadget_phandle_collection_[i] = nullptr;
 	}
@@ -122,7 +160,6 @@ DevicePropertyX2::DevicePropertyX2()
 @param gadget_type ガジェットのオブジェクトタイプ
 @param collision_accuracy 衝突判定の精度
 @note
- オブジェクトの最大個数は10000個。
  衝突判定の精度は[1-10]の値で指定、大きい値ほど高精度になる。
  それぞれの引数で指定したプロパティのメンバの中で使用しない値は設定しても無視される
 **/
@@ -131,14 +168,14 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dpx, const Graphic
 	static list<DeviceGadget14>::iterator it_from, it_to;
 
 	// 最大個数まで生成されているときは何もしない
-	if (dg14_wait_list_.begin() == dg14_wait_list_.end())
-		return;
+	if (gadget14_wait_list_.begin() == gadget14_wait_list_.end())
+		gadget14_wait_list_.resize(1);
 
 	// 衝突精度の値が範囲外のときは無効化
 	if (collision_accuracy < 1 && 10 < collision_accuracy)
 		collision_accuracy = 1;
 
-	it_from = dg14_wait_list_.begin();
+	it_from = gadget14_wait_list_.begin();
 	it_from->clear_ = false;
 	it_from->collision_accuracy_ = collision_accuracy;
 	it_from->count_frame_ = 0;
@@ -160,8 +197,8 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dpx, const Graphic
 		it_from->gadget_phandle_collection_[i]->health_ = 1;
 	}
 
-	it_to = dg14_attack_list_[static_cast<int>(gadget_type)].begin();
-	dg14_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg14_wait_list_), it_from);
+	it_to = gadget14_attack_list_[static_cast<int>(gadget_type)].begin();
+	gadget14_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(gadget14_wait_list_), it_from);
 }
 
 /**
@@ -175,7 +212,6 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dpx, const Graphic
 @param collision_accuracy 衝突判定の精度
 @note
  エフェクト付き攻撃関数。
- ガジェットの最大個数は10000個。
  衝突判定の精度は[1-10]の値で指定、大きい値ほど高精度になる。
  それぞれの引数で指定したプロパティのメンバの中で使用しない値は設定しても無視される。
 **/
@@ -184,14 +220,14 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 	static list<DeviceGadget1414>::iterator it_from, it_to;
 
 	// 最大個数まで生成されているときは何もしない
-	if (dg1414_wait_list_.begin() == dg1414_wait_list_.end())
-		return;
+	if (gadget1414_wait_list_.begin() == gadget1414_wait_list_.end())
+		gadget1414_wait_list_.resize(1);
 
 	// 衝突精度の値が範囲外のときは無効化
 	if (collision_accuracy < 1 && 10 < collision_accuracy)
 		collision_accuracy = 1;
 
-	it_from = dg1414_wait_list_.begin();
+	it_from = gadget1414_wait_list_.begin();
 	it_from->clear_ = false;
 	it_from->collision_accuracy_ = collision_accuracy;
 	it_from->count_frame_ = 0;
@@ -203,6 +239,7 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 	it_from->move_y_ = sin(it_from->move_angle_rad_) * gadget_dpx->move_speed_;
 	it_from->move_y_ /= collision_accuracy;
 	*it_from->effect_epx_ = *effect_epx;
+	it_from->effect_gpx_->file_.div_collection_ = gadget_gpx->file_.div_collection_;
 	*it_from->effect_gpx_ = *effect_gpx;
 	*it_from->gadget_dpx_ = *gadget_dpx;
 	*it_from->gadget_gpx_ = *gadget_gpx;
@@ -215,8 +252,8 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 		it_from->gadget_phandle_collection_[i]->grid_y_ = gadget_dpx->create_y_;
 		it_from->gadget_phandle_collection_[i]->health_ = 1;
 	}
-	it_to = dg1414_attack_list_[static_cast<int>(gadget_type)].begin();
-	dg1414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg1414_wait_list_), it_from);
+	it_to = gadget1414_attack_list_[static_cast<int>(gadget_type)].begin();
+	gadget1414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(gadget1414_wait_list_), it_from);
 }
 
 /**
@@ -230,7 +267,6 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 @param collision_accuracy 衝突判定の精度
 @note
  エフェクトと角速度を指定できる攻撃関数。
- ガジェットの最大個数は10000個。
  衝突判定の精度は[1-10]の値で指定、大きい値ほど高精度になる。
  それぞれの引数で指定したプロパティのメンバの中で使用しない値は設定しても無視される。
 **/
@@ -239,15 +275,14 @@ void NyaDevice::Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicProp
 {
 	static list<DeviceGadget2414>::iterator it_from, it_to;
 
-		// 最大個数まで生成されているときは何もしない
-	if (dg2414_wait_list_.begin() == dg2414_wait_list_.end())
-		return;
+	if (gadget2414_wait_list_.begin() == gadget2414_wait_list_.end())
+		gadget2414_wait_list_.resize(1);
 
 	// 衝突精度の値が範囲外のときは無効化
 	if (collision_accuracy < 1 && 10 < collision_accuracy)
 		collision_accuracy = 1;
 
-	it_from = dg2414_wait_list_.begin();
+	it_from = gadget2414_wait_list_.begin();
 	it_from->clear_ = false;
 	it_from->collision_accuracy_ = collision_accuracy;
 	it_from->count_frame_ = 0;
@@ -272,8 +307,8 @@ void NyaDevice::Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicProp
 		it_from->gadget_phandle_collection_[i]->health_ = 1;
 	}
 
-	it_to = dg2414_attack_list_[static_cast<int>(gadget_type)].begin();
-	dg2414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(dg2414_wait_list_), it_from);
+	it_to = gadget2414_attack_list_[static_cast<int>(gadget_type)].begin();
+	gadget2414_attack_list_[static_cast<int>(gadget_type)].splice(it_to, move(gadget2414_wait_list_), it_from);
 }
 
 /**
@@ -284,39 +319,45 @@ void NyaDevice::Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicProp
 **/
 void NyaDevice::Clear(eOBJECT type)
 {
-	for (auto& e : dg14_attack_list_[static_cast<int>(type)])
+	for (auto& e : gadget14_attack_list_[static_cast<int>(type)])
 		e.clear_ = true;
-	for (auto& e : dg1414_attack_list_[static_cast<int>(type)])
+	for (auto& e : gadget24_attack_list_[static_cast<int>(type)])
 		e.clear_ = true;
-	for (auto& e : dg2414_attack_list_[static_cast<int>(type)])
+	for (auto& e : gadget1414_attack_list_[static_cast<int>(type)])
+		e.clear_ = true;
+	for (auto& e : gadget2414_attack_list_[static_cast<int>(type)])
 		e.clear_ = true;
 }
 
-
 void NyaDevice::Run(void)
 {
-	tuple<int, int, int> white = make_tuple(255, 255, 255);
-
 	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
 		CalculateGadget(type);
 
+#ifdef __DEBUG__
+	unsigned int wait_size = 0;
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-	NyaString::Write("debug_font", white, 50, 190, "[50, 190] attack list size = %d", 10000 - (int)dg1414_wait_list_.size());
-	NyaString::Write("debug_font", white, 50, 210, "[50, 210] wait list size = %d", (int)dg1414_wait_list_.size());
+	wait_size += (unsigned int)gadget14_wait_list_.size();
+	wait_size += (unsigned int)gadget24_wait_list_.size();
+	wait_size += (unsigned int)gadget1414_wait_list_.size();
+	wait_size += (unsigned int)gadget2414_wait_list_.size();
+	NyaString::Write("debug_font", white, 50, 210, "[50, 210] device_wait_list size = %u", wait_size);
+#endif
 }
 
 
 void NyaDevice::CalculateGadget(eOBJECT type)
 {
-	GraphicPropertyX4 gp;
-	deque<list<DeviceGadget14>::iterator> dg14_delete_deque;
-	deque<list<DeviceGadget1414>::iterator> dg1414_delete_deque;
-	deque<list<DeviceGadget2414>::iterator> dg2414_delete_deque;
+	deque<list<DeviceGadget14>::iterator> gadget14_delete_deque;
+	deque<list<DeviceGadget24>::iterator> gadget24_delete_deque;
+	deque<list<DeviceGadget1414>::iterator> gadget1414_delete_deque;
+	deque<list<DeviceGadget2414>::iterator> gadget2414_delete_deque;
 
 	//***********************
 	// Gadget14 削除処理
 	//***********************
-	for (auto it = dg14_attack_list_[static_cast<int>(type)].begin(); it != dg14_attack_list_[static_cast<int>(type)].end(); ++it)
+	for (auto it = gadget14_attack_list_[static_cast<int>(type)].begin(); it != gadget14_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
 		// フレームカウントが遅延時間に達していないなら何もしない
 		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
@@ -326,31 +367,31 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
 		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
-			dg14_delete_deque.push_back(it);
+			gadget14_delete_deque.push_back(it);
 		else if (it->clear_)
-			dg14_delete_deque.push_back(it);
+			gadget14_delete_deque.push_back(it);
 		else
 		{
 			for (unsigned int i = 0; i < it->collision_accuracy_; i++)
 			{
 				if (it->gadget_phandle_collection_[i]->collision_hit_damage_ != 0)
 				{
-					dg14_delete_deque.push_back(it);
+					gadget14_delete_deque.push_back(it);
 					break;
 				}
 			}
 		}
 	}
-	while (!dg14_delete_deque.empty())
+	while (!gadget14_delete_deque.empty())
 	{
-		dg14_wait_list_.splice(dg14_wait_list_.begin(), move(dg14_attack_list_[static_cast<int>(type)]), dg14_delete_deque.front());
-		dg14_delete_deque.pop_front();
+		gadget14_wait_list_.splice(gadget14_wait_list_.begin(), move(gadget14_attack_list_[static_cast<int>(type)]), gadget14_delete_deque.front());
+		gadget14_delete_deque.pop_front();
 	}
 
 	//****************************
 	// gadget14 削除以外の処理
 	//****************************
-	for (auto& e : dg14_attack_list_[static_cast<int>(type)])
+	for (auto& e : gadget14_attack_list_[static_cast<int>(type)])
 	{
 		// count_frame_の初期値は0になっている
 		// delay_time_frame_が1なら1フレームは何もしないようにしたい
@@ -359,7 +400,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		if (e.count_frame_ - 1 < e.gadget_dpx_->delay_time_frame_)
 			continue;
 
-		// 衝突判定処理
+		// 移動処理と衝突判定処理
 		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
 		{
 			e.gadget_phandle_collection_[i]->grid_x_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_x_ * (i + 1);
@@ -374,11 +415,10 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		NyaGraphic::Draw(e.gadget_gpx_, type);
 	}
 
-	//*******************************************
-	// Gadget1414 削除処理
-	// 削除するときにエフェクト描画もおこなう
-	//*******************************************
-	for (auto it = dg1414_attack_list_[static_cast<int>(type)].begin(); it != dg1414_attack_list_[static_cast<int>(type)].end(); ++it)
+	//***********************
+	// Gadget24 削除処理
+	//***********************
+	for (auto it = gadget24_attack_list_[static_cast<int>(type)].begin(); it != gadget24_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
 		// フレームカウントが遅延時間に達していないなら何もしない
 		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
@@ -388,13 +428,84 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
 		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
-			dg1414_delete_deque.push_back(it);
+			gadget24_delete_deque.push_back(it);
+		else if (it->clear_)
+			gadget24_delete_deque.push_back(it);
+		else
+		{
+			for (unsigned int i = 0; i < it->collision_accuracy_; i++)
+			{
+				if (it->gadget_phandle_collection_[i]->collision_hit_damage_ != 0)
+				{
+					gadget24_delete_deque.push_back(it);
+					break;
+				}
+			}
+		}
+	}
+	while (!gadget24_delete_deque.empty())
+	{
+		gadget24_wait_list_.splice(gadget24_wait_list_.begin(), move(gadget24_attack_list_[static_cast<int>(type)]), gadget24_delete_deque.front());
+		gadget24_delete_deque.pop_front();
+	}
+
+	//****************************
+	// gadget24 削除以外の処理
+	//****************************
+	for (auto& e : gadget24_attack_list_[static_cast<int>(type)])
+	{
+		// count_frame_の初期値は0になっている
+		// delay_time_frame_が1なら1フレームは何もしないようにしたい
+		// したがって、インクリメントしてから判定してるのでcount_frame_ - 1で比較
+		e.count_frame_++;
+		if (e.count_frame_ - 1 < e.gadget_dpx_->delay_time_frame_)
+			continue;
+
+		// 移動処理と衝突判定処理
+		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
+		{
+			e.gadget_phandle_collection_[i]->grid_x_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_x_ * (i + 1);
+			e.gadget_phandle_collection_[i]->grid_y_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_y_ * (i + 1);
+			NyaPosition::Collide(e.gadget_phandle_collection_[i], type);
+		}
+		
+		// 角速度の処理
+		e.move_angle_deg_ += e.gadget_dpx_->move_angle_speed_deg_;
+		e.move_angle_rad_ = AngleToRad(e.move_angle_deg_);
+		e.move_x_ = cos(e.move_angle_rad_) * e.gadget_dpx_->move_speed_;
+		e.move_x_ /= e.collision_accuracy_;
+		e.move_y_ = sin(e.move_angle_rad_) * e.gadget_dpx_->move_speed_;
+		e.move_y_ /= e.collision_accuracy_;
+		
+		// 描画処理
+		e.gadget_gpx_->draw_grid_cx_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_;
+		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
+		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
+		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
+	}
+
+	//*******************************************
+	// Gadget1414 削除処理
+	// 削除するときにエフェクト描画もおこなう
+	//*******************************************
+	for (auto it = gadget1414_attack_list_[static_cast<int>(type)].begin(); it != gadget1414_attack_list_[static_cast<int>(type)].end(); ++it)
+	{
+		// フレームカウントが遅延時間に達していないなら何もしない
+		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
+			continue;
+
+		// 表示領域の限界を超えた
+		// クリアを指定された
+		// 他のオブジェクトと衝突した
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+			gadget1414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
 			it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
 			it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
 			NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
-			dg1414_delete_deque.push_back(it);
+			gadget1414_delete_deque.push_back(it);
 		}
 		else 
 		{
@@ -405,23 +516,23 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 					it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[i]->collision_hit_x_;
 					it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[i]->collision_hit_y_;
 					NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
-					dg1414_delete_deque.push_back(it);
+					gadget1414_delete_deque.push_back(it);
 					break;
 				}
 			}
 		}
 
 	}
-	while (!dg1414_delete_deque.empty())
+	while (!gadget1414_delete_deque.empty())
 	{
-		dg1414_wait_list_.splice(dg1414_wait_list_.begin(), move(dg1414_attack_list_[static_cast<int>(type)]), dg1414_delete_deque.front());
-		dg1414_delete_deque.pop_front();
+		gadget1414_wait_list_.splice(gadget1414_wait_list_.begin(), move(gadget1414_attack_list_[static_cast<int>(type)]), gadget1414_delete_deque.front());
+		gadget1414_delete_deque.pop_front();
 	}
 
 	//****************************
 	// gadget1414 削除以外の処理
 	//****************************
-	for (auto& e : dg1414_attack_list_[static_cast<int>(type)])
+	for (auto& e : gadget1414_attack_list_[static_cast<int>(type)])
 	{
 		// count_frame_の初期値は0になっている
 		// delay_time_frame_が1なら1フレームは何もしないようにしたい
@@ -450,7 +561,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 	// gadget2414 削除処理
 	// 削除するときにエフェクト描画もおこなう
 	//*******************************************
-	for (auto it = dg2414_attack_list_[static_cast<int>(type)].begin(); it != dg2414_attack_list_[static_cast<int>(type)].end(); ++it)
+	for (auto it = gadget2414_attack_list_[static_cast<int>(type)].begin(); it != gadget2414_attack_list_[static_cast<int>(type)].end(); ++it)
 	{
 		// フレームカウントが遅延時間に達していないなら何もしない
 		if (it->count_frame_ < it->gadget_dpx_->delay_time_frame_)
@@ -460,13 +571,13 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
 		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
-			dg2414_delete_deque.push_back(it);
+			gadget2414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
 			it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
 			it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
 			NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
-			dg2414_delete_deque.push_back(it);
+			gadget2414_delete_deque.push_back(it);
 		}
 		else 
 		{
@@ -477,22 +588,22 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 					it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[i]->collision_hit_x_;
 					it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[i]->collision_hit_y_;
 					NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
-					dg2414_delete_deque.push_back(it);
+					gadget2414_delete_deque.push_back(it);
 					break;
 				}
 			}
 		}
 	}
-	while (!dg2414_delete_deque.empty())
+	while (!gadget2414_delete_deque.empty())
 	{
-		dg2414_wait_list_.splice(dg2414_wait_list_.begin(), move(dg2414_attack_list_[static_cast<int>(type)]), dg2414_delete_deque.front());
-		dg2414_delete_deque.pop_front();
+		gadget2414_wait_list_.splice(gadget2414_wait_list_.begin(), move(gadget2414_attack_list_[static_cast<int>(type)]), gadget2414_delete_deque.front());
+		gadget2414_delete_deque.pop_front();
 	}
 
 	//****************************
 	// gadget2414 削除以外の処理
 	//****************************
-	for (auto& e : dg2414_attack_list_[static_cast<int>(type)])
+	for (auto& e : gadget2414_attack_list_[static_cast<int>(type)])
 	{
 		// count_frame_の初期値は0になっている
 		// delay_time_frame_が1なら1フレームは何もしないようにしたい

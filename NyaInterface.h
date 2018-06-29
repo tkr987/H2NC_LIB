@@ -97,7 +97,6 @@ namespace H2NLIB
 		static InterfaceHandleMissionWarning* GetHandleMissionWarning(void) { return &handle_mission_warning_; }
 		static InterfaceHandleTitle* GetHandleTitle(void) { return &handle_title_; }
 	private:
-		static unsigned int count_frame_;
 		static InterfaceHandleMissionAllOver handle_mission_all_over_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleMissionEx handle_mission_ex_;

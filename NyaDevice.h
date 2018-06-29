@@ -20,7 +20,7 @@ namespace H2NLIB
 	class DevicePropertyX1
 	{
 	public:
-		int collision_power_;					//!< 衝突力
+		int collision_power_;					//!< 衝撃力
 		int collision_range_;					//!< 衝突範囲
 		double create_x_;						//!< 生成x座標
 		double create_y_;						//!< 生成y座標	
@@ -35,7 +35,7 @@ namespace H2NLIB
 	class DevicePropertyX2
 	{
 	public:
-		int collision_power_;					//!< 衝突力
+		int collision_power_;					//!< 衝撃力
 		int collision_range_;					//!< 衝突範囲
 		double create_x_;						//!< 生成x座標
 		double create_y_;						//!< 生成y座標	
@@ -48,7 +48,10 @@ namespace H2NLIB
 		DevicePropertyX2();
 	};
 
-
+	//*****************************************************
+	// class DeviceGadget14
+	// DevicePropertyX1単体使用、エフェクトなし
+	//*****************************************************
 	class DeviceGadget14
 	{
 	public:
@@ -66,6 +69,31 @@ namespace H2NLIB
 		~DeviceGadget14();
 	};
 
+	//*****************************************************
+	// class DeviceGadget24
+	// DevicePropertyX2単体使用、エフェクトなし
+	//*****************************************************
+	class DeviceGadget24
+	{
+	public:
+		bool clear_;
+		unsigned int collision_accuracy_;
+		unsigned int count_frame_;
+		double move_angle_deg_;
+		double move_angle_rad_;
+		double move_x_;
+		double move_y_;
+		DevicePropertyX2* gadget_dpx_;
+		GraphicPropertyX4* gadget_gpx_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		DeviceGadget24();
+		~DeviceGadget24();
+	};
+
+	//*****************************************************
+	// class DeviceGadget1414
+	// DevicePropertyX1とEffectPropertyX1の組み合わせ
+	//*****************************************************
 	class DeviceGadget1414
 	{
 	public:
@@ -86,6 +114,10 @@ namespace H2NLIB
 		~DeviceGadget1414();
 	};
 
+	//*****************************************************
+	// class DeviceGadget2414
+	// DevicePropertyX2とEffectPropertyX1の組み合わせ
+	//*****************************************************
 	class DeviceGadget2414
 	{
 	public:
@@ -116,12 +148,14 @@ namespace H2NLIB
 		static void Clear(eOBJECT type);
 		static void Run(void);
 	private:
-		static std::list<DeviceGadget14> dg14_attack_list_[(int)eOBJECT::sizeof_enum];
-		static std::list<DeviceGadget14> dg14_wait_list_;
-		static std::list<DeviceGadget1414> dg1414_attack_list_[(int)eOBJECT::sizeof_enum];
-		static std::list<DeviceGadget1414> dg1414_wait_list_;
-		static std::list<DeviceGadget2414> dg2414_attack_list_[(int)eOBJECT::sizeof_enum];
-		static std::list<DeviceGadget2414> dg2414_wait_list_;
+		static std::list<DeviceGadget14> gadget14_attack_list_[(int)eOBJECT::sizeof_enum];
+		static std::list<DeviceGadget14> gadget14_wait_list_;
+		static std::list<DeviceGadget24> gadget24_attack_list_[(int)eOBJECT::sizeof_enum];
+		static std::list<DeviceGadget24> gadget24_wait_list_;
+		static std::list<DeviceGadget1414> gadget1414_attack_list_[(int)eOBJECT::sizeof_enum];
+		static std::list<DeviceGadget1414> gadget1414_wait_list_;
+		static std::list<DeviceGadget2414> gadget2414_attack_list_[(int)eOBJECT::sizeof_enum];
+		static std::list<DeviceGadget2414> gadget2414_wait_list_;
 		static void CalculateGadget(eOBJECT group);
 		static double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		static double AngleToRad(double x) { return (x * 3.14159 / 180.0); }

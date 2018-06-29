@@ -1,13 +1,45 @@
+#include "NyaDevice.h"
+#include "NyaEffect.h"
 #include "NyaGraphic.h"
 #include "NyaPosition.h"
+#include "TeemoEnum.h"
 #include "TeemoTargetEx3b.h"
 
 using namespace H2NLIB;
 
+TeemoExDevice311::TeemoExDevice311()
+{
+	dpx_ = new DevicePropertyX1;
+	dpx_->collision_power_ = 1;
+	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
+	dpx_->move_speed_ = 3;
+	gadget_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	epx_ = new EffectPropertyX1;
+	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	effect_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+}
+
+TeemoExDevice311::~TeemoExDevice311()
+{
+	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+}
+
+
 TeemoEx3bMain::TeemoEx3bMain()
 {
 	gpx_ = new GraphicPropertyX4;
-	phandle_ = new PositionHandle;
+	phandle_ = NyaPosition::CreateHandle();
 }
 
 TeemoEx3bMain::~TeemoEx3bMain()
@@ -39,16 +71,43 @@ TeemoTargetEx3b::~TeemoTargetEx3b()
 
 void TeemoTargetEx3b::MissionRun(void)
 {
-	Act();
-	Draw();
+	static int mode = 1;
+
+	switch (mode)
+	{
+	case 1:
+		Act1();
+		Draw1();
+		break;
+	}
+
+	count_frame_++;
+
+#ifdef __DEBUG__
+		NyaString::Write("design_fps_font", white, 50, 90, "[50, 90] count_frame = %u", count_frame_);
+#endif
 }
 
-void TeemoTargetEx3b::Act(void)
+void TeemoTargetEx3b::Act1(void)
 {
+	PositionHandle* phandle_user = nullptr;
+
+	if (count_frame_ == 1)
+		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 4);
+
+	if (count_frame_ < FPS_MAX * 4)
+		return;
+
+	if (count_frame_ % 60 == 0)
+	{ 
+		NyaPosition::FindHandle("user_main_handle", phandle_user);
+		main_.device11_.dpx_->move_angle_deg_ =  NyaPosition::Angle(main_.phandle_, phandle_user);
+		NyaDevice::Attack1414(main_.device11_.dpx_, main_.device11_.gadget_gpx_, main_.device11_.epx_, main_.device11_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+	}
 
 }
 
-void TeemoTargetEx3b::Draw(void)
+void TeemoTargetEx3b::Draw1(void)
 {
 
 }
@@ -118,3 +177,4 @@ void TeemoTargetEx3b::Draw(void)
 //		NyaPosition::MoveGridMode(main_.phandle_, move_end_x, move_end_y, FPS_MAX - 3);
 //	}
 //}
+

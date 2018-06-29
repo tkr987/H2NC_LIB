@@ -9,7 +9,13 @@ using namespace H2NLIB;
 
 vector<pair<eOBJECT, eOBJECT>> NyaPosition::collision_pair_collection_;
 vector<PositionHandle*> NyaPosition::collision_collection_[static_cast<int>(eOBJECT::sizeof_enum)];
+list<PositionHandle*> NyaPosition::handle_collection_;
 list<PositionMove> NyaPosition::move_collection_;
+
+double H2NLIB::NyaPosition::Angle(PositionHandle* handle1, PositionHandle* handle2)
+{
+	return RadToAngle(atan2(handle1->grid_y_ - handle2->grid_y_, handle1->grid_x_ - handle2->grid_x_));
+}
 
 /**
  @brief 衝突判定処理するハンドルを登録する関数
@@ -20,9 +26,9 @@ list<PositionMove> NyaPosition::move_collection_;
   なお、登録されたハンドルはフレーム毎にクリアされるので、
   判定処理をし続けたいときは１フレーム毎にCollision()で登録し直す必要がある
 **/
-void NyaPosition::Collide(PositionHandle* phandle, eOBJECT type)
+void NyaPosition::Collide(PositionHandle* handle, eOBJECT type)
 {
-	collision_collection_[static_cast<int>(type)].push_back(phandle);
+	collision_collection_[static_cast<int>(type)].push_back(handle);
 }
 
 /**
@@ -49,6 +55,71 @@ void NyaPosition::CollisionPair(eOBJECT type1, eOBJECT type2)
 	set.second = type2;
 	collision_pair_collection_.push_back(set);
 }
+
+/**
+@brief ハンドル新規作成関数
+@note
+ 新規作成したハンドルを返す
+**/
+PositionHandle* NyaPosition::CreateHandle(void)
+{
+	PositionHandle* new_handle = new PositionHandle;
+
+	handle_collection_.push_back(new_handle);
+
+	return new_handle;
+}
+
+/**
+@brief ハンドル新規作成関数
+@note
+ 動的生成したhandleを引数から渡して登録する方法で新規作成するときに使う
+ nullptrのポインタを渡したときはハンドルを新規に作成して引数に格納される
+**/
+void NyaPosition::CreateHandle(PositionHandle* new_handle)
+{
+	if (new_handle == nullptr)
+		new_handle = new PositionHandle;
+
+	handle_collection_.push_back(new_handle);
+}
+
+/**
+@brief ハンドル削除関数
+@note
+ 引数で指定されたハンドルを削除する
+**/
+void H2NLIB::NyaPosition::DeleteHandle(PositionHandle* delete_handle)
+{
+	handle_collection_.remove(delete_handle);
+	delete delete_handle;
+	delete_handle = nullptr;
+}
+
+void NyaPosition::FindHandle(std::string name, PositionHandle* handle)
+{
+	for (auto& e : handle_collection_)
+	{
+		if (e->name_ == name)
+		{
+			handle = e;
+			return;
+		}
+	}
+	handle = nullptr;
+}
+
+void NyaPosition::FindHandle(string name, vector<PositionHandle*>* handle)
+{
+	for (auto& e : handle_collection_)
+	{
+		if (e->name_ == name)
+		{
+			handle->push_back(e);
+		}
+	}
+}
+
 
 /**
 @brief 移動関数

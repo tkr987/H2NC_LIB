@@ -1,4 +1,5 @@
 #pragma once
 
+#define TARGET_ATTACK_RANGE_RED1			5
 #define TARGET_DEVICE_EFFECT_INTERVAL		120
 

@@ -12,7 +12,6 @@
 using namespace std;
 using namespace H2NLIB;
 
-unsigned int NyaInterface::count_frame_;
 InterfaceHandleMissionAllOver NyaInterface::handle_mission_all_over_;
 InterfaceHandleMissionClear NyaInterface::handle_mission_clear_;
 InterfaceHandleMissionEx NyaInterface::handle_mission_ex_;
@@ -111,7 +110,6 @@ H2NLIB::InterfaceHandleTitle::InterfaceHandleTitle()
 **/
 void NyaInterface::Init(void)
 {
-	count_frame_ = 0;
 	NyaString::SettingFont("interface_title_font", 20, 6);
 	NyaString::SettingFont("interface_exp_font", 18, 2);
 	NyaString::SettingFont("design_fps_font", 14, 2);

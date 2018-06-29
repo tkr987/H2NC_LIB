@@ -18,20 +18,39 @@ GraphicSwing NyaGraphic::swing_;
 // class GraphicFile
 //***************************
 
-GraphicFile& GraphicFile::operator=(const GraphicFile& file)
-{
-	div_collection_.clear();
-	std::copy(file.div_collection_.begin(), file.div_collection_.end(), back_inserter(div_collection_));
-	div_total_ = file.div_total_;
-	div_x_ = file.div_x_;
-	div_y_ = file.div_y_;
-	pass_.clear();
-	pass_ = file.pass_;
-	size_x_ = file.size_x_;
-	size_y_ = file.size_y_;
-
-	return *this;
-}
+//GraphicFile::GraphicFile(const GraphicFile& file)
+//{
+//	//div_collection_.clear();
+//	//copy(file.div_collection_.begin(), file.div_collection_.end(), back_inserter(div_collection_));
+//	div_collection_.resize(file.div_collection_.size());
+//	for (int i = 0; i < file.div_collection_.size(); i++)
+//		div_collection_[i] = file.div_collection_[i];
+//	div_total_ = file.div_total_;
+//	div_x_ = file.div_x_;
+//	div_y_ = file.div_y_;
+//	pass_.clear();
+//	pass_ = file.pass_;
+//	size_x_ = file.size_x_;
+//	size_y_ = file.size_y_;
+//}
+//
+//GraphicFile& GraphicFile::operator=(const GraphicFile& file)
+//{
+//	//div_collection_.clear();
+//	//copy(file.div_collection_.begin(), file.div_collection_.end(), back_inserter(div_collection_));
+//	div_collection_.resize(file.div_collection_.size());
+//	for (int i = 0; i < file.div_collection_.size(); i++)
+//		div_collection_[i] = file.div_collection_[i];
+//	div_total_ = file.div_total_;
+//	div_x_ = file.div_x_;
+//	div_y_ = file.div_y_;
+//	pass_.clear();
+//	pass_ = file.pass_;
+//	size_x_ = file.size_x_;
+//	size_y_ = file.size_y_;
+//
+//	return *this;
+//}
 
 //***************************
 // class GraphicPropertyX
@@ -66,18 +85,18 @@ GraphicPropertyX4::GraphicPropertyX4()
 	flag_trans_ = true;
 }
 
-GraphicPropertyX4& GraphicPropertyX4::operator=(const GraphicPropertyX4& gpx)
-{
-	draw_angle_deg_ = gpx.draw_angle_deg_;
-	draw_grid_cx_ = gpx.draw_grid_cx_;
-	draw_grid_cy_ = gpx.draw_grid_cy_;
-	extend_rate_ = gpx.extend_rate_;
-	file_ = gpx.file_;
-	file_div_ = gpx.file_div_;
-	flag_turn_ = gpx.flag_turn_;
-	flag_trans_ = gpx.flag_trans_;
-	return *this;
-}
+//GraphicPropertyX4& GraphicPropertyX4::operator=(const GraphicPropertyX4& gpx)
+//{
+//	draw_angle_deg_ = gpx.draw_angle_deg_;
+//	draw_grid_cx_ = gpx.draw_grid_cx_;
+//	draw_grid_cy_ = gpx.draw_grid_cy_;
+//	extend_rate_ = gpx.extend_rate_;
+//	file_ = gpx.file_;
+//	file_div_ = gpx.file_div_;
+//	flag_turn_ = gpx.flag_turn_;
+//	flag_trans_ = gpx.flag_trans_;
+//	return *this;
+//}
 
 H2NLIB::GraphicSwing::GraphicSwing()
 {

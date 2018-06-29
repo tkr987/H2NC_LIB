@@ -7,9 +7,9 @@ using namespace H2NLIB;
 
 
 list<EffectAnimation1> NyaEffect::ea1_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<EffectAnimation1> NyaEffect::ea1_wait_list_(EFFECT_MAX_DEFAULT);
+list<EffectAnimation1> NyaEffect::ea1_wait_list_;
 list<EffectAnimation2> NyaEffect::ea2_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<EffectAnimation2> NyaEffect::ea2_wait_list_(EFFECT_MAX_DEFAULT);
+list<EffectAnimation2> NyaEffect::ea2_wait_list_;
 
 EffectAnimation1::EffectAnimation1()
 {
@@ -67,7 +67,7 @@ void NyaEffect::Draw(const EffectPropertyX1* epx, const GraphicPropertyX4* gpx, 
 	static list<EffectAnimation1>::iterator it_from, it_to;
 
 	if (ea1_wait_list_.begin() == ea1_wait_list_.end())
-		return;
+		ea1_wait_list_.resize(1);
 	
 	it_from = ea1_wait_list_.begin();
 	it_from->count_ = 0;
@@ -107,7 +107,7 @@ void NyaEffect::Draw(const EffectPropertyX2* epx, const GraphicPropertyX4* gpx, 
 	static list<EffectAnimation2>::iterator it_from, it_to;
 
 	if (ea2_wait_list_.begin() == ea2_wait_list_.end())
-		return;
+		ea2_wait_list_.resize(1);
 	
 	it_from = ea2_wait_list_.begin();
 	it_from->count_ = 0;

@@ -1,10 +1,13 @@
 #include <tuple>
+#include "NyaDevice.h"
+#include "NyaEffect.h"
 #include "NyaInterface.h"
 #include "NyaGraphic.h"
 #include "NyaPosition.h"
 #include "NyaSound.h"
 #include "NyaString.h"
 #include "NyaTarget.h"
+#include "TeemoEnum.h"
 #include "TeemoTargetEx2.h"
 
 #define __DEBUG__
@@ -12,117 +15,142 @@
 using namespace std;
 using namespace H2NLIB;
 
-TargetExTeemo2Main::TargetExTeemo2Main() : health_max_(200) 
+TeemoExDevice211::TeemoExDevice211()
 {
-	gp_ = new GraphicPropertyX4;
-	ph_ = new PositionHandle;
+	dpx_ = new DevicePropertyX3;
+	dpx_->move_angle_deg_ = 90;
+	dpx_->collision_power_ = 1;
+	dpx_->collision_range_ = 5;
+	dpx_->move_speed_ = 1;
+	dpx_->move_speed_accel_ = 0.1;
+	gadget_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	epx_ = new EffectPropertyX1;
+	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	effect_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+};
+
+TeemoExDevice211::~TeemoExDevice211()
+{
+	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+}
+
+TeemoExMain2::TeemoExMain2() : health_max_(10000) 
+{
+	gpx_ = new GraphicPropertyX4;
+	phandle_ = NyaPosition::CreateHandle();
+	NyaGraphic::LoadGraphicFile("img/target/teemo_ex2.png", &gpx_->file_);
+	phandle_->health_ = health_max_;
+	phandle_->collision_power_ = 1;
+	phandle_->collision_range_ = 20;
+	phandle_->grid_x_ = SCREEN_MAX_X / 2;
+	phandle_->grid_y_ = -200;
 
 }
 
-TargetExTeemo2Main::~TargetExTeemo2Main()
+TeemoExMain2::~TeemoExMain2()
 {
 
-	delete gp_;
-	delete ph_;
+	delete gpx_;
+	gpx_ = nullptr;
+	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 }
 
-TargetExTeemo2::TargetExTeemo2(void)
+TeemoTargetEx2::TeemoTargetEx2(void)
 {
-	InterfaceHandleMissionWarning* handle_mission_warning;
-
 	count_frame_ = 0;
-
-	// mission warning setting
-	handle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::LoadFile("sound/warning.wav", &handle_mission_warning->spx_->file_);
-	NyaSound::ChangeVolume(&handle_mission_warning->spx_->file_, 20);
-
-	// target ex teemo main property
-	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->file_);
-	main_.ph_->health_ = main_.health_max_;
-	main_.ph_->collision_power_ = 1;
-	main_.ph_->collision_range_ = 20;
-	main_.ph_->grid_x_ = 300;
-	main_.ph_->grid_y_ = 200;
+	NyaInterface::GetHandleWarning()->LoadSound("sound/warning.wav", 20);
 }
 
-TargetExTeemo2::~TargetExTeemo2(void)
+TeemoTargetEx2::~TeemoTargetEx2(void)
 {
-
-	InterfaceHandleMissionWarning* ihandle_mission_warning;
-
-	// 使用したグラフィックデータなどはデストラクタで破棄する
-	NyaGraphic::DeleteGraphicFile(&main_.gp_->file_);
-	ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::DeleteSoundFile(&ihandle_mission_warning->spx_->file_);
+	NyaInterface::GetHandleWarning()->DeleteSound();
 }
 
 
-void TargetExTeemo2::MissionRun(void)
+void TeemoTargetEx2::MissionRun(void)
 {
-	Act();
-	Draw();
+	int mode = 1;
+
+	switch (mode)
+	{
+	case 1:
+		Act1();
+		Draw1();
+		break;
+	}
+
+	count_frame_++;
 }
 
-void TargetExTeemo2::Act(void)
+void TeemoTargetEx2::Act1(void)
 {
 	InterfaceHandleMissionAllOver* ihandle_mission_all_over;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
-	InterfaceHandleMissionSkill* ihandle_mission_skill;
-	InterfaceHandleMissionWarning* ihandle_mission_warning;
+	InterfaceHandleSkill* ihandle_mission_skill;
+	InterfaceHandleWarning* ihandle_warning;
 
 	// 行動開始1フレーム目
 	// mission ex モードをtrueにする
 	// mission warning 表示を実行する
+	// 初期位置へ移動する
 	if (count_frame_ == 1)
 	{
 		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 		ihandle_mission_ex->valid_ = true;
-		ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
-		ihandle_mission_warning->draw_valid_ = true;
-		ihandle_mission_warning->sound_valid_ = true;
+		ihandle_warning = NyaInterface::GetHandleWarning();
+		ihandle_warning->draw_valid_ = true;
+		ihandle_warning->sound_valid_ = true;
+		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, 150, FPS_MAX * 3);
 	}
 
-	// 通常処理
-	NyaPosition::Collide(main_.ph_, eOBJECT::TARGET1);
-	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
-	ihandle_mission_skill->exp_[static_cast<int>(ihandle_mission_skill->select_)] += main_.ph_->collision_hit_damage_;
-	count_frame_++;
+	if (count_frame_ % 10 == 0)
+	{
+		main_.device211_.dpx_->create_x_ = main_.phandle_->grid_x_;
+		main_.device211_.dpx_->create_y_ = main_.phandle_->grid_y_;
+		NyaDevice::Attack3414(main_.device211_.dpx_, main_.device211_.gadget_gpx_, main_.device211_.epx_, main_.device211_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+	}
+
 
 	// ヘルスが0以下になったらmission clearを表示する
-	if (main_.ph_->health_ <= 0)
-	{
-		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
-		ihandle_mission_all_over->valid_ = true;
-	}
+	//if (main_.ph_->health_ <= 0)
+	//{
+	//	ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
+	//	ihandle_mission_all_over->valid_ = true;
+	//}
 
 }
 
-void TargetExTeemo2::Draw(void)
+void TeemoTargetEx2::Draw1(void)
 {
 	InterfaceHandleMissionEx* ihandle_mission_ex;
-	tuple<int, int, int> white = make_tuple(255, 255, 255);
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// 本体の描画
-	main_.gp_->draw_grid_cx_ = main_.ph_->grid_x_;
-	main_.gp_->draw_grid_cy_ = main_.ph_->grid_y_;
-	NyaGraphic::Draw(main_.gp_, eOBJECT::TARGET1);
+	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.ph_->health_) 
+	if (0 < main_.phandle_->health_) 
 	{
 		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.ph_->health_ / (double)main_.health_max_ * 100;
+		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100;
 	}
 	else
 	{
 		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 		ihandle_mission_ex->value_ = 0;
 	}
-
-#ifdef __DEBUG__
-	NyaString::Write("debug_font", white, 50, 90, "[50, 790] target ex health = %d", (int)main_.ph_->health_);
-#endif
 }
 

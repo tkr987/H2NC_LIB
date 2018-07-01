@@ -1,4 +1,3 @@
-#include "NyaInterface.h"
 #include "TeemoBackgroundMission1.h"
 #include "TeemoMission1.h"
 #include "TeemoTarget.h"
@@ -10,27 +9,27 @@ using namespace H2NLIB;
 void TeemoMission1::Create(void) 
 {
 	unsigned int id = 0;
-	InterfaceHandleMissionSkill* ihandle_mission_skill;
+	InterfaceHandleSkill* ihandle_mission_skill;
 
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
 	//*****************************************************
-	AddChild(new TeemoBackgroundMission1);
+	AddBackground(new TeemoBackgroundMission1);
 
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	AddChild(5, 600, new TargetExTeemo, id++);
+	AddTarget(5, 600, new TargetExTeemo);
 
 	//**************************************
 	// ユーザーを子オブジェクトとして追加
 	//**************************************
-	AddChild(new UserAi);
+	AddUser(new UserAi);
 
 	//******************
 	// interface 設定
 	//******************
-	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::Q)] = "Skill Q (power)";
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::W)] = "Passive W (bit)";
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::E)] = "Passive E (speed)";

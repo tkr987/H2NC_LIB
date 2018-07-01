@@ -14,7 +14,7 @@ list<PositionMove> NyaPosition::move_collection_;
 
 double H2NLIB::NyaPosition::Angle(PositionHandle* handle1, PositionHandle* handle2)
 {
-	return RadToAngle(atan2(handle1->grid_y_ - handle2->grid_y_, handle1->grid_x_ - handle2->grid_x_));
+	return RadToAngle(atan2(handle2->grid_y_ - handle1->grid_y_, handle2->grid_x_ - handle1->grid_x_));
 }
 
 /**
@@ -96,28 +96,50 @@ void H2NLIB::NyaPosition::DeleteHandle(PositionHandle* delete_handle)
 	delete_handle = nullptr;
 }
 
-void NyaPosition::FindHandle(std::string name, PositionHandle* handle)
+/**
+@brief ハンドル検索関数
+@param name 検索する名前
+@param handle 検索結果を格納する
+@retval 1 見つかった
+@retval 0 見つからなかった
+@note
+ 見つからなかったときは何もしない
+**/
+int NyaPosition::FindHandle(std::string name, PositionHandle* handle)
 {
 	for (auto& e : handle_collection_)
 	{
 		if (e->name_ == name)
 		{
-			handle = e;
-			return;
+			*handle = *e;
+			return 1;
 		}
 	}
-	handle = nullptr;
+
+	return 0;
 }
 
-void NyaPosition::FindHandle(string name, vector<PositionHandle*>* handle)
+/**
+@brief ハンドル検索関数
+@param name 検索する名前
+@param handle 検索結果を格納する
+@return 見つかったハンドルの数
+@note
+ 見つからなかったときは何もしない
+**/
+int NyaPosition::FindHandle(string name, vector<PositionHandle>* handle_collection)
 {
+	int find = 0;
 	for (auto& e : handle_collection_)
 	{
 		if (e->name_ == name)
 		{
-			handle->push_back(e);
+			handle_collection->push_back(*e);
+			find++;
 		}
 	}
+
+	return find;
 }
 
 

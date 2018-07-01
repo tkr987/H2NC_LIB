@@ -15,88 +15,33 @@ std::vector<GraphicDrawSet> NyaGraphic::layer_collection_(static_cast<int>(eOBJE
 GraphicSwing NyaGraphic::swing_;
 
 //***************************
-// class GraphicFile
-//***************************
-
-//GraphicFile::GraphicFile(const GraphicFile& file)
-//{
-//	//div_collection_.clear();
-//	//copy(file.div_collection_.begin(), file.div_collection_.end(), back_inserter(div_collection_));
-//	div_collection_.resize(file.div_collection_.size());
-//	for (int i = 0; i < file.div_collection_.size(); i++)
-//		div_collection_[i] = file.div_collection_[i];
-//	div_total_ = file.div_total_;
-//	div_x_ = file.div_x_;
-//	div_y_ = file.div_y_;
-//	pass_.clear();
-//	pass_ = file.pass_;
-//	size_x_ = file.size_x_;
-//	size_y_ = file.size_y_;
-//}
-//
-//GraphicFile& GraphicFile::operator=(const GraphicFile& file)
-//{
-//	//div_collection_.clear();
-//	//copy(file.div_collection_.begin(), file.div_collection_.end(), back_inserter(div_collection_));
-//	div_collection_.resize(file.div_collection_.size());
-//	for (int i = 0; i < file.div_collection_.size(); i++)
-//		div_collection_[i] = file.div_collection_[i];
-//	div_total_ = file.div_total_;
-//	div_x_ = file.div_x_;
-//	div_y_ = file.div_y_;
-//	pass_.clear();
-//	pass_ = file.pass_;
-//	size_x_ = file.size_x_;
-//	size_y_ = file.size_y_;
-//
-//	return *this;
-//}
-
-//***************************
 // class GraphicPropertyX
 //***************************
 
 GraphicPropertyX1::GraphicPropertyX1()
 {
-	draw_grid_x_ = 0;
-	draw_grid_y_ = 0;
 	file_div_ = 0;
 	flag_trans_ = true;
 }
 
-GraphicPropertyX1& GraphicPropertyX1::operator=(const GraphicPropertyX1& gpx)
+GraphicPropertyX2::GraphicPropertyX2()
 {
-	draw_grid_x_ = gpx.draw_grid_x_;
-	draw_grid_y_ = gpx.draw_grid_y_;
-	file_ = gpx.file_;
-	file_div_ = gpx.file_div_;
-	flag_trans_ = gpx.flag_trans_;
-	return *this;
+	file_div_ = 0;
+	flag_trans_ = true;
 }
 
 GraphicPropertyX4::GraphicPropertyX4()
 {
 	draw_angle_deg_ = 0;
-	draw_grid_cx_ = 0;
-	draw_grid_cy_ = 0;
 	extend_rate_ = 1.0;
 	file_div_ = 0;
 	flag_turn_ = false;
 	flag_trans_ = true;
 }
 
-//GraphicPropertyX4& GraphicPropertyX4::operator=(const GraphicPropertyX4& gpx)
-//{
-//	draw_angle_deg_ = gpx.draw_angle_deg_;
-//	draw_grid_cx_ = gpx.draw_grid_cx_;
-//	draw_grid_cy_ = gpx.draw_grid_cy_;
-//	extend_rate_ = gpx.extend_rate_;
-//	file_ = gpx.file_;
-//	file_div_ = gpx.file_div_;
-//	flag_turn_ = gpx.flag_turn_;
-//	flag_trans_ = gpx.flag_trans_;
-//	return *this;
-//}
+//**********************
+// class GraphicSwing
+//**********************
 
 H2NLIB::GraphicSwing::GraphicSwing()
 {
@@ -244,46 +189,49 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 
 /**
 @brief 通常描画関数
-@param *gp プロパティ
+@param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
 @note
  DXLIB::DrawGraph() に対応。
 **/
-void NyaGraphic::Draw(const GraphicPropertyX1 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX1 *gpx, eOBJECT layer)
 {
-	layer_collection_[static_cast<int>(layer)].gpx1_deque_.push_back(*gp);
+	layer_collection_[static_cast<int>(layer)].gpx1_deque_.push_back(*gpx);
 }
 
 
 /**
-@brief 画像描画関数2
-@param *gp プロパティ
+@brief LR反転描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::DrawTurnGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX2 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX2 *gpx, eOBJECT layer)
 {
-	layer_collection_[static_cast<int>(layer)].gpx2_deque_.push_back(*gp);
+	layer_collection_[static_cast<int>(layer)].gpx2_deque_.push_back(*gpx);
 }
 
 
 /**
-@brief 画像描画関数3
-@param *gp プロパティ
+@brief 拡大縮小描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::DrawExtendGraph() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX3 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX3 *gpx, eOBJECT layer)
 {
-	layer_collection_[static_cast<int>(layer)].gpx3_deque_.push_back(*gp);
+	layer_collection_[static_cast<int>(layer)].gpx3_deque_.push_back(*gpx);
 }
 
 /**
-@brief 画像描画関数4
-@param *gpx プロパティ
+@brief 回転描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::DrawRotaGraph() に対応。
@@ -295,81 +243,160 @@ void NyaGraphic::Draw(const GraphicPropertyX4 *gpx, eOBJECT layer)
 
 
 /**
-@brief 画像描画関数5
-@param *gpx セットするプロパティ
+@brief 回転描画関数II
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::DrawRotaGraph2() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX5 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX5 *gpx, eOBJECT layer)
 {
-	layer_collection_[static_cast<int>(layer)].gpx5_deque_.push_back(*gp);
+	layer_collection_[static_cast<int>(layer)].gpx5_deque_.push_back(*gpx);
 }
 
 
 /**
-@brief 画像描画関数6
-@param *gpx セットするプロパティ
+@brief 回転描画関数III
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::DrawRotaGraph3() に対応。
 **/
-void NyaGraphic::Draw(GraphicPropertyX6 *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX6 *gpx, eOBJECT layer)
 {
-	layer_collection_[static_cast<int>(layer)].gpx6_deque_.push_back(*gp);
+	layer_collection_[static_cast<int>(layer)].gpx6_deque_.push_back(*gpx);
 }
 
 /**
-@brief 画像描画関数1b
-@param *gpx プロパティ
+@brief 自由変形描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
+@return なし
+@note
+ DXLIB::DrawRotaGraph3() に対応。
+**/
+void NyaGraphic::Draw(const GraphicPropertyX7 *gpx, eOBJECT layer)
+{
+	layer_collection_[static_cast<int>(layer)].gpx7_deque_.push_back(*gpx);
+}
+
+/**
+@brief 定矩形描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
+@return なし
+@note
+ DXLIB::DrawRotaGraph3() に対応。
+**/
+void NyaGraphic::Draw(const GraphicPropertyX8 *gpx, eOBJECT layer)
+{
+	layer_collection_[static_cast<int>(layer)].gpx8_deque_.push_back(*gpx);
+}
+
+/**
+@brief ブレンドモード付き通常描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::SetDrawBlendMode(), DXLIB::DrawGraph() に対応。
- ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX1b *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX1b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx1b_deque_.push_back(*gp);
 }
 
 /**
-@brief 画像描画関数2b
-@param *gpx プロパティ
+@brief ブレンドモード付きLR反転描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::SetDrawBlendMode(), DXLIB::DrawTurnGraph() に対応。
- ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX2b *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX2b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx2b_deque_.push_back(*gp);
 }
 
 /**
-@brief 画像描画関数3b
-@param *gpx プロパティ
+@brief ブレンドモード付き拡大縮小描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
 @return なし
 @note
  DXLIB::SetDrawBlendMode(), DXLIB::DrawExtendGraph() に対応。
- ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX3b *gp, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX3b *gp, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx3b_deque_.push_back(*gp);
 }
 
 /**
-@brief 回転描画関数
-@param *gp プロパティ
+@brief ブレンドモード付き回転描画関数
+@param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
 @note
  DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
- ただし、重い処理なので多用するときは注意。
 **/
-void NyaGraphic::Draw(GraphicPropertyX4b *gpx, eOBJECT layer)
+void NyaGraphic::Draw(const GraphicPropertyX4b *gpx, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx4b_deque_.push_back(*gpx);
+}
+
+/**
+@brief ブレンドモード付き回転描画関数II
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
+@return なし
+@note
+ DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
+**/
+void NyaGraphic::Draw(const GraphicPropertyX5b *gpx, eOBJECT layer)
+{
+	layer_collection_[static_cast<int>(layer)].gpx5b_deque_.push_back(*gpx);
+}
+
+/**
+@brief ブレンドモード付き回転描画関数III
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
+@return なし
+@note
+ DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
+**/
+void NyaGraphic::Draw(const GraphicPropertyX6b *gpx, eOBJECT layer)
+{
+	layer_collection_[static_cast<int>(layer)].gpx6b_deque_.push_back(*gpx);
+}
+
+/**
+@brief ブレンドモード付き自由変形描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
+@return なし
+@note
+ DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
+**/
+void NyaGraphic::Draw(const GraphicPropertyX7b *gpx, eOBJECT layer)
+{
+	layer_collection_[static_cast<int>(layer)].gpx7b_deque_.push_back(*gpx);
+}
+
+/**
+@brief ブレンドモード付き指定矩形描画関数
+@param *gpx 描画プロパティ
+@param layer 描画レイヤー
+@return なし
+@note
+ DXLIB::SetDrawBlendMode(), DXLIB::DrawRotaGraph() に対応。
+**/
+void NyaGraphic::Draw(const GraphicPropertyX8b *gpx, eOBJECT layer)
+{
+	layer_collection_[static_cast<int>(layer)].gpx8b_deque_.push_back(*gpx);
 }
 
 /**
@@ -468,21 +495,21 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_[layer].gpx1_deque_.empty())
 	{
 		gp1 = &layer_collection_[layer].gpx1_deque_.front();
-		DrawGraph((int)(gp1->draw_grid_x_ + swing_.grid_x_), (int)(gp1->draw_grid_y_), 
+		DrawGraph((int)gp1->draw_grid_x_ + swing_.grid_x_, (int)gp1->draw_grid_y_, 
 			gp1->file_.div_collection_[gp1->file_div_], gp1->flag_trans_);
 		layer_collection_[layer].gpx1_deque_.pop_front();
 	}
 	while (!layer_collection_[layer].gpx2_deque_.empty())
 	{
 		gp2 = &layer_collection_[layer].gpx2_deque_.front();
-		DrawTurnGraph((int)(gp2->draw_grid_x_ + swing_.grid_x_), (int)(gp2->draw_grid_y_),
+		DrawTurnGraph((int)gp2->draw_grid_x_ + swing_.grid_x_, (int)gp2->draw_grid_y_,
 			gp2->file_.div_collection_[gp2->file_div_], gp2->flag_trans_);
 		layer_collection_[layer].gpx2_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx3_deque_.empty()) 
 	{
 		gp3 = &layer_collection_.at(layer).gpx3_deque_.front();
-		DrawExtendGraph((int)(gp3->draw_grid_x1_ + swing_.grid_x_), (int)(gp3->draw_grid_y1_),
+		DrawExtendGraph((int)gp3->draw_grid_x1_ + swing_.grid_x_, (int)gp3->draw_grid_y1_,
 			(int)(gp3->draw_grid_x2_ + swing_.grid_x_), (int)(gp3->draw_grid_y2_), 
 			gp3->file_.div_collection_[gp3->file_div_], gp3->flag_trans_);
 		layer_collection_.at(layer).gpx3_deque_.pop_front();
@@ -490,22 +517,22 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_[layer].gpx4_deque_.empty())
 	{
 		gp4 = &layer_collection_[layer].gpx4_deque_.front();
-		DrawRotaGraph((int)(gp4->draw_grid_cx_ + swing_.grid_x_), (int)(gp4->draw_grid_cy_), 
+		DrawRotaGraph((int)gp4->draw_grid_cx_ + swing_.grid_x_, (int)gp4->draw_grid_cy_, 
 			gp4->extend_rate_, AngleToRad(gp4->draw_angle_deg_),
 			gp4->file_.div_collection_[gp4->file_div_], gp4->flag_trans_, gp4->flag_turn_);
 		layer_collection_[layer].gpx4_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx5_deque_.empty()) {
 		gpx5 = &layer_collection_.at(layer).gpx5_deque_.front();
-		DrawRotaGraph2(gpx5->pos_x_ + swing_.grid_x_, gpx5->pos_y_, 
-			gpx5->pos_cx_ + swing_.grid_x_, gpx5->pos_cy_, gpx5->extend_rate_, AngleToRad(gpx5->draw_angle_deg_), 
+		DrawRotaGraph2((int)gpx5->draw_grid_x_ + swing_.grid_x_, (int)gpx5->draw_grid_y_, 
+			(int)gpx5->draw_grid_cx_ + swing_.grid_x_, (int)gpx5->draw_grid_cy_, gpx5->extend_rate_, AngleToRad(gpx5->draw_angle_deg_), 
 			gpx5->file_.div_collection_[gpx5->file_div_], gpx5->flag_trans_, gpx5->flag_turn_);
 		layer_collection_.at(layer).gpx5_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx6_deque_.empty()) {
 		gpx6 = &layer_collection_.at(layer).gpx6_deque_.front();
-		DrawRotaGraph3(gpx6->pos_x_ + swing_.grid_x_, gpx6->pos_y_, 
-			gpx6->pos_cx_ + swing_.grid_x_, gpx6->pos_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
+		DrawRotaGraph3((int)gpx6->draw_grid_x_ + swing_.grid_x_, (int)gpx6->draw_grid_y_, 
+			(int)gpx6->draw_grid_cx_ + swing_.grid_x_, gpx6->draw_grid_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
 			gpx6->file_.div_collection_[gpx6->file_div_], gpx6->flag_trans_, gpx6->flag_turn_);
 		layer_collection_.at(layer).gpx6_deque_.pop_front();
 	}
@@ -575,7 +602,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx6b_deque_.pop_front();
 	}
-	while (!layer_collection_.at(layer).gpx7_deque_.empty()) {
+	while (!layer_collection_.at(layer).gpx7b_deque_.empty()) {
 		gpx7b = &layer_collection_.at(layer).gpx7b_deque_.front();
 		SetDrawBlendMode(gpx7b->blend_mode_, gpx7b->blend_alpha_);
 		DrawModiGraph(
@@ -583,9 +610,9 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 			gpx7b->pos_x3_ + swing_.grid_x_, gpx7b->pos_y3_, gpx7b->pos_x4_ + swing_.grid_x_, gpx7b->pos_y4_,
 			gpx7b->file_.div_collection_[gpx7b->file_div_], gpx7b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-		layer_collection_.at(layer).gpx7_deque_.pop_front();
+		layer_collection_.at(layer).gpx7b_deque_.pop_front();
 	}
-	while (!layer_collection_.at(layer).gpx8_deque_.empty()) {
+	while (!layer_collection_.at(layer).gpx8b_deque_.empty()) {
 		gpx8b = &layer_collection_.at(layer).gpx8b_deque_.front();
 		SetDrawBlendMode(gpx8b->blend_mode_, gpx8b->blend_alpha_);
 		DrawRectGraph(gpx8b->pos_dx_ + swing_.grid_x_, gpx8b->pos_dy_, 

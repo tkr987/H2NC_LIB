@@ -20,13 +20,11 @@ void NyaUser::Run(const eEVENT check_event)
 		MissionRun();
 		break;
 	case eEVENT::MISSION_CONTINUE:
-		MissionContinue();
 		break;
 	case eEVENT::MISSION_CLEAR:
 	case eEVENT::MISSION_ALL_CLEAR:
 	case eEVENT::MISSION_REPLAY_CLEAR:
 	case eEVENT::MISSION_REPLAY_ALL_CLEAR:
-		MissionClear();
 		break;
 	}
 }

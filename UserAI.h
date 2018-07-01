@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NyaUser.h"
 #include <utility>
+#include "h2nlib.h"
 
 namespace H2NLIB
 {

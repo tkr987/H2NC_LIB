@@ -13,8 +13,6 @@ namespace H2NLIB {
 		NyaUser(){}
 		virtual ~NyaUser(){}
 		void Run(const eEVENT check_event);
-		virtual void MissionClear(void){}
-		virtual void MissionContinue(void){}
 		/**
 		 @brief イベントMISSION_RUNでの処理を定義する関数
 		**/

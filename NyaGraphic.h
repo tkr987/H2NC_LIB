@@ -21,9 +21,6 @@ namespace H2NLIB
 		std::string pass_;
 		int size_x_;
 		int size_y_;
-//		GraphicFile(){}
-//		GraphicFile(const GraphicFile& file);
-//		GraphicFile& operator=(const GraphicFile& file);
 	};
 
 	//*********************************
@@ -41,7 +38,6 @@ namespace H2NLIB
 		int file_div_;
 		bool flag_trans_;
 		GraphicPropertyX1();
-		GraphicPropertyX1& operator=(const GraphicPropertyX1& gpx);
 	};
 
 	// DXLIB LRîΩì]ï`âÊä÷êîÇ…ëŒâû
@@ -54,20 +50,7 @@ namespace H2NLIB
 		int file_div_;
 		bool flag_trans_;
 		GraphicFile file_;
-		GraphicPropertyX2()
-		{
-			file_div_ = 0;
-			flag_trans_ = true;
-		}
-		GraphicPropertyX2& operator=(const GraphicPropertyX2& gp)
-		{
-			draw_grid_x_ = gp.draw_grid_x_;
-			draw_grid_y_ = gp.draw_grid_y_;
-			file_div_ = gp.file_div_;
-			file_ = gp.file_;
-			flag_trans_ = gp.flag_trans_;
-			return *this;
-		}
+		GraphicPropertyX2();
 	};
 
 	// DXLIB ägëÂèkè¨ï`âÊä÷êîÇ…ëŒâû
@@ -87,17 +70,6 @@ namespace H2NLIB
 			file_div_ = 0;
 			flag_trans_ = true;
 		}
-		GraphicPropertyX3& operator=(const GraphicPropertyX3& gpx)
-		{
-			draw_grid_x1_ = gpx.draw_grid_x1_;
-			draw_grid_y1_ = gpx.draw_grid_y1_;
-			draw_grid_x2_ = gpx.draw_grid_x2_;
-			draw_grid_y2_ = gpx.draw_grid_y2_;
-			file_div_ = gpx.file_div_;
-			file_ = gpx.file_;
-			flag_trans_ = gpx.flag_trans_;
-			return *this;
-		}
 	};
 
 	// DXLIB âÒì]ï`âÊä÷êîÇ…ëŒâû
@@ -114,7 +86,6 @@ namespace H2NLIB
 		bool flag_turn_;
 		bool flag_trans_;
 		GraphicPropertyX4();
-//		GraphicPropertyX4& operator=(const GraphicPropertyX4& gpx);
 
 	};
 
@@ -125,10 +96,10 @@ namespace H2NLIB
 	public:
 		GraphicFile file_;
 		int file_div_;
-		int pos_x_;
-		int pos_y_;
-		int pos_cx_;
-		int pos_cy_;
+		double draw_grid_x_;
+		double draw_grid_y_;
+		double draw_grid_cx_;
+		double draw_grid_cy_;
 		double draw_angle_deg_;
 		double extend_rate_;
 		bool flag_turn_;
@@ -142,10 +113,10 @@ namespace H2NLIB
 	public:
 		GraphicFile file_;
 		int file_div_;
-		int pos_x_;
-		int pos_y_;
-		int pos_cx_;
-		int pos_cy_;
+		double draw_grid_x_;
+		double draw_grid_y_;
+		double draw_grid_cx_;
+		double draw_grid_cy_;
 		double draw_angle_deg_;
 		double extend_ratex_;
 		double extend_ratey_;
@@ -388,16 +359,22 @@ namespace H2NLIB
 		~NyaGraphic();
 		static void Clear(void);
 		static void DeleteGraphicFile(GraphicFile* file);
-		static void Draw(const GraphicPropertyX1* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX2* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX3* gp, eOBJECT layer);
+		static void Draw(const GraphicPropertyX1* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX2* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX3* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX4* gpx, eOBJECT layer);
-		static void Draw(GraphicPropertyX5* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX6* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX1b* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX2b* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX3b* gp, eOBJECT layer);
-		static void Draw(GraphicPropertyX4b* gp, eOBJECT layer);
+		static void Draw(const GraphicPropertyX5* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX6* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX7* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX8* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX1b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX2b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX3b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX4b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX5b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX6b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX7b* gpx, eOBJECT layer);
+		static void Draw(const GraphicPropertyX8b* gpx, eOBJECT layer);
 		static void LoadGraphicFile(std::string file_pass, GraphicFile* file);
 		static void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		static void Run(void);

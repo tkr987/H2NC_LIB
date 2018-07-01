@@ -15,11 +15,21 @@ using namespace H2NLIB;
 InterfaceHandleMissionAllOver NyaInterface::handle_mission_all_over_;
 InterfaceHandleMissionClear NyaInterface::handle_mission_clear_;
 InterfaceHandleMissionEx NyaInterface::handle_mission_ex_;
-InterfaceHandleMissionSkill NyaInterface::handle_mission_skill_;
-InterfaceHandleMissionLife NyaInterface::handle_mission_life_;
-InterfaceHandleMissionWarning NyaInterface::handle_mission_warning_;
+InterfaceHandleSkill NyaInterface::handle_skill_;
+InterfaceHandleLife NyaInterface::handle_life_;
+InterfaceHandleWarning NyaInterface::handle_warning_;
 InterfaceHandleTitle NyaInterface::handle_title_;
-eSKILL InterfaceHandleMissionSkill::select_;
+
+void H2NLIB::InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
+{
+	NyaSound::LoadFile(file_pass, &spx_->file_);
+	NyaSound::ChangeVolume(&spx_->file_, volume);
+}
+
+void H2NLIB::InterfaceHandleWarning::DeleteSound(void)
+{
+	NyaSound::DeleteSoundFile(&spx_->file_);
+}
 
 InterfaceHandleMissionAllOver::InterfaceHandleMissionAllOver()
 {
@@ -35,17 +45,17 @@ InterfaceHandleMissionClear::InterfaceHandleMissionClear()
 	valid_ = false;
 }
 
-InterfaceHandleMissionSkill::InterfaceHandleMissionSkill()
+InterfaceHandleSkill::InterfaceHandleSkill()
 {
 	Clear();
 }
 
-void InterfaceHandleMissionSkill::AddExp(unsigned int value)
+void InterfaceHandleSkill::AddExp(unsigned int value)
 {
 	exp_[static_cast<int>(select_)] += value;
 }
 
-void InterfaceHandleMissionSkill::Clear(void)
+void InterfaceHandleSkill::Clear(void)
 {
 	for (int i = 0; i < static_cast<int>(eSKILL::sizeof_enum); i++)
 	{
@@ -62,12 +72,12 @@ void InterfaceHandleMissionSkill::Clear(void)
 	select_ = eSKILL::Q;
 }
 
-H2NLIB::InterfaceHandleMissionLife::InterfaceHandleMissionLife()
+InterfaceHandleLife::InterfaceHandleLife()
 {
 	value_ = 1;
 }
 
-InterfaceHandleMissionWarning::InterfaceHandleMissionWarning()
+InterfaceHandleWarning::InterfaceHandleWarning()
 {
 	draw_grid_x_ = 225;
 	draw_grid_y_ = 200;
@@ -78,7 +88,7 @@ InterfaceHandleMissionWarning::InterfaceHandleMissionWarning()
 	spx_ = new SoundPropertyX;
 }
 
-InterfaceHandleMissionWarning::~InterfaceHandleMissionWarning()
+InterfaceHandleWarning::~InterfaceHandleWarning()
 {
 	draw_grid_x_ = 225;
 	draw_grid_y_ = 200;
@@ -112,7 +122,6 @@ void NyaInterface::Init(void)
 {
 	NyaString::SettingFont("interface_title_font", 20, 6);
 	NyaString::SettingFont("interface_exp_font", 18, 2);
-	NyaString::SettingFont("design_fps_font", 14, 2);
 	NyaString::SettingFont("interface_lib_font", 50, 6);
 	NyaString::SettingFont("design_mission_clear_big_font", 50, 2);
 	NyaString::SettingFont("design_mission_clear_small_font", 30, 2);
@@ -131,10 +140,10 @@ void NyaInterface::Run(void)
 {
 	DrawBlack(850, 0, 1280, 720);
 	DrawTitle(875, 35);
-	DrawUserLife(875, 75);
-	DrawUserSkill(875, 135);
+	DrawLife(875, 75);
+	DrawSkill(875, 135);
 	DrawLIB(910, 520);
-	DrawUserInput(875, 640);
+	DrawInput(875, 640);
 	DrawMissionEx();
 	DrawMissionWarning();
 	DrawMissionClear();
@@ -155,7 +164,10 @@ void NyaInterface::DrawTitle(int x, int y)
 	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_);
 }
 
-void NyaInterface::DrawUserInput(int x, int y)
+/**
+@brief 入力表示関数
+**/
+void NyaInterface::DrawInput(int x, int y)
 {
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -244,7 +256,10 @@ void NyaInterface::DrawMissionEx(void)
 	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_mission_ex_.value_ / 100.0), 15, red, true);
 }
 
-void NyaInterface::DrawUserLife(int x, int y)
+/**
+@brief ライフ表示関数
+**/
+void NyaInterface::DrawLife(int x, int y)
 {
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
@@ -252,71 +267,47 @@ void NyaInterface::DrawUserLife(int x, int y)
 	NyaString::Write("interface_life_font", white, x, y, "user:");
 
 	x += 90;
-	if      (handle_mission_life_.value_ == 1)
-		NyaString::Write("interface_life_font", red, x, y, "■□□□□□");
-	else if (handle_mission_life_.value_ == 2)
-		NyaString::Write("interface_life_font", red, x, y, "■■□□□□");
-	else if (handle_mission_life_.value_ == 3)
-		NyaString::Write("interface_life_font", red, x, y, "■■■□□□");
-	else if (handle_mission_life_.value_ == 4)
-		NyaString::Write("interface_life_font", red, x, y, "■■■■□□");
-	else if (handle_mission_life_.value_ == 5)
-		NyaString::Write("interface_life_font", red, x, y, "■■■■■□");
-	else if (6 <= handle_mission_life_.value_)
-		NyaString::Write("interface_life_font", red, x, y, "■■■■■■");
-	NyaString::Write("interface_life_font", white, x, y, "□□□□□□");
+	if      (handle_life_.value_ == 1)
+		NyaString::Write("interface_life_font", red, x, y, "■□□□□□□□");
+	else if (handle_life_.value_ == 2)
+		NyaString::Write("interface_life_font", red, x, y, "■■□□□□□□");
+	else if (handle_life_.value_ == 3)
+		NyaString::Write("interface_life_font", red, x, y, "■■■□□□□□");
+	else if (handle_life_.value_ == 4)
+		NyaString::Write("interface_life_font", red, x, y, "■■■■□□□□");
+	else if (handle_life_.value_ == 5)
+		NyaString::Write("interface_life_font", red, x, y, "■■■■■□□□");
+	else if (handle_life_.value_ == 6)
+		NyaString::Write("interface_life_font", red, x, y, "■■■■■■□□");
+	else if (handle_life_.value_ == 7)
+		NyaString::Write("interface_life_font", red, x, y, "■■■■■■■□");
+	else if (8 <= handle_life_.value_)
+		NyaString::Write("interface_life_font", red, x, y, "■■■■■■■■");
+
+	NyaString::Write("interface_life_font", white, x, y, "□□□□□□□□");
 }
 
-void NyaInterface::DrawMissionWarning(void)
-{
-	int draw_grid_x, draw_grid_y;
-	const int black = GetColor(0, 0, 0);
-	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	// 効果音再生
-	if (handle_mission_warning_.sound_valid_)
-	{
-		NyaSound::Play(handle_mission_warning_.spx_);
-		handle_mission_warning_.sound_valid_ = false;
-	}
-
-	// warning表示
-	if (handle_mission_warning_.draw_valid_)
-	{
-		draw_grid_x = handle_mission_warning_.draw_grid_x_;
-		draw_grid_y = handle_mission_warning_.draw_grid_y_;
-		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
-		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
-		handle_mission_warning_.draw_frame_++;
-
-		if (handle_mission_warning_.draw_frame_ == handle_mission_warning_.draw_frame_max_)
-		{
-			handle_mission_warning_.draw_valid_ = false;
-			handle_mission_warning_.draw_frame_ = 0;
-		}
-	}	
-}
-
-void NyaInterface::DrawUserSkill(int x, int y)
+void NyaInterface::DrawSkill(int x, int y)
 {
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// スキル選択肢の表示
-	NyaString::Write("design_skill_font", red, x, y + 90 * (static_cast<int>(handle_mission_skill_.select_) - 1), "★");
+	NyaString::Write("design_skill_font", red, x, y + 90 * (static_cast<int>(handle_skill_.select_) - 1), "★");
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
 		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1), "☆");
-		NyaString::Write("design_skill_font", white, x + 50, y + 90 * (skill - 1), handle_mission_skill_.name_[skill]);
+		NyaString::Write("design_skill_font", white, x + 50, y + 90 * (skill - 1), handle_skill_.name_[skill]);
 	}
 	// スキルのレベルと経験値の表示
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
-		unsigned int exp = handle_mission_skill_.exp_[skill];
-		unsigned int lv1_exp = handle_mission_skill_.lv1_exp_[skill];
-		unsigned int lv2_exp = handle_mission_skill_.lv2_exp_[skill];
-		unsigned int lv3_exp = handle_mission_skill_.lv3_exp_[skill];
-		unsigned int lv4_exp = handle_mission_skill_.lv4_exp_[skill];
+		unsigned int exp = handle_skill_.exp_[skill];
+		unsigned int lv1_exp = handle_skill_.lv1_exp_[skill];
+		unsigned int lv2_exp = handle_skill_.lv2_exp_[skill];
+		unsigned int lv3_exp = handle_skill_.lv3_exp_[skill];
+		unsigned int lv4_exp = handle_skill_.lv4_exp_[skill];
 		NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 40, "Exp : %u pt", exp);
 		if (exp < lv1_exp)
 		{
@@ -364,4 +355,36 @@ void NyaInterface::DrawUserSkill(int x, int y)
 		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1) + 45, "□□□□");
 	}
 }
+
+void NyaInterface::DrawMissionWarning(void)
+{
+	int draw_grid_x, draw_grid_y;
+	const int black = GetColor(0, 0, 0);
+	const tuple<int, int, int> red = make_tuple(255, 0, 0);
+
+	// 効果音再生
+	if (handle_warning_.sound_valid_)
+	{
+		NyaSound::Play(handle_warning_.spx_);
+		handle_warning_.sound_valid_ = false;
+	}
+
+	// warning表示
+	if (handle_warning_.draw_valid_)
+	{
+		draw_grid_x = handle_warning_.draw_grid_x_;
+		draw_grid_y = handle_warning_.draw_grid_y_;
+		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
+		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
+		handle_warning_.draw_frame_++;
+
+		if (handle_warning_.draw_frame_ == handle_warning_.draw_frame_max_)
+		{
+			handle_warning_.draw_valid_ = false;
+			handle_warning_.draw_frame_ = 0;
+		}
+	}	
+}
+
+
 

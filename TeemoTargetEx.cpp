@@ -30,14 +30,14 @@ TargetExTeemoMain::~TargetExTeemoMain()
 
 TargetExTeemo::TargetExTeemo(void)
 {
-	InterfaceHandleMissionWarning* handle_mission_warning;
+	InterfaceHandleWarning* handle_warning;
 
 	count_frame_ = 0;
 
 	// mission warning handle 設定
-	handle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::LoadFile("sound/warning.wav", &handle_mission_warning->spx_->file_);
-	NyaSound::ChangeVolume(&handle_mission_warning->spx_->file_, 20);
+	handle_warning = NyaInterface::GetHandleWarning();
+	NyaSound::LoadFile("sound/warning.wav", &handle_warning->spx_->file_);
+	NyaSound::ChangeVolume(&handle_warning->spx_->file_, 20);
 
 	// target ex teemo main property
 	NyaGraphic::LoadGraphicFile("img/target_teemo.png", &main_.gp_->file_);
@@ -51,12 +51,12 @@ TargetExTeemo::TargetExTeemo(void)
 TargetExTeemo::~TargetExTeemo(void)
 {
 
-	InterfaceHandleMissionWarning* ihandle_mission_warning;
+	InterfaceHandleWarning* ihandle_warning;
 
 	// 使用したグラフィックデータなどはデストラクタで破棄する
 	NyaGraphic::DeleteGraphicFile(&main_.gp_->file_);
-	ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
-	NyaSound::DeleteSoundFile(&ihandle_mission_warning->spx_->file_);
+	ihandle_warning = NyaInterface::GetHandleWarning();
+	NyaSound::DeleteSoundFile(&ihandle_warning->spx_->file_);
 }
 
 
@@ -70,8 +70,8 @@ void TargetExTeemo::Act(void)
 {
 	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
-	InterfaceHandleMissionSkill *ihandle_mission_skill;
-	InterfaceHandleMissionWarning* ihandle_mission_warning;
+	InterfaceHandleSkill *ihandle_mission_skill;
+	InterfaceHandleWarning* ihandle_warning;
 
 	// 行動開始1フレーム目
 	// mission ex モードをtrueにする
@@ -80,14 +80,14 @@ void TargetExTeemo::Act(void)
 	{
 		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
 		ihandle_mission_ex->valid_ = true;
-		ihandle_mission_warning = NyaInterface::GetHandleMissionWarning();
-		ihandle_mission_warning->draw_valid_ = true;
-		ihandle_mission_warning->sound_valid_ = true;
+		ihandle_warning = NyaInterface::GetHandleWarning();
+		ihandle_warning->draw_valid_ = true;
+		ihandle_warning->sound_valid_ = true;
 	}
 
 	// 通常処理
 	NyaPosition::Collide(main_.ph_, eOBJECT::TARGET1);
-	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	ihandle_mission_skill->exp_[static_cast<int>(ihandle_mission_skill->select_)] += main_.ph_->collision_hit_damage_;
 	count_frame_++;
 

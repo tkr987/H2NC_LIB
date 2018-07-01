@@ -381,7 +381,7 @@ void TeemoTargetEx4::MissionRun(void)
 void TeemoTargetEx4::Act1(void)
 {
 	InterfaceHandleMissionEx* ihandle_mission_ex;
-	InterfaceHandleMissionSkill *ihandle_mission_skill;
+	InterfaceHandleSkill *ihandle_mission_skill;
 
 	// 行動開始1フレーム目
 	// mission ex モードをtrueにする
@@ -399,7 +399,7 @@ void TeemoTargetEx4::Act1(void)
 		main_.phandle_->grid_y_++;
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
-	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	ihandle_mission_skill->AddExp(main_.phandle_->collision_hit_damage_);
 
@@ -453,7 +453,7 @@ void TeemoTargetEx4::Act2(void)
 	GraphicPropertyX4* cube_effect_gpx;
 	EffectPropertyX1* cube_epx;
 	GraphicPropertyX4* cube_gadget_gpx;
-	InterfaceHandleMissionSkill *ihandle_mission_skill;
+	InterfaceHandleSkill *ihandle_mission_skill;
 
 	// 行動開始1フレーム目
 	// mission ex モードをtrueにする
@@ -474,7 +474,7 @@ void TeemoTargetEx4::Act2(void)
 	}
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
-	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	ihandle_mission_skill->AddExp(main_.phandle_->collision_hit_damage_);
 	for (int i = 0; i < 6; i++)
@@ -612,7 +612,7 @@ void TeemoTargetEx4::Act2(void)
 void TeemoTargetEx4::Act3(void)
 {
 	static int update_device_angle = -5;
-	InterfaceHandleMissionSkill *ihandle_mission_skill;
+	InterfaceHandleSkill *ihandle_mission_skill;
 	DevicePropertyX1* cube_dpx;
 	GraphicPropertyX4* cube_effect_gpx;
 	EffectPropertyX1* cube_epx;
@@ -641,7 +641,7 @@ void TeemoTargetEx4::Act3(void)
 	cube3_collection_[3].phandle_->grid_y_ = main_.phandle_->grid_y_ - 70;
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
-	ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	ihandle_mission_skill->AddExp(main_.phandle_->collision_hit_damage_);
 

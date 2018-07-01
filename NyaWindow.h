@@ -11,14 +11,15 @@ namespace H2NLIB
 	class NyaMission;
 	class NyaOpening;
 
-	// 子オブジェクトmission関連
-	class ChildMission
+	// 子オブジェクト
+	class WindowChild
 	{
 	public:
-		bool valid_;
-		int index_;
+		int mission_index_;
+		NyaEnding* ending_;
 		std::vector<NyaMission*> mission_collection_;
-		ChildMission();
+		NyaOpening* opening_;
+		WindowChild();
 	};
 
 	// nya window
@@ -28,15 +29,13 @@ namespace H2NLIB
 	public:
 		NyaWindow(std::string title);
 		~NyaWindow();
-		void AddChild(NyaOpening* opening);
-		void AddChild(NyaMission* mission);
+		void Child(NyaOpening* opening);
+		void Child(NyaMission* mission);
 		void Run(void);
 	private:
 		eEVENT event_;
 		eEVENT event_next_;
-		H2NLIB::NyaEnding* ending_;
-		ChildMission child_mission_;
-		H2NLIB::NyaOpening* opening_;
+		WindowChild child_;
 		void Ending(void);
 		void Mission(void);
 		void NotSaveReplay(void);

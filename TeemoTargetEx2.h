@@ -4,34 +4,45 @@
 
 namespace H2NLIB 
 {
-	class NyaDevice;
-	class NyaSound;
-	class NyaString;
 	class DevicePropertyX1;
+	class DevicePropertyX3;
+	class EffectPropertyX1;
 	class GraphicPropertyX4;
 	class PositionHandle;
 }
 
-class TargetExTeemo2Main
+class TeemoExDevice211
 {
 public:
-	const unsigned int health_max_;
-	H2NLIB::GraphicPropertyX4* gp_;
-	H2NLIB::PositionHandle* ph_;
-	TargetExTeemo2Main();
-	~TargetExTeemo2Main();
+	H2NLIB::DevicePropertyX3* dpx_;
+	H2NLIB::GraphicPropertyX4* gadget_gpx_;
+	H2NLIB::EffectPropertyX1* epx_;
+	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	TeemoExDevice211();
+	~TeemoExDevice211();
 };
 
-class TargetExTeemo2 : public H2NLIB::NyaTarget
+class TeemoExMain2
 {
 public:
-	TargetExTeemo2();
-	~TargetExTeemo2();
+	TeemoExDevice211 device211_;
+	const unsigned int health_max_;
+	H2NLIB::GraphicPropertyX4* gpx_;
+	H2NLIB::PositionHandle* phandle_;
+	TeemoExMain2();
+	~TeemoExMain2();
+};
+
+class TeemoTargetEx2 : public H2NLIB::NyaTarget
+{
+public:
+	TeemoTargetEx2();
+	~TeemoTargetEx2();
 	void MissionRun(void);
 private:
 	unsigned int count_frame_;
-	TargetExTeemo2Main main_;
-	void Act(void);
-	void Draw(void);
+	TeemoExMain2 main_;
+	void Act1(void);
+	void Draw1(void);
 };
 

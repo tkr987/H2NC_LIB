@@ -10,18 +10,20 @@ using namespace H2NLIB;
 
 void TeemoMission2::Create(void)
 {
-	unsigned int id = 0;
-
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
 	//*****************************************************
-	AddChild(new TeemoBackgroundMission1);
+	AddBackground(new TeemoBackgroundMission1);
 
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	AddChild(5, 600, new TargetExTeemo2, id++);
+	AddTarget(1, 600, new TeemoTargetEx2);
 
+	//**************************************
+	// ユーザーを子オブジェクトとして追加
+	//**************************************
+	AddUser(new UserAi);
 }
 
 void TeemoMission2::Delete(void)

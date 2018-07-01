@@ -26,22 +26,11 @@ using namespace std::experimental::filesystem;
 using namespace H2NLIB;
 
 
-H2NLIB::ChildMission::ChildMission()
+WindowChild::WindowChild()
 {
-	index_ = 0;
-	valid_ = false;
-}
-
-/**
- @brief ミッションを追加する関数
- @param mission 追加するミッション
- @note
-  NyaWindowの子オブジェクトとしてミッションが追加される。
-**/
-void NyaWindow::AddChild(NyaMission* mission)
-{
-	child_mission_.valid_ = true;
-	child_mission_.mission_collection_.push_back(mission);
+	mission_index_ = 0;
+	ending_ = nullptr;
+	opening_ = nullptr;
 }
 
 NyaWindow::NyaWindow(string title)
@@ -51,7 +40,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v71");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v72");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -69,28 +58,39 @@ NyaWindow::NyaWindow(string title)
 	ihandle_title->name_ = title;
 	
 	// フォント設定
+	NyaString::SettingFont("fps_font", 14, 2);
 	NyaString::SettingFont("window_title_font", 30, 4);
 	NyaString::SettingFont("debug_font", 10, 2);
 
 	// メンバ変数の初期化
 	event_ = eEVENT::TITLE;
-	ending_ = nullptr;
-	opening_ = nullptr;
+	event_next_ = eEVENT::enum_zero;
 }
 
 
 NyaWindow::~NyaWindow(void)
 {
 	// 親オブジェクトのNyaWindowを破棄するときに子オブジェクトを破棄する
-	for (auto& e : child_mission_.mission_collection_)
+	for (auto& e : child_.mission_collection_)
 		delete e;
 
 	DxLib_End();
 }
 
-void H2NLIB::NyaWindow::AddChild(NyaOpening * opening)
+/**
+@brief ミッションを追加する関数
+@param mission 追加するミッション
+@note
+ NyaWindowの子オブジェクトとしてミッションが追加される。
+**/
+void NyaWindow::Child(NyaMission* mission)
 {
-	opening_ = opening;
+	child_.mission_collection_.push_back(mission);
+}
+
+void NyaWindow::Child(NyaOpening * opening)
+{
+	child_.opening_ = opening;
 }
 
 /**
@@ -112,6 +112,7 @@ void NyaWindow::Run(void)
 		// mission all clear と add_child(mission) の関係
 		// nya interface skill の初期化(ミッション→リプレイのとき不具合)
 		// save replay or not save replay 状態遷移確認
+		// game実行時にswingが実行されることがある
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -225,21 +226,21 @@ void NyaWindow::Ending(void)
 	switch(event_)
 	{
 		case eEVENT::ENDING_LOAD:
-			if (ending_ == nullptr)
+			if (child_.ending_ == nullptr)
 				event_next_ = eEVENT::REPLAY_SAVE;
 			else
 			{
-				ending_->Load();
+				child_.ending_->Load();
 				event_next_ = eEVENT::ENDING_RUN;
 			}
 			break;
 		case eEVENT::ENDING_RUN:
-			ending_->Run();
+			child_.ending_->Run();
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
 			event_next_ = eEVENT::ENDING_DELETE;
 			break;
 		case eEVENT::ENDING_DELETE:
-			ending_->Delete();
+			child_.ending_->Delete();
 			event_next_ = eEVENT::REPLAY_SAVE;
 			break;
 	}
@@ -257,25 +258,25 @@ void NyaWindow::Mission(void)
 	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleMissionEx* ihandle_mission_ex;
 
-	if (!child_mission_.valid_)
+	if (child_.mission_collection_.size() == 0)
 	{
 		event_next_ = eEVENT::TITLE;
 		return;
 	}
 
 	// イベント毎にミッションの子オブジェクトであるuser, target, backgraoundの処理をおこなう
-	if (child_mission_.index_ < child_mission_.mission_collection_.size())
-		child_mission_.mission_collection_[child_mission_.index_]->Run(event_);
+	if (child_.mission_index_ < child_.mission_collection_.size())
+		child_.mission_collection_[child_.mission_index_]->Run(event_);
 
 	switch (event_) 
 	{	// インデックスの更新
 	case eEVENT::TITLE:
 		// 最低でも1フレームはタイトル画面にいるのでindexは必ず更新される
-		child_mission_.index_ = 0;
+		child_.mission_index_ = 0;
 		break;
 	case eEVENT::MISSION_DELETE:
 	case eEVENT::MISSION_REPLAY_DELETE:
-		child_mission_.index_++;
+		child_.mission_index_++;
 		break;
 	}
 
@@ -313,7 +314,7 @@ void NyaWindow::Mission(void)
 		}
 		break;
 	case eEVENT::MISSION_DELETE:
-		if (child_mission_.index_ < child_mission_.mission_collection_.size())
+		if (child_.mission_index_ < child_.mission_collection_.size())
 			event_next_ = eEVENT::MISSION_CREATE;
 		else
 			event_next_ = eEVENT::TITLE;
@@ -353,7 +354,7 @@ void NyaWindow::Mission(void)
 		}
 		break;
 	case eEVENT::MISSION_REPLAY_DELETE:
-		if (child_mission_.index_ < child_mission_.mission_collection_.size())
+		if (child_.mission_index_ < child_.mission_collection_.size())
 			event_next_ = eEVENT::MISSION_REPLAY_CREATE;
 		else
 			event_next_ = eEVENT::TITLE;
@@ -521,21 +522,21 @@ void NyaWindow::Opening(void)
 	switch(event_)
 	{
 		case eEVENT::OPENING_LOAD:
-			if (opening_ == nullptr)
+			if (child_.opening_ == nullptr)
 				event_next_ = eEVENT::MISSION_CREATE;
 			else
 			{
-				opening_->Load();
+				child_.opening_->Load();
 				event_next_ = eEVENT::OPENING_RUN;
 			}
 			break;
 		case eEVENT::OPENING_RUN:
-			opening_->Run();
+			child_.opening_->Run();
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
 			event_next_ = eEVENT::OPENING_DELETE;
 			break;
 		case eEVENT::OPENING_DELETE:
-			opening_->Delete();
+			child_.opening_->Delete();
 			event_next_ = eEVENT::MISSION_CREATE;
 			break;
 	}
@@ -553,7 +554,7 @@ void NyaWindow::Title(void)
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
 	static int select = 0;
-	InterfaceHandleMissionSkill* ihandle_mission_skill = NyaInterface::GetHandleMissionSkill();
+	InterfaceHandleSkill* ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	InterfaceHandleTitle* ihandle_title = NyaInterface::GetHandleTitle();
 
 	if (event_ != eEVENT::TITLE)
@@ -666,16 +667,13 @@ void NyaWindow::Title(void)
 		switch (select)
 		{	// イベントの更新
 		case 0:
-				event_next_ = eEVENT::OPENING_LOAD;
+			event_next_ = eEVENT::OPENING_LOAD;
 			break;
 		case 1:
 		case 2:
 		case 3:
 		case 4:
-			if (opening_ == nullptr)
-				event_next_ = eEVENT::MISSION_CREATE;
-			else
-				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			event_next_ = eEVENT::MISSION_REPLAY_CREATE;
 			break;
 		case 5:
 			event_next_ = eEVENT::WINDOW_CLOSE;
@@ -708,17 +706,17 @@ void NyaWindow::WaitFPS(int x, int y)
 
 
 
-#ifdef __DEBUG__
-	if (frame_ave_ != 0) 
-	{
-		NyaString::Write("design_fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
-		NyaString::Write("design_fps_font", white, x + 100, y, "loop[%d ms]", ltime_ave_);
-		NyaString::Write("design_fps_font", white, x + 180, y, "wait[%d ms]", wtime_ave_);
-	}
-#else
+//#ifdef __DEBUG__
+//	if (frame_ave_ != 0) 
+//	{
+//		NyaString::Write("fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
+//		NyaString::Write("fps_font", white, x + 100, y, "loop[%d ms]", ltime_ave_);
+//		NyaString::Write("fps_font", white, x + 180, y, "wait[%d ms]", wtime_ave_);
+//	}
+//#else
 	if (frame_ave_ != 0)
-		DebugPrint::SetData(1200, 700, "fps[%.1f]", 1000.0 / (double)frame_ave_);
-#endif
+		NyaString::Write("fps_font", white, x + 170, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
+//#endif
 
 
 	frame_count_ = ++all_frame_count_ % FPS_MAX;

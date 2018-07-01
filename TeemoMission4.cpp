@@ -13,17 +13,15 @@ TeemoMission4::~TeemoMission4()
 
 void TeemoMission4::Create(void)
 {
-	unsigned int id = 0;
-
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	AddChild(1, 3600, new TeemoTargetEx4, id++);
+	AddTarget(1, 3600, new TeemoTargetEx4);
 
 	//**************************************
 	// ユーザーを子オブジェクトとして追加
 	//**************************************
-	AddChild(new UserAi);
+	AddUser(new UserAi);
 }
 
 void TeemoMission4::Delete(void)

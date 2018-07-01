@@ -36,7 +36,6 @@ namespace H2NLIB
 			grid_x_ = -1000;
 			grid_y_ = -1000;
 		}
-		~PositionHandle(){}
 	};
 
 	class PositionMove
@@ -59,10 +58,10 @@ namespace H2NLIB
 		static void Collide(PositionHandle* handle, eOBJECT type);
 		static void CollisionPair(eOBJECT type1, eOBJECT type2);
 		static PositionHandle* CreateHandle(void);
-		static void CreateHandle(PositionHandle * new_handle);
+		static void CreateHandle(PositionHandle* new_handle);
 		static void DeleteHandle(PositionHandle* delete_handle);
-		static void FindHandle(std::string name, PositionHandle* handle);
-		static void FindHandle(std::string name, std::vector<PositionHandle*>* handle);
+		static int FindHandle(std::string name, PositionHandle* handle);
+		static int FindHandle(std::string name, std::vector<PositionHandle>* handle_collection);
 		static bool InScreen(PositionHandle* handle, int gap = 0);
 		static void MoveAngleMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);
 		static void MoveGridMode(PositionHandle* handle, double end_x, double end_y, unsigned int max_frame);

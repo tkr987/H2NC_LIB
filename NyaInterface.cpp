@@ -293,14 +293,35 @@ void NyaInterface::DrawSkill(int x, int y)
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
+	//***********************
+	// スキルの選択肢を更新
+	//***********************
+	if (NyaInput::IsPressKey(eINPUT::SPACE))
+	{
+		if      (handle_skill_.select_ == eSKILL::Q)
+			handle_skill_.select_ = eSKILL::W;
+		else if (handle_skill_.select_ == eSKILL::W)
+			handle_skill_.select_ = eSKILL::E;
+		else if (handle_skill_.select_ == eSKILL::E)
+			handle_skill_.select_ = eSKILL::R;
+		else
+			handle_skill_.select_ = eSKILL::Q;
+	}
+
+	
+	//***********************
 	// スキル選択肢の表示
+	//***********************
 	NyaString::Write("design_skill_font", red, x, y + 90 * (static_cast<int>(handle_skill_.select_) - 1), "★");
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
 		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1), "☆");
 		NyaString::Write("design_skill_font", white, x + 50, y + 90 * (skill - 1), handle_skill_.name_[skill]);
 	}
+	
+	//*********************************
 	// スキルのレベルと経験値の表示
+	//*********************************
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
 		unsigned int exp = handle_skill_.exp_[skill];

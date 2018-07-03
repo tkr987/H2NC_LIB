@@ -12,6 +12,14 @@ namespace H2NLIB
 	class SoundPropertyX;
 }
 
+class UserAiRange
+{
+public:
+	H2NLIB::GraphicPropertyX4* gpx_;
+	UserAiRange();
+	~UserAiRange();
+};
+
 class UserAiDevice
 {
 public:
@@ -43,6 +51,8 @@ public:
 struct UserAiMain
 {
 public:
+	H2NLIB::EffectPropertyX1* death_epx_;
+	H2NLIB::GraphicPropertyX4* death_gpx_;
 	H2NLIB::GraphicPropertyX4* gpx_;
 	H2NLIB::PositionHandle* phandle_;
 	UserAiMain();
@@ -60,6 +70,7 @@ private:
 	UserAiDevice device_;
 	UserAiDeviceEx device_ex_;
 	UserAiMain main_;
+	UserAiRange range_;
 	void Act(void);
 	void Act_Attack(void);
 	void Act_AttackEx(void);

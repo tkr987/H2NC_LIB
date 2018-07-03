@@ -10,6 +10,8 @@
 #include "NyaString.h"
 #include "UserAi.h"
 
+#define __DEBUG__
+
 using namespace std;
 using namespace H2NLIB;
 
@@ -115,6 +117,11 @@ UserAiDeviceEx::~UserAiDeviceEx()
 
 UserAiMain::UserAiMain()
 {
+	death_epx_ = new EffectPropertyX1;
+	death_epx_->interval_time_frame_ = 3;
+	death_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile(4, 2, "img/user/death.png", &death_gpx_->file_);
+
 	gpx_ = new GraphicPropertyX4;
 	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &gpx_->file_);
 	gpx_->extend_rate_ = 0.4;
@@ -123,7 +130,7 @@ UserAiMain::UserAiMain()
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->health_ = 1;
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 20;
+	phandle_->collision_range_ = 5;
 	phandle_->grid_x_ = 100;
 	phandle_->grid_y_ = 500;
 	phandle_->name_ = "user_main_handle";
@@ -140,6 +147,18 @@ UserAiMain::~UserAiMain()
 	delete gpx_;
 	gpx_ = nullptr;
 	NyaPosition::DeleteHandle(phandle_);
+}
+
+UserAiRange::UserAiRange()
+{
+	gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/user/range.png", &gpx_->file_);
+}
+
+UserAiRange::~UserAiRange()
+{
+	delete gpx_;
+	gpx_ = nullptr;
 }
 
 UserAi::UserAi(void)
@@ -212,23 +231,8 @@ void UserAi::Act(void)
 	Act_Attack();
 	Act_AttackEx();
 
-	//ƒXƒLƒ‹‚Ì‘I‘ðŽˆ‚ðXV
-	if (NyaInput::IsPressKey(eINPUT::SPACE))
-	{
-		if      (ihandle_mission_skill->select_ == eSKILL::Q)
-			ihandle_mission_skill->select_ = eSKILL::W;
-		else if (ihandle_mission_skill->select_ == eSKILL::W)
-			ihandle_mission_skill->select_ = eSKILL::E;
-		else if (ihandle_mission_skill->select_ == eSKILL::E)
-			ihandle_mission_skill->select_ = eSKILL::R;
-		else
-			ihandle_mission_skill->select_ = eSKILL::Q;
-	}
-
-
-
 	// Õ“Ë”»’è
-	//nya_position_->Collision(ai_ph1_, eOBJECT::USER1);		
+	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
 
 	// ‚»‚Ì‘¼
 	count_frame_++;
@@ -241,12 +245,6 @@ void UserAi::Act(void)
 
 /**
 @brief UŒ‚ˆ—ŠÖ”
-@note
- UŒ‚—Í‚ÌÝ’è
- - W true MAX power
- lv0 = 3, lv1 = 6+2, lv2 = 9+4, lv3 = 12+6, lv4 = 15+8
- - W false (bit true) MAX power
- lv0 = 3, lv1 = 7, lv2 = 11, lv3 = 15, lv4 = 19 
 **/
 void UserAi::Act_Attack(void)
 {
@@ -470,12 +468,6 @@ void UserAi::Act_Attack(void)
 
 /**
 @brief UŒ‚ˆ—ŠÖ”
-@note
- UŒ‚—Í‚ÌÝ’è
- - W true MAX power
- lv0 = 3, lv1 = 6+2, lv2 = 9+4, lv3 = 12+6, lv4 = 15+8
- - W false (bit true) MAX power
- lv0 = 3, lv1 = 7, lv2 = 11, lv3 = 15, lv4 = 19 
 **/
 void UserAi::Act_AttackEx(void)
 {
@@ -894,16 +886,18 @@ void UserAi::Draw(void)
 	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
 	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
 
-	// •`‰æƒeƒXƒg
+	//*************
+	// main•`‰æ
+	//*************
 	main_.gpx_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = (int)main_.phandle_->grid_y_;
 	if (count_frame_ % 2 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 16;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::USER1);
 
-	//******************
-	// ƒrƒbƒg‚Ì•`‰æ
-	//******************
+	//*************
+	// bit•`‰æ
+	//*************
 	if (!NyaInput::GetKeyStateNow(eINPUT::W))
 	{
 		device_.bit_gpx_->file_div_ = ++device_.bit_gpx_->file_div_ % 16;
@@ -944,5 +938,23 @@ void UserAi::Draw(void)
 			NyaGraphic::Draw(device_.bit_gpx_, eOBJECT::USER1);
 		}	
 	}
+
+	//******************
+	// Õ“ËƒGƒtƒFƒNƒg
+	//******************
+	if (main_.phandle_->collision_hit_damage_ != 0)
+	{
+		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
+		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
+		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::USER_EFFECT1);
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+	}
+
+#ifdef __DEBUG__
+	// Õ“Ë”»’è”ÍˆÍ
+	range_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+	range_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;	
+	NyaGraphic::Draw(range_.gpx_, eOBJECT::USER1);
+#endif
 
 }

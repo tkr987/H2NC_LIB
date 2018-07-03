@@ -40,7 +40,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v72");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v73");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -113,6 +113,7 @@ void NyaWindow::Run(void)
 		// nya interface skill の初期化(ミッション→リプレイのとき不具合)
 		// save replay or not save replay 状態遷移確認
 		// game実行時にswingが実行されることがある
+		// NyaDevice::Clear()時に経験値追加(NyaDeviceのリストサイズ取得関数を作る必要あり)
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく

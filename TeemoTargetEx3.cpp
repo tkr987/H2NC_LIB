@@ -479,9 +479,6 @@ void TeemoTargetEx3::Act1(void)
 
 void TeemoTargetEx3::Act2(void)
 {
-	// 行動開始1フレーム目
-	// mission ex モードをtrueにする
-	// mission warning 表示を実行する
 	// 初期位置へ移動する
 	if (count_frame_ == 1)
 		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 3);

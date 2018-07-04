@@ -317,6 +317,8 @@ TeemoTargetEx4::TeemoTargetEx4()
 	main_.phandle_->grid_x_ =  SCREEN_MAX_X / 2;
 	main_.phandle_->grid_y_ = -100;
 
+	mode_ = 1;
+
 	// フォント設定
 	NyaString::SettingFont("warning_logo_font", 64, 4);
 	NyaString::SettingFont("ex_logo_font", 100, 12);
@@ -330,57 +332,67 @@ TeemoTargetEx4::~TeemoTargetEx4()
 	NyaGraphic::DeleteGraphicFile(&main_.gpx_->file_);
 }
 
-void TeemoTargetEx4::MissionRun(void)
+void TeemoTargetEx4::Act(void)
 {
-	static int mode = 1;
-	const tuple<int, int, int> white = make_tuple(255, 255, 255);
-
-	switch (mode)
+	switch (mode_)
 	{
 	case 1:
 		Act1();
-		Draw1();
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 80)
 		{
 			count_frame_ = 0;
-			mode = 2;
+			mode_ = 2;
 			NyaGraphic::Swing();
 		}
 		break;
 	case 2:
 		Act2();
-		Draw2();
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 40)
 		{
 			count_frame_ = 0;
-			mode = 3;
+			mode_ = 3;
 			NyaGraphic::Swing();
 		}
 		break;
 	case 3:
 		Act3();
-		Draw3();
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
 		{
 			count_frame_ = 0;
-			mode = 4;
+			mode_ = 4;
 		}
+		break;
+	}
+
+	count_frame_++;
+}
+
+void TeemoTargetEx4::Draw(void)
+{
+	switch (mode_)
+	{
+	case 1:
+		Draw1();
+		break;
+	case 2:
+		Draw2();
+		break;
+	case 3:
+		Draw3();
 		break;
 	case 4:
 		Draw4();
 		break;
 	}
 
-	count_frame_++;
-
 #ifdef __DEBUG__
-		NyaString::Write("design_fps_font", white, 50, 90, "[50, 90] count_frame = %u", count_frame_);
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+	NyaString::Write("design_fps_font", white, 50, 90, "[50, 90] count_frame = %u", count_frame_);
 #endif
 }
 
 void TeemoTargetEx4::Act1(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	InterfaceHandleSkill *ihandle_mission_skill;
 
 	// 行動開始1フレーム目
@@ -388,9 +400,8 @@ void TeemoTargetEx4::Act1(void)
 	// mission warning 表示を実行する
 	if (count_frame_ == 1)
 	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->valid_ = true;
-		ihandle_mission_ex->value_ = 100;
+		NyaInterface::GetHandleHealth()->valid_ = true;
+		NyaInterface::GetHandleHealth()->value_ = 100;
 		NyaSound::Play(warning_spx_);
 	}
 
@@ -737,7 +748,6 @@ void TeemoTargetEx4::Act3(void)
 
 void TeemoTargetEx4::Draw1(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
@@ -765,20 +775,11 @@ void TeemoTargetEx4::Draw1(void)
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	}
-	else
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = 0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
 void TeemoTargetEx4::Draw2(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
@@ -802,20 +803,11 @@ void TeemoTargetEx4::Draw2(void)
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	}
-	else
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = 0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
 void TeemoTargetEx4::Draw3(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
@@ -847,21 +839,13 @@ void TeemoTargetEx4::Draw3(void)
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 	else
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = 0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = 0;
 }
 
 void TeemoTargetEx4::Draw4(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
-
 	if (count_frame_ < 30 * 7)
 	{
 		if (count_frame_ % 30 == 0)
@@ -890,14 +874,8 @@ void TeemoTargetEx4::Draw4(void)
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 	else
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = 0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = 0;
 }
 

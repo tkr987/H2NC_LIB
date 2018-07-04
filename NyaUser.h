@@ -1,22 +1,15 @@
 #pragma once
 #include "NyaEnum.h"
 
-namespace H2NLIB {
-
-	//*************************************************************************
-	// class NyaUser
-	// たいていの場合、MissionRun()は必須なので純粋仮想関数になっている。
-	// 他の仮想関数は必要に応じて定義すること。
-	//*************************************************************************
+namespace H2NLIB
+{
 	class NyaUser {
 	public:
 		NyaUser(){}
 		virtual ~NyaUser(){}
-		void Run(const eEVENT check_event);
-		/**
-		 @brief イベントMISSION_RUNでの処理を定義する関数
-		**/
-		virtual void MissionRun(void) = 0;
+		virtual void Act(void) = 0;
+		virtual void Draw(void) = 0;
+		void Run(eEVENT check_event);
 	};
 
 }

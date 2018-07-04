@@ -43,9 +43,9 @@ GraphicPropertyX4::GraphicPropertyX4()
 // class GraphicSwing
 //**********************
 
-H2NLIB::GraphicSwing::GraphicSwing()
-{
-	count_ = 0;
+GraphicSwing::GraphicSwing()
+{	// count_は8未満だと振動してしまうので8で初期化
+	count_ = 8;
 	grid_x_ = 0;
 }
 
@@ -422,7 +422,7 @@ void NyaGraphic::Run(void)
 **/
 void H2NLIB::NyaGraphic::Swing(void)
 {
-	// 振動をカウントする変数count_が8以下のとき振動するので、count_を0に初期化する
+	// 振動をカウントする変数count_が8未満のとき振動するので、count_を0に初期化する
 	// 振動のx座標も0に初期化する
 	// よって、連続で呼び出された場合は振動の値が0になり再処理される
 	swing_.count_ = 0;

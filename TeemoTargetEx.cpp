@@ -69,7 +69,6 @@ void TargetExTeemo::MissionRun(void)
 void TargetExTeemo::Act(void)
 {
 	InterfaceHandleMissionClear* ihandle_mission_clear;
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	InterfaceHandleSkill *ihandle_mission_skill;
 	InterfaceHandleWarning* ihandle_warning;
 
@@ -78,8 +77,7 @@ void TargetExTeemo::Act(void)
 	// mission warning 表示を実行する
 	if (count_frame_ == 1)
 	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->valid_ = true;
+		NyaInterface::GetHandleHealth()->valid_ = true;
 		ihandle_warning = NyaInterface::GetHandleWarning();
 		ihandle_warning->draw_valid_ = true;
 		ihandle_warning->sound_valid_ = true;
@@ -102,7 +100,6 @@ void TargetExTeemo::Act(void)
 
 void TargetExTeemo::Draw(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// 本体の描画
@@ -113,15 +110,9 @@ void TargetExTeemo::Draw(void)
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.ph_->health_) 
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.ph_->health_ / (double)main_.health_max_ * 100.0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.ph_->health_ / (double)main_.health_max_ * 100.0;
 	else
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = 0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = 0;
 
 #ifdef __DEBUG__
 	NyaString::Write("debug_font", white, 50, 90, "[50, 790] target ex health = %d", (int)main_.ph_->health_);

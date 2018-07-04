@@ -1,6 +1,10 @@
 #pragma once
+#include "NyaUser.h"
 
-#include "h2nlib.h"
+namespace H2NLIB 
+{
+	class GraphicPropertyX4;
+}
 
 class TeemoUser : public H2NLIB::NyaUser
 {
@@ -8,6 +12,7 @@ public:
 	H2NLIB::GraphicPropertyX4* gpx_;
 	TeemoUser();
 	~TeemoUser();
-	void MissionRun(void);
+	void Act(void);
+	void Draw(void);
 };
 

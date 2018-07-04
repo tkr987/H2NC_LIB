@@ -14,9 +14,8 @@ namespace H2NLIB
 	public:
 		NyaTarget(){}
 		virtual ~NyaTarget(){}
-		virtual void MissionClear(void){}
-		virtual void MissionContinue(void){}
-		virtual void MissionRun(void) = 0;
+		virtual void Act(void) = 0;
+		virtual void Draw(void) = 0;
 		void Run(eEVENT check_event);
 	};
 }

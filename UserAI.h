@@ -64,18 +64,17 @@ class UserAi : public H2NLIB::NyaUser {
 public:
 	UserAi();
 	~UserAi();
-	void MissionRun(void);
+	void Act(void);
+	void Draw(void);
 private:
 	unsigned int count_frame_;
 	UserAiDevice device_;
 	UserAiDeviceEx device_ex_;
 	UserAiMain main_;
 	UserAiRange range_;
-	void Act(void);
 	void Act_Attack(void);
 	void Act_AttackEx(void);
 	void Act_Move(void);
 	void Act_Ult(void);
-	void Draw(void);
 };
 

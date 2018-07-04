@@ -17,14 +17,10 @@ using namespace H2NLIB;
 TeemoExDevice311::TeemoExDevice311()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
-	dpx_->move_speed_ = 8;
-	way1_angle_ = 0;
-	way2_angle_ = 180;
-	way3_angle_ = 0;
-	way4_angle_ = 180;
+	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE3;
+	dpx_->move_speed_ = 2;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_blue2.png", &gadget_gpx_->file_);
+	NyaGraphic::LoadGraphicFile("img/target/attack_blue3.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -49,7 +45,7 @@ TeemoExDevice312::TeemoExDevice312()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
-	dpx_->move_speed_ = 3;
+	dpx_->move_speed_ = 11;
 	gadget_gpx_ = new GraphicPropertyX4;
 	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
@@ -74,13 +70,14 @@ TeemoExDevice312::~TeemoExDevice312()
 
 TeemoExCube31::TeemoExCube31()
 {
+	device_gap_angle_ = 40;
 	death_epx_ = new EffectPropertyX1;
 	death_epx_->interval_time_frame_ = 3;
 	death_gpx_ = new GraphicPropertyX4;
 	death_gpx_->extend_rate_ = 0.5;
 	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death_gpx_->file_);
 	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = 0.4;
+	gpx_->extend_rate_ = 0.01;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
@@ -192,10 +189,14 @@ TeemoExCube32::~TeemoExCube32()
 TeemoExDevice331::TeemoExDevice331()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE3;
-	dpx_->move_speed_ = 2;
+	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
+	dpx_->move_speed_ = 8;
+	way1_angle_ = 0;
+	way2_angle_ = 180;
+	way3_angle_ = 0;
+	way4_angle_ = 180;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_blue3.png", &gadget_gpx_->file_);
+	NyaGraphic::LoadGraphicFile("img/target/attack_blue2.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -220,7 +221,7 @@ TeemoExDevice332::TeemoExDevice332()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
-	dpx_->move_speed_ = 11;
+	dpx_->move_speed_ = 3;
 	gadget_gpx_ = new GraphicPropertyX4;
 	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
@@ -245,14 +246,13 @@ TeemoExDevice332::~TeemoExDevice332()
 
 TeemoExCube33::TeemoExCube33()
 {
-	device_gap_angle_ = 40;
 	death_epx_ = new EffectPropertyX1;
 	death_epx_->interval_time_frame_ = 3;
 	death_gpx_ = new GraphicPropertyX4;
 	death_gpx_->extend_rate_ = 0.5;
 	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death_gpx_->file_);
 	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = 0.01;
+	gpx_->extend_rate_ = 0.4;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
@@ -275,7 +275,7 @@ TeemoExCube33::~TeemoExCube33()
 // TeemoEx3Main
 //*****************
 
-TeemoEx3Main::TeemoEx3Main() : /*health_max_(15000)*/ health_max_(1000)
+TeemoEx3Main::TeemoEx3Main() : health_max_(26000)
 {
 	gpx_ = new GraphicPropertyX4;
 	NyaGraphic::LoadGraphicFile("img/target/teemo_ex3.png", &gpx_->file_);
@@ -302,9 +302,12 @@ TeemoEx3Main::~TeemoEx3Main()
 
 TeemoTargetEx3::TeemoTargetEx3()
 {
-	NyaInterface::GetHandleWarning()->LoadSound("sound/warning.wav", 20);
+	// メンバ変数初期化
 	count_frame_ = 0;
+	mode_ = 1;
 
+	// interface 初期化
+	NyaInterface::GetHandleWarning()->LoadSound("sound/warning.wav", 20);
 }
 
 
@@ -317,46 +320,42 @@ TeemoTargetEx3::~TeemoTargetEx3()
 // TeemoTargetEx メンバ関数
 //***************************
 
-void TeemoTargetEx3::MissionRun(void)
+void TeemoTargetEx3::Act(void)
 {
-	static int mode = 1;
-
-	switch (mode)
+	switch (mode_)
 	{
 	case 1:
 		Act1();
-		Draw1();
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 70)
 		{
 			count_frame_ = 0;
-			mode = 2;
+			mode_ = 2;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
 			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 			NyaGraphic::Swing();
 		}
 		break;
 	case 2:
 		Act2();
-		Draw2();
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 30)
 		{
 			count_frame_ = 0;
-			mode = 3;
+			mode_ = 3;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
 			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 			NyaGraphic::Swing();
 		}
 		break;
 	case 3:
 		Act3();
-		Draw3();
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
 		{
 			count_frame_ = 0;
-			mode = 4;
+			mode_ = 4;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
 			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 			NyaGraphic::Swing();
 		}
-		break;
-	case 4:
 		break;
 	}
 
@@ -367,11 +366,27 @@ void TeemoTargetEx3::MissionRun(void)
 #endif
 }
 
+void TeemoTargetEx3::Draw(void)
+{
+	switch (mode_)
+	{
+	case 1:
+		Draw1();
+		break;
+	case 2:
+		Draw2();
+		break;
+	case 3:
+		Draw3();
+		break;
+	}
+}
+
 void TeemoTargetEx3::Act1(void)
 {
 	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleSkill *ihandle_mission_skill;
-
+	PositionHandle phandle_user;
 
 	// 行動開始1フレーム目
 	// mission ex モードをtrueにする
@@ -379,100 +394,95 @@ void TeemoTargetEx3::Act1(void)
 	// 初期位置へ移動する
 	if (count_frame_ == 1)
 	{
-		NyaInterface::GetHandleMissionEx()->valid_ = true;
+		NyaInterface::GetHandleHealth()->valid_ = true;
 		NyaInterface::GetHandleWarning()->draw_valid_ = true;
 		NyaInterface::GetHandleWarning()->sound_valid_ = true;
 		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 3);
 	}
 
+	if (count_frame_ == FPS_MAX * 3)
+	{	// 初期位置へ移動させる
+		cube31_collection_[0].phandle_->grid_x_ = 50;
+		cube31_collection_[0].phandle_->grid_y_ = 50;
+		cube31_collection_[1].phandle_->grid_x_ = SCREEN_MAX_X - 50;
+		cube31_collection_[1].phandle_->grid_y_ = 50;
+		cube31_collection_[2].phandle_->grid_x_ = SCREEN_MAX_X - 50;
+		cube31_collection_[2].phandle_->grid_y_ = SCREEN_MAX_Y - 60;
+		cube31_collection_[3].phandle_->grid_x_ = 50;
+		cube31_collection_[3].phandle_->grid_y_ = SCREEN_MAX_Y - 60;
+	}
+
 	// 衝突判定　衝突ダメージだけ経験値を追加
-	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
-	ihandle_mission_skill->AddExp(main_.phandle_->collision_hit_damage_);
+	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	for (auto& e : cube31_collection_)
 	{
 		NyaPosition::Collide(e.phandle_, eOBJECT::TARGET1);
-		ihandle_mission_skill->AddExp(e.phandle_->collision_hit_damage_);
+		NyaInterface::GetHandleSkill()->AddExp(e.phandle_->collision_hit_damage_);
 		main_.phandle_->health_ -= e.phandle_->collision_hit_damage_;
 	}
 
-	if (count_frame_ == FPS_MAX * 3)
-	{
-		for (int cube_index = 0; cube_index < 4; cube_index++)
-		{
-			cube31_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_;
-			cube31_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_;
-		}
-		NyaPosition::MoveGridMode(cube31_collection_[0].phandle_, main_.phandle_->grid_x_ - 300, 90, FPS_MAX * 2);
-		NyaPosition::MoveGridMode(cube31_collection_[1].phandle_, main_.phandle_->grid_x_ - 150, 90, FPS_MAX * 2);
-		NyaPosition::MoveGridMode(cube31_collection_[2].phandle_, main_.phandle_->grid_x_ + 150, 90, FPS_MAX * 2);
-		NyaPosition::MoveGridMode(cube31_collection_[3].phandle_, main_.phandle_->grid_x_ + 300, 90, FPS_MAX * 2);
-	}
-
-	if (count_frame_ < FPS_MAX * 5)
+	if (count_frame_ < FPS_MAX * 4)
 		return;
 
-	if (count_frame_ % 20 == 0)
+	if (count_frame_ % (FPS_MAX * 3) == FPS_MAX)
+	{	// main移動処理
+		int move_end_x = (int)main_.phandle_->grid_x_ + NyaInput::GetRand(-50, 50);
+		if (250 <= move_end_x  && move_end_x < SCREEN_MAX_X - 250)
+			NyaPosition::MoveGridMode(main_.phandle_, move_end_x, main_.phandle_->grid_y_, FPS_MAX);
+	}
+
+
+	if (count_frame_ % 30 == 0)
 	{	// main攻撃処理
 		main_.device311_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device311_.dpx_->create_y_ = main_.phandle_->grid_y_;
-		main_.device311_.dpx_->move_angle_deg_ = main_.device311_.way1_angle_;
-		main_.device311_.way1_angle_ += 10;
-		for (int delay = 0; delay < 8; delay++)
+		for (int way = 0; way < 20; way++)
 		{
-			main_.device311_.dpx_->delay_time_frame_ = delay * 2;
+			main_.device311_.dpx_->move_angle_deg_ += 4;
 			NyaDevice::Attack1414(main_.device311_.dpx_, main_.device311_.gadget_gpx_, main_.device311_.epx_, main_.device311_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
-		main_.device311_.dpx_->move_angle_deg_ = main_.device311_.way2_angle_;
-		main_.device311_.way2_angle_ += 10;
-		for (int delay = 0; delay < 8; delay++)
+		main_.device311_.dpx_->move_angle_deg_ += (180 - 80);
+		for (int way = 0; way < 20; way++)
 		{
-			main_.device311_.dpx_->delay_time_frame_ = delay * 2;
+			main_.device311_.dpx_->move_angle_deg_ += 4;
 			NyaDevice::Attack1414(main_.device311_.dpx_, main_.device311_.gadget_gpx_, main_.device311_.epx_, main_.device311_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
-		main_.device311_.dpx_->move_angle_deg_ = main_.device311_.way3_angle_;
-		main_.device311_.way3_angle_ -= 10;
-		for (int delay = 0; delay < 8; delay++)
-		{
-			main_.device311_.dpx_->delay_time_frame_ = delay * 2;
-			NyaDevice::Attack1414(main_.device311_.dpx_, main_.device311_.gadget_gpx_, main_.device311_.epx_, main_.device311_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-		}
-		main_.device311_.dpx_->move_angle_deg_ = main_.device311_.way4_angle_;
-		main_.device311_.way4_angle_ -= 10;
-		for (int delay = 0; delay < 8; delay++)
-		{
-			main_.device311_.dpx_->delay_time_frame_ = delay * 2;
-			NyaDevice::Attack1414(main_.device311_.dpx_, main_.device311_.gadget_gpx_, main_.device311_.epx_, main_.device311_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-		}
+		main_.device311_.dpx_->move_angle_deg_ += (180 - 80 - 30);
 	}
 
-	if (count_frame_ % 15 == 0)
+	if (count_frame_ % 4 == 0 && count_frame_ % (FPS_MAX * 8) < FPS_MAX * 3)
 	{	// cube攻撃処理
-		DevicePropertyX1* cube_dpx;
-		GraphicPropertyX4* cube_gadget_gpx;
-		EffectPropertyX1* cube_epx;
-		GraphicPropertyX4* cube_effect_gpx;
-		PositionHandle phandle_user;
-		NyaPosition::FindHandle("user_main_handle", &phandle_user);
-		for (int i = 0; i < 4; i++)
+		for (int cube_index = 0; cube_index < 4; cube_index++)
 		{
-			cube_dpx = cube31_collection_[i].device312_.dpx_;
-			cube_gadget_gpx = cube31_collection_[i].device312_.gadget_gpx_;
-			cube_epx = cube31_collection_[i].device312_.epx_;
-			cube_effect_gpx = cube31_collection_[i].device312_.effect_gpx_;
-			cube_dpx->create_x_ = cube31_collection_[i].phandle_->grid_x_;
-			cube_dpx->create_y_ = cube31_collection_[i].phandle_->grid_y_;
-			cube_dpx->move_angle_deg_ = NyaPosition::Angle(cube31_collection_[i].phandle_, &phandle_user);
-			cube_dpx->move_angle_deg_ += (NyaInput::GetRand(-25, 25) - 2);
-			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			cube_dpx->move_angle_deg_++;
-			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			cube_dpx->move_angle_deg_++;
-			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			cube_dpx->move_angle_deg_++;
-			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			cube_dpx->move_angle_deg_++;
-			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaPosition::FindHandle("user_main_handle", &phandle_user);
+			cube31_collection_[cube_index].device312_.dpx_->create_x_ = cube31_collection_[cube_index].phandle_->grid_x_;
+			cube31_collection_[cube_index].device312_.dpx_->create_y_ = cube31_collection_[cube_index].phandle_->grid_y_;
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube31_collection_[cube_index].phandle_, &phandle_user);
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ += cube31_collection_[cube_index].device_gap_angle_;
+			NyaDevice::Attack1414(cube31_collection_[cube_index].device312_.dpx_, cube31_collection_[cube_index].device312_.gadget_gpx_, cube31_collection_[cube_index].device312_.epx_, cube31_collection_[cube_index].device312_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube31_collection_[cube_index].phandle_, &phandle_user);
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ -= cube31_collection_[cube_index].device_gap_angle_;
+			NyaDevice::Attack1414(cube31_collection_[cube_index].device312_.dpx_, cube31_collection_[cube_index].device312_.gadget_gpx_, cube31_collection_[cube_index].device312_.epx_, cube31_collection_[cube_index].device312_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
+			if (6 < cube31_collection_[cube_index].device_gap_angle_)
+				cube31_collection_[cube_index].device_gap_angle_--;
+		}
+	}
+	else if (count_frame_ % 4 == 0 && FPS_MAX * 3 <= count_frame_ % (FPS_MAX * 8))
+	{	// cube攻撃処理
+		for (int cube_index = 0; cube_index < 4; cube_index++)
+		{
+			NyaPosition::FindHandle("user_main_handle", &phandle_user);
+			cube31_collection_[cube_index].device312_.dpx_->create_x_ = cube31_collection_[cube_index].phandle_->grid_x_;
+			cube31_collection_[cube_index].device312_.dpx_->create_y_ = cube31_collection_[cube_index].phandle_->grid_y_;
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube31_collection_[cube_index].phandle_, &phandle_user);
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ += cube31_collection_[cube_index].device_gap_angle_;
+			NyaDevice::Attack1414(cube31_collection_[cube_index].device312_.dpx_, cube31_collection_[cube_index].device312_.gadget_gpx_, cube31_collection_[cube_index].device312_.epx_, cube31_collection_[cube_index].device312_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube31_collection_[cube_index].phandle_, &phandle_user);
+			cube31_collection_[cube_index].device312_.dpx_->move_angle_deg_ -= cube31_collection_[cube_index].device_gap_angle_;
+			NyaDevice::Attack1414(cube31_collection_[cube_index].device312_.dpx_, cube31_collection_[cube_index].device312_.gadget_gpx_, cube31_collection_[cube_index].device312_.epx_, cube31_collection_[cube_index].device312_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
+			if (cube31_collection_[cube_index].device_gap_angle_ < 40)
+				cube31_collection_[cube_index].device_gap_angle_ ++;
 		}
 	}
 }
@@ -493,9 +503,6 @@ void TeemoTargetEx3::Act2(void)
 		}
 	}
 
-	if (count_frame_ < FPS_MAX * 5)
-		return;
-
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
@@ -505,6 +512,9 @@ void TeemoTargetEx3::Act2(void)
 		NyaInterface::GetHandleSkill()->AddExp(e.phandle_->collision_hit_damage_);
 		main_.phandle_->health_ -= e.phandle_->collision_hit_damage_;
 	}
+
+	if (count_frame_ < FPS_MAX * 5)
+		return;
 
 	if (count_frame_ % 4 == 0 && FPS_MAX * 5 < count_frame_ % (FPS_MAX * 15))
 	{	// cube攻撃処理
@@ -563,20 +573,10 @@ void TeemoTargetEx3::Act2(void)
 
 void TeemoTargetEx3::Act3(void)
 {
-	PositionHandle phandle_user;
-
+	// 行動開始1フレーム目
+	// 初期位置へ移動する
 	if (count_frame_ == 1)
-	{	// 初期位置へ移動させる
-		cube33_collection_[0].phandle_->grid_x_ = 50;
-		cube33_collection_[0].phandle_->grid_y_ = 50;
-		cube33_collection_[1].phandle_->grid_x_ = SCREEN_MAX_X - 50;
-		cube33_collection_[1].phandle_->grid_y_ = 50;
-		cube33_collection_[2].phandle_->grid_x_ = SCREEN_MAX_X - 50;
-		cube33_collection_[2].phandle_->grid_y_ = SCREEN_MAX_Y - 60;
-		cube33_collection_[3].phandle_->grid_x_ = 50;
-		cube33_collection_[3].phandle_->grid_y_ = SCREEN_MAX_Y - 60;
 		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 3);
-	}
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
@@ -588,59 +588,83 @@ void TeemoTargetEx3::Act3(void)
 		main_.phandle_->health_ -= e.phandle_->collision_hit_damage_;
 	}
 
-	if (count_frame_ < FPS_MAX * 4)
+	if (count_frame_ == FPS_MAX * 3)
+	{
+		for (int cube_index = 0; cube_index < 4; cube_index++)
+		{
+			cube33_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_;
+			cube33_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_;
+		}
+		NyaPosition::MoveGridMode(cube33_collection_[0].phandle_, main_.phandle_->grid_x_ - 300, 90, FPS_MAX * 2);
+		NyaPosition::MoveGridMode(cube33_collection_[1].phandle_, main_.phandle_->grid_x_ - 150, 90, FPS_MAX * 2);
+		NyaPosition::MoveGridMode(cube33_collection_[2].phandle_, main_.phandle_->grid_x_ + 150, 90, FPS_MAX * 2);
+		NyaPosition::MoveGridMode(cube33_collection_[3].phandle_, main_.phandle_->grid_x_ + 300, 90, FPS_MAX * 2);
+	}
+
+	if (count_frame_ < FPS_MAX * 5)
 		return;
 
-	if (count_frame_ % 30 == 0)
+	if (count_frame_ % 20 == 0)
 	{	// main攻撃処理
 		main_.device331_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device331_.dpx_->create_y_ = main_.phandle_->grid_y_;
-		for (int way = 0; way < 20; way++)
+		main_.device331_.dpx_->move_angle_deg_ = main_.device331_.way1_angle_;
+		main_.device331_.way1_angle_ += 10;
+		for (int delay = 0; delay < 8; delay++)
 		{
-			main_.device331_.dpx_->move_angle_deg_ += 4;
+			main_.device331_.dpx_->delay_time_frame_ = delay * 2;
 			NyaDevice::Attack1414(main_.device331_.dpx_, main_.device331_.gadget_gpx_, main_.device331_.epx_, main_.device331_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
-		main_.device331_.dpx_->move_angle_deg_ += (180 - 80);
-		for (int way = 0; way < 20; way++)
+		main_.device331_.dpx_->move_angle_deg_ = main_.device331_.way2_angle_;
+		main_.device331_.way2_angle_ += 10;
+		for (int delay = 0; delay < 8; delay++)
 		{
-			main_.device331_.dpx_->move_angle_deg_ += 4;
+			main_.device331_.dpx_->delay_time_frame_ = delay * 2;
 			NyaDevice::Attack1414(main_.device331_.dpx_, main_.device331_.gadget_gpx_, main_.device331_.epx_, main_.device331_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
-		main_.device331_.dpx_->move_angle_deg_ += (180 - 80 - 30);
+		main_.device331_.dpx_->move_angle_deg_ = main_.device331_.way3_angle_;
+		main_.device331_.way3_angle_ -= 10;
+		for (int delay = 0; delay < 8; delay++)
+		{
+			main_.device331_.dpx_->delay_time_frame_ = delay * 2;
+			NyaDevice::Attack1414(main_.device331_.dpx_, main_.device331_.gadget_gpx_, main_.device331_.epx_, main_.device331_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		}
+		main_.device331_.dpx_->move_angle_deg_ = main_.device331_.way4_angle_;
+		main_.device331_.way4_angle_ -= 10;
+		for (int delay = 0; delay < 8; delay++)
+		{
+			main_.device331_.dpx_->delay_time_frame_ = delay * 2;
+			NyaDevice::Attack1414(main_.device331_.dpx_, main_.device331_.gadget_gpx_, main_.device331_.epx_, main_.device331_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		}
 	}
 
-	if (count_frame_ % 4 == 0 && count_frame_ % (FPS_MAX * 8) < FPS_MAX * 3)
+	if (count_frame_ % 15 == 0)
 	{	// cube攻撃処理
-		for (int cube_index = 0; cube_index < 4; cube_index++)
+		DevicePropertyX1* cube_dpx;
+		GraphicPropertyX4* cube_gadget_gpx;
+		EffectPropertyX1* cube_epx;
+		GraphicPropertyX4* cube_effect_gpx;
+		PositionHandle phandle_user;
+		NyaPosition::FindHandle("user_main_handle", &phandle_user);
+		for (int i = 0; i < 4; i++)
 		{
-			NyaPosition::FindHandle("user_main_handle", &phandle_user);
-			cube33_collection_[cube_index].device332_.dpx_->create_x_ = cube33_collection_[cube_index].phandle_->grid_x_;
-			cube33_collection_[cube_index].device332_.dpx_->create_y_ = cube33_collection_[cube_index].phandle_->grid_y_;
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube33_collection_[cube_index].phandle_, &phandle_user);
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ += cube33_collection_[cube_index].device_gap_angle_;
-			NyaDevice::Attack1414(cube33_collection_[cube_index].device332_.dpx_, cube33_collection_[cube_index].device332_.gadget_gpx_, cube33_collection_[cube_index].device332_.epx_, cube33_collection_[cube_index].device332_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube33_collection_[cube_index].phandle_, &phandle_user);
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ -= cube33_collection_[cube_index].device_gap_angle_;
-			NyaDevice::Attack1414(cube33_collection_[cube_index].device332_.dpx_, cube33_collection_[cube_index].device332_.gadget_gpx_, cube33_collection_[cube_index].device332_.epx_, cube33_collection_[cube_index].device332_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-			if (6 < cube33_collection_[cube_index].device_gap_angle_)
-				cube33_collection_[cube_index].device_gap_angle_--;
-		}
-	}
-	else if (count_frame_ % 4 == 0 && FPS_MAX * 3 <= count_frame_ % (FPS_MAX * 8))
-	{	// cube攻撃処理
-		for (int cube_index = 0; cube_index < 4; cube_index++)
-		{
-			NyaPosition::FindHandle("user_main_handle", &phandle_user);
-			cube33_collection_[cube_index].device332_.dpx_->create_x_ = cube33_collection_[cube_index].phandle_->grid_x_;
-			cube33_collection_[cube_index].device332_.dpx_->create_y_ = cube33_collection_[cube_index].phandle_->grid_y_;
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube33_collection_[cube_index].phandle_, &phandle_user);
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ += cube33_collection_[cube_index].device_gap_angle_;
-			NyaDevice::Attack1414(cube33_collection_[cube_index].device332_.dpx_, cube33_collection_[cube_index].device332_.gadget_gpx_, cube33_collection_[cube_index].device332_.epx_, cube33_collection_[cube_index].device332_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube33_collection_[cube_index].phandle_, &phandle_user);
-			cube33_collection_[cube_index].device332_.dpx_->move_angle_deg_ -= cube33_collection_[cube_index].device_gap_angle_;
-			NyaDevice::Attack1414(cube33_collection_[cube_index].device332_.dpx_, cube33_collection_[cube_index].device332_.gadget_gpx_, cube33_collection_[cube_index].device332_.epx_, cube33_collection_[cube_index].device332_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-			if (cube33_collection_[cube_index].device_gap_angle_ < 40)
-				cube33_collection_[cube_index].device_gap_angle_ ++;
+			cube_dpx = cube33_collection_[i].device332_.dpx_;
+			cube_gadget_gpx = cube33_collection_[i].device332_.gadget_gpx_;
+			cube_epx = cube33_collection_[i].device332_.epx_;
+			cube_effect_gpx = cube33_collection_[i].device332_.effect_gpx_;
+			cube_dpx->create_x_ = cube33_collection_[i].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube33_collection_[i].phandle_->grid_y_;
+			cube_dpx->move_angle_deg_ = NyaPosition::Angle(cube33_collection_[i].phandle_, &phandle_user);
+			cube_dpx->move_angle_deg_ += (NyaInput::GetRand(-25, 25) - 2);
+			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			cube_dpx->move_angle_deg_++;
+			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			cube_dpx->move_angle_deg_++;
+			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			cube_dpx->move_angle_deg_++;
+			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			cube_dpx->move_angle_deg_++;
+			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 	}
 }
@@ -652,16 +676,15 @@ void TeemoTargetEx3::Draw1(void)
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
-
 	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleMissionEx()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	else
-		NyaInterface::GetHandleMissionEx()->value_ = 0;
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 
-	if (count_frame_ < FPS_MAX * 3)
-		return;
+	for (int i = 0; i < 4; i++)
+	{	// cube拡大
+		if (cube31_collection_[i].gpx_->extend_rate_ < 0.4)
+			cube31_collection_[i].gpx_->extend_rate_ += 0.01;
+	}
 
 	for (auto& e : cube31_collection_)
 	{	// cube描画
@@ -672,10 +695,9 @@ void TeemoTargetEx3::Draw1(void)
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
 
-	
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 60)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 70)
 	{	// cube爆発
-		for (auto& e : cube31_collection_)
+		for (auto& e : cube32_collection_)
 		{
 			e.death_epx_->grid_x_ = e.phandle_->grid_x_;
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
@@ -692,11 +714,8 @@ void TeemoTargetEx3::Draw2(void)
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
 	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleMissionEx()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	else
-		NyaInterface::GetHandleMissionEx()->value_ = 0;
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 
 	if (count_frame_ < FPS_MAX * 3)
 		return;
@@ -711,6 +730,16 @@ void TeemoTargetEx3::Draw2(void)
 		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
+
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 30)
+	{	// cube爆発
+		for (auto& e : cube32_collection_)
+		{
+			e.death_epx_->grid_x_ = e.phandle_->grid_x_;
+			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
+			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
+		}
+	}
 }
 
 void TeemoTargetEx3::Draw3(void)
@@ -720,18 +749,16 @@ void TeemoTargetEx3::Draw3(void)
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
+
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleMissionEx()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 	else
-		NyaInterface::GetHandleMissionEx()->value_ = 0;
+		NyaInterface::GetHandleHealth()->value_ = 0;
 
-	for (int i = 0; i < 4; i++)
-	{	// cube拡大
-		if (cube33_collection_[i].gpx_->extend_rate_ < 0.4)
-			cube33_collection_[i].gpx_->extend_rate_ += 0.01;
-	}
+	if (count_frame_ < FPS_MAX * 3)
+		return;
 
 	for (auto& e : cube33_collection_)
 	{	// cube描画
@@ -741,5 +768,15 @@ void TeemoTargetEx3::Draw3(void)
 		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
-}
 
+	
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
+	{	// cube爆発
+		for (auto& e : cube33_collection_)
+		{
+			e.death_epx_->grid_x_ = e.phandle_->grid_x_;
+			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
+			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
+		}
+	}
+}

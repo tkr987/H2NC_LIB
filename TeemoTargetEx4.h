@@ -157,20 +157,22 @@ class TeemoTargetEx4 : public H2NLIB::NyaTarget
 public:
 	TeemoTargetEx4();
 	~TeemoTargetEx4();
-	void MissionRun(void);
+	void Act(void);
+	void Draw(void);
 private:
 	unsigned int count_frame_;
 	TeemoExBullet41 bullet1_;
-	TeemoEx4Main main_;
 	std::array<TeemoEx4Cube1, 8> cube1_collection_;
 	std::array<TeemoExCube42, 6> cube2_collection_;
 	std::array<TeemoExCube43, 4> cube3_collection_;
+	TeemoEx4Main main_;
+	int mode_;
 	H2NLIB::SoundPropertyX* warning_spx_;
 	void Act1(void);
-	void Draw1(void);
 	void Act2(void);
-	void Draw2(void);
 	void Act3(void);
+	void Draw1(void);
+	void Draw2(void);
 	void Draw3(void);
 	void Draw4(void);
 	static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }

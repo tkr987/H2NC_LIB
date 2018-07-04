@@ -14,11 +14,11 @@ using namespace H2NLIB;
 
 InterfaceHandleMissionAllOver NyaInterface::handle_mission_all_over_;
 InterfaceHandleMissionClear NyaInterface::handle_mission_clear_;
-InterfaceHandleMissionEx NyaInterface::handle_mission_ex_;
-InterfaceHandleSkill NyaInterface::handle_skill_;
+InterfaceHandleHealth NyaInterface::handle_health_;
 InterfaceHandleLife NyaInterface::handle_life_;
-InterfaceHandleWarning NyaInterface::handle_warning_;
+InterfaceHandleSkill NyaInterface::handle_skill_;
 InterfaceHandleTitle NyaInterface::handle_title_;
+InterfaceHandleWarning NyaInterface::handle_warning_;
 
 void H2NLIB::InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
 {
@@ -101,7 +101,7 @@ InterfaceHandleWarning::~InterfaceHandleWarning()
 }
 
 
-InterfaceHandleMissionEx::InterfaceHandleMissionEx()
+InterfaceHandleHealth::InterfaceHandleHealth()
 {
 	valid_ = false;
 	value_ = 100;
@@ -144,8 +144,8 @@ void NyaInterface::Run(void)
 	DrawSkill(875, 135);
 	DrawLIB(910, 520);
 	DrawInput(875, 640);
-	DrawMissionEx();
-	DrawMissionWarning();
+	DrawHealth();
+	DrawWarning();
 	DrawMissionClear();
 	DrawMissionAllOver();
 }
@@ -243,17 +243,17 @@ void NyaInterface::DrawMissionClear()
 	NyaString::Write("design_mission_clear_small_font", font_color, draw_grid_x + 80, draw_grid_y + 90, "PRESS ENTER KEY");
 }
 
-void NyaInterface::DrawMissionEx(void)
+void NyaInterface::DrawHealth(void)
 {
 	const double ex_max_size_x = 840.0;
 	const int black = GetColor(0, 0, 0);
 	const int red = GetColor(255, 0, 0);
 
-	if (!handle_mission_ex_.valid_)
+	if (!handle_health_.valid_)
 		return;
 
 	DrawBox(0, 0, 850, 20, black, true);
-	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_mission_ex_.value_ / 100.0), 15, red, true);
+	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_health_.value_ / 100.0), 15, red, true);
 }
 
 /**
@@ -377,7 +377,7 @@ void NyaInterface::DrawSkill(int x, int y)
 	}
 }
 
-void NyaInterface::DrawMissionWarning(void)
+void NyaInterface::DrawWarning(void)
 {
 	int draw_grid_x, draw_grid_y;
 	const int black = GetColor(0, 0, 0);

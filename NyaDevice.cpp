@@ -584,6 +584,20 @@ void NyaDevice::Run(void)
 #endif
 }
 
+size_t NyaDevice::Size(eOBJECT type)
+{
+	size_t attack_size = 0;
+
+	attack_size += gadget14_attack_list_[static_cast<int>(type)].size();
+	attack_size += gadget24_attack_list_[static_cast<int>(type)].size();
+	attack_size += gadget34_attack_list_[static_cast<int>(type)].size();
+	attack_size += gadget1414_attack_list_[static_cast<int>(type)].size();
+	attack_size += gadget2414_attack_list_[static_cast<int>(type)].size();
+	attack_size += gadget3414_attack_list_[static_cast<int>(type)].size();
+
+	return attack_size;
+}
+
 
 void NyaDevice::CalculateGadget(eOBJECT type)
 {

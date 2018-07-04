@@ -18,10 +18,6 @@ namespace H2NLIB
 class TeemoExDevice311
 {
 public:
-	double way1_angle_;
-	double way2_angle_;
-	double way3_angle_;
-	double way4_angle_;
 	H2NLIB::DevicePropertyX1* dpx_;
 	H2NLIB::GraphicPropertyX4* gadget_gpx_;
 	H2NLIB::EffectPropertyX1* epx_;
@@ -41,11 +37,11 @@ public:
 	~TeemoExDevice312();
 };
 
-
 class TeemoExCube31
 {
 public:
 	TeemoExDevice312 device312_;
+	int device_gap_angle_;
 	H2NLIB::EffectPropertyX1* death_epx_;
 	H2NLIB::GraphicPropertyX4* death_gpx_;
 	H2NLIB::GraphicPropertyX4* gpx_;
@@ -53,7 +49,6 @@ public:
 	TeemoExCube31();
 	~TeemoExCube31();
 };
-
 
 //*************************************
 // Act2(), Draw2() で使うクラス
@@ -92,12 +87,17 @@ public:
 	~TeemoExCube32();
 };
 
+
 //*************************************
 // Act3(), Draw3() で使うクラス
 //*************************************
 class TeemoExDevice331
 {
 public:
+	double way1_angle_;
+	double way2_angle_;
+	double way3_angle_;
+	double way4_angle_;
 	H2NLIB::DevicePropertyX1* dpx_;
 	H2NLIB::GraphicPropertyX4* gadget_gpx_;
 	H2NLIB::EffectPropertyX1* epx_;
@@ -117,11 +117,11 @@ public:
 	~TeemoExDevice332();
 };
 
+
 class TeemoExCube33
 {
 public:
 	TeemoExDevice332 device332_;
-	int device_gap_angle_;
 	H2NLIB::EffectPropertyX1* death_epx_;
 	H2NLIB::GraphicPropertyX4* death_gpx_;
 	H2NLIB::GraphicPropertyX4* gpx_;
@@ -150,13 +150,15 @@ class TeemoTargetEx3 : public H2NLIB::NyaTarget
 public:
 	TeemoTargetEx3();
 	~TeemoTargetEx3();
-	void MissionRun(void);
+	void Act(void);
+	void Draw(void);
 private:
 	int count_frame_;
 	std::array<TeemoExCube31, 4> cube31_collection_;
 	std::array<TeemoExCube32, 6> cube32_collection_;
 	std::array<TeemoExCube33, 4> cube33_collection_;
 	TeemoEx3Main main_;
+	int mode_;
 	void Act1(void);
 	void Act2(void);
 	void Act3(void);

@@ -212,18 +212,9 @@ UserAi::~UserAi()
 	NyaGraphic::DeleteGraphicFile(&main_.gpx_->file_);
 }
 
-void UserAi::MissionRun(void)
-{
-	Act();
-	Draw();
-}
-
 void UserAi::Act(void)
 {
-	InterfaceHandleSkill *ihandle_mission_skill = NyaInterface::GetHandleSkill();
-	const tuple<int, int, int> white = make_tuple(255, 255, 255);
-
-	// 移動テスト
+	// 移動処理
 	Act_Move();
 
 	// 攻撃処理
@@ -233,14 +224,18 @@ void UserAi::Act(void)
 
 	// 衝突判定
 	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
+	if (main_.phandle_->collision_hit_damage_ != 0)
+	{
+		unsigned int size = 0;
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK1);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK2);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK3);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK4);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK5);
+		NyaInterface::GetHandleSkill()->AddExp(size);
+	}
 
-	// その他
 	count_frame_++;
-
-	// デバッグ
-	NyaString::Write("teemo_font", white, 50, 70, "[50, 70] teemo count = %d", (int)count_frame_);
-	NyaString::Write("teemo_font", white, 50, 110, "[50, 110] teemo x = %d", (int)main_.phandle_->grid_x_);
-	NyaString::Write("teemo_font", white, 50, 130, "[50, 130] teemo y = %d", (int)main_.phandle_->grid_y_);
 }
 
 /**
@@ -856,7 +851,14 @@ void UserAi::Act_Ult(void)
 
 	if (NyaInput::IsPressKey(eINPUT::R) && lv1_exp_r <= exp_r && !device_ex_.valid_)
 	{
+		unsigned int size = 0;
 		device_ex_.valid_ = true;
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK1);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK2);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK3);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK4);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK5);
+		NyaInterface::GetHandleSkill()->AddExp(size);
 		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 		NyaDevice::Clear(eOBJECT::TARGET_ATTACK2);
 		NyaDevice::Clear(eOBJECT::TARGET_ATTACK3);
@@ -955,6 +957,11 @@ void UserAi::Draw(void)
 	range_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	range_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;	
 	NyaGraphic::Draw(range_.gpx_, eOBJECT::USER1);
+	// デバッグ情報
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+	NyaString::Write("teemo_font", white, 50, 70, "[50, 70] teemo count = %d", (int)count_frame_);
+	NyaString::Write("teemo_font", white, 50, 110, "[50, 110] teemo x = %d", (int)main_.phandle_->grid_x_);
+	NyaString::Write("teemo_font", white, 50, 130, "[50, 130] teemo y = %d", (int)main_.phandle_->grid_y_);
 #endif
 
 }

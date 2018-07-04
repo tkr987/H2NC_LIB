@@ -1,5 +1,5 @@
+#include "H2NLIB.h"
 #include "TeemoUser.h"
-
 using namespace H2NLIB;
 
 TeemoUser::TeemoUser()
@@ -16,7 +16,12 @@ TeemoUser::~TeemoUser()
 	gpx_ = nullptr;
 }
 
-void TeemoUser::MissionRun(void)
+void TeemoUser::Act(void)
+{
+
+}
+
+void TeemoUser::Draw(void)
 {
 	NyaGraphic::Draw(gpx_, eOBJECT::USER1);
 }

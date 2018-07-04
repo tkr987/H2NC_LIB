@@ -211,6 +211,7 @@ namespace H2NLIB
 		static void Attack3414(const DevicePropertyX3* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Clear(eOBJECT type);
 		static void Run(void);
+		static size_t Size(eOBJECT type);
 	private:
 		static std::list<DeviceGadget14> gadget14_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget14> gadget14_wait_list_;

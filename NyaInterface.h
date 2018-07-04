@@ -31,12 +31,12 @@ namespace H2NLIB
 		InterfaceHandleMissionClear();
 	};
 
-	class InterfaceHandleMissionEx
+	class InterfaceHandleHealth
 	{
 	public:
 		bool valid_;
 		double value_;
-		InterfaceHandleMissionEx();
+		InterfaceHandleHealth();
 	};
 
 	class InterfaceHandleLife
@@ -95,7 +95,7 @@ namespace H2NLIB
 		static void Run(void);
 		static InterfaceHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
 		static InterfaceHandleMissionAllOver* GetHandleMissionAllOver(void) { return &handle_mission_all_over_; }
-		static InterfaceHandleMissionEx* GetHandleMissionEx(void) { return &handle_mission_ex_; }
+		static InterfaceHandleHealth* GetHandleHealth (void) { return &handle_health_; }
 		static InterfaceHandleLife* GetHandleLife(void) { return &handle_life_; }
 		static InterfaceHandleSkill* GetHandleSkill(void) { return &handle_skill_; }
 		static InterfaceHandleTitle* GetHandleTitle(void) { return &handle_title_; }
@@ -104,7 +104,7 @@ namespace H2NLIB
 		static InterfaceHandleLife handle_life_;
 		static InterfaceHandleMissionAllOver handle_mission_all_over_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
-		static InterfaceHandleMissionEx handle_mission_ex_;
+		static InterfaceHandleHealth handle_health_;
 		static InterfaceHandleSkill handle_skill_;
 		static InterfaceHandleTitle handle_title_;
 		static InterfaceHandleWarning handle_warning_;
@@ -112,12 +112,12 @@ namespace H2NLIB
 		static void DrawLIB(int x, int y);
 		static void DrawMissionAllOver(void);
 		static void DrawMissionClear(void);
-		static void DrawMissionEx(void);
-		static void DrawMissionWarning(void);
+		static void DrawHealth(void);
 		static void DrawTitle(int x, int y);
 		static void DrawInput(int x, int y);
 		static void DrawLife(int x, int y);
 		static void DrawSkill(int x, int y);
+		static void DrawWarning(void);
 	};
 
 }

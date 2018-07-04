@@ -1,31 +1,26 @@
-#include "NyaEnum.h"
-#include "NyaInput.h"
 #include "NyaUser.h"
-
 using namespace H2NLIB;
 
-
 /**
-@brief 実行関数
+@brief ミッションでの処理を定義する関数
+@return なし
 @note
- ライブラリのNyaMissionクラス内で自動的に呼ばれるので、ライブラリ使用者が呼ぶ必要はない
+ イベントがeEVENT::MISSION_RUNやeEVENT::MISSION_REPLAY_RUNのとき実行される
 **/
-void NyaUser::Run(const eEVENT check_event)
+void NyaUser::Run(eEVENT check_event)
 {
-
 	switch (check_event)
 	{
 	case eEVENT::MISSION_RUN:
 	case eEVENT::MISSION_REPLAY_RUN:
-		MissionRun();
-		break;
-	case eEVENT::MISSION_CONTINUE:
+		Act();
+		Draw();
 		break;
 	case eEVENT::MISSION_CLEAR:
 	case eEVENT::MISSION_ALL_CLEAR:
 	case eEVENT::MISSION_REPLAY_CLEAR:
 	case eEVENT::MISSION_REPLAY_ALL_CLEAR:
+		Draw();
 		break;
 	}
 }
-

@@ -76,6 +76,36 @@ TeemoExCube21::~TeemoExCube21()
 }
 
 
+TeemoExDevice221::TeemoExDevice221()
+{
+	dpx_ = new DevicePropertyX3;
+	dpx_->collision_power_ = 1;
+	dpx_->collision_range_ = 5;
+	dpx_->move_speed_ = 1;
+	dpx_->move_speed_accel_ = 0.02;
+	gadget_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	epx_ = new EffectPropertyX1;
+	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	effect_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+};
+
+TeemoExDevice221::~TeemoExDevice221()
+{
+	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+}
+
+
 TeemoExMain2::TeemoExMain2() : health_max_(10000) 
 {
 	gpx_ = new GraphicPropertyX4;
@@ -100,6 +130,7 @@ TeemoExMain2::~TeemoExMain2()
 TeemoTargetEx2::TeemoTargetEx2(void)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	NyaInterface::GetHandleWarning()->LoadSound("sound/warning.wav", 20);
 }
 
@@ -109,28 +140,46 @@ TeemoTargetEx2::~TeemoTargetEx2(void)
 }
 
 
-void TeemoTargetEx2::MissionRun(void)
+void TeemoTargetEx2::Act(void)
 {
-	int mode = 1;
-
-	switch (mode)
+	switch (mode_)
 	{
 	case 1:
 		Act1();
-		Draw1();
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 70)
+		{
+			count_frame_ = 0;
+			mode_ = 2;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
+			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+			NyaGraphic::Swing();
+		}
+		break;
+	case 2:
+		Act2();
 		break;
 	}
 
 	count_frame_++;
 }
 
+void TeemoTargetEx2::Draw(void)
+{
+	switch (mode_)
+	{
+	case 1:
+		Draw1();
+		break;
+	case 2:
+		Draw2();
+		break;
+	}
+}
+
 
 void TeemoTargetEx2::Act1(void)
 {
-	InterfaceHandleMissionClear* ihandle_mission_clear;
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 	InterfaceHandleSkill *ihandle_mission_skill;
-	InterfaceHandleWarning* ihandle_warning;
 	PositionHandle phandle_user;
 
 	// 行動開始1フレーム目
@@ -139,11 +188,9 @@ void TeemoTargetEx2::Act1(void)
 	// 初期位置へ移動する
 	if (count_frame_ == 1)
 	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->valid_ = true;
-		ihandle_warning = NyaInterface::GetHandleWarning();
-		ihandle_warning->draw_valid_ = true;
-		ihandle_warning->sound_valid_ = true;
+		NyaInterface::GetHandleHealth()->valid_ = true;
+		NyaInterface::GetHandleWarning()->draw_valid_ = true;
+		NyaInterface::GetHandleWarning()->sound_valid_ = true;
 		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 3);
 	}
 
@@ -370,9 +417,63 @@ void TeemoTargetEx2::Act1(void)
 	}
 }
 
+void TeemoTargetEx2::Act2(void)
+{
+	PositionHandle phandle_user;
+
+	if (count_frame_ == 1)
+		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 3);
+
+	if (count_frame_ < FPS_MAX * 3)
+		return;
+
+	if (count_frame_ % (FPS_MAX * 2) == 0)
+	{
+		main_.device221_.dpx_->create_x_ = main_.phandle_->grid_x_;
+		main_.device221_.dpx_->create_y_ = main_.phandle_->grid_y_;
+		main_.device221_.dpx_->move_angle_deg_ = NyaInput::GetRand(0, 360);
+		for (int way = 0; way < 75; way++)
+		{
+			main_.device221_.dpx_->move_angle_deg_ += 5;
+			NyaDevice::Attack3414(main_.device221_.dpx_, main_.device221_.gadget_gpx_, main_.device221_.epx_, main_.device221_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		}
+	}
+
+	NyaPosition::FindHandle("user_main_handle", &phandle_user);
+	NyaPosition::Angle(main_.phandle_, &phandle_user);
+}
+
 void TeemoTargetEx2::Draw1(void)
 {
-	InterfaceHandleMissionEx* ihandle_mission_ex;
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+	// 本体の描画
+	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+
+	// ヘルスバー(%)の表示をする
+	if (0 < main_.phandle_->health_) 
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100;
+
+	if (count_frame_ < FPS_MAX * 4)
+		return;
+
+	for (auto& e : cube21_collection_)
+	{	// cube描画
+		if (e.gpx_->extend_rate_ < 0.4)
+			e.gpx_->extend_rate_ += 0.01;
+		if (count_frame_ % 5 == 0)
+			e.gpx_->file_div_ = ++e.gpx_->file_div_ % 5;
+		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
+		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
+		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
+	}
+
+}
+
+void TeemoTargetEx2::Draw2(void)
+{
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	// 本体の描画
@@ -383,14 +484,5 @@ void TeemoTargetEx2::Draw1(void)
 	// ヘルスバー(%)の表示をする
 	// ただし、ヘルス0以下のときゲージ0(%)として表示する
 	if (0 < main_.phandle_->health_) 
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100;
-	}
-	else
-	{
-		ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-		ihandle_mission_ex->value_ = 0;
-	}
+		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100;
 }
-

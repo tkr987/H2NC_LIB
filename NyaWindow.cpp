@@ -40,7 +40,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v73");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v74");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -112,8 +112,6 @@ void NyaWindow::Run(void)
 		// mission all clear と add_child(mission) の関係
 		// nya interface skill の初期化(ミッション→リプレイのとき不具合)
 		// save replay or not save replay 状態遷移確認
-		// game実行時にswingが実行されることがある
-		// NyaDevice::Clear()時に経験値追加(NyaDeviceのリストサイズ取得関数を作る必要あり)
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -257,7 +255,6 @@ void NyaWindow::Mission(void)
 {
 	InterfaceHandleMissionAllOver* ihandle_mission_all_over;
 	InterfaceHandleMissionClear* ihandle_mission_clear;
-	InterfaceHandleMissionEx* ihandle_mission_ex;
 
 	if (child_.mission_collection_.size() == 0)
 	{
@@ -299,8 +296,7 @@ void NyaWindow::Mission(void)
 		{
 			ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 			ihandle_mission_clear->valid_ = false;
-			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-			ihandle_mission_ex->valid_ = false;
+			NyaInterface::GetHandleHealth()->valid_ = false;
 			event_next_ = eEVENT::MISSION_DELETE;
 		}
 		break;
@@ -309,8 +305,7 @@ void NyaWindow::Mission(void)
 		{
 			ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
 			ihandle_mission_all_over->valid_ = false;
-			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-			ihandle_mission_ex->valid_ = false;
+			NyaInterface::GetHandleHealth()->valid_ = false;
 			event_next_ = eEVENT::ENDING_LOAD;
 		}
 		break;
@@ -339,8 +334,7 @@ void NyaWindow::Mission(void)
 		{
 			ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 			ihandle_mission_clear->valid_ = false;
-			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-			ihandle_mission_ex->valid_ = false;
+			NyaInterface::GetHandleHealth()->valid_ = false;
 			event_ = eEVENT::MISSION_REPLAY_DELETE;
 		}
 		break;
@@ -349,8 +343,7 @@ void NyaWindow::Mission(void)
 		{
 			ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
 			ihandle_mission_all_over->valid_ = false;
-			ihandle_mission_ex = NyaInterface::GetHandleMissionEx();
-			ihandle_mission_ex->valid_ = false;
+			NyaInterface::GetHandleHealth()->valid_ = false;
 			event_next_ = eEVENT::MISSION_REPLAY_DELETE;
 		}
 		break;

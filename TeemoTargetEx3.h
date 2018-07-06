@@ -26,24 +26,9 @@ public:
 	~TeemoExDevice311();
 };
 
-class TeemoExDevice312
-{
-public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice312();
-	~TeemoExDevice312();
-};
-
 class TeemoExCube31
 {
 public:
-	TeemoExDevice312 device312_;
-	int device_gap_angle_;
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
 	H2NLIB::GraphicPropertyX4* gpx_;
 	H2NLIB::PositionHandle* phandle_;
 	TeemoExCube31();
@@ -133,11 +118,15 @@ public:
 class TeemoEx3Main
 {
 public:
-	const int health_max_;
+	H2NLIB::EffectPropertyX1* death1_epx_;
+	H2NLIB::GraphicPropertyX4* death1_gpx_;
+	H2NLIB::EffectPropertyX1* death2_epx_;
+	H2NLIB::GraphicPropertyX4* death2_gpx_;
 	TeemoExDevice311 device311_;
 	TeemoExDevice321 device321_;
 	TeemoExDevice331 device331_;
 	H2NLIB::GraphicPropertyX4* gpx_;
+	const int health_max_;
 	H2NLIB::PositionHandle* phandle_;
 	TeemoEx3Main();
 	~TeemoEx3Main();
@@ -154,7 +143,7 @@ public:
 	void Draw(void);
 private:
 	int count_frame_;
-	std::array<TeemoExCube31, 4> cube31_collection_;
+	std::array<TeemoExCube31, 100> cube31_collection_;
 	std::array<TeemoExCube32, 6> cube32_collection_;
 	std::array<TeemoExCube33, 4> cube33_collection_;
 	TeemoEx3Main main_;
@@ -165,5 +154,6 @@ private:
 	void Draw1(void);
 	void Draw2(void);
 	void Draw3(void);
+	void Draw4(void);
 };
 

@@ -12,23 +12,32 @@ namespace H2NLIB
 	class GraphicPropertyX4;
 	class PositionHandle;
 
-
+	//********************************************************************
+	// class EffectPropertyX2
+	// 絶対座標を指定してエフェクトを貼りたいときに使うプロパティ
+	//********************************************************************
 	class EffectPropertyX1
 	{
 	public:
 		int interval_time_frame_;		//!< アニメーションインターバル時間(フレーム指定)
 		double grid_x_;					//!< 描画x座標
 		double grid_y_;					//!< 描画y座標
+		EffectPropertyX1();
 	};
 
+	//******************************************************************************
+	// class EffectPropertyX2
+	// 動的に動くオブジェクトに追随してエフェクトを貼りたいときに使うプロパティ
+	//******************************************************************************
 	class EffectPropertyX2
 	{
 	public:
-		double draw_move_x_;
-		double draw_move_y_;
-		int interval_time_frame_;
-		double grid_x_;
-		double grid_y_;
+		int interval_time_frame_;		//!< アニメーションインターバル時間(フレーム指定)
+		double gap_x_;					//!< x座標ギャップ
+		double gap_y_;					//!< y座標ギャップ
+		double* grid_x_;				//!< 描画x座標
+		double* grid_y_;				//!< 描画y座標
+		EffectPropertyX2();
 	};
 
 	class EffectAnimation1

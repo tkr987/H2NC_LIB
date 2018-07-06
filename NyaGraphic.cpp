@@ -532,7 +532,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx6_deque_.empty()) {
 		gpx6 = &layer_collection_.at(layer).gpx6_deque_.front();
 		DrawRotaGraph3((int)gpx6->draw_grid_x_ + swing_.grid_x_, (int)gpx6->draw_grid_y_, 
-			(int)gpx6->draw_grid_cx_ + swing_.grid_x_, gpx6->draw_grid_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
+			(int)gpx6->draw_grid_cx_ + swing_.grid_x_, (int)gpx6->draw_grid_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
 			gpx6->file_.div_collection_[gpx6->file_div_], gpx6->flag_trans_, gpx6->flag_turn_);
 		layer_collection_.at(layer).gpx6_deque_.pop_front();
 	}

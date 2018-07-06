@@ -12,8 +12,8 @@
 
 namespace H2NLIB
 {
-
 	class EffectPropertyX1;
+	class EffectPropertyX2;
 	class GraphicPropertyX4;
 	class PositionHandle;
 
@@ -152,6 +152,30 @@ namespace H2NLIB
 	};
 
 	//*****************************************************
+	// class DeviceGadget1424
+	// DevicePropertyX1Ç∆EffectPropertyX1ÇÃëgÇ›çáÇÌÇπ
+	//*****************************************************
+	class DeviceGadget1424
+	{
+	public:
+		bool clear_;
+		unsigned int collision_accuracy_;
+		unsigned int count_frame_;
+		double move_angle_deg_;
+		double move_angle_rad_;
+		double move_x_;
+		double move_y_;
+		eOBJECT effect_type_;
+		EffectPropertyX2* effect_epx_;
+		GraphicPropertyX4* effect_gpx_;
+		DevicePropertyX1* gadget_dpx_;
+		GraphicPropertyX4* gadget_gpx_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		DeviceGadget1424();
+		~DeviceGadget1424();
+	};
+
+	//*****************************************************
 	// class DeviceGadget2414
 	// DevicePropertyX2Ç∆EffectPropertyX1ÇÃëgÇ›çáÇÌÇπ
 	//*****************************************************
@@ -207,6 +231,7 @@ namespace H2NLIB
 		static void Attack24(const DevicePropertyX2* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type, unsigned int collision_accuracy = 1);
 		static void Attack34(const DevicePropertyX3* const gadget_dpx, const GraphicPropertyX4* const gadget_gpx, eOBJECT gadget_type, unsigned int collision_accuracy = 1);
 		static void Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
+		static void Attack1424(const DevicePropertyX1* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX2* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Attack2414(const DevicePropertyX2* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Attack3414(const DevicePropertyX3* gadget_dpx, const GraphicPropertyX4* gadget_gpx, const EffectPropertyX1* effect_epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Clear(eOBJECT type);
@@ -221,6 +246,8 @@ namespace H2NLIB
 		static std::list<DeviceGadget34> gadget34_wait_list_;
 		static std::list<DeviceGadget1414> gadget1414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget1414> gadget1414_wait_list_;
+		static std::list<DeviceGadget1424> gadget1424_attack_list_[(int)eOBJECT::sizeof_enum];
+		static std::list<DeviceGadget1424> gadget1424_wait_list_;
 		static std::list<DeviceGadget2414> gadget2414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget2414> gadget2414_wait_list_;
 		static std::list<DeviceGadget3414> gadget3414_attack_list_[(int)eOBJECT::sizeof_enum];

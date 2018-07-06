@@ -142,28 +142,6 @@ int NyaPosition::FindHandle(string name, vector<PositionHandle>* handle_collecti
 	return find;
 }
 
-
-/**
-@brief 移動関数
-@param handle 移動させるハンドル
-@param angle 移動角度
-@param max_frame 移動時間(フレーム単位)
-@param length 移動距離
-@note
- handleを角度angleでmax_frameかけてlengthだけ移動させる
-**/
-void NyaPosition::MoveAngleMode(PositionHandle* handle, double angle, double length, unsigned int max_frame)
-{
-	PositionMove new_move;
-
-	new_move.frame_ = 0;
-	new_move.max_frame_ = max_frame;
-	new_move.handle_ = handle;
-	new_move.move_x_ = length * cos(AngleToRad(angle)) / max_frame;
-	new_move.move_y_ = length * sin(AngleToRad(angle)) / max_frame;
-	move_collection_.push_back(new_move);
-}
-
 /**
 @brief 移動関数
 @param handle 移動させるハンドル
@@ -182,6 +160,48 @@ void NyaPosition::MoveGridMode(PositionHandle* handle, double end_x,  double end
 	new_move.handle_ = handle;
 	new_move.move_x_ = (end_x - handle->grid_x_) / (double)max_frame;
 	new_move.move_y_ = (end_y - handle->grid_y_) / (double)max_frame;
+	move_collection_.push_back(new_move);
+}
+
+/**
+@brief 移動関数
+@param handle 移動させるハンドル
+@param angle 移動角度
+@param length 移動距離
+@param max_frame 移動時間(フレーム単位)
+@note
+ handleを角度angleでmax_frameかけてlengthだけ移動させる
+**/
+void NyaPosition::MoveLengthMode(PositionHandle* handle, double angle, double length, unsigned int max_frame)
+{
+	PositionMove new_move;
+
+	new_move.frame_ = 0;
+	new_move.max_frame_ = max_frame;
+	new_move.handle_ = handle;
+	new_move.move_x_ = length * cos(AngleToRad(angle)) / max_frame;
+	new_move.move_y_ = length * sin(AngleToRad(angle)) / max_frame;
+	move_collection_.push_back(new_move);
+}
+
+/**
+@brief 移動関数
+@param handle 移動させるハンドル
+@param angle 移動角度
+@param speed 移動速度
+@param max_frame 移動時間(フレーム単位)
+@note
+ handleを角度angleでmax_frameかけて速度speedで移動させる
+**/
+void NyaPosition::MoveSpeedMode(PositionHandle* handle, double angle, double speed, unsigned int max_frame)
+{
+	PositionMove new_move;
+
+	new_move.frame_ = 0;
+	new_move.max_frame_ = max_frame;
+	new_move.handle_ = handle;
+	new_move.move_x_ = speed * cos(AngleToRad(angle));
+	new_move.move_y_ = speed * sin(AngleToRad(angle));
 	move_collection_.push_back(new_move);
 }
 
@@ -216,8 +236,7 @@ bool NyaPosition::InScreen(PositionHandle* phandle, int gap)
 void NyaPosition::Run(void)
 {
 	// 衝突判定をする前に衝突ダメージを0クリアしておく
-	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
-		ClearCollisionHit(type);
+	ClearCollisionHit();
 
 	// CollisionSettingで設定したオブジェクトグループの組み合わせで衝突判定をおこなう
 	for (auto& e : collision_pair_collection_)
@@ -253,16 +272,15 @@ void H2NLIB::NyaPosition::CalculateMove(void)
 	}
 }
 
-void NyaPosition::ClearCollisionHit(eOBJECT type)
+void NyaPosition::ClearCollisionHit(void)
 {
-	for (auto& e : collision_collection_[static_cast<int>(type)])
+	for (auto& e : handle_collection_)
 	{
 		e->collision_hit_damage_ = 0;
 		e->collision_hit_x_ = -1000;
 		e->collision_hit_y_ = -1000;
 	}
 }
-
 
 /**
  @brief 衝突判定を実行する関数
@@ -279,6 +297,8 @@ void NyaPosition::JudgeCollision(eOBJECT type1, eOBJECT type2)
 			{
 				e1->collision_hit_damage_ += e2->collision_power_;
 				e2->collision_hit_damage_ += e1->collision_power_;
+				e1->collision_hit_handle_ = e2;
+				e2->collision_hit_handle_ = e1;
 				e1->collision_hit_x_ = e1->grid_x_;
 				e1->collision_hit_y_ = e1->grid_y_;
 				e1->health_ -= e2->collision_power_;

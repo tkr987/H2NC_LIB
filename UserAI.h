@@ -7,6 +7,7 @@ namespace H2NLIB
 {
 	class DevicePropertyX1;
 	class EffectPropertyX1;
+	class EffectPropertyX2;
 	class GraphicPropertyX4;
 	class PositionHandle;
 	class SoundPropertyX;
@@ -26,7 +27,7 @@ public:
 	H2NLIB::GraphicPropertyX4* bit_gpx_;
 	H2NLIB::DevicePropertyX1* gadget_dpx_;
 	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* effect_epx_;
+	H2NLIB::EffectPropertyX2* effect_epx_;
 	H2NLIB::GraphicPropertyX4* effect_gpx_;
 	H2NLIB::SoundPropertyX* spx_[6];
 	H2NLIB::SoundPropertyX* spx_ex_[6];
@@ -42,7 +43,7 @@ public:
 	H2NLIB::GraphicPropertyX4* bit_gpx_;
 	H2NLIB::DevicePropertyX1* gadget_dpx_;
 	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* effect_epx_;
+	H2NLIB::EffectPropertyX2* effect_epx_;
 	H2NLIB::GraphicPropertyX4* effect_gpx_;
 	UserAiDeviceEx();
 	~UserAiDeviceEx();

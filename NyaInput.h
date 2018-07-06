@@ -10,6 +10,10 @@ namespace H2NLIB {
 
 	class NyaInput {
 	public:
+		static double AngleToRad(double x) 
+		{ 
+			return (x * 3.14159265359 / 180.0);
+		}
 		/**
 		 @brief Œ»İ‚ÌƒL[ó‘Ô‚ğæ“¾‚·‚éŠÖ”
 		**/
@@ -23,13 +27,6 @@ namespace H2NLIB {
 		static bool GetKeyStatePre(eINPUT key) 
 		{ 
 			return state_pre_[static_cast<int>(key)];
-		}
-		/**
-		 @brief —”‚ğæ“¾‚·‚éŠÖ”
-		**/
-		template<class T> static T GetRand(void)
-		{
-			return mt_rand_();
 		}
 		/**
 		 @brief intŒ^‚Ì—”‚ğæ“¾‚·‚éŠÖ”
@@ -68,6 +65,10 @@ namespace H2NLIB {
 		static bool IsPressKey(eINPUT key)
 		{ 
 			return (state_pre_[static_cast<int>(key)] == false && state_now_[static_cast<int>(key)] == true) ? true : false; 
+		}
+		static double RadToAngle(double x)
+		{
+			return (x * 180.0 / 3.14159265359);
 		}
 		static void InitRand(void);
 		static void InputReplay(std::string file_name);

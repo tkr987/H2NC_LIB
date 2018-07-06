@@ -11,6 +11,19 @@ list<EffectAnimation1> NyaEffect::ea1_wait_list_;
 list<EffectAnimation2> NyaEffect::ea2_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<EffectAnimation2> NyaEffect::ea2_wait_list_;
 
+EffectPropertyX1::EffectPropertyX1()
+{
+	interval_time_frame_ = 1;
+}
+
+EffectPropertyX2::EffectPropertyX2()
+{
+	interval_time_frame_ = 1;
+	gap_x_ = 0;
+	gap_y_ = 0;
+}
+
+
 EffectAnimation1::EffectAnimation1()
 {
 	count_ = 0;
@@ -167,6 +180,38 @@ void NyaEffect::DrawAnimation1(eOBJECT layer)
 
 void NyaEffect::DrawAnimation2(eOBJECT layer)
 {
+	static list<EffectAnimation2>::iterator it, it_delete;
+	static deque<list<EffectAnimation2>::iterator> delete_deque;
 
+	// ************
+	// íœˆ—
+	// ************
+	for (auto it = ea2_draw_list_[static_cast<int>(layer)].begin(); it != ea2_draw_list_[static_cast<int>(layer)].end(); ++it)
+	{
+		if (it->gpx_->file_div_ == it->gpx_->file_.div_total_)
+			delete_deque.push_back(it);
+	}
+	while (!delete_deque.empty())
+	{
+		ea2_wait_list_.splice(ea2_wait_list_.begin(), move(ea2_draw_list_[static_cast<int>(layer)]), delete_deque.front());
+		delete_deque.pop_front();
+	}
+
+	// ************
+	// •`‰æˆ—
+	// ************
+	for (auto& e : ea2_draw_list_[static_cast<int>(layer)])
+	{		
+		e.gpx_->draw_grid_cx_ = *e.epx_->grid_x_ + e.epx_->gap_x_;
+		e.gpx_->draw_grid_cy_ = *e.epx_->grid_y_ + e.epx_->gap_y_;
+		NyaGraphic::Draw(e.gpx_, layer);
+
+		e.count_++;
+		if (e.count_ == e.epx_->interval_time_frame_)
+		{
+			e.gpx_->file_div_++;
+			e.count_ = 0;
+		}
+	}
 }
 

@@ -72,7 +72,7 @@ namespace H2NLIB
 	//************
 	// ÉXÉLÉã
 	//************
-	enum class eSKILL : int
+	enum class eSKILL
 	{
 			enum_zero, 
 			Q, W, E, R, 

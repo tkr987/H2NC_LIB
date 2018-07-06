@@ -16,15 +16,16 @@ namespace H2NLIB
 	class PositionHandle
 	{
 	public:
-		int collision_hit_damage_;		// 衝突判定trueになったときに受けたダメージ(1フレーム毎に0クリアされる)
-		double collision_hit_x_;		// 衝突判定trueになったときのx座標(1フレーム毎に0クリアされる)
-		double collision_hit_y_;		// 衝突判定trueになったときのy座標(1フレーム毎に0クリアされる)
-		int collision_power_;			// 衝突判定trueになったときに与えるダメージ
-		int collision_range_;			// 衝突範囲
-		int health_;					// 現在のヘルス
-		double grid_x_;					// オブジェクト（ハンドル）のX座標
-		double grid_y_;					// オブジェクト（ハンドル）のY座標
-		std::string name_;				// ハンドルの名前
+		int collision_hit_damage_;					// 衝突判定trueになったときに受けたダメージ(1フレーム毎に0クリアされる)
+		PositionHandle* collision_hit_handle_;		// 衝突判定trueになったときの相手のハンドル
+		double collision_hit_x_;					// 衝突判定trueになったときのx座標(1フレーム毎に0クリアされる)
+		double collision_hit_y_;					// 衝突判定trueになったときのy座標(1フレーム毎に0クリアされる)
+		int collision_power_;						// 衝突判定trueになったときに与えるダメージ
+		int collision_range_;						// 衝突範囲
+		int health_;								// 現在のヘルス
+		double grid_x_;								// オブジェクト（ハンドル）のX座標
+		double grid_y_;								// オブジェクト（ハンドル）のY座標
+		std::string name_;							// ハンドルの名前
 		PositionHandle()
 		{
 			collision_hit_damage_ = 0;
@@ -63,15 +64,16 @@ namespace H2NLIB
 		static int FindHandle(std::string name, PositionHandle* handle);
 		static int FindHandle(std::string name, std::vector<PositionHandle>* handle_collection);
 		static bool InScreen(PositionHandle* handle, int gap = 0);
-		static void MoveAngleMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);
 		static void MoveGridMode(PositionHandle* handle, double end_x, double end_y, unsigned int max_frame);
+		static void MoveLengthMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);
+		static void MoveSpeedMode(PositionHandle* handle, double angle, double speed, unsigned int max_frame);
 		static void Run(void);
 	private:
 		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_pair_collection_;
 		static std::vector<PositionHandle*> collision_collection_[static_cast<int>(eOBJECT::sizeof_enum)];
 		static std::list<PositionHandle*> handle_collection_;
 		static std::list<PositionMove> move_collection_;
-		static void ClearCollisionHit(eOBJECT object_type);
+		static void ClearCollisionHit(void);
 		static void JudgeCollision(eOBJECT, eOBJECT);
 		static void CalculateMove(void);
 		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }

@@ -421,7 +421,7 @@ void TeemoTargetEx4::Act1(void)
 			cube1_collection_[i].move_angle_ = i * 45;
 			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_;
 			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_;
-			NyaPosition::MoveAngleMode(cube1_collection_[i].phandle_, i * 45, 130, FPS_MAX * 3);
+			NyaPosition::MoveLengthMode(cube1_collection_[i].phandle_, i * 45, 130, FPS_MAX * 3);
 		}
 	}
 
@@ -443,7 +443,7 @@ void TeemoTargetEx4::Act1(void)
 			cube1_collection_[i].move_angle_ += 5;
 			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_ + 130 * cos(AngleToRad(cube1_collection_[i].move_angle_));
 			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_ + 130 * sin(AngleToRad(cube1_collection_[i].move_angle_));
-			NyaPosition::MoveAngleMode(cube1_collection_[i].phandle_, i * 45, 140, FPS_MAX * 3);
+			NyaPosition::MoveLengthMode(cube1_collection_[i].phandle_, i * 45, 140, FPS_MAX * 3);
 			if (count_frame_ % 15 == 0)
 			{
 				bullet1_.dpx_->create_x_ = cube1_collection_[i].phandle_->grid_x_;

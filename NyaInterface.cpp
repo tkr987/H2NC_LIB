@@ -112,7 +112,7 @@ InterfaceHandleHealth::InterfaceHandleHealth()
 
 H2NLIB::InterfaceHandleTitle::InterfaceHandleTitle()
 {
-	name_ = "no_title";
+
 }
 
 
@@ -205,7 +205,7 @@ void NyaInterface::DrawTitle(int x, int y)
 {
 	const tuple<int, int, int> white = make_tuple(212, 227, 255);
 
-	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_);
+	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
 }
 
 /**

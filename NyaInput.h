@@ -70,13 +70,14 @@ namespace H2NLIB {
 		{
 			return (x * 180.0 / 3.14159265359);
 		}
-		static void InitRand(void);
+		static void Init(void);
 		static void InputReplay(std::string file_name);
 		static void OutputReplay(std::string file_name);
 		static void Run(const eEVENT check_event);
 	private:
-		static std::stringstream output_seed_;
 		static std::stringstream output_date_;
+		static std::stringstream output_seed_;
+		static std::stringstream output_title_;
 		static std::mt19937 mt_rand_;
 		static std::deque<int> save_state_collection_;
 		static bool state_now_[static_cast<int>(eINPUT::sizeof_enum)];

@@ -35,12 +35,10 @@ WindowChild::WindowChild()
 
 NyaWindow::NyaWindow(string title)
 {
-	InterfaceHandleTitle* ihandle_title;
-
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v75");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v78");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -53,9 +51,9 @@ NyaWindow::NyaWindow(string title)
 
 	// 各クラス内でDXLIB関数を利用する可能性があるので
 	// DXLIB初期化後にInit()を呼び出す必要がある。
+	// インターフェースの初期化をする
 	NyaInterface::Init();
-	ihandle_title = NyaInterface::GetHandleTitle();
-	ihandle_title->name_ = title;
+	NyaInterface::GetHandleTitle()->name_ << title;
 	
 	// フォント設定
 	NyaString::SettingFont("fps_font", 14, 2);
@@ -369,7 +367,7 @@ void NyaWindow::SaveReplay(void)
 {
 	string pass;
 	int x, y;
-	string date, seed;
+	string date, seed, title;
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -410,6 +408,8 @@ void NyaWindow::SaveReplay(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
 	}
 	else
@@ -423,6 +423,8 @@ void NyaWindow::SaveReplay(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
 	}
 	else
@@ -436,6 +438,8 @@ void NyaWindow::SaveReplay(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
 	}
 	else
@@ -449,6 +453,8 @@ void NyaWindow::SaveReplay(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
 	}
 	else
@@ -552,13 +558,12 @@ void NyaWindow::Opening(void)
 void NyaWindow::Title(void)
 {
 	int x, y;
-	string date, seed;
+	string date, seed, title;
 	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
 	static int select = 0;
 	InterfaceHandleSkill* ihandle_mission_skill = NyaInterface::GetHandleSkill();
-	InterfaceHandleTitle* ihandle_title = NyaInterface::GetHandleTitle();
 
 	if (event_ != eEVENT::TITLE)
 		return;
@@ -572,6 +577,8 @@ void NyaWindow::Title(void)
 		select = (select == 0) ? 5 : select - 1;
 	x = 60;
 	y = (select + 1) * 100;
+	if (select == 5)
+		y += 40;
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
 	//******************
@@ -581,7 +588,7 @@ void NyaWindow::Title(void)
 	y = 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission");
-	NyaString::Write("window_title_font", white, x + 70, y, "%s", ihandle_title->name_);
+	NyaString::Write("window_title_font", white, x + 180, y - 40, "%s", "..." + NyaInterface::GetHandleTitle()->name_.str());
 
 	//***********************
 	// リプレイの有無を表示
@@ -594,6 +601,8 @@ void NyaWindow::Title(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
 	}
 	else
@@ -607,6 +616,8 @@ void NyaWindow::Title(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
 	}
 	else
@@ -620,6 +631,8 @@ void NyaWindow::Title(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
 	}
 	else
@@ -633,6 +646,8 @@ void NyaWindow::Title(void)
 	{
 		getline(ifs, seed);
 		getline(ifs, date);
+		getline(ifs, title);
+		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
 		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
 	}
 	else
@@ -642,7 +657,7 @@ void NyaWindow::Title(void)
 	//******************
 	// 終了の表示
 	//******************
-	y += 100;
+	y += (100 + 40);
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
 
@@ -653,11 +668,11 @@ void NyaWindow::Title(void)
 	{	
 		ihandle_mission_skill->Clear();		// スキルのUIをクリア
 
-		// ミッションの開始なら乱数の初期化をする
+		// ミッションの開始なら乱数の初期化と時刻の取得をおこなう
 		// リプレイの開始ならリプレイファイルを読み込む
 		// (リプレイファイル読み込み関数内で乱数の初期化がされる)
 		if (select == 0)
-			NyaInput::InitRand();	
+			NyaInput::Init();	
 		else if (select == 1)
 			NyaInput::InputReplay("replay/replay1.rep");
 		else if (select == 2)

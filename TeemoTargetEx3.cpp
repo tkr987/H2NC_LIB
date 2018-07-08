@@ -336,7 +336,7 @@ void TeemoTargetEx3::Draw(void)
 		break;
 	case 2:
 		Draw2();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 30)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 20)
 		{
 			count_frame_ = 0;
 			mode_ = 3;
@@ -648,7 +648,7 @@ void TeemoTargetEx3::Draw2(void)
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
 
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 30)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 20)
 	{	// cube”š”­
 		for (auto& e : cube32_collection_)
 		{

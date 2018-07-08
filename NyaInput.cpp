@@ -3,19 +3,21 @@
 #include <iostream>
 #include "DxLib.h"
 #include "NyaInput.h"
+#include "NyaInterface.h"
 
 
 using namespace std;
 using namespace H2NLIB;
 
 mt19937 NyaInput::mt_rand_;
-stringstream NyaInput::output_seed_;
 stringstream NyaInput::output_date_;
+stringstream NyaInput::output_seed_;
 deque<int> NyaInput::save_state_collection_;
 bool NyaInput::state_now_[static_cast<int>(eINPUT::sizeof_enum)];
 bool NyaInput::state_pre_[static_cast<int>(eINPUT::sizeof_enum)];
 
-void NyaInput::InitRand(void)
+
+void NyaInput::Init(void)
 {
 	int seed_value = 0;
 	time_t system_time;
@@ -57,6 +59,9 @@ void NyaInput::InputReplay(string file_name)
 
 	// 2行目は日時なので読み飛ばす
 	getline(ifs, line);
+
+	// タイトルなので3行目も読み飛ばす
+	getline(ifs, line);
 	
 	// リプレイファイルに書かれたキー入力の内容を全て読み込む
 	while (getline(ifs, line))
@@ -77,6 +82,8 @@ void NyaInput::OutputReplay(string file_name)
 		ofs << output_seed_.str();
 		ofs << endl;
 		ofs << output_date_.str();
+		ofs << endl;
+		ofs << NyaInterface::GetHandleTitle()->name_.str();
 		ofs << endl;
 	}
 
@@ -146,7 +153,6 @@ void NyaInput::Run(eEVENT check_event)
 		state_now_[static_cast<int>(eINPUT::E)]          = ((replay_state & (1 << static_cast<int>(eINPUT::E))) != 0 ) ? true : false; 
 		state_now_[static_cast<int>(eINPUT::R)]          = ((replay_state & (1 << static_cast<int>(eINPUT::R))) != 0 ) ? true : false; 
 		state_now_[static_cast<int>(eINPUT::SPACE)]		= ((replay_state & (1 << static_cast<int>(eINPUT::SPACE))) != 0) ? true : false;
-		state_now_[static_cast<int>(eINPUT::ENTER)]		= ((replay_state & (1 << static_cast<int>(eINPUT::ENTER))) != 0) ? true : false;
 		save_state_collection_.pop_front();
 	}
 }

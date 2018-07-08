@@ -3,6 +3,7 @@
 #include <array>
 #include <limits>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <utility>
 #include "NyaEnum.h"
@@ -20,7 +21,7 @@ namespace H2NLIB
 	class InterfaceHandleComplete
 	{
 	public:
-		bool valid_;						//!< complete画面表示の有効化
+		bool valid_;		//!< complete画面表示の有効化
 		void Clear();
 	};
 
@@ -43,10 +44,10 @@ namespace H2NLIB
 	class InterfaceHandleContinue
 	{
 	public:
-		unsigned int cnum_;					//!< continue回数
-		unsigned int recovery_;				//!< continueから戻ったときのライフ数
-		int select_;						//!< continue画面で現在選択している項目
-		bool valid_;						//!< continue画面表示の有効化
+		unsigned int cnum_;				//!< continue回数
+		unsigned int recovery_;			//!< continueから戻ったときのライフ数
+		int select_;					//!< continue画面で現在選択している項目
+		bool valid_;					//!< continue画面表示の有効化
 		void Clear();
 	};
 
@@ -77,7 +78,7 @@ namespace H2NLIB
 	class InterfaceHandleLife
 	{
 	public:
-		int value_;				//!< ライフ数
+		int value_;		//!< ライフ数
 	};
 
 	class InterfaceHandleSkill
@@ -116,7 +117,7 @@ namespace H2NLIB
 	class InterfaceHandleTitle
 	{
 	public:
-		std::string name_;
+		std::stringstream name_;
 		InterfaceHandleTitle();
 	};
 

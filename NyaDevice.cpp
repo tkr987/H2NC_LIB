@@ -746,7 +746,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
 		{
 			e.gadget_phandle_collection_[i]->grid_x_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_x_ * (i + 1);
-			e.gadget_phandle_collection_[i]->grid_y_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_y_ * (i + 1);
+			e.gadget_phandle_collection_[i]->grid_y_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_ + e.move_y_ * (i + 1);
 			NyaPosition::Collide(e.gadget_phandle_collection_[i], type);
 		}
 		
@@ -807,7 +807,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
 		{
 			e.gadget_phandle_collection_[i]->grid_x_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_x_ * (i + 1);
-			e.gadget_phandle_collection_[i]->grid_y_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_y_ * (i + 1);
+			e.gadget_phandle_collection_[i]->grid_y_ = e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_ + e.move_y_ * (i + 1);
 			NyaPosition::Collide(e.gadget_phandle_collection_[i], type);
 		}
 		

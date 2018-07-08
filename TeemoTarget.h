@@ -1,35 +1,39 @@
 #pragma once
-
 #include "NyaTarget.h"
 
-
-namespace H2NLIB {
-	class NyaString;
+namespace H2NLIB
+{
 	class DevicePropertyX1;
 	class GraphicPropertyX4;
-	class PositionHandle;
+	class EffectPropertyX1;
 }
 
-struct TargetTeemoMain
+class TeemoDevice
 {
 public:
-	H2NLIB::GraphicPropertyX4* gp_;
-	H2NLIB::PositionHandle* ph_;
-	TargetTeemoMain();
-	~TargetTeemoMain();
+	H2NLIB::DevicePropertyX1* dpx_;
+	H2NLIB::GraphicPropertyX4* gpx_;
+	TeemoDevice();
+	~TeemoDevice();
 };
 
-
-class TeemoTarget : public H2NLIB::NyaTarget {
+class TeemoTargetMain
+{
 public:
-	void MissionClear(void);
-	void MissionCreate(void);
-	void MissionDelete(void);
-	void MissionRun(void);
-private:
-	unsigned int count_frame_;
-	TargetTeemoMain teemo_main_;
+	TeemoDevice device_;
+	H2NLIB::GraphicPropertyX4* gpx_;
+	TeemoTargetMain();
+	~TeemoTargetMain();
+};
+
+class TeemoTarget : public H2NLIB::NyaTarget 
+{
+public:
 	void Act(void);
 	void Draw(void);
+	TeemoTarget();
+private:
+	unsigned int count_frame_;
+	TeemoTargetMain main_;
 };
 

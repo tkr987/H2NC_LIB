@@ -1,65 +1,56 @@
-#include "NyaEnum.h"
-#include "NyaDevice.h"
-#include "NyaGraphic.h"
-#include "NyaInput.h"
-#include "NyaPosition.h"
-#include "NyaString.h"
+#include "H2NLIB.h"
 #include "TeemoTarget.h"
-
 using namespace std;
 using namespace H2NLIB;
 
-TargetTeemoMain::TargetTeemoMain()
+TeemoDevice::TeemoDevice()
 {
-	gp_ = new GraphicPropertyX4;
-	ph_ = new PositionHandle;
+	dpx_ = new DevicePropertyX1;
+	dpx_->move_angle_deg_ = 90;
+	dpx_->move_speed_ = 3;
+	dpx_->create_x_ = 400;
+	dpx_->create_y_ = 200;
+	gpx_ = new GraphicPropertyX4;
+	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gpx_->file_);
 }
 
-TargetTeemoMain::~TargetTeemoMain()
+TeemoDevice::~TeemoDevice()
 {
-	delete gp_;
-	delete ph_;
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gpx_;
+	gpx_ = nullptr;
 }
 
-void TeemoTarget::MissionClear(void)
+TeemoTargetMain::TeemoTargetMain()
 {
-	Draw();
+	gpx_ = new GraphicPropertyX4;
+	gpx_->draw_grid_cx_ = 400;
+	gpx_->draw_grid_cy_ = 200;
+	NyaGraphic::LoadGraphicFile("img/teemo_target.png", &gpx_->file_);
 }
 
-void TeemoTarget::MissionCreate(void)
+TeemoTargetMain::~TeemoTargetMain()
+{
+	delete gpx_;
+	gpx_ = nullptr;
+}
+
+TeemoTarget::TeemoTarget()
 {
 	count_frame_ = 0;
-	
-	// target teemo main property
-	NyaGraphic::LoadGraphicFile("img/target/teemo_ex3b.png", &teemo_main_.gp_->file_);
-	teemo_main_.ph_->health_ = 1000;
-	teemo_main_.ph_->collision_power_ = 1;
-	teemo_main_.ph_->collision_range_ = 20;
-	teemo_main_.ph_->grid_x_ = -100;
-	teemo_main_.ph_->grid_y_ = -100;
-}
-
-void TeemoTarget::MissionDelete(void)
-{
-
-}
-
-void TeemoTarget::MissionRun(void)
-{
-	Act();
-	Draw();
 }
 
 void TeemoTarget::Act(void)
 {	
-	NyaPosition::Collide(teemo_main_.ph_, eOBJECT::TARGET1);
+	if (count_frame_ % FPS_MAX == 0)
+		NyaDevice::Attack14(main_.device_.dpx_, main_.device_.gpx_, eOBJECT::TARGET_ATTACK1);
+
+	count_frame_++;
 }
 
 void TeemoTarget::Draw(void)
 {
-	teemo_main_.gp_->draw_grid_cx_ = (int)teemo_main_.ph_->grid_x_;
-	teemo_main_.gp_->draw_grid_cy_ = (int)teemo_main_.ph_->grid_y_;
-	NyaGraphic::Draw(teemo_main_.gp_, eOBJECT::TARGET1);
-	count_frame_++;
+	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 }
 

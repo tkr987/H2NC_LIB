@@ -240,6 +240,7 @@ void NyaWindow::Ending(void)
 			break;
 		case eEVENT::ENDING_DELETE:
 			child_.ending_->Delete();
+			NyaInterface::Init();
 			event_next_ = eEVENT::REPLAY_SAVE;
 			break;
 	}
@@ -253,7 +254,6 @@ void NyaWindow::Ending(void)
 **/
 void NyaWindow::Mission(void)
 {
-	InterfaceHandleMissionAllOver* ihandle_mission_all_over;
 	InterfaceHandleMissionClear* ihandle_mission_clear;
 
 	if (child_.mission_collection_.size() == 0)
@@ -287,9 +287,16 @@ void NyaWindow::Mission(void)
 		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 		if (ihandle_mission_clear->valid_)
 			event_next_ = eEVENT::MISSION_CLEAR;
-		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
-		if (ihandle_mission_all_over->valid_)
+		if (NyaInterface::GetHandleComplete()->valid_)
 			event_next_ = eEVENT::MISSION_ALL_CLEAR;
+		if (NyaInterface::GetHandleContinue()->valid_)
+			event_next_ = eEVENT::MISSION_CONTINUE;
+		break;
+	case eEVENT::MISSION_CONTINUE:
+		if (NyaInput::IsPressKey(eINPUT::ENTER) && NyaInterface::GetHandleContinue()->select_ == 0)
+			event_next_ = eEVENT::MISSION_RUN;
+		if (NyaInput::IsPressKey(eINPUT::ENTER) && NyaInterface::GetHandleContinue()->select_ == 1)
+			event_next_ = eEVENT::NOT_REPLAY_SAVE;
 		break;
 	case eEVENT::MISSION_CLEAR:
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
@@ -303,8 +310,7 @@ void NyaWindow::Mission(void)
 	case eEVENT::MISSION_ALL_CLEAR:
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
 		{
-			ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
-			ihandle_mission_all_over->valid_ = false;
+			NyaInterface::GetHandleComplete()->valid_ = false;
 			NyaInterface::GetHandleHealth()->valid_ = false;
 			event_next_ = eEVENT::ENDING_LOAD;
 		}
@@ -325,8 +331,7 @@ void NyaWindow::Mission(void)
 		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
 		if (ihandle_mission_clear->valid_)
 			event_next_ = eEVENT::MISSION_REPLAY_CLEAR;
-		ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
-		if (ihandle_mission_all_over->valid_)
+		if (NyaInterface::GetHandleComplete()->valid_)
 			event_next_ = eEVENT::MISSION_REPLAY_ALL_CLEAR;
 		break;
 	case eEVENT::MISSION_REPLAY_CLEAR:
@@ -341,8 +346,7 @@ void NyaWindow::Mission(void)
 	case eEVENT::MISSION_REPLAY_ALL_CLEAR:
 		if (NyaInput::IsPressKey(eINPUT::ENTER))
 		{
-			ihandle_mission_all_over = NyaInterface::GetHandleMissionAllOver();
-			ihandle_mission_all_over->valid_ = false;
+			NyaInterface::GetHandleComplete()->valid_ = false;
 			NyaInterface::GetHandleHealth()->valid_ = false;
 			event_next_ = eEVENT::MISSION_REPLAY_DELETE;
 		}
@@ -373,6 +377,9 @@ void NyaWindow::SaveReplay(void)
 
 	if (event_ != eEVENT::REPLAY_SAVE)
 		return;
+
+	// まず、インターフェースの初期化をしておく
+	NyaInterface::Init();
 
 	//************************************************
 	// カーソルキーの入力に応じて現在の選択を更新
@@ -490,9 +497,11 @@ void NyaWindow::NotSaveReplay(void)
 	if (event_ != eEVENT::NOT_REPLAY_SAVE)
 		return;
 
+	// まず、インターフェースの初期化をしておく
+	NyaInterface::Init();
+
 	NyaString::Write("window_title_font", white, 32, 100, "コンテニューしたので");
 	NyaString::Write("window_title_font", white, 32, 150, "リプレイの保存はできません");
-
 
 	//**************************
 	// 終了の選択肢を表示

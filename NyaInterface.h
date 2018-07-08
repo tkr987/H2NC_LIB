@@ -12,14 +12,42 @@ namespace H2NLIB
 {
 	class SoundPropertyX;
 
-
-	class InterfaceHandleMissionAllOver
+	/**
+	@brief mission complete 操作クラス
+	@note
+	 変数valid_をtrueにするとmission completeを表示する
+	**/
+	class InterfaceHandleComplete
 	{
 	public:
-		int draw_grid_x_;
-		int draw_grid_y_;
-		bool valid_;						// trueならmission all overと表示する
-		InterfaceHandleMissionAllOver();
+		bool valid_;						//!< complete画面表示の有効化
+		void Clear();
+	};
+
+	/**
+	@brief continue 操作クラス
+	@note
+	 ライブラリ使用者はvalid_とrecovery_以外のメンバ変数を使う必要はない。
+	 - recovery_:
+	 値を設定するとコンテニュー画面から戻ったときライフ数に反映される。
+	 デフォルトでは値1に設定されている。
+	 - valid_:
+	 trueにするとコンテニュー画面を表示する。
+	 [enter]キーで選択するとコンテニュー画面は自動的に閉じられる。
+	 - cnum_:
+	 0ならMISSION_COMPLETE時にリプレイをセーブするイベントに移行。
+	 0以外ならMISSION_COMPLETE時にリプレイをセーブしない。
+	 コンテニュー画面に表示される選択肢は2つなので、メンバ変数select_の値は[0,1]のみ。
+	 メンバselect_の値を[0,1]以外にすると選択できなくなる。
+	**/
+	class InterfaceHandleContinue
+	{
+	public:
+		unsigned int cnum_;					//!< continue回数
+		unsigned int recovery_;				//!< continueから戻ったときのライフ数
+		int select_;						//!< continue画面で現在選択している項目
+		bool valid_;						//!< continue画面表示の有効化
+		void Clear();
 	};
 
 	class InterfaceHandleMissionClear
@@ -39,11 +67,17 @@ namespace H2NLIB
 		InterfaceHandleHealth();
 	};
 
+	/**
+	@brief ライフ操作クラス
+	@note
+	 メンバvalue_には[0-8]の値を設定することができる。
+	 0未満の値を設定したときは次フレームまでに0の値に自動的に変更される。
+	 9以上の値を設定したときは次フレームまでに8の値に自動的に変更される。
+	**/
 	class InterfaceHandleLife
 	{
 	public:
-		int value_;
-		InterfaceHandleLife();
+		int value_;				//!< ライフ数
 	};
 
 	class InterfaceHandleSkill
@@ -93,24 +127,27 @@ namespace H2NLIB
 		~NyaInterface();
 		static void Init(void);
 		static void Run(void);
+		static InterfaceHandleComplete* GetHandleComplete(void) { return &handle_complete_; }
+		static InterfaceHandleContinue* GetHandleContinue(void) { return &handle_continue_; }
 		static InterfaceHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
-		static InterfaceHandleMissionAllOver* GetHandleMissionAllOver(void) { return &handle_mission_all_over_; }
 		static InterfaceHandleHealth* GetHandleHealth (void) { return &handle_health_; }
 		static InterfaceHandleLife* GetHandleLife(void) { return &handle_life_; }
 		static InterfaceHandleSkill* GetHandleSkill(void) { return &handle_skill_; }
 		static InterfaceHandleTitle* GetHandleTitle(void) { return &handle_title_; }
 		static InterfaceHandleWarning* GetHandleWarning(void) { return &handle_warning_; }
 	private:
+		static InterfaceHandleComplete handle_complete_;
+		static InterfaceHandleContinue handle_continue_;
 		static InterfaceHandleLife handle_life_;
-		static InterfaceHandleMissionAllOver handle_mission_all_over_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleHealth handle_health_;
 		static InterfaceHandleSkill handle_skill_;
 		static InterfaceHandleTitle handle_title_;
 		static InterfaceHandleWarning handle_warning_;
 		static void DrawBlack(int x, int y, int x2, int y2);
+		static void DrawComplete(int x, int y);
+		static void DrawContinue(int x, int y);
 		static void DrawLIB(int x, int y);
-		static void DrawMissionAllOver(void);
 		static void DrawMissionClear(void);
 		static void DrawHealth(void);
 		static void DrawTitle(int x, int y);

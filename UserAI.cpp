@@ -234,6 +234,9 @@ void UserAi::Act(void)
 		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK4);
 		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK5);
 		NyaInterface::GetHandleSkill()->AddExp((unsigned int)size);
+		NyaInterface::GetHandleLife()->value_--;
+		if (NyaInterface::GetHandleLife()->value_ == 0)
+			NyaInterface::GetHandleContinue()->valid_ = true;
 	}
 
 	count_frame_++;

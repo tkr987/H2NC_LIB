@@ -306,6 +306,10 @@ void TeemoTargetEx3::Act(void)
 	case 3:
 		Act3();
 		break;
+	case 4:
+		if (count_frame_ == FPS_MAX * 8)
+			NyaInterface::GetHandleComplete()->valid_ = true;
+		break;
 	}
 
 	count_frame_++;

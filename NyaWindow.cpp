@@ -106,11 +106,6 @@ void NyaWindow::Run(void)
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
 
-		// TODO
-		// mission all clear と add_child(mission) の関係
-		// nya interface skill の初期化(ミッション→リプレイのとき不具合)
-		// save replay or not save replay 状態遷移確認
-
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
 		// NyaWindowのメンバ関数でevent_next_の値をenum_zero以外にしたとき

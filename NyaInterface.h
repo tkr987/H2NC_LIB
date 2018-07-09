@@ -60,6 +60,18 @@ namespace H2NLIB
 		InterfaceHandleMissionClear();
 	};
 
+	/**
+	@brief replay end 操作クラス
+	@note
+	 変数valid_をtrueにするとreplay endを表示する
+	**/
+	class InterfaceHandleEnd
+	{
+	public:
+		bool valid_;		//!< replay end 画面表示の有効化
+		void Clear();
+	};
+
 	class InterfaceHandleHealth
 	{
 	public:
@@ -127,9 +139,10 @@ namespace H2NLIB
 		NyaInterface();
 		~NyaInterface();
 		static void Init(void);
-		static void Run(void);
+		static void Run(eEVENT event_check);
 		static InterfaceHandleComplete* GetHandleComplete(void) { return &handle_complete_; }
 		static InterfaceHandleContinue* GetHandleContinue(void) { return &handle_continue_; }
+		static InterfaceHandleEnd* GetHandleEnd(void) { return &handle_end_; }
 		static InterfaceHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
 		static InterfaceHandleHealth* GetHandleHealth (void) { return &handle_health_; }
 		static InterfaceHandleLife* GetHandleLife(void) { return &handle_life_; }
@@ -139,6 +152,7 @@ namespace H2NLIB
 	private:
 		static InterfaceHandleComplete handle_complete_;
 		static InterfaceHandleContinue handle_continue_;
+		static InterfaceHandleEnd handle_end_;
 		static InterfaceHandleLife handle_life_;
 		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleHealth handle_health_;
@@ -147,7 +161,8 @@ namespace H2NLIB
 		static InterfaceHandleWarning handle_warning_;
 		static void DrawBlack(int x, int y, int x2, int y2);
 		static void DrawComplete(int x, int y);
-		static void DrawContinue(int x, int y);
+		static void DrawContinue(int x, int y, eEVENT event_check);
+		static void DrawEnd(int x, int y);
 		static void DrawLIB(int x, int y);
 		static void DrawMissionClear(void);
 		static void DrawHealth(void);

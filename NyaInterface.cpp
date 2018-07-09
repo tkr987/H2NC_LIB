@@ -14,6 +14,7 @@ using namespace H2NLIB;
 
 InterfaceHandleComplete NyaInterface::handle_complete_;
 InterfaceHandleContinue	NyaInterface::handle_continue_;
+InterfaceHandleEnd NyaInterface::handle_end_;
 InterfaceHandleMissionClear NyaInterface::handle_mission_clear_;
 InterfaceHandleHealth NyaInterface::handle_health_;
 InterfaceHandleLife NyaInterface::handle_life_;
@@ -32,6 +33,11 @@ void InterfaceHandleContinue::Clear()
 	cnum_ = 0;
 	recovery_ = 1;
 	select_ = 0;
+	valid_ = false;
+}
+
+void InterfaceHandleEnd::Clear()
+{
 	valid_ = false;
 }
 
@@ -125,6 +131,7 @@ void NyaInterface::Init(void)
 {
 	handle_complete_.Clear();
 	handle_continue_.Clear();
+	handle_end_.Clear();
 	handle_health_.valid_ = false;
 	handle_health_.value_ = 100;
 	handle_life_.value_ = 1;
@@ -146,7 +153,7 @@ void NyaInterface::Init(void)
  @note
   ライブラリのNyaWindowクラス内で自動的に呼ばれるので、ライブラリ使用者が呼ぶ必要はない
 **/
-void NyaInterface::Run(void)
+void NyaInterface::Run(eEVENT event_check)
 {
 	DrawBlack(850, 0, 1280, 720);
 	DrawTitle(875, 35);
@@ -156,7 +163,8 @@ void NyaInterface::Run(void)
 	DrawInput(875, 640);
 
 	DrawComplete(225, 200);
-	DrawContinue(220, 200);
+	DrawContinue(220, 200, event_check);
+	DrawEnd(225, 200);
 	DrawHealth();
 	DrawWarning();
 	DrawMissionClear();
@@ -169,13 +177,16 @@ void NyaInterface::DrawBlack(int x, int y, int x2, int y2)
 	DrawBox(x, y, x2, y2, color , true);
 }
 
-void NyaInterface::DrawContinue(int x, int y)
+void NyaInterface::DrawContinue(int x, int y, eEVENT event_check)
 {
 	const int black = GetColor(0, 0, 0);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
 	if (!handle_continue_.valid_)
+		return;
+
+	if (event_check != eEVENT::MISSION_RUN)
 		return;
 
 	DrawBox(x, y, x + 400, y + 200, black, true);
@@ -199,6 +210,19 @@ void NyaInterface::DrawContinue(int x, int y)
 		handle_continue_.valid_ = false;
 		handle_life_.value_ = handle_continue_.recovery_;
 	}
+}
+
+void NyaInterface::DrawEnd(int x, int y)
+{
+	const int black = GetColor(0, 0, 0);
+	const tuple<int, int, int> white = make_tuple(212, 212, 255);
+
+	if (!handle_end_.valid_)
+		return;
+
+	DrawBox(x, y, x + 400, y + 150, black, true);
+	NyaString::Write("design_mission_clear_big_font", white, x + 75, y + 25, "REPLAY END");
+	NyaString::Write("design_mission_clear_small_font", white, x + 85, y + 90, "PRESS ENTER KEY");
 }
 
 void NyaInterface::DrawTitle(int x, int y)

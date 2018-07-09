@@ -11,9 +11,8 @@ namespace H2NLIB
 	public:
 		NyaBackground(){}
 		virtual ~NyaBackground(){}
-		virtual void MissionRun(void) = 0;
-		virtual void MissionContinue(void) = 0;
-		virtual void MissionClear(void){}
+		virtual void Act(void) = 0;
+		virtual void Draw(void) = 0;
 		void Run(const eEVENT check_event);
 	};
 }

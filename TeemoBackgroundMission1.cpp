@@ -20,22 +20,6 @@ TeemoBackgroundMission1::~TeemoBackgroundMission1()
 	delete gp_;
 }
 
-void TeemoBackgroundMission1::MissionClear(void)
-{
-	Draw();
-}
-
-void TeemoBackgroundMission1::MissionContinue(void)
-{
-	Draw();
-}
-
-void TeemoBackgroundMission1::MissionRun(void)
-{
-	Act();
-	Draw();
-}
-
 void TeemoBackgroundMission1::Act(void)
 {
 	const double limit_scroll_max_y = -10.0;

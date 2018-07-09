@@ -81,6 +81,7 @@ void NyaMission::Run(eEVENT check_event)
 		break;
 	case eEVENT::MISSION_RUN:
 	case eEVENT::MISSION_REPLAY_RUN:
+	case eEVENT::MISSION_REPLAY_END:
 		count_frame_++;
 		break;
 	case eEVENT::MISSION_DELETE:

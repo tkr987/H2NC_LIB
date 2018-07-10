@@ -5,7 +5,7 @@
 #include <utility>
 #include "NyaEnum.h"
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class NyaEnding;
 	class NyaMission;

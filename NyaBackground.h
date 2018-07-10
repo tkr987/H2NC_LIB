@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace H2NLIB
+namespace HNLIB
 {
 	enum class eEVENT;
 

@@ -2,12 +2,12 @@
 
 #include "NyaOpening.h"
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class GraphicPropertyX1;
 }
 
-class TeemoOpening : public H2NLIB::NyaOpening
+class TeemoOpening : public HNLIB::NyaOpening
 {
 public:	
 	TeemoOpening();
@@ -16,6 +16,6 @@ public:
 	void Run(void);
 	void Delete(void);
 private:
-	H2NLIB::GraphicPropertyX1* gpx_;
+	HNLIB::GraphicPropertyX1* gpx_;
 };
 

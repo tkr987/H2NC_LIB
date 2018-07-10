@@ -1,9 +1,9 @@
 #pragma once
 
 #include <utility>
-#include "h2nlib.h"
+#include "HNLIB.h"
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class DevicePropertyX1;
 	class EffectPropertyX1;
@@ -16,7 +16,7 @@ namespace H2NLIB
 class UserAiRange
 {
 public:
-	H2NLIB::GraphicPropertyX4* gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
 	UserAiRange();
 	~UserAiRange();
 };
@@ -24,13 +24,13 @@ public:
 class UserAiDevice
 {
 public:
-	H2NLIB::GraphicPropertyX4* bit_gpx_;
-	H2NLIB::DevicePropertyX1* gadget_dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX2* effect_epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
-	H2NLIB::SoundPropertyX* spx_[6];
-	H2NLIB::SoundPropertyX* spx_ex_[6];
+	HNLIB::GraphicPropertyX4* bit_gpx_;
+	HNLIB::DevicePropertyX1* gadget_dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX2* effect_epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::SoundPropertyX* spx_[6];
+	HNLIB::SoundPropertyX* spx_ex_[6];
 	UserAiDevice();
 	~UserAiDevice();
 };
@@ -40,11 +40,11 @@ class UserAiDeviceEx
 public:
 	bool valid_;
 	int count_ult_frame_;
-	H2NLIB::GraphicPropertyX4* bit_gpx_;
-	H2NLIB::DevicePropertyX1* gadget_dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX2* effect_epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::GraphicPropertyX4* bit_gpx_;
+	HNLIB::DevicePropertyX1* gadget_dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX2* effect_epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	UserAiDeviceEx();
 	~UserAiDeviceEx();
 };
@@ -52,16 +52,16 @@ public:
 struct UserAiMain
 {
 public:
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	UserAiMain();
 	~UserAiMain();
 };
 
 
-class UserAi : public H2NLIB::NyaUser {
+class UserAi : public HNLIB::NyaUser {
 public:
 	UserAi();
 	~UserAi();

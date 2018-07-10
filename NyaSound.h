@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-namespace H2NLIB
+namespace HNLIB
 {
 
 	class NyaDesign;

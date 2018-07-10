@@ -5,7 +5,7 @@
 #include "DxLib.h"
 
 
-namespace H2NLIB {
+namespace HNLIB {
 
 
 	struct NyaDebugData {

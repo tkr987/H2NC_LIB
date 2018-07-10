@@ -1,7 +1,7 @@
-#include "H2NLIB.h"
+#include "HNLIB.h"
 #include "TeemoTarget.h"
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 TeemoDevice::TeemoDevice()
 {

@@ -1,7 +1,7 @@
 #include "TeemoOpening.h"
 #include "NyaGraphic.h"
 
-using namespace H2NLIB;
+using namespace HNLIB;
 
 TeemoOpening::TeemoOpening()
 {

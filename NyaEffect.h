@@ -7,7 +7,7 @@
 #include <vector>
 
 
-namespace H2NLIB 
+namespace HNLIB 
 {
 	class GraphicPropertyX4;
 	class PositionHandle;

@@ -8,7 +8,7 @@
 //#define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 std::list<GraphicFile> NyaGraphic::file_collection_;
 std::vector<GraphicDrawSet> NyaGraphic::layer_collection_(static_cast<int>(eOBJECT::sizeof_enum));
@@ -85,6 +85,9 @@ void NyaGraphic::Clear(void)
 **/
 void NyaGraphic::DeleteGraphicFile(GraphicFile* file)
 {
+	if (file->pass_.empty())
+		return;
+
 	for (list<GraphicFile>::iterator it = file_collection_.begin(); it != file_collection_.end(); ++it)
 	{
 		if (it->pass_ == file->pass_ && it->div_x_ == file->div_x_ && it->div_y_ == file->div_y_)
@@ -420,7 +423,7 @@ void NyaGraphic::Run(void)
 /**
 @brief 振動命令を出す関数
 **/
-void H2NLIB::NyaGraphic::Swing(void)
+void HNLIB::NyaGraphic::Swing(void)
 {
 	// 振動をカウントする変数count_が8未満のとき振動するので、count_を0に初期化する
 	// 振動のx座標も0に初期化する

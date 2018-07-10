@@ -1,8 +1,8 @@
 #pragma once
 
-#include "h2nlib.h"
+#include "HNLIB.h"
 
-class TeemoMission1 : public H2NLIB::NyaMission {
+class TeemoMission1 : public HNLIB::NyaMission {
 public:
 	void Create(void);
 	void Delete(void);

@@ -3,7 +3,7 @@
 #include "NyaPosition.h"
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 
 list<EffectAnimation1> NyaEffect::ea1_draw_list_[static_cast<int>(eOBJECT::sizeof_enum)];

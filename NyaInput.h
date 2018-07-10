@@ -6,7 +6,7 @@
 #include <string>
 #include "NyaEnum.h"
 
-namespace H2NLIB {
+namespace HNLIB {
 
 	class NyaInput {
 	public:

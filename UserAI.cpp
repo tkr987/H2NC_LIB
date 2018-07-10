@@ -13,7 +13,7 @@
 #define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 
 UserAiDevice::UserAiDevice()
@@ -38,26 +38,14 @@ UserAiDevice::UserAiDevice()
 	NyaGraphic::LoadGraphicFile(11, 1, "img/user/attack_effect.png", &effect_gpx_->file_);
 
 	for (int i = 0; i < 6; i++)
+	{
 		spx_[i] = new SoundPropertyX;
-	NyaSound::LoadFile("sound/user_attack1.wav", &spx_[0]->file_);
-	NyaSound::LoadFile("sound/user_attack2.wav", &spx_[1]->file_);
-	NyaSound::LoadFile("sound/user_attack3.wav", &spx_[2]->file_);
-	NyaSound::LoadFile("sound/user_attack4.wav", &spx_[3]->file_);
-	NyaSound::LoadFile("sound/user_attack5.wav", &spx_[4]->file_);
-	NyaSound::LoadFile("sound/user_attack6.wav", &spx_[5]->file_);
-	for (int i = 0; i < 6; i++)
+		NyaSound::LoadFile("sound/user_attack.wav", &spx_[i]->file_);
 		NyaSound::ChangeVolume(&spx_[i]->file_, 50);
-
-	for (int i = 0; i < 6; i++)
 		spx_ex_[i] = new SoundPropertyX;
-	NyaSound::LoadFile("sound/user_attack_ex1.wav", &spx_ex_[0]->file_);
-	NyaSound::LoadFile("sound/user_attack_ex2.wav", &spx_ex_[1]->file_);
-	NyaSound::LoadFile("sound/user_attack_ex3.wav", &spx_ex_[2]->file_);
-	NyaSound::LoadFile("sound/user_attack_ex4.wav", &spx_ex_[3]->file_);
-	NyaSound::LoadFile("sound/user_attack_ex5.wav", &spx_ex_[4]->file_);
-	NyaSound::LoadFile("sound/user_attack_ex6.wav", &spx_ex_[5]->file_);
-	for (int i = 0; i < 6; i++)
+		NyaSound::LoadFile("sound/user_attack_ex.wav", &spx_ex_[i]->file_);
 		NyaSound::ChangeVolume(&spx_ex_[i]->file_, 30);
+	}
 }
 
 UserAiDevice::~UserAiDevice()
@@ -84,9 +72,6 @@ UserAiDevice::~UserAiDevice()
 	{
 		delete spx_[i];
 		spx_[i] = nullptr;
-	}
-	for (int i = 0; i < 6; i++)
-	{
 		delete spx_ex_[i];
 		spx_ex_[i] = nullptr;
 	}
@@ -133,12 +118,12 @@ UserAiMain::UserAiMain()
 	phandle_->collision_range_ = 5;
 	phandle_->grid_x_ = 100;
 	phandle_->grid_y_ = 500;
-	phandle_->name_ = "user_main_handle";
+	phandle_->name_ = "user";
 
 	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
 	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1500000;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 800000;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 200;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 0;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 700000;
 }
 
@@ -176,10 +161,10 @@ UserAi::UserAi(void)
 	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)] = 400000;
 	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)] = 600000;
 	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)] = 800000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::E)] = 100;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)] = 200;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)] = 300;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)] = 400;
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::E)] = 10000;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)] = 20000;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)] = 30000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)] = 40000;
 	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::R)] = 200000;
 	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::R)] = 400000;
 	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 600000;

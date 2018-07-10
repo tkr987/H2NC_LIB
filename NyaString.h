@@ -6,7 +6,7 @@
 #include <tuple>
 
 
-namespace H2NLIB
+namespace HNLIB
 {
 
 	struct StringOutput

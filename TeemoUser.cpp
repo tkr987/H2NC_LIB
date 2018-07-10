@@ -1,6 +1,6 @@
-#include "H2NLIB.h"
+#include "HNLIB.h"
 #include "TeemoUser.h"
-using namespace H2NLIB;
+using namespace HNLIB;
 
 TeemoUser::TeemoUser()
 {

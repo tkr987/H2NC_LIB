@@ -3,7 +3,7 @@
 #include <array>
 #include "NyaTarget.h"
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class DevicePropertyX1;
 	class DevicePropertyX3;
@@ -18,10 +18,10 @@ namespace H2NLIB
 class TeemoExDevice311
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice311();
 	~TeemoExDevice311();
 };
@@ -29,8 +29,8 @@ public:
 class TeemoExCube31
 {
 public:
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExCube31();
 	~TeemoExCube31();
 };
@@ -41,10 +41,10 @@ public:
 class TeemoExDevice321
 {
 public:
-	H2NLIB::DevicePropertyX3* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX3* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice321();
 	~TeemoExDevice321();
 };
@@ -52,10 +52,10 @@ public:
 class TeemoExDevice322
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice322();
 	~TeemoExDevice322();
 };
@@ -64,10 +64,10 @@ class TeemoExCube32
 {
 public:
 	TeemoExDevice322 device322_;
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExCube32();
 	~TeemoExCube32();
 };
@@ -83,10 +83,10 @@ public:
 	double way2_angle_;
 	double way3_angle_;
 	double way4_angle_;
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice331();
 	~TeemoExDevice331();
 };
@@ -94,10 +94,10 @@ public:
 class TeemoExDevice332
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice332();
 	~TeemoExDevice332();
 };
@@ -107,10 +107,10 @@ class TeemoExCube33
 {
 public:
 	TeemoExDevice332 device332_;
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExCube33();
 	~TeemoExCube33();
 };
@@ -118,23 +118,23 @@ public:
 class TeemoEx3Main
 {
 public:
-	H2NLIB::EffectPropertyX1* death1_epx_;
-	H2NLIB::GraphicPropertyX4* death1_gpx_;
-	H2NLIB::EffectPropertyX1* death2_epx_;
-	H2NLIB::GraphicPropertyX4* death2_gpx_;
+	HNLIB::EffectPropertyX1* death1_epx_;
+	HNLIB::GraphicPropertyX4* death1_gpx_;
+	HNLIB::EffectPropertyX1* death2_epx_;
+	HNLIB::GraphicPropertyX4* death2_gpx_;
 	TeemoExDevice311 device311_;
 	TeemoExDevice321 device321_;
 	TeemoExDevice331 device331_;
-	H2NLIB::GraphicPropertyX4* gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
 	const int health_max_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoEx3Main();
 	~TeemoEx3Main();
 };
 
 
 
-class TeemoTargetEx3 : public H2NLIB::NyaTarget
+class TeemoTargetEx3 : public HNLIB::NyaTarget
 {
 public:
 	TeemoTargetEx3();

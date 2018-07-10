@@ -7,7 +7,7 @@
 
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 mt19937 NyaInput::mt_rand_;
 stringstream NyaInput::output_date_;

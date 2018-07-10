@@ -2,7 +2,7 @@
 
 #include "NyaTarget.h"
 
-namespace H2NLIB 
+namespace HNLIB 
 {
 	class NyaDevice;
 	class NyaSound;
@@ -16,13 +16,13 @@ class TargetExTeemoMain
 {
 public:
 	const unsigned int health_max_;
-	H2NLIB::GraphicPropertyX4* gp_;
-	H2NLIB::PositionHandle* ph_;
+	HNLIB::GraphicPropertyX4* gp_;
+	HNLIB::PositionHandle* ph_;
 	TargetExTeemoMain();
 	~TargetExTeemoMain();
 };
 
-class TargetExTeemo : public H2NLIB::NyaTarget
+class TargetExTeemo : public HNLIB::NyaTarget
 {
 public:
 	TargetExTeemo();

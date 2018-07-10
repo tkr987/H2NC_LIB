@@ -1,6 +1,6 @@
 #pragma once
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class NyaEnding
 	{

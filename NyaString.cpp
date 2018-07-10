@@ -3,7 +3,7 @@
 
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 deque<StringOutput> NyaString::string_output_deque_;
 map<string, int> NyaString::font_map_;
@@ -93,7 +93,7 @@ void NyaString::Write(string font, std::tuple<int, int, int> color, int grid_x, 
 	string_output_deque_.push_back(so);
 }
 
-void H2NLIB::NyaString::Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, unsigned int value)
+void HNLIB::NyaString::Write(std::string font, std::tuple<int, int, int> color, int grid_x, int grid_y, std::string str, unsigned int value)
 {
 	StringOutput so;
 

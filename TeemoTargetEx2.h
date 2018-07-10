@@ -2,7 +2,7 @@
 
 #include "NyaTarget.h"
 
-namespace H2NLIB 
+namespace HNLIB 
 {
 	class DevicePropertyX1;
 	class DevicePropertyX3;
@@ -17,10 +17,10 @@ namespace H2NLIB
 class TeemoExDevice211
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice211();
 	~TeemoExDevice211();
 };
@@ -28,10 +28,10 @@ public:
 class TeemoExDevice212
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice212();
 	~TeemoExDevice212();
 };
@@ -41,10 +41,10 @@ class TeemoExCube21
 public:
 	TeemoExDevice212 device212_;
 	int device_gap_angle_;
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExCube21();
 	~TeemoExCube21();
 };
@@ -57,10 +57,10 @@ public:
 class TeemoExDevice221
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice221();
 	~TeemoExDevice221();
 };
@@ -68,10 +68,10 @@ public:
 class TeemoExDevice222
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice222();
 	~TeemoExDevice222();
 };
@@ -79,10 +79,10 @@ public:
 class TeemoExDevice223
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice223();
 	~TeemoExDevice223();
 };
@@ -92,10 +92,10 @@ class TeemoExCube22
 public:
 	TeemoExDevice222 device222_;
 	TeemoExDevice222 device223_;
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExCube22();
 	~TeemoExCube22();
 };
@@ -107,10 +107,10 @@ public:
 class TeemoExDevice232
 {
 public:
-	H2NLIB::DevicePropertyX1* dpx_;
-	H2NLIB::GraphicPropertyX4* gadget_gpx_;
-	H2NLIB::EffectPropertyX1* epx_;
-	H2NLIB::GraphicPropertyX4* effect_gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice232();
 	~TeemoExDevice232();
 };
@@ -119,10 +119,10 @@ class TeemoExCube23
 {
 public:
 	TeemoExDevice232 device232_;
-	H2NLIB::EffectPropertyX1* death_epx_;
-	H2NLIB::GraphicPropertyX4* death_gpx_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExCube23();
 	~TeemoExCube23();
 };
@@ -130,20 +130,20 @@ public:
 class TeemoExMain2
 {
 public:
-	H2NLIB::EffectPropertyX1* death1_epx_;
-	H2NLIB::GraphicPropertyX4* death1_gpx_;
-	H2NLIB::EffectPropertyX1* death2_epx_;
-	H2NLIB::GraphicPropertyX4* death2_gpx_;
+	HNLIB::EffectPropertyX1* death1_epx_;
+	HNLIB::GraphicPropertyX4* death1_gpx_;
+	HNLIB::EffectPropertyX1* death2_epx_;
+	HNLIB::GraphicPropertyX4* death2_gpx_;
 	TeemoExDevice211 device211_;
 	TeemoExDevice221 device221_;
 	const unsigned int health_max_;
-	H2NLIB::GraphicPropertyX4* gpx_;
-	H2NLIB::PositionHandle* phandle_;
+	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::PositionHandle* phandle_;
 	TeemoExMain2();
 	~TeemoExMain2();
 };
 
-class TeemoTargetEx2 : public H2NLIB::NyaTarget
+class TeemoTargetEx2 : public HNLIB::NyaTarget
 {
 public:
 	TeemoTargetEx2();

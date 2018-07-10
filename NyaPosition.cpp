@@ -5,14 +5,14 @@
 #include "NyaPosition.h"
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 vector<pair<eOBJECT, eOBJECT>> NyaPosition::collision_pair_collection_;
 vector<PositionHandle*> NyaPosition::collision_collection_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<PositionHandle*> NyaPosition::handle_collection_;
 list<PositionMove> NyaPosition::move_collection_;
 
-double H2NLIB::NyaPosition::Angle(PositionHandle* handle1, PositionHandle* handle2)
+double HNLIB::NyaPosition::Angle(PositionHandle* handle1, PositionHandle* handle2)
 {
 	return RadToAngle(atan2(handle2->grid_y_ - handle1->grid_y_, handle2->grid_x_ - handle1->grid_x_));
 }
@@ -89,7 +89,7 @@ void NyaPosition::CreateHandle(PositionHandle* new_handle)
 @note
  ˆø”‚Åw’è‚³‚ê‚½ƒnƒ“ƒhƒ‹‚ğíœ‚·‚é
 **/
-void H2NLIB::NyaPosition::DeleteHandle(PositionHandle* delete_handle)
+void HNLIB::NyaPosition::DeleteHandle(PositionHandle* delete_handle)
 {
 	handle_collection_.remove(delete_handle);
 	delete delete_handle;
@@ -250,7 +250,7 @@ void NyaPosition::Run(void)
 	CalculateMove();
 }
 
-void H2NLIB::NyaPosition::CalculateMove(void)
+void HNLIB::NyaPosition::CalculateMove(void)
 {
 	list<PositionMove>::iterator remove_it;
 	deque<list<PositionMove>::iterator> gabage_collection;

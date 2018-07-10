@@ -1,15 +1,15 @@
 #pragma once
 #include "NyaUser.h"
 
-namespace H2NLIB 
+namespace HNLIB 
 {
 	class GraphicPropertyX4;
 }
 
-class TeemoUser : public H2NLIB::NyaUser
+class TeemoUser : public HNLIB::NyaUser
 {
 public:
-	H2NLIB::GraphicPropertyX4* gpx_;
+	HNLIB::GraphicPropertyX4* gpx_;
 	TeemoUser();
 	~TeemoUser();
 	void Act(void);

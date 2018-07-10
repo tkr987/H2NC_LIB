@@ -9,7 +9,7 @@
 #define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 
 list<DeviceGadget14> NyaDevice::gadget14_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
@@ -984,7 +984,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 			{
 				if (it->gadget_phandle_collection_[i]->collision_hit_damage_ != 0)
 				{
-					it->effect_epx_->gap_x_ = it->gadget_phandle_collection_[i]->collision_hit_handle_->grid_x_ - it->gadget_phandle_collection_[i]->collision_hit_x_;
+					it->effect_epx_->gap_x_ = it->gadget_phandle_collection_[i]->collision_hit_x_ - it->gadget_phandle_collection_[i]->collision_hit_handle_->grid_x_;
 					it->effect_epx_->gap_y_ = it->gadget_phandle_collection_[i]->collision_hit_y_ - it->gadget_phandle_collection_[i]->collision_hit_handle_->grid_y_;
 					it->effect_epx_->grid_x_ = &it->gadget_phandle_collection_[i]->collision_hit_handle_->grid_x_;
 					it->effect_epx_->grid_y_ = &it->gadget_phandle_collection_[i]->collision_hit_handle_->grid_y_;

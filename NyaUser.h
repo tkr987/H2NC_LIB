@@ -1,7 +1,7 @@
 #pragma once
 #include "NyaEnum.h"
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class NyaUser {
 	public:

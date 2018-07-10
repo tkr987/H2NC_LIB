@@ -10,7 +10,7 @@
 #include <vector>
 
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class EffectPropertyX1;
 	class EffectPropertyX2;

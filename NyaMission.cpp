@@ -6,7 +6,7 @@
 #include "NyaUser.h"
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 NyaBackground* NyaMission::background_;
 std::vector<MissionTarget> NyaMission::target_collection_;

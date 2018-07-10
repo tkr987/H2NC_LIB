@@ -10,12 +10,12 @@
 #define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
+InterfaceHandleClear NyaInterface::handle_clear_;
 InterfaceHandleComplete NyaInterface::handle_complete_;
 InterfaceHandleContinue	NyaInterface::handle_continue_;
 InterfaceHandleEnd NyaInterface::handle_end_;
-InterfaceHandleMissionClear NyaInterface::handle_mission_clear_;
 InterfaceHandleHealth NyaInterface::handle_health_;
 InterfaceHandleLife NyaInterface::handle_life_;
 InterfaceHandleSkill NyaInterface::handle_skill_;
@@ -23,7 +23,14 @@ InterfaceHandleTitle NyaInterface::handle_title_;
 InterfaceHandleWarning NyaInterface::handle_warning_;
 
 
-void H2NLIB::InterfaceHandleComplete::Clear()
+
+void InterfaceHandleClear::Clear()
+{
+	valid_ = false;
+}
+
+
+void InterfaceHandleComplete::Clear()
 {
 	valid_ = false;
 }
@@ -41,22 +48,23 @@ void InterfaceHandleEnd::Clear()
 	valid_ = false;
 }
 
-void H2NLIB::InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
+
+void InterfaceHandleHealth::Clear()
+{
+	valid_ = false;
+	value_ = 100;
+}
+
+
+void HNLIB::InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
 {
 	NyaSound::LoadFile(file_pass, &spx_->file_);
 	NyaSound::ChangeVolume(&spx_->file_, volume);
 }
 
-void H2NLIB::InterfaceHandleWarning::DeleteSound(void)
+void HNLIB::InterfaceHandleWarning::DeleteSound(void)
 {
 	NyaSound::DeleteSoundFile(&spx_->file_);
-}
-
-InterfaceHandleMissionClear::InterfaceHandleMissionClear()
-{
-	draw_grid_x_ = INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_X;
-	draw_grid_y_ = INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_Y;
-	valid_ = false;
 }
 
 InterfaceHandleSkill::InterfaceHandleSkill()
@@ -109,14 +117,7 @@ InterfaceHandleWarning::~InterfaceHandleWarning()
 	spx_ = nullptr;
 }
 
-
-InterfaceHandleHealth::InterfaceHandleHealth()
-{
-	valid_ = false;
-	value_ = 100;
-}
-
-H2NLIB::InterfaceHandleTitle::InterfaceHandleTitle()
+HNLIB::InterfaceHandleTitle::InterfaceHandleTitle()
 {
 
 }
@@ -132,8 +133,7 @@ void NyaInterface::Init(void)
 	handle_complete_.Clear();
 	handle_continue_.Clear();
 	handle_end_.Clear();
-	handle_health_.valid_ = false;
-	handle_health_.value_ = 100;
+	handle_health_.Clear();
 	handle_life_.value_ = 1;
 
 	NyaString::SettingFont("interface_continue_font", 40, 6);
@@ -162,12 +162,12 @@ void NyaInterface::Run(eEVENT event_check)
 	DrawLIB(910, 520);
 	DrawInput(875, 640);
 
+	DrawClear(225, 200);
 	DrawComplete(225, 200);
 	DrawContinue(220, 200, event_check);
 	DrawEnd(225, 200);
 	DrawHealth();
 	DrawWarning();
-	DrawMissionClear();
 }
 
 void NyaInterface::DrawBlack(int x, int y, int x2, int y2) 
@@ -175,6 +175,38 @@ void NyaInterface::DrawBlack(int x, int y, int x2, int y2)
 	const int color = GetColor(16, 16, 16);
 
 	DrawBox(x, y, x2, y2, color , true);
+}
+
+void NyaInterface::DrawClear(int x, int y)
+{
+	const int black = GetColor(0, 0, 0);
+	const tuple<int, int, int> font_color = make_tuple(212, 212, 255);
+
+	if (!handle_clear_.valid_)
+		return;
+
+	DrawBox(x, y, x + 400, y + 150, black, true);
+	NyaString::Write("design_mission_clear_big_font", font_color, x + 40, y + 25, "MISSION CLEAR");
+	NyaString::Write("design_mission_clear_small_font", font_color, x + 80, y + 90, "PRESS ENTER KEY");
+
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+		handle_clear_.valid_ = false;
+}
+
+void NyaInterface::DrawComplete(int x, int y)
+{
+	const int black = GetColor(0, 0, 0);
+	const tuple<int, int, int> font_color = make_tuple(212, 212, 255);
+
+	if (!handle_complete_.valid_)
+		return;
+
+	DrawBox(x, y, x + 460, y + 150, black, true);
+	NyaString::Write("design_mission_clear_big_font", font_color, x + 20, y + 25, "MISSION COMPLETE");
+	NyaString::Write("design_mission_clear_small_font", font_color, x + 105, y + 90, "PRESS ENTER KEY");
+
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+		handle_complete_.valid_ = false;
 }
 
 void NyaInterface::DrawContinue(int x, int y, eEVENT event_check)
@@ -186,7 +218,7 @@ void NyaInterface::DrawContinue(int x, int y, eEVENT event_check)
 	if (!handle_continue_.valid_)
 		return;
 
-	if (event_check != eEVENT::MISSION_RUN)
+	if (event_check != eEVENT::MISSION_RUN && event_check != eEVENT::MISSION_CONTINUE)
 		return;
 
 	DrawBox(x, y, x + 400, y + 200, black, true);
@@ -223,13 +255,9 @@ void NyaInterface::DrawEnd(int x, int y)
 	DrawBox(x, y, x + 400, y + 150, black, true);
 	NyaString::Write("design_mission_clear_big_font", white, x + 75, y + 25, "REPLAY END");
 	NyaString::Write("design_mission_clear_small_font", white, x + 85, y + 90, "PRESS ENTER KEY");
-}
 
-void NyaInterface::DrawTitle(int x, int y)
-{
-	const tuple<int, int, int> white = make_tuple(212, 227, 255);
-
-	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+		handle_end_.valid_ = false;
 }
 
 /**
@@ -279,33 +307,11 @@ void NyaInterface::DrawLIB(int x, int y)
 	NyaString::Write("interface_lib_font", white, x, y + 50, "2 Nya");
 }
 
-void NyaInterface::DrawComplete(int x, int y)
+void NyaInterface::DrawTitle(int x, int y)
 {
-	const int black = GetColor(0, 0, 0);
-	const tuple<int, int, int> font_color = make_tuple(212, 212, 255);
+	const tuple<int, int, int> white = make_tuple(212, 227, 255);
 
-	if (!handle_complete_.valid_)
-		return;
-
-	DrawBox(x, y, x + 460, y + 150, black, true);
-	NyaString::Write("design_mission_clear_big_font", font_color, x + 20, y + 25, "MISSION COMPLETE");
-	NyaString::Write("design_mission_clear_small_font", font_color, x + 105, y + 90, "PRESS ENTER KEY");
-}
-
-void NyaInterface::DrawMissionClear()
-{
-	int draw_grid_x, draw_grid_y;
-	const int black = GetColor(0, 0, 0);
-	const tuple<int, int, int> font_color = make_tuple(212, 212, 255);
-
-	if (!handle_mission_clear_.valid_)
-		return;
-
-	draw_grid_x = handle_mission_clear_.draw_grid_x_;
-	draw_grid_y = handle_mission_clear_.draw_grid_y_;
-	DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
-	NyaString::Write("design_mission_clear_big_font", font_color, draw_grid_x + 40, draw_grid_y + 25, "MISSION CLEAR");
-	NyaString::Write("design_mission_clear_small_font", font_color, draw_grid_x + 80, draw_grid_y + 90, "PRESS ENTER KEY");
+	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
 }
 
 void NyaInterface::DrawHealth(void)
@@ -476,5 +482,3 @@ void NyaInterface::DrawWarning(void)
 		}
 	}	
 }
-
-

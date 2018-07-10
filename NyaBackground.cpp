@@ -1,7 +1,7 @@
 #include "NyaBackground.h"
 #include "NyaEnum.h"
 
-using namespace H2NLIB;
+using namespace HNLIB;
 
 
 /**

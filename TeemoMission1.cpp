@@ -4,7 +4,7 @@
 #include "TeemoTargetEx.h"
 #include "UserAI.h"
 
-using namespace H2NLIB;
+using namespace HNLIB;
 
 void TeemoMission1::Create(void) 
 {

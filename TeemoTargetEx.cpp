@@ -10,7 +10,7 @@
 #define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 TargetExTeemoMain::TargetExTeemoMain() : health_max_(500) 
 {
@@ -68,7 +68,6 @@ void TargetExTeemo::MissionRun(void)
 
 void TargetExTeemo::Act(void)
 {
-	InterfaceHandleMissionClear* ihandle_mission_clear;
 	InterfaceHandleSkill *ihandle_mission_skill;
 	InterfaceHandleWarning* ihandle_warning;
 
@@ -91,11 +90,7 @@ void TargetExTeemo::Act(void)
 
 	// ƒwƒ‹ƒX‚ª0ˆÈ‰º‚É‚È‚Á‚½‚çmission clear‚ð•\Ž¦‚·‚é
 	if (main_.ph_->health_ <= 0)
-	{
-		ihandle_mission_clear = NyaInterface::GetHandleMissionClear();
-		ihandle_mission_clear->valid_ = true;
-	}
-
+		NyaInterface::GetHandleClear()->valid_ = true;
 }
 
 void TargetExTeemo::Draw(void)

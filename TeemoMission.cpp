@@ -2,7 +2,7 @@
 #include "TeemoTarget.h"
 #include "TeemoUser.h"
 
-using namespace H2NLIB;
+using namespace HNLIB;
 
 void TeemoMission::Create(void)
 {

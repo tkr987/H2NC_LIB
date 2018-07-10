@@ -2,7 +2,7 @@
 #include "NyaSound.h"
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 std::list<SoundFile> NyaSound::file_collection_;
 std::deque<SoundPropertyX> NyaSound::play_collection_;
@@ -60,21 +60,25 @@ void NyaSound::LoadFile(std::string file_pass, SoundFile* file)
 	list<SoundFile>::iterator it;
 	SoundFile new_file;
 
-	// ロード済みファイルなら新しくロードする必要ない
 	for (auto& e : file_collection_)
-	{
+	{	// ロード済みファイルかどうか調べる
 		if (e.pass_ == file_pass)
-		{
-			*file = e;
+		{	// 既にメモリに読み込んである音データを使用するサウンドハンドルを新たに作成する
+			new_file.id_ = DuplicateSoundMem(e.id_);
+			new_file.pass_ = file_pass;
+			file_collection_.push_front(new_file);
+			// ロード結果を返す
+			if (file != nullptr)
+				*file = new_file;
 			return;
 		}
 	}
 
-	// サウンドファイルをメモリにロードする
+	// ロード済みファイルでないなら
+	// サウンドファイルを新たにメモリにロードする
 	new_file.id_ = LoadSoundMem(file_pass.c_str());
 	new_file.pass_ = file_pass;
 	file_collection_.push_front(new_file);
-
 	// ロード結果を返す
 	if (file != nullptr)
 		*file = new_file;

@@ -14,7 +14,7 @@
 
 
 
-namespace H2NLIB
+namespace HNLIB
 {
 	//*****************
 	// “ü—Í‚ÌŽí—Þ

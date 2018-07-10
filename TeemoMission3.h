@@ -2,7 +2,7 @@
 
 #include "NyaMission.h"
 
-class TeemoMission3 : public H2NLIB::NyaMission
+class TeemoMission3 : public HNLIB::NyaMission
 {
 public:
 	void Create(void);

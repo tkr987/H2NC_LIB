@@ -9,9 +9,16 @@
 #include "NyaEnum.h"
 
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class SoundPropertyX;
+
+	class InterfaceHandleClear
+	{
+	public:
+		bool valid_;					//!< trueならmission clearと表示する
+		void Clear();
+	};
 
 	/**
 	@brief mission complete 操作クラス
@@ -51,15 +58,6 @@ namespace H2NLIB
 		void Clear();
 	};
 
-	class InterfaceHandleMissionClear
-	{
-	public:
-		int draw_grid_x_;
-		int draw_grid_y_;
-		bool valid_;						// trueならmission clearと表示する
-		InterfaceHandleMissionClear();
-	};
-
 	/**
 	@brief replay end 操作クラス
 	@note
@@ -77,7 +75,7 @@ namespace H2NLIB
 	public:
 		bool valid_;
 		double value_;
-		InterfaceHandleHealth();
+		void Clear();
 	};
 
 	/**
@@ -140,31 +138,31 @@ namespace H2NLIB
 		~NyaInterface();
 		static void Init(void);
 		static void Run(eEVENT event_check);
+		static InterfaceHandleClear* GetHandleClear(void) { return &handle_clear_; }
 		static InterfaceHandleComplete* GetHandleComplete(void) { return &handle_complete_; }
 		static InterfaceHandleContinue* GetHandleContinue(void) { return &handle_continue_; }
 		static InterfaceHandleEnd* GetHandleEnd(void) { return &handle_end_; }
-		static InterfaceHandleMissionClear* GetHandleMissionClear(void) { return &handle_mission_clear_; }
 		static InterfaceHandleHealth* GetHandleHealth (void) { return &handle_health_; }
 		static InterfaceHandleLife* GetHandleLife(void) { return &handle_life_; }
 		static InterfaceHandleSkill* GetHandleSkill(void) { return &handle_skill_; }
 		static InterfaceHandleTitle* GetHandleTitle(void) { return &handle_title_; }
 		static InterfaceHandleWarning* GetHandleWarning(void) { return &handle_warning_; }
 	private:
+		static InterfaceHandleClear handle_clear_;
 		static InterfaceHandleComplete handle_complete_;
 		static InterfaceHandleContinue handle_continue_;
 		static InterfaceHandleEnd handle_end_;
 		static InterfaceHandleLife handle_life_;
-		static InterfaceHandleMissionClear handle_mission_clear_;
 		static InterfaceHandleHealth handle_health_;
 		static InterfaceHandleSkill handle_skill_;
 		static InterfaceHandleTitle handle_title_;
 		static InterfaceHandleWarning handle_warning_;
 		static void DrawBlack(int x, int y, int x2, int y2);
+		static void DrawClear(int x, int y);
 		static void DrawComplete(int x, int y);
 		static void DrawContinue(int x, int y, eEVENT event_check);
 		static void DrawEnd(int x, int y);
 		static void DrawLIB(int x, int y);
-		static void DrawMissionClear(void);
 		static void DrawHealth(void);
 		static void DrawTitle(int x, int y);
 		static void DrawInput(int x, int y);

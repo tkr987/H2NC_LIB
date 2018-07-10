@@ -14,7 +14,7 @@
 #define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 //*************************************
 // Act1(), Draw1() ‚ÅŽg‚¤ƒNƒ‰ƒX

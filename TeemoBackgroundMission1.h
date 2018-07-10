@@ -2,12 +2,12 @@
 
 #include "NyaBackground.h"
 
-namespace H2NLIB
+namespace HNLIB
 {
 	class GraphicPropertyX1;
 }
 
-class TeemoBackgroundMission1 : public H2NLIB::NyaBackground
+class TeemoBackgroundMission1 : public HNLIB::NyaBackground
 {
 public:
 	TeemoBackgroundMission1();
@@ -16,7 +16,7 @@ public:
 	void MissionContinue(void);
 	void MissionRun(void);
 private:
-	H2NLIB::GraphicPropertyX1* gp_;
+	HNLIB::GraphicPropertyX1* gp_;
 	void Act(void);
 	void Draw(void);
 };

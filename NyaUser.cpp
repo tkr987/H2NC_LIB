@@ -1,5 +1,5 @@
 #include "NyaUser.h"
-using namespace H2NLIB;
+using namespace HNLIB;
 
 /**
 @brief ミッションでの処理を定義する関数

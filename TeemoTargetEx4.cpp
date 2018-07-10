@@ -14,7 +14,7 @@
 #define __DEBUG__
 
 using namespace std;
-using namespace H2NLIB;
+using namespace HNLIB;
 
 TeemoExBullet41::TeemoExBullet41()
 {

@@ -7,13 +7,13 @@ using namespace HNLIB;
 Target3PseudomonadMain::Target3PseudomonadMain()
 {
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/target_pseudomonad.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile("img/target/target_methanobacterium.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
 	phandle_->collision_range_ = 20;
 
-	lock_.LoadGraphic("img/target/lock_pseudomonad.png");
+	lock_.LoadGraphic("img/target/lock_methanobacterium.png");
 }
 
 Target3PseudomonadMain::~Target3PseudomonadMain()

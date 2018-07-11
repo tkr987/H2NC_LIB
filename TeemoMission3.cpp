@@ -2,6 +2,7 @@
 #include "Target3Kluyvera.h"
 #include "Target3Pantoea.h"
 #include "Target3Pseudomonad.h"
+#include "Target3Shigella.h"
 #include "TeemoBackgroundMission1.h"
 #include "TeemoMission3.h"
 #include "TeemoTargetEx3.h"
@@ -10,6 +11,8 @@
 
 void TeemoMission3::Create(void)
 {
+	unsigned int ctime = 0;
+
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
 	//*****************************************************
@@ -23,10 +26,20 @@ void TeemoMission3::Create(void)
 	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 70, 350));
 	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 210, 350));
 
-	AddTarget(3, 88, new Target3Pseudomonad(-100, 300, SCREEN_MAX_X / 2 - 100, 300, true));
-	AddTarget(3, 88, new Target3Pseudomonad(-200, 300, SCREEN_MAX_X / 2 - 300, 300, true));
-	AddTarget(3, 88, new Target3Pseudomonad(SCREEN_MAX_X + 100, 300, SCREEN_MAX_X / 2 + 100, 300, false));
-	AddTarget(3, 88, new Target3Pseudomonad(SCREEN_MAX_X + 200, 300, SCREEN_MAX_X / 2 + 300, 300, false));
+	ctime = 2;
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 200, -100));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 100, -100));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 100, -100));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 200, -100));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 250, -300));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 150, -300));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 150, -300));
+	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 250, -300));
+	ctime++;
+	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(-100, 150, SCREEN_MAX_X / 2 - 120, 150, true));
+	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(-200, 150, SCREEN_MAX_X / 2 - 340, 150, true));
+	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(SCREEN_MAX_X + 100, 150, SCREEN_MAX_X / 2 + 120, 150, false));
+	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(SCREEN_MAX_X + 200, 150, SCREEN_MAX_X / 2 + 340, 150, false));
 
 
 	//for (int i = 0; i < 8; i++)

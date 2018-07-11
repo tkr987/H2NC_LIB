@@ -14,6 +14,10 @@ namespace HNLIB {
 		{ 
 			return (x * 3.14159265359 / 180.0);
 		}
+		static unsigned int GetFrameCount(void)
+		{
+			return count_frame_;
+		}
 		/**
 		 @brief Œ»İ‚ÌƒL[ó‘Ô‚ğæ“¾‚·‚éŠÖ”
 		**/
@@ -75,6 +79,7 @@ namespace HNLIB {
 		static void OutputReplay(std::string file_name);
 		static void Run(const eEVENT check_event);
 	private:
+		static unsigned int count_frame_;
 		static std::stringstream output_date_;
 		static std::stringstream output_seed_;
 		static std::stringstream output_title_;

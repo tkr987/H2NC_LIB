@@ -66,7 +66,7 @@ namespace HNLIB
 	public:
 		static void Draw(const EffectPropertyX1* epx, const GraphicPropertyX4* gpx, eOBJECT layer);
 		static void Draw(const EffectPropertyX2* epx, const GraphicPropertyX4* gpx, eOBJECT layer);
-		static void Run(void);
+		static void Run(eEVENT check_event);
 	private:
 		static std::list<EffectAnimation1> ea1_draw_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<EffectAnimation1> ea1_wait_list_;

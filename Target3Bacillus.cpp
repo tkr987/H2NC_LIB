@@ -1,14 +1,14 @@
 #include "HNLIB.h"
 #include "TeemoEnum.h"
-#include "Target3Kluyvera.h"
+#include "Target3Bacillus.h"
 
 using namespace HNLIB;
 
-Target3KluyveraDevice::Target3KluyveraDevice()
+Target3BacillusDevice::Target3BacillusDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
-	dpx_->move_speed_ = 5;
+	dpx_->move_speed_ = 4;
 	gadget_gpx_ = new GraphicPropertyX4;
 	NyaGraphic::LoadGraphicFile("img/target/attack_orange1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
@@ -18,7 +18,7 @@ Target3KluyveraDevice::Target3KluyveraDevice()
 
 }
 
-Target3KluyveraDevice::~Target3KluyveraDevice()
+Target3BacillusDevice::~Target3BacillusDevice()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
@@ -32,7 +32,7 @@ Target3KluyveraDevice::~Target3KluyveraDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target3KluyveraMain::Target3KluyveraMain()
+Target3BacillusMain::Target3BacillusMain()
 {
 	death_epx_ = new EffectPropertyX1;
 	death_epx_->interval_time_frame_ = 3;
@@ -55,7 +55,7 @@ Target3KluyveraMain::Target3KluyveraMain()
 	lock_.LoadGraphic("img/target/lock_pantoea.png");
 }
 
-Target3KluyveraMain::~Target3KluyveraMain()
+Target3BacillusMain::~Target3BacillusMain()
 {
 	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
 	NyaSound::DeleteSoundFile(&death_spx_->file_);
@@ -70,21 +70,22 @@ Target3KluyveraMain::~Target3KluyveraMain()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
-Target3Kluyvera::Target3Kluyvera(int x, int y, bool turn)
+Target3Bacillus::Target3Bacillus(int x, int y, int move_max_x, int move_max_y)
 {
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	main_.phandle_->health_ = 30;
+	main_.phandle_->health_ = 50;
 	mode_ = 1;
-	turn_ = turn;
+	move_max_x_ = move_max_x;
+	move_max_y_ = move_max_y;
 }
 
-Target3Kluyvera::~Target3Kluyvera()
+Target3Bacillus::~Target3Bacillus()
 {
 
 }
 
-void Target3Kluyvera::Act(void)
+void Target3Bacillus::Act(void)
 {
 	switch(mode_)
 	{
@@ -99,7 +100,7 @@ void Target3Kluyvera::Act(void)
 	count_frame_++;
 }
 
-void Target3Kluyvera::Draw(void)
+void Target3Bacillus::Draw(void)
 {
 	switch(mode_)
 	{
@@ -111,22 +112,36 @@ void Target3Kluyvera::Draw(void)
 	};
 }
 
-void Target3Kluyvera::Act1(void)
+void Target3Bacillus::Act1(void)
 {
 	PositionHandle phandle_user;
 
 	if (count_frame_ == 0)
 	{
-		main_.phandle_->grid_x_ += NyaInput::GetRand(-10, 10);
-		main_.phandle_->grid_y_ += NyaInput::GetRand(-30, 30);
+		int rand_x = NyaInput::GetRand(-100, 100);
+		int rand_y = NyaInput::GetRand(-100, 100);
+		main_.phandle_->grid_x_ += rand_x;
+		main_.phandle_->grid_y_ += rand_y;
+		move_max_x_ += rand_x;
+		move_max_y_ += NyaInput::GetRand(-100, 100);
+		NyaPosition::MoveGridMode(main_.phandle_, move_max_x_, move_max_y_, FPS_MAX * 3);
 		count_frame_ = NyaInput::GetRand(1, FPS_MAX);
 	}
 
-	// 移動処理
-	if (!turn_)
-		main_.phandle_->grid_x_ += 3;
-	else
-		main_.phandle_->grid_x_ -= 3;
+	// 衝突判定　衝突ダメージだけ経験値を追加
+	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
+	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
+	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
+
+	if (count_frame_ < FPS_MAX * 4)
+		return;
+	
+	if (count_frame_ == FPS_MAX * 5 - 30)
+	{
+		NyaPosition::FindHandle("user", &phandle_user);
+		move_angle_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
+		NyaPosition::MoveLengthMode(main_.phandle_, move_angle_, 1000, FPS_MAX * 3);
+	}
 
 	// 攻撃処理
 	if (count_frame_ % FPS_MAX == 0)
@@ -136,28 +151,30 @@ void Target3Kluyvera::Act1(void)
 			device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 			device_.dpx_->create_y_ = main_.phandle_->grid_y_;
 			NyaPosition::FindHandle("user", &phandle_user);
+			device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) - 5;
+			device_.dpx_->delay_time_frame_ = 0;
+			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			device_.dpx_->delay_time_frame_ = 5;
+			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
-			for (int delay = 0; delay < 10; delay+= 2)
-			{
-				device_.dpx_->delay_time_frame_ = delay;
-				NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			}
+			device_.dpx_->delay_time_frame_ = 0;
+			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			device_.dpx_->delay_time_frame_ = 5;
+			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + 5;
+			device_.dpx_->delay_time_frame_ = 0;
+			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			device_.dpx_->delay_time_frame_ = 5;
+			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 	}
-
-
-	// 衝突判定　衝突ダメージだけ経験値を追加
-	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
-	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
-	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
 }
 
-void Target3Kluyvera::Draw1(void)
+void Target3Bacillus::Draw1(void)
 {
 	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	main_.gpx_->flag_turn_ = turn_;
 	if (count_frame_ % 30 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 3;	
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);

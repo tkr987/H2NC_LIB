@@ -11,13 +11,15 @@ namespace HNLIB
 class TargetLock
 {
 public:
-	HNLIB::GraphicPropertyX4* gpx_;
-	unsigned int lock_frame_;
-	HNLIB::SoundPropertyX* spx_;
 	void LoadGraphic(std::string);
 	void Run(const HNLIB::PositionHandle* phandle);
 	TargetLock();
 	~TargetLock();
+private:
+	HNLIB::GraphicPropertyX4* gpx_;
+	unsigned int lock_frame_;
+	HNLIB::SoundPropertyX* spx_;
+	static unsigned int played_sound_frame_;
 };
 
 

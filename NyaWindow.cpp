@@ -106,27 +106,16 @@ void NyaWindow::Run(void)
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
 
+		// TODO
+		// 連続でリプレイ再生したときのバグ
+		// no_replayを[enter]したときの挙動
+
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
 		// NyaWindowのメンバ関数でevent_next_の値をenum_zero以外にしたとき
 		// Run()の最後にイベントを更新する処理をおこなう
 		//*********************************************************************
 		event_next_ = eEVENT::enum_zero;
-
-		//***********************
-		// NyaWindow メンバ関数
-		// タイトル画面
-		// オープニング処理
-		// ミッション処理
-		// エンディング処理
-		// リプレイ保存
-		//***********************
-		Title();
-		Opening();
-		Mission();
-		Ending();
-		SaveReplay();
-		NotSaveReplay();
 
 		//******************************************************
 		// ライブラリの処理
@@ -146,7 +135,7 @@ void NyaWindow::Run(void)
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		NyaEffect::Run();
+		NyaEffect::Run(event_);
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 640, "[600, 640] NyaEffect::Run() %d msec", (int)debug_time_msec);
@@ -166,7 +155,7 @@ void NyaWindow::Run(void)
 
 #ifdef __DEBUG__
 		debug_time_start = std::chrono::system_clock::now();
-		NyaPosition::Run();
+		NyaPosition::Run(event_);
 		debug_time_end = std::chrono::system_clock::now();
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 680, "[600, 680] NyaPosition::Run() %d msec", (int)debug_time_msec);
@@ -189,6 +178,21 @@ void NyaWindow::Run(void)
 		NyaSound::Run();
 		NyaString::Run();
 #endif
+
+		//***********************
+		// NyaWindow メンバ関数
+		// タイトル画面
+		// オープニング処理
+		// ミッション処理
+		// エンディング処理
+		// リプレイ保存
+		//***********************
+		Title();
+		Opening();
+		Mission();
+		Ending();
+		SaveReplay();
+		NotSaveReplay();
 
 		//*****************************
 		// 画面更新

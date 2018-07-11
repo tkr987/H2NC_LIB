@@ -3,12 +3,15 @@
 
 using namespace HNLIB;
 
+unsigned int TargetLock::played_sound_frame_ = 0;
+
 TargetLock::TargetLock()
 {
 	gpx_ = new GraphicPropertyX4;
 	lock_frame_ = 0;
 	spx_ = new SoundPropertyX;
 	NyaSound::LoadFile("sound/lock.wav", &spx_->file_);
+	NyaSound::ChangeVolume(&spx_->file_, 50);
 }
 
 
@@ -29,11 +32,17 @@ void TargetLock::LoadGraphic(std::string pass)
 
 void TargetLock::Run(const PositionHandle* phandle)
 {
-
+	// 最初の衝突なら効果音を再生
 	if (phandle->collision_hit_damage_ != 0)
-	{	// 最初の衝突なら効果音を再生
+	{
 		if (lock_frame_ == 0)
-			NyaSound::Play(spx_);
+		{
+			if (played_sound_frame_ != NyaInput::GetFrameCount())
+			{	// ロック音は1フレーム1回まで再生する(重なって音量が大きくなるのを防ぐため)
+				NyaSound::Play(spx_);
+				played_sound_frame_ = NyaInput::GetFrameCount();
+			}
+		}
 		lock_frame_++;
 		if (0 < lock_frame_)
 			lock_frame_ = 1;

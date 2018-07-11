@@ -233,24 +233,34 @@ bool NyaPosition::InScreen(PositionHandle* phandle, int gap)
  @note
   ライブラリのNyaWindowクラス内で自動的に呼ばれるので、ライブラリ使用者が呼ぶ必要はない
 **/
-void NyaPosition::Run(void)
+void NyaPosition::Run(eEVENT check_event)
 {
-	// 衝突判定をする前に衝突ダメージを0クリアしておく
-	ClearCollisionHit();
 
-	// CollisionSettingで設定したオブジェクトグループの組み合わせで衝突判定をおこなう
-	for (auto& e : collision_pair_collection_)
-		JudgeCollision(e.first, e.second);
-
-	// 毎フレーム登録されたCollisionHandleSetのクリアをする
-	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
-		collision_collection_[static_cast<int>(type)].clear();
-
-	// 移動処理を指定されたハンドルに対して座標の計算をおこなう
-	CalculateMove();
+	switch(check_event)
+	{
+	case eEVENT::MISSION_CREATE:
+	case eEVENT::MISSION_REPLAY_CREATE:
+		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
+			collision_collection_[static_cast<int>(type)].clear();
+		move_collection_.clear();
+		break;
+	case eEVENT::MISSION_RUN:
+	case eEVENT::MISSION_REPLAY_RUN:
+		// 衝突判定をする前に衝突ダメージを0クリアしておく
+		ClearCollisionHit();
+		// CollisionSettingで設定したオブジェクトグループの組み合わせで衝突判定をおこなう
+		for (auto& e : collision_pair_collection_)
+			JudgeCollision(e.first, e.second);
+		// 毎フレーム登録されたCollisionHandleSetのクリアをする
+		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
+			collision_collection_[static_cast<int>(type)].clear();
+		// 移動処理を指定されたハンドルに対して座標の計算をおこなう
+		CalculateMove();
+		break;
+	}
 }
 
-void HNLIB::NyaPosition::CalculateMove(void)
+void NyaPosition::CalculateMove(void)
 {
 	list<PositionMove>::iterator remove_it;
 	deque<list<PositionMove>::iterator> gabage_collection;

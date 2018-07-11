@@ -1,5 +1,7 @@
+#include "Target3Bacillus.h"
 #include "Target3Kluyvera.h"
 #include "Target3Pantoea.h"
+#include "Target3Pseudomonad.h"
 #include "TeemoBackgroundMission1.h"
 #include "TeemoMission3.h"
 #include "TeemoTargetEx3.h"
@@ -20,11 +22,44 @@ void TeemoMission3::Create(void)
 	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 - 70, 350));
 	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 70, 350));
 	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 210, 350));
-	for (int i = 0; i < 8; i++)
-	{
-		AddTarget(2, 32, new Target3Kluyvera(-100 - (i * 100) + 40, 200, false));
-		AddTarget(2, 32, new Target3Kluyvera(-100 - (i * 100), 200, false));
-	}
+
+	AddTarget(3, 88, new Target3Pseudomonad(-100, 300, SCREEN_MAX_X / 2 - 100, 300, true));
+	AddTarget(3, 88, new Target3Pseudomonad(-200, 300, SCREEN_MAX_X / 2 - 300, 300, true));
+	AddTarget(3, 88, new Target3Pseudomonad(SCREEN_MAX_X + 100, 300, SCREEN_MAX_X / 2 + 100, 300, false));
+	AddTarget(3, 88, new Target3Pseudomonad(SCREEN_MAX_X + 200, 300, SCREEN_MAX_X / 2 + 300, 300, false));
+
+
+	//for (int i = 0; i < 8; i++)
+	//{
+	//	AddTarget(4, 34, new Target3Kluyvera(-100 - (i * 100) + 40, 200, false));
+	//	AddTarget(4, 34, new Target3Kluyvera(-100 - (i * 100), 200, false));
+	//	AddTarget(4, 34, new Target3Kluyvera(SCREEN_MAX_X + 100 + (i * 100) + 40, 200, true));
+	//	AddTarget(4, 34, new Target3Kluyvera(SCREEN_MAX_X + 100 + (i * 100), 200, true));
+	//}
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	AddTarget(10, 40, new Target3Bacillus(200, -100, 200, 200));
+	//	AddTarget(10, 40, new Target3Bacillus(300, -100, 300, 200));
+	//	AddTarget(12, 42, new Target3Bacillus(200, -100, 200, 200));
+	//	AddTarget(12, 42, new Target3Bacillus(300, -100, 300, 200));
+	//	AddTarget(14, 44, new Target3Bacillus(200, -100, 200, 200));
+	//	AddTarget(14, 44, new Target3Bacillus(300, -100, 300, 200));
+	//}
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	AddTarget(20, 50, new Target3Bacillus(SCREEN_MAX_X - 200, -100, SCREEN_MAX_X - 200, 200));
+	//	AddTarget(20, 50, new Target3Bacillus(SCREEN_MAX_X - 300, -100, SCREEN_MAX_X - 300, 200));
+	//	AddTarget(22, 52, new Target3Bacillus(SCREEN_MAX_X - 200, -100, SCREEN_MAX_X - 200, 200));
+	//	AddTarget(22, 52, new Target3Bacillus(SCREEN_MAX_X - 300, -100, SCREEN_MAX_X - 300, 200));
+	//	AddTarget(24, 54, new Target3Bacillus(SCREEN_MAX_X - 200, -100, SCREEN_MAX_X - 200, 200));
+	//	AddTarget(24, 54, new Target3Bacillus(SCREEN_MAX_X - 300, -100, SCREEN_MAX_X - 300, 200));
+	//}
+
+	//AddTarget(28, 88, new Target3Pseudomonad(-100, 300, SCREEN_MAX_X / 2 - 100, 300, false));
+	//AddTarget(28, 88, new Target3Pseudomonad(-200, 300, SCREEN_MAX_X / 2 - 300, 300, false));
+	//AddTarget(28, 88, new Target3Pseudomonad(SCREEN_MAX_X + 100, 300, SCREEN_MAX_X / 2 + 100, 300, true));
+	//AddTarget(28, 88, new Target3Pseudomonad(SCREEN_MAX_X + 200, 300, SCREEN_MAX_X / 2 + 300, 300, true));
+
 	AddTarget(100, 600, new TeemoTargetEx3);
 
 	//**************************************
@@ -35,5 +70,7 @@ void TeemoMission3::Create(void)
 
 void TeemoMission3::Delete(void)
 {
+	ClearBackground();
 	ClearTarget();
+	ClearUser();
 }

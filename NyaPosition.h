@@ -67,7 +67,7 @@ namespace HNLIB
 		static void MoveGridMode(PositionHandle* handle, double end_x, double end_y, unsigned int max_frame);
 		static void MoveLengthMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);
 		static void MoveSpeedMode(PositionHandle* handle, double angle, double speed, unsigned int max_frame);
-		static void Run(void);
+		static void Run(eEVENT check_event);
 	private:
 		static std::vector<std::pair<eOBJECT, eOBJECT>> collision_pair_collection_;
 		static std::vector<PositionHandle*> collision_collection_[static_cast<int>(eOBJECT::sizeof_enum)];

@@ -1,5 +1,6 @@
 #pragma once
 
+#define MAP_SCROLL_PER_FRAME				0.2
 #define TARGET_ATTACK_RANGE_BLUE2			4
 #define TARGET_ATTACK_RANGE_BLUE3			5
 #define TARGET_ATTACK_RANGE_ORANGE1			3

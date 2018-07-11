@@ -18,6 +18,7 @@ TeemoBackgroundMission1::~TeemoBackgroundMission1()
 {
 	NyaGraphic::DeleteGraphicFile(&gp_->file_);
 	delete gp_;
+	gp_ = nullptr;
 }
 
 void TeemoBackgroundMission1::Act(void)

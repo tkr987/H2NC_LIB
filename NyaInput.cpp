@@ -9,6 +9,7 @@
 using namespace std;
 using namespace HNLIB;
 
+unsigned int NyaInput::count_frame_ = 0;
 mt19937 NyaInput::mt_rand_;
 stringstream NyaInput::output_date_;
 stringstream NyaInput::output_seed_;
@@ -23,8 +24,10 @@ void NyaInput::Init(void)
 	time_t system_time;
 	tm local_time;
 
-	output_date_.clear();
-	output_seed_.clear();
+	output_date_.str("");
+	output_date_.clear(stringstream::goodbit);
+	output_seed_.str("");
+	output_seed_.clear(stringstream::goodbit);
 
 	system_time = time(nullptr);
 	localtime_s(&local_time, &system_time);
@@ -152,8 +155,10 @@ void NyaInput::Run(eEVENT check_event)
 		state_now_[static_cast<int>(eINPUT::W)]          = ((replay_state & (1 << static_cast<int>(eINPUT::W))) != 0 ) ? true : false;
 		state_now_[static_cast<int>(eINPUT::E)]          = ((replay_state & (1 << static_cast<int>(eINPUT::E))) != 0 ) ? true : false; 
 		state_now_[static_cast<int>(eINPUT::R)]          = ((replay_state & (1 << static_cast<int>(eINPUT::R))) != 0 ) ? true : false; 
-		state_now_[static_cast<int>(eINPUT::SPACE)]		= ((replay_state & (1 << static_cast<int>(eINPUT::SPACE))) != 0) ? true : false;
+		state_now_[static_cast<int>(eINPUT::SPACE)]		 = ((replay_state & (1 << static_cast<int>(eINPUT::SPACE))) != 0) ? true : false;
 		save_state_collection_.pop_front();
 	}
+
+	count_frame_++;
 }
 	

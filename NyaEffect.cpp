@@ -132,12 +132,29 @@ void NyaEffect::Draw(const EffectPropertyX2* epx, const GraphicPropertyX4* gpx, 
 	ea2_draw_list_[static_cast<int>(layer)].splice(it_to, move(ea2_wait_list_), it_from);
 }
 
-void NyaEffect::Run(void)
+void NyaEffect::Run(eEVENT check_event)
 {
-	for (eOBJECT layer = eOBJECT::enum_zero; layer != eOBJECT::sizeof_enum; ++layer)
+	switch(check_event)
 	{
-		DrawAnimation1(layer);
-		DrawAnimation2(layer);
+	case eEVENT::MISSION_CREATE:
+	case eEVENT::MISSION_REPLAY_CREATE:
+		for (eOBJECT layer = eOBJECT::enum_zero; layer != eOBJECT::sizeof_enum; ++layer)
+		{
+			ea1_draw_list_[static_cast<int>(layer)].clear();
+			ea1_wait_list_.clear();
+			ea2_draw_list_[static_cast<int>(layer)].clear();
+			ea2_wait_list_.clear();
+		}
+		
+		break;
+	case eEVENT::MISSION_RUN:
+	case eEVENT::MISSION_REPLAY_RUN:
+		for (eOBJECT layer = eOBJECT::enum_zero; layer != eOBJECT::sizeof_enum; ++layer)
+		{
+			DrawAnimation1(layer);
+			DrawAnimation2(layer);
+		}
+		break;
 	}
 }
 

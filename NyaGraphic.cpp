@@ -119,7 +119,10 @@ void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
 	for (auto& e : file_collection_)
 	{
 		if (e.pass_ == file_pass && e.div_x_ == 0 && e.div_y_ == 0)
+		{
 			*file = e;
+			return;
+		}
 	}
 
 	// ロードする画像ファイルのサイズチェック
@@ -162,7 +165,10 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 	for (auto& e : file_collection_)
 	{
 		if (e.pass_ == file_pass && e.div_x_ == div_x && e.div_y_ == div_y)
+		{
 			*file = e;
+			return;
+		}
 	}
 
 	// ロードする画像ファイルの分割サイズを計算

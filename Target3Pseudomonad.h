@@ -21,6 +21,8 @@ public:
 	Target3PseudomonadMain();
 	~Target3PseudomonadMain();
 };
+
+
 class Target3Pseudomonad : public HNLIB::NyaTarget
 {
 public:

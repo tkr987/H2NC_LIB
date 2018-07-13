@@ -46,11 +46,12 @@ Target3BacillusMain::Target3BacillusMain()
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(3, 1, "img/target/target_pantoea.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_bacillus.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 20;
+	phandle_->collision_range_ = 6;
+	phandle_->health_ = 100;
 
 	lock_.LoadGraphic("img/target/lock_pantoea.png");
 }
@@ -74,7 +75,6 @@ Target3Bacillus::Target3Bacillus(int x, int y, int move_max_x, int move_max_y)
 {
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	main_.phandle_->health_ = 50;
 	mode_ = 1;
 	move_max_x_ = move_max_x;
 	move_max_y_ = move_max_y;
@@ -93,9 +93,6 @@ void Target3Bacillus::Act(void)
 		Act1();
 		break;
 	};
-
-	// mapにシンクロさせる
-	main_.phandle_->grid_y_ += 0.2;
 
 	count_frame_++;
 }
@@ -124,50 +121,44 @@ void Target3Bacillus::Act1(void)
 		main_.phandle_->grid_y_ += rand_y;
 		move_max_x_ += rand_x;
 		move_max_y_ += NyaInput::GetRand(-100, 100);
-		NyaPosition::MoveGridMode(main_.phandle_, move_max_x_, move_max_y_, FPS_MAX * 3);
-		count_frame_ = NyaInput::GetRand(1, FPS_MAX);
+		move_start_time_ = NyaInput::GetRand(1, FPS_MAX);
 	}
+
+	if (count_frame_ == move_start_time_)
+		NyaPosition::MoveGridMode(main_.phandle_, move_max_x_, move_max_y_, FPS_MAX * 3);
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
 
-	if (count_frame_ < FPS_MAX * 4)
-		return;
-	
-	if (count_frame_ == FPS_MAX * 5 - 30)
-	{
-		NyaPosition::FindHandle("user", &phandle_user);
-		move_angle_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
-		NyaPosition::MoveLengthMode(main_.phandle_, move_angle_, 1000, FPS_MAX * 3);
-	}
-
 	// 攻撃処理
-	if (count_frame_ % FPS_MAX == 0)
+	if (count_frame_ % 20 == 10)
 	{
 		if (NyaPosition::InScreen(main_.phandle_))
 		{
 			device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 			device_.dpx_->create_y_ = main_.phandle_->grid_y_;
 			NyaPosition::FindHandle("user", &phandle_user);
+
 			device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) - 5;
-			device_.dpx_->delay_time_frame_ = 0;
 			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			device_.dpx_->delay_time_frame_ = 5;
-			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+
 			device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
-			device_.dpx_->delay_time_frame_ = 0;
 			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			device_.dpx_->delay_time_frame_ = 5;
-			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+
 			device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + 5;
-			device_.dpx_->delay_time_frame_ = 0;
-			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			device_.dpx_->delay_time_frame_ = 5;
 			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 	}
+	
+	if (count_frame_ == FPS_MAX * 4 + 30)
+	{
+		NyaPosition::FindHandle("user", &phandle_user);
+		move_angle_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
+		NyaPosition::MoveLengthMode(main_.phandle_, move_angle_, 1000, FPS_MAX * 3);
+	}
+
 }
 
 void Target3Bacillus::Draw1(void)
@@ -176,7 +167,7 @@ void Target3Bacillus::Draw1(void)
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	if (count_frame_ % 30 == 0)
-		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 3;	
+		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 4;	
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
 	main_.lock_.Run(main_.phandle_);

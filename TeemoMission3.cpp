@@ -1,4 +1,5 @@
 #include "Target3Bacillus.h"
+#include "Target3Bordetella.h"
 #include "Target3Kluyvera.h"
 #include "Target3Pantoea.h"
 #include "Target3Pseudomonad.h"
@@ -21,25 +22,43 @@ void TeemoMission3::Create(void)
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 - 210, 350));
-	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 - 70, 350));
-	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 70, 350));
-	AddTarget(0, 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 210, 350));
+	AddTarget(ctime, ctime + 60, new Target3Pantoea(SCREEN_MAX_X / 2 - 210, 350));
+	AddTarget(ctime, ctime + 60, new Target3Pantoea(SCREEN_MAX_X / 2 - 70, 350));
+	AddTarget(ctime, ctime + 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 70, 350));
+	AddTarget(ctime, ctime + 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 210, 350));
 
-	ctime = 2;
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 200, -100));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 100, -100));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 100, -100));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 200, -100));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 250, -300));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 - 150, -300));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 150, -300));
-	AddTarget(ctime, ctime + 50, new Target3Shigella(SCREEN_MAX_X / 2 + 250, -300));
+	ctime = 1;
+	AddTarget(ctime, ctime + 90, new Target3Bordetella(SCREEN_CENTER_X, -100));
+
+
+	ctime = 120;
+	for (int i = 6; i < 16; i+=2)
+	{
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 -200, -100, SCREEN_MAX_X / 2 -200, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 -200, -100, SCREEN_MAX_X / 2 -200, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 -100, -100, SCREEN_MAX_X / 2 -100, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 -100, -100, SCREEN_MAX_X / 2 -100, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2,      -100, SCREEN_MAX_X / 2     , 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2,      -100, SCREEN_MAX_X / 2     , 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 +100, -100, SCREEN_MAX_X / 2 +100, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 +100, -100, SCREEN_MAX_X / 2 +100, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 +200, -100, SCREEN_MAX_X / 2 +200, 200));
+		AddTarget(ctime + i, ctime + 25, new Target3Bacillus(SCREEN_MAX_X / 2 +200, -100, SCREEN_MAX_X / 2 +200, 200));
+	}
+
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 - 200, -120));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 - 100, -120));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 + 100, -120));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 + 200, -120));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 - 250, -260));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 - 150, -260));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 + 150, -260));
+	AddTarget(ctime, ctime + 90, new Target3Shigella(SCREEN_MAX_X / 2 + 250, -260));
 	ctime++;
-	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(-100, 150, SCREEN_MAX_X / 2 - 120, 150, true));
-	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(-200, 150, SCREEN_MAX_X / 2 - 340, 150, true));
-	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(SCREEN_MAX_X + 100, 150, SCREEN_MAX_X / 2 + 120, 150, false));
-	AddTarget(ctime, ctime + 50, new Target3Pseudomonad(SCREEN_MAX_X + 200, 150, SCREEN_MAX_X / 2 + 340, 150, false));
+	AddTarget(ctime, ctime + 90, new Target3Pseudomonad(-200, 150, SCREEN_MAX_X / 2 - 360, 150, true));
+	AddTarget(ctime, ctime + 90, new Target3Pseudomonad(-100, 150, SCREEN_MAX_X / 2 - 120, 150, true));
+	AddTarget(ctime, ctime + 90, new Target3Pseudomonad(SCREEN_MAX_X + 100, 150, SCREEN_MAX_X / 2 + 120, 150, false));
+	AddTarget(ctime, ctime + 90, new Target3Pseudomonad(SCREEN_MAX_X + 200, 150, SCREEN_MAX_X / 2 + 360, 150, false));
 
 
 	//for (int i = 0; i < 8; i++)
@@ -49,15 +68,9 @@ void TeemoMission3::Create(void)
 	//	AddTarget(4, 34, new Target3Kluyvera(SCREEN_MAX_X + 100 + (i * 100) + 40, 200, true));
 	//	AddTarget(4, 34, new Target3Kluyvera(SCREEN_MAX_X + 100 + (i * 100), 200, true));
 	//}
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	AddTarget(10, 40, new Target3Bacillus(200, -100, 200, 200));
-	//	AddTarget(10, 40, new Target3Bacillus(300, -100, 300, 200));
-	//	AddTarget(12, 42, new Target3Bacillus(200, -100, 200, 200));
-	//	AddTarget(12, 42, new Target3Bacillus(300, -100, 300, 200));
-	//	AddTarget(14, 44, new Target3Bacillus(200, -100, 200, 200));
-	//	AddTarget(14, 44, new Target3Bacillus(300, -100, 300, 200));
-	//}
+
+
+
 	//for (int i = 0; i < 10; i++)
 	//{
 	//	AddTarget(20, 50, new Target3Bacillus(SCREEN_MAX_X - 200, -100, SCREEN_MAX_X - 200, 200));

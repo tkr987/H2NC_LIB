@@ -94,7 +94,7 @@ void NyaGraphic::DeleteGraphicFile(GraphicFile* file)
 		{
 			for (auto& e : it->div_collection_)
 				DeleteGraph(e);
-			
+
 			file_collection_.erase(it);
 			return;
 		}

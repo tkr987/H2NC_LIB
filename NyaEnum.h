@@ -7,6 +7,8 @@
 //#define INTERFACE_SKILL_MAX_LV						4
 #define INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_X		225
 #define INTERFACE_MISSION_CLEAR_DEFAULT_DRAW_Y		200
+#define SCREEN_CENTER_X								425
+#define SCREEN_CENTER_Y								375
 #define SCREEN_MIN_X								0
 #define SCREEN_MIN_Y								0
 #define SCREEN_MAX_X								850

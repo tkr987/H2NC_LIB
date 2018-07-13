@@ -50,6 +50,7 @@ private:
 	double move_angle_;
 	int move_max_x_;
 	int move_max_y_;
+	int move_start_time_;
 	void Act1(void);
 	void Draw1(void);
 };

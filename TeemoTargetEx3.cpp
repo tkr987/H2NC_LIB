@@ -263,10 +263,19 @@ TeemoEx3Main::TeemoEx3Main() : health_max_(26000)
 TeemoEx3Main::~TeemoEx3Main()
 {
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&death1_gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&death2_gpx_->file_);
+	delete death1_epx_;
+	death1_epx_ = nullptr;
+	delete death1_gpx_;
+	death1_gpx_ = nullptr;
+	delete death2_epx_;
+	death2_epx_ = nullptr;
+	delete death2_gpx_;
+	death2_gpx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
-	delete phandle_;
-	phandle_ = nullptr;
+	NyaPosition::DeleteHandle(phandle_);
 }
 
 //***********************************************

@@ -84,10 +84,23 @@ UserAiDeviceEx::UserAiDeviceEx()
 	gadget_gpx_ = new GraphicPropertyX4;
 	effect_epx_ = new EffectPropertyX2;
 	effect_gpx_ = new GraphicPropertyX4;
+
+	bit_gpx_->extend_rate_ = 0.5;
+	NyaGraphic::LoadGraphicFile(16, 1,"img/user/bit.png", &bit_gpx_->file_);
+	gadget_dpx_->collision_range_ = 2;
+	gadget_dpx_->move_speed_ = 20;
+	gadget_gpx_->extend_rate_ = 0.2;
+	NyaGraphic::LoadGraphicFile("img/user/attack_ex.png", &gadget_gpx_->file_);
+	effect_epx_->interval_time_frame_ = 2;
+	effect_gpx_->extend_rate_ = 0.5;
+	NyaGraphic::LoadGraphicFile(8, 2, "img/user/attack_ex_effect.png", &effect_gpx_->file_);
 }
 
 UserAiDeviceEx::~UserAiDeviceEx()
 {
+	NyaGraphic::DeleteGraphicFile(&bit_gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
 	delete bit_gpx_;
 	bit_gpx_ = nullptr;
 	delete gadget_dpx_;
@@ -129,6 +142,8 @@ UserAiMain::UserAiMain()
 
 UserAiMain::~UserAiMain()
 {
+	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
+	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 	NyaPosition::DeleteHandle(phandle_);
@@ -142,6 +157,7 @@ UserAiRange::UserAiRange()
 
 UserAiRange::~UserAiRange()
 {
+	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 }
@@ -170,17 +186,6 @@ UserAi::UserAi(void)
 	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 600000;
 	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)] = 800000;
 
-	// device ex プロパティ
-	device_ex_.bit_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(16, 1,"img/user/bit.png", &device_ex_.bit_gpx_->file_);
-	device_ex_.gadget_dpx_->collision_range_ = 2;
-	device_ex_.gadget_dpx_->move_speed_ = 20;
-	device_ex_.gadget_gpx_->extend_rate_ = 0.2;
-	NyaGraphic::LoadGraphicFile("img/user/attack_ex.png", &device_ex_.gadget_gpx_->file_);
-	device_ex_.effect_epx_->interval_time_frame_ = 2;
-	device_ex_.effect_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(8, 2, "img/user/attack_ex_effect.png", &device_ex_.effect_gpx_->file_);
-
 	// 衝突判定設定
 	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
 	NyaPosition::CollisionPair(eOBJECT::USER1, eOBJECT::TARGET_ATTACK1);
@@ -192,9 +197,6 @@ UserAi::UserAi(void)
 
 UserAi::~UserAi()
 {
-	NyaGraphic::DeleteGraphicFile(&device_.bit_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&device_.gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&device_.effect_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&main_.gpx_->file_);
 }
 
@@ -264,15 +266,16 @@ void UserAi::Act_Attack(void)
 	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && NyaInput::GetKeyStateNow(eINPUT::W) == true && count_frame_ % 6 == 0)
 	{	// 3wave
 		if(exp_q < lv1_exp_q)
-			device_.gadget_dpx_->collision_power_ = 1;
+			device_.gadget_dpx_->collision_power_ = 2;
 		else if(lv1_exp_q <= exp_q && exp_q < lv2_exp_q)
-			device_.gadget_dpx_->collision_power_ = 3;
+			device_.gadget_dpx_->collision_power_ = 6;
 		else if(lv2_exp_q <= exp_q && exp_q < lv3_exp_q)
-			device_.gadget_dpx_->collision_power_ = 5;
+			device_.gadget_dpx_->collision_power_ = 13;
 		else if(lv3_exp_q <= exp_q && exp_q < lv4_exp_q)
-			device_.gadget_dpx_->collision_power_ = 7;
+			device_.gadget_dpx_->collision_power_ = 23;
 		else
-			device_.gadget_dpx_->collision_power_ = 9;
+			device_.gadget_dpx_->collision_power_ = 36;
+
 		device_.gadget_dpx_->move_angle_deg_ = -90;
 		device_.gadget_dpx_->draw_angle_deg_ = 90;
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
@@ -286,7 +289,6 @@ void UserAi::Act_Attack(void)
 		NyaDevice::Attack1424(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		if (lv1_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90;
 			device_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -20;
@@ -298,7 +300,6 @@ void UserAi::Act_Attack(void)
 		}
 		if (lv2_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90;
 			device_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -30;
@@ -310,7 +311,6 @@ void UserAi::Act_Attack(void)
 		}
 		if (lv3_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90;
 			device_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
@@ -322,7 +322,6 @@ void UserAi::Act_Attack(void)
 		}
 		if (lv4_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90;
 			device_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -50;
@@ -339,7 +338,17 @@ void UserAi::Act_Attack(void)
 	//***********************
 	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && NyaInput::GetKeyStateNow(eINPUT::W) == false && count_frame_ % 6 == 0)
 	{	// 3wave
-		device_.gadget_dpx_->collision_power_ = 1;
+		if (exp_w < lv1_exp_w)
+			device_.gadget_dpx_->collision_power_ = 1;
+		else if(lv1_exp_w <= exp_w && exp_w < lv2_exp_w)
+			device_.gadget_dpx_->collision_power_ = 2;
+		else if(lv2_exp_w <= exp_w && exp_w < lv3_exp_w)
+			device_.gadget_dpx_->collision_power_ = 3;
+		else if(lv3_exp_w <= exp_w && exp_w < lv4_exp_w)
+			device_.gadget_dpx_->collision_power_ = 4;
+		else
+			device_.gadget_dpx_->collision_power_ = 5;
+
 		device_.gadget_dpx_->move_angle_deg_ = -90;
 		device_.gadget_dpx_->draw_angle_deg_ = 90;
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
@@ -351,9 +360,9 @@ void UserAi::Act_Attack(void)
 		device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ +10;
 		device_.gadget_dpx_->create_y_ = main_.phandle_->grid_y_;
 		NyaDevice::Attack1424(device_.gadget_dpx_, device_.gadget_gpx_, device_.effect_epx_, device_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
+
 		if (lv1_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 5;
 			device_.gadget_dpx_->draw_angle_deg_ = 90 - 5;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
@@ -377,7 +386,6 @@ void UserAi::Act_Attack(void)
 		}
 		if (lv2_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 10;
 			device_.gadget_dpx_->draw_angle_deg_ = 90 - 10;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -70;
@@ -401,7 +409,6 @@ void UserAi::Act_Attack(void)
 		}
 		if (lv3_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 15;
 			device_.gadget_dpx_->draw_angle_deg_ = 90 - 15;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -100;
@@ -425,7 +432,6 @@ void UserAi::Act_Attack(void)
 		}
 		if (lv4_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_.gadget_dpx_->collision_power_ = 1;
 			device_.gadget_dpx_->move_angle_deg_ = -90 - 20;
 			device_.gadget_dpx_->draw_angle_deg_ = 90 - 20;
 			device_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -130;
@@ -487,15 +493,15 @@ void UserAi::Act_AttackEx(void)
 	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && NyaInput::GetKeyStateNow(eINPUT::W) == true && count_frame_ % 6 == 0)
 	{	// 3wave
 		if(exp_q < lv1_exp_q)
-			device_.gadget_dpx_->collision_power_ = 1 + 1;
+			device_ex_.gadget_dpx_->collision_power_ = 3;
 		else if(lv1_exp_q <= exp_q && exp_q < lv2_exp_q)
-			device_.gadget_dpx_->collision_power_ = 3 + 1;
+			device_ex_.gadget_dpx_->collision_power_ = 9;
 		else if(lv2_exp_q <= exp_q && exp_q < lv3_exp_q)
-			device_.gadget_dpx_->collision_power_ = 5 + 1;
+			device_ex_.gadget_dpx_->collision_power_ = 17;
 		else if(lv3_exp_q <= exp_q && exp_q < lv4_exp_q)
-			device_.gadget_dpx_->collision_power_ = 7 + 1;
+			device_ex_.gadget_dpx_->collision_power_ = 29;
 		else
-			device_.gadget_dpx_->collision_power_ = 9 + 1;
+			device_ex_.gadget_dpx_->collision_power_ = 43;
 
 		device_ex_.gadget_dpx_->move_angle_deg_ = -90;
 		device_ex_.gadget_dpx_->draw_angle_deg_ = 90;
@@ -513,7 +519,6 @@ void UserAi::Act_AttackEx(void)
 		NyaDevice::Attack1424(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		if (lv1_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -25;
@@ -527,7 +532,6 @@ void UserAi::Act_AttackEx(void)
 		}
 		if (lv2_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
@@ -541,7 +545,6 @@ void UserAi::Act_AttackEx(void)
 		}
 		if (lv3_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -55;
@@ -555,7 +558,6 @@ void UserAi::Act_AttackEx(void)
 		}
 		if (lv4_exp_w <= exp_w)
 		{	// 1wave + 1wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -70;
@@ -574,7 +576,17 @@ void UserAi::Act_AttackEx(void)
 	//***********************
 	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && NyaInput::GetKeyStateNow(eINPUT::W) == false && count_frame_ % 6 == 0)
 	{	// 3wave
-		device_ex_.gadget_dpx_->collision_power_ = 2;
+		if (exp_w < lv1_exp_w)
+			device_ex_.gadget_dpx_->collision_power_ = 1 + 1;
+		else if(lv1_exp_w <= exp_w && exp_w < lv2_exp_w)
+			device_ex_.gadget_dpx_->collision_power_ = 2 + 1;
+		else if(lv2_exp_w <= exp_w && exp_w < lv3_exp_w)
+			device_ex_.gadget_dpx_->collision_power_ = 3 + 1;
+		else if(lv3_exp_w <= exp_w && exp_w < lv4_exp_w)
+			device_ex_.gadget_dpx_->collision_power_ = 4 + 1;
+		else
+			device_ex_.gadget_dpx_->collision_power_ = 5 + 1;
+
 		device_ex_.gadget_dpx_->move_angle_deg_ = -90;
 		device_ex_.gadget_dpx_->draw_angle_deg_ = 90;
 		device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -10;
@@ -591,7 +603,6 @@ void UserAi::Act_AttackEx(void)
 		NyaDevice::Attack1424(device_ex_.gadget_dpx_, device_ex_.gadget_gpx_, device_ex_.effect_epx_, device_ex_.effect_gpx_, eOBJECT::USER_ATTACK1, eOBJECT::USER_ATTACK_EFFECT1, device_collision_accuracy);
 		if (lv1_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 5;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90 - 5;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -40;
@@ -619,7 +630,6 @@ void UserAi::Act_AttackEx(void)
 		}
 		if (lv2_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 10;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90 - 10;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -70;
@@ -647,7 +657,6 @@ void UserAi::Act_AttackEx(void)
 		}
 		if (lv3_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 15;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90 - 15;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -100;
@@ -675,7 +684,6 @@ void UserAi::Act_AttackEx(void)
 		}
 		if (lv4_exp_w <= exp_w)
 		{	// 2wave + 2wave
-			device_ex_.gadget_dpx_->collision_power_ = 1;
 			device_ex_.gadget_dpx_->move_angle_deg_ = -90 - 20;
 			device_ex_.gadget_dpx_->draw_angle_deg_ = 90 - 20;
 			device_ex_.gadget_dpx_->create_x_ = main_.phandle_->grid_x_ -130;
@@ -708,7 +716,7 @@ void UserAi::Act_AttackEx(void)
 	// ウルト実行時間を超えたらウルトを終了させる
 	//************************************************
 	device_ex_.count_ult_frame_++;
-	if (FPS_MAX * 5 < device_ex_.count_ult_frame_)
+	if (FPS_MAX * 3 < device_ex_.count_ult_frame_)
 	{
 		device_ex_.count_ult_frame_ = 0;
 		device_ex_.valid_ = false;
@@ -729,28 +737,28 @@ void UserAi::Act_Move(void)
 	if (NyaInput::GetKeyStateNow(eINPUT::W))
 	{
 		if     (exp_e < lv1_exp_e)
-			speed = 1;
+			speed = 2;
 		else if(lv1_exp_e <= exp_e && exp_e < lv2_exp_e)
 			speed = 3;
 		else if(lv2_exp_e <= exp_e && exp_e < lv3_exp_e)
-			speed = 5;
+			speed = 4;
 		else if(lv3_exp_e <= exp_e && exp_e < lv4_exp_e)
-			speed = 7;
+			speed = 5;
 		else
-			speed = 9;
+			speed = 6;
 	}
 	else
 	{
-		if     (exp_e < lv1_exp_e)
-			speed = 4;
+		if (exp_e < lv1_exp_e)
+			speed = 9;
 		else if(lv1_exp_e <= exp_e && exp_e < lv2_exp_e)
-			speed = 7;
-		else if(lv2_exp_e <= exp_e && exp_e < lv3_exp_e)
 			speed = 10;
+		else if(lv2_exp_e <= exp_e && exp_e < lv3_exp_e)
+			speed = 11;
 		else if(lv3_exp_e <= exp_e && exp_e < lv4_exp_e)
-			speed = 13;
+			speed = 12;
 		else
-			speed = 16;
+			speed = 13;
 
 	}
 
@@ -838,7 +846,7 @@ void UserAi::Act_Ult(void)
 	int lv3_exp_r = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)];
 	int lv4_exp_r = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)];
 
-	if (NyaInput::IsPressKey(eINPUT::R) && lv1_exp_r <= exp_r && !device_ex_.valid_)
+	if (NyaInput::IsPressKey(eINPUT::R) && lv1_exp_r <= exp_r)
 	{
 		size_t size = 0;
 		// 弾数だけスキルの経験値追加

@@ -27,11 +27,12 @@ Target3PantoeaMain::Target3PantoeaMain()
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(3, 1, "img/target/target_pantoea.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_pantoea.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 20;
+	phandle_->collision_range_ = 10;
+	phandle_->health_ = 300;
 
 	lock_.LoadGraphic("img/target/lock_pantoea.png");
 }
@@ -55,7 +56,6 @@ Target3Pantoea::Target3Pantoea(int x, int y)
 {
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	main_.phandle_->health_ = 150;
 	mode_ = 1;
 }
 
@@ -104,7 +104,7 @@ void Target3Pantoea::Draw1(void)
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	if (count_frame_ % 30 == 0)
-		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 3;
+		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 4;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
 	main_.lock_.Run(main_.phandle_);

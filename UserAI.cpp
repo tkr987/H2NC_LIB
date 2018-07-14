@@ -211,7 +211,7 @@ void UserAi::Act(void)
 	Act_AttackEx();
 
 	// Õ“Ë”»’è
-	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
+	//NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
 	if (main_.phandle_->collision_hit_damage_ != 0)
 	{
 		size_t size = 0;

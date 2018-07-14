@@ -37,6 +37,7 @@ DevicePropertyX1::DevicePropertyX1()
 	collision_range_ = 1;
 	delay_time_frame_ = 0;
 	draw_angle_deg_ = 0;
+	draw_angle_speed_deg_ = 0;
 	move_angle_deg_ = 0;
 	move_speed_ = 1;
 }
@@ -708,7 +709,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget14_delete_deque.push_back(it);
 		else if (it->clear_)
 			gadget14_delete_deque.push_back(it);
@@ -755,6 +756,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
 		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
 
 	//***********************
@@ -769,7 +771,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget24_delete_deque.push_back(it);
 		else if (it->clear_)
 			gadget24_delete_deque.push_back(it);
@@ -816,6 +818,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
 		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
 
 	//***********************
@@ -830,7 +833,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget34_delete_deque.push_back(it);
 		else if (it->clear_)
 			gadget34_delete_deque.push_back(it);
@@ -883,6 +886,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
 		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
 
 	//*******************************************
@@ -898,7 +902,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget1414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
@@ -954,6 +958,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
 		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
 
 	//*******************************************
@@ -969,7 +974,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget1424_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
@@ -1027,6 +1032,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		e.gadget_gpx_->draw_grid_cy_ = (int)e.gadget_phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
 		e.gadget_gpx_->draw_angle_deg_ = e.gadget_dpx_->draw_angle_deg_;
 		NyaGraphic::Draw(e.gadget_gpx_, type);
+		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
 
 
@@ -1043,7 +1049,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget2414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
@@ -1122,7 +1128,7 @@ void NyaDevice::CalculateGadget(eOBJECT type)
 		// 表示領域の限界を超えた
 		// クリアを指定された
 		// 他のオブジェクトと衝突した
-		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1]))
+		if (!NyaPosition::InScreen(it->gadget_phandle_collection_[it->collision_accuracy_ - 1], 128))
 			gadget3414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{

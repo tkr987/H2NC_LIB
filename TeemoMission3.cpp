@@ -4,6 +4,7 @@
 #include "Target3Pantoea.h"
 #include "Target3Pseudomonad.h"
 #include "Target3Shigella.h"
+#include "Target3Vibrio.h"
 #include "TeemoBackgroundMission1.h"
 #include "TeemoMission3.h"
 #include "TeemoTargetEx3.h"
@@ -28,7 +29,13 @@ void TeemoMission3::Create(void)
 	AddTarget(ctime, ctime + 60, new Target3Pantoea(SCREEN_MAX_X / 2 + 210, 350));
 
 	ctime = 1;
-	AddTarget(ctime, ctime + 90, new Target3Bordetella(SCREEN_CENTER_X, -100));
+	AddTarget(ctime, ctime + 50, new Target3Bordetella(SCREEN_CENTER_X, -100));
+	AddTarget(ctime + 13, ctime + 50, new Target3Vibrio(SCREEN_CENTER_X - 200, -100, SCREEN_CENTER_X - 230, 150));
+	AddTarget(ctime + 13, ctime + 50, new Target3Vibrio(SCREEN_CENTER_X - 150, -100, SCREEN_CENTER_X - 180, 120));
+	AddTarget(ctime + 13, ctime + 50, new Target3Vibrio(SCREEN_CENTER_X - 100, -100, SCREEN_CENTER_X - 100, 150));
+	AddTarget(ctime + 13, ctime + 50, new Target3Vibrio(SCREEN_CENTER_X + 100, -100, SCREEN_CENTER_X + 100, 150));
+	AddTarget(ctime + 13, ctime + 50, new Target3Vibrio(SCREEN_CENTER_X + 150, -100, SCREEN_CENTER_X + 180, 120));
+	AddTarget(ctime + 13, ctime + 50, new Target3Vibrio(SCREEN_CENTER_X + 200, -100, SCREEN_CENTER_X + 230, 150));
 
 
 	ctime = 120;

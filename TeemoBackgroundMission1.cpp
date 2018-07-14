@@ -1,6 +1,6 @@
-
 #include "NyaGraphic.h"
 #include "TeemoBackgroundMission1.h"
+#include "TeemoEnum.h"
 
 using namespace HNLIB;
 
@@ -23,10 +23,10 @@ TeemoBackgroundMission1::~TeemoBackgroundMission1()
 
 void TeemoBackgroundMission1::Act(void)
 {
-	const double limit_scroll_max_y = -10.0;
+	const double limit_scroll_max_y = -4.0;
 	
 	if (gp_->draw_grid_y_ < limit_scroll_max_y)
-		gp_->draw_grid_y_ += 0.2;
+		gp_->draw_grid_y_ += MAP_SCROLL_PER_FRAME;
 }
 
 

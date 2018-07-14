@@ -1,5 +1,6 @@
 #include "HNLIB.h"
 #include "Target3Pantoea.h"
+#include "TeemoEnum.h"
 
 using namespace HNLIB;
 
@@ -73,7 +74,7 @@ void Target3Pantoea::Act(void)
 		break;
 	};
 
-	main_.phandle_->grid_y_ += 0.2;
+	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
 	count_frame_++;
 }
 
@@ -103,7 +104,7 @@ void Target3Pantoea::Draw1(void)
 	// main •`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	if (count_frame_ % 30 == 0)
+	if (NyaInput::GetFrameCount() % 30 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 4;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 

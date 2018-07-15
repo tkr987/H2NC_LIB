@@ -1,4 +1,4 @@
-#include "NyaBackground.h"
+#include "NyaBack.h"
 #include "NyaEnum.h"
 
 using namespace HNLIB;
@@ -9,7 +9,7 @@ using namespace HNLIB;
 @note
  ライブラリのNyaMissionクラス内で自動的に呼ばれるので、ライブラリ使用者が呼ぶ必要はない
 **/
-void NyaBackground::Run(const eEVENT check_event)
+void NyaBack::Run(const eEVENT check_event)
 {
 	switch (check_event)
 	{

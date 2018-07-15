@@ -9,7 +9,7 @@
 
 namespace HNLIB
 {
-	class NyaBackground;
+	class NyaBack;
 	class NyaTarget;
 	class NyaUser;
 
@@ -31,7 +31,7 @@ namespace HNLIB
 	public:
 		NyaMission(){}
 		virtual ~NyaMission(){}
-		void AddBackground(NyaBackground* background);
+		void AddBack(NyaBack* back);
 		void AddTarget(int start_time_sec, int end_time_sec, NyaTarget* target);
 		void AddUser(NyaUser* user);
 		void ClearBackground(void);
@@ -55,7 +55,7 @@ namespace HNLIB
 		// eEVENT::MISSION_RUNの状態のフレーム数をカウントする
 		// UINT_MAXを超えるミッションは正常動作しないので注意
 		unsigned int count_frame_;
-		static NyaBackground* background_;
+		static NyaBack* back_;
 		static NyaUser* user_;
 		static std::vector<MissionTarget> target_collection_;
 	};

@@ -1,5 +1,5 @@
 #include "NyaInterface.h"
-#include "TeemoBackgroundMission1.h"
+#include "TeemoBack1.h"
 #include "TeemoMission2.h"
 #include "TeemoTarget.h"
 #include "TeemoTargetEx2.h"
@@ -13,7 +13,7 @@ void TeemoMission2::Create(void)
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
 	//*****************************************************
-	AddBackground(new TeemoBackgroundMission1);
+	AddBack(new TeemoBack1);
 
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加

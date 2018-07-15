@@ -87,7 +87,7 @@ Target3BordetellaDevice::~Target3BordetellaDevice()
 
 Target3BordetellaMain::Target3BordetellaMain()
 {
-	health_max_ = 35000;
+	health_max_ = 33000;
 	lock_.LoadGraphic("img/target/lock_bordetella.png");
 
 	death_epx_ = new EffectPropertyX1;

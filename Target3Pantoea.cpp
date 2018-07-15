@@ -1,6 +1,7 @@
 #include "HNLIB.h"
 #include "Target3Pantoea.h"
 #include "TeemoEnum.h"
+#include "TeemoFactory.h"
 
 using namespace HNLIB;
 
@@ -17,22 +18,20 @@ Target3PantoeaDevice::~Target3PantoeaDevice()
 Target3PantoeaMain::Target3PantoeaMain()
 {
 	death_epx_ = new EffectPropertyX1;
-	death_epx_->interval_time_frame_ = 3;
-
 	death_gpx_ = new GraphicPropertyX4;
-	death_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death_gpx_->file_);
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	death_spx_ = new SoundPropertyX;
 	NyaSound::LoadFile("sound/target_death1.wav", &death_spx_->file_);
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
+	gpx_->extend_rate_ = 1.5;
 	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_pantoea.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 10;
+	phandle_->collision_range_ = 20;
 	phandle_->health_ = 300;
 
 	lock_.LoadGraphic("img/target/lock_pantoea.png");
@@ -40,7 +39,6 @@ Target3PantoeaMain::Target3PantoeaMain()
 
 Target3PantoeaMain::~Target3PantoeaMain()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
 	NyaSound::DeleteSoundFile(&death_spx_->file_);
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 
@@ -50,6 +48,7 @@ Target3PantoeaMain::~Target3PantoeaMain()
 	death_gpx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 

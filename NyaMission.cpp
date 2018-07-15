@@ -1,5 +1,5 @@
 #include "DxLib.h"
-#include "NyaBackground.h"
+#include "NyaBack.h"
 #include "NyaEnum.h"
 #include "NyaMission.h"
 #include "NyaTarget.h"
@@ -8,7 +8,7 @@
 using namespace std;
 using namespace HNLIB;
 
-NyaBackground* NyaMission::background_;
+NyaBack* NyaMission::back_;
 std::vector<MissionTarget> NyaMission::target_collection_;
 NyaUser* NyaMission::user_;
 
@@ -16,9 +16,9 @@ NyaUser* NyaMission::user_;
 @brief background‚ð’Ç‰Á‚·‚éŠÖ”
 @param background ’Ç‰Á‚·‚ébackground
 **/
-void NyaMission::AddBackground(NyaBackground* background)
+void NyaMission::AddBack(NyaBack* back)
 {
-	background_ = background;
+	back_ = back;
 }
 
 /**
@@ -50,8 +50,8 @@ void NyaMission::AddUser(NyaUser* user)
 
 void NyaMission::ClearBackground(void)
 {
-	delete background_;
-	background_ = nullptr;
+	delete back_;
+	back_ = nullptr;
 }
 
 void NyaMission::ClearTarget(void)
@@ -90,8 +90,8 @@ void NyaMission::Run(eEVENT check_event)
 		break;
 	}
 
-	if (background_ != nullptr)
-		background_->Run(check_event);
+	if (back_ != nullptr)
+		back_->Run(check_event);
 
 
 	if (user_ != nullptr)

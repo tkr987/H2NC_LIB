@@ -1,24 +1,25 @@
 #include "HNLIB.h"
-#include "Target3Vibrio.h"
+#include "Target3Erwinia.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
 using namespace HNLIB;
 
-Target3VibrioDevice::Target3VibrioDevice()
+
+Target3ErwiniaDevice::Target3ErwiniaDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
-	dpx_->move_speed_ = 2;
+	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE2;
+	dpx_->move_speed_ = 9;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_orange1.png", &gadget_gpx_->file_);
+	NyaGraphic::LoadGraphicFile("img/target/attack_orange2.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-Target3VibrioDevice::~Target3VibrioDevice()
+Target3ErwiniaDevice::~Target3ErwiniaDevice()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
@@ -32,7 +33,7 @@ Target3VibrioDevice::~Target3VibrioDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target3VibrioDeathDevice::Target3VibrioDeathDevice()
+Target3ErwiniaDeathDevice::Target3ErwiniaDeathDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->move_speed_ = 4;
@@ -44,7 +45,7 @@ Target3VibrioDeathDevice::Target3VibrioDeathDevice()
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-Target3VibrioDeathDevice::~Target3VibrioDeathDevice()
+Target3ErwiniaDeathDevice::~Target3ErwiniaDeathDevice()
 {
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
 	delete dpx_;
@@ -57,8 +58,11 @@ Target3VibrioDeathDevice::~Target3VibrioDeathDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target3VibrioMain::Target3VibrioMain()
+Target3ErwiniaMain::Target3ErwiniaMain()
 {
+	health_max_ = 1000;
+	lock_.LoadGraphic("img/target/lock_erwinia.png");
+
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
@@ -68,18 +72,15 @@ Target3VibrioMain::Target3VibrioMain()
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(2, 1, "img/target/target_vibrio.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile(2, 1, "img/target/target_erwinia.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 20;
-	phandle_->health_ = 500;
-
-	lock_.LoadGraphic("img/target/lock_vibrio.png");
+	phandle_->collision_range_ = 10;
+	phandle_->health_ = health_max_;
 }
 
-Target3VibrioMain::~Target3VibrioMain()
+Target3ErwiniaMain::~Target3ErwiniaMain()
 {
 	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
 	NyaSound::DeleteSoundFile(&death_spx_->file_);
@@ -97,66 +98,97 @@ Target3VibrioMain::~Target3VibrioMain()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
-Target3Vibrio::Target3Vibrio(int x, int y, int max_x, int max_y)
+Target3Erwinia::Target3Erwinia()
 {
-	count_frame_ = 0;
+	main_.phandle_->grid_x_ = NyaInput::GetRand(100, SCREEN_MAX_X - 50);
+	main_.phandle_->grid_y_ = NyaInput::GetRand(-200, -100);
+	mode_ = 1;
+}
+
+Target3Erwinia::Target3Erwinia(int x, int y)
+{
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
 	mode_ = 1;
-	move_max_x_ = max_x;
-	move_max_y_ = max_y;
 }
 
-Target3Vibrio::~Target3Vibrio()
+
+Target3Erwinia::~Target3Erwinia()
 {
 
 }
 
-void Target3Vibrio::Act(void)
+void Target3Erwinia::Act(void)
 {
 	switch(mode_)
 	{
 	case 1:
 		Act1();
+		if (NyaPosition::InScreen(main_.phandle_))
+		{
+			count_frame_ = 0;
+			mode_ = 2;
+		}
+		break;
+	case 2:
+		Act2();
 		break;
 	};
 
+	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
 	count_frame_++;
 }
 
-void Target3Vibrio::Draw(void)
+void Target3Erwinia::Draw(void)
 {
 	switch(mode_)
 	{
 	case 1:
 		Draw1();
+		break;
+	case 2:
+		Draw2();
 		if (main_.phandle_->health_ < 0)
-			mode_ = 2;
+			mode_ = 3;
 		break;
 	};
 }
 
-void Target3Vibrio::Act1(void)
+void Target3Erwinia::Act1(void)
 {
-	// 初期位置へ移動
-	if (count_frame_ == 1)
-		NyaPosition::MoveGridMode(main_.phandle_, move_max_x_, move_max_y_, FPS_MAX * 2);
+	// 何もしない
+}
 
-	if (count_frame_ == FPS_MAX * 2)
-	{	// 攻撃処理
-		device_.dpx_->create_x_ = main_.phandle_->grid_x_;
-		device_.dpx_->create_y_ = main_.phandle_->grid_y_;
-		for (int way = 0; way < 360 / 8; way++)
-		{
-			device_.dpx_->move_angle_deg_ += 8;
-			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-		}
-	}
+void Target3Erwinia::Act2(void)
+{
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
+
+	if (count_frame_ % (FPS_MAX * 4) == FPS_MAX * 2)
+	{	// 左右への移動処理
+		int move_x;
+		if (NyaInput::GetRand(0, 1) == 0)
+			move_x = -100;
+		else
+			move_x = 100;
+		if (50 <= main_.phandle_->grid_x_ + move_x && main_.phandle_->grid_x_ + move_x < SCREEN_MAX_X - 50)
+			NyaPosition::MoveGridMode(main_.phandle_, main_.phandle_->grid_x_ + move_x, main_.phandle_->grid_y_, FPS_MAX);
+	}
+
+	if (count_frame_ % (FPS_MAX * 4) == FPS_MAX * 3)
+	{	// 攻撃処理
+		main_.device_.dpx_->create_x_ = main_.phandle_->grid_x_;
+		main_.device_.dpx_->create_y_ = main_.phandle_->grid_y_;
+		main_.device_.dpx_->move_angle_deg_ = 78;
+		for (int way = 0; way < 9; way++)
+		{
+			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
+			main_.device_.dpx_->move_angle_deg_ += 3;
+		}
+	}
 
 	if (main_.phandle_->health_ < 0)
 	{	// 打ち返し攻撃
@@ -166,6 +198,14 @@ void Target3Vibrio::Act1(void)
 		main_.device2_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device2_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		dpx_angle = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-1.0, 1.0);
+		main_.device2_.dpx_->delay_time_frame_ = 0;
+		main_.device2_.dpx_->move_angle_deg_ = dpx_angle - 5;
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device2_.dpx_->move_angle_deg_ = dpx_angle;
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device2_.dpx_->move_angle_deg_ = dpx_angle + 5;
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device2_.dpx_->delay_time_frame_ = 10;
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle - 5;
 		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle;
@@ -174,12 +214,21 @@ void Target3Vibrio::Act1(void)
 		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 
-	// Uターン移動
-	if (count_frame_ == FPS_MAX * 10)
-		NyaPosition::MoveGridMode(main_.phandle_, move_max_x_, -100, FPS_MAX * 2);
 }
 
-void Target3Vibrio::Draw1(void)
+void Target3Erwinia::Draw1(void)
+{
+	// main 描画
+	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+	if (count_frame_ % 20 == 0)
+		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
+	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+
+	main_.lock_.Run(main_.phandle_);
+}
+
+void Target3Erwinia::Draw2(void)
 {
 	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
@@ -187,7 +236,6 @@ void Target3Vibrio::Draw1(void)
 	if (NyaInput::GetFrameCount() % 20 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
-
 	// main ロック描画
 	main_.lock_.Run(main_.phandle_);
 
@@ -201,5 +249,3 @@ void Target3Vibrio::Draw1(void)
 	}
 
 }
-
-

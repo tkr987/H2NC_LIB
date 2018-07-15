@@ -1,4 +1,4 @@
-#include "TeemoBackgroundMission1.h"
+#include "TeemoBack1.h"
 #include "TeemoMission1.h"
 #include "TeemoTarget.h"
 #include "TeemoTargetEx.h"
@@ -14,7 +14,7 @@ void TeemoMission1::Create(void)
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
 	//*****************************************************
-	AddBackground(new TeemoBackgroundMission1);
+	AddBack(new TeemoBack1);
 
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加

@@ -48,6 +48,8 @@ private:
 	Target3ShigellaMain main_;
 	unsigned int mode_;
 	void Act1(void);
+	void Act2(void);
 	void Draw1(void);
+	void Draw2(void);
 };
 

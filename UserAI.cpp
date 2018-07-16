@@ -211,7 +211,7 @@ void UserAi::Act(void)
 	Act_AttackEx();
 
 	// Õ“Ë”»’è
-	//NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
+	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
 	if (main_.phandle_->collision_hit_damage_ != 0)
 	{
 		size_t size = 0;
@@ -892,8 +892,8 @@ void UserAi::Draw(void)
 	//*************
 	main_.gpx_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = (int)main_.phandle_->grid_y_;
-	if (count_frame_ % 2 == 0)
-		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 16;
+	if (NyaInput::GetFrameCount() % 2 == 0)
+		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::USER1);
 
 	//*************

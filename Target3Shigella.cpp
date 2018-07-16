@@ -88,6 +88,11 @@ void Target3Shigella::Act(void)
 	{
 	case 1:
 		Act1();
+		if (NyaPosition::InScreen(main_.phandle_))
+			mode_ = 2;
+		break;
+	case 2:
+		Act2();
 		break;
 	};
 
@@ -101,16 +106,24 @@ void Target3Shigella::Draw(void)
 	{
 	case 1:
 		Draw1();
-		if (main_.phandle_->health_ < 0)
-			mode_ = 2;
 		break;
+	case 2:
+		Draw2();
+		if (main_.phandle_->health_ < 0)
+			mode_ = 3;
+		break;	
 	};
 }
 
 void Target3Shigella::Act1(void)
 {
-	if (count_frame_ % 400 == 0)
-	{
+	// ‰½‚à‚µ‚È‚¢
+}
+
+void Target3Shigella::Act2(void)
+{
+	if (NyaInput::GetFrameCount() % 20 == 0 && main_.gpx_->file_div_ == 0)
+	{	// UŒ‚ˆ—
 		device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		device_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		for (int way = 0; way < 360 / 6; way++)
@@ -119,7 +132,6 @@ void Target3Shigella::Act1(void)
 			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 	}
-
 
 	// Õ“Ë”»’è@Õ“Ëƒ_ƒ[ƒW‚¾‚¯ŒoŒ±’l‚ð’Ç‰Á
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
@@ -132,10 +144,22 @@ void Target3Shigella::Draw1(void)
 	// main •`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	if (count_frame_ % 20 == 0)
-		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % 20;
+	if (NyaInput::GetFrameCount() % 20 == 0)
+		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	// main ƒƒbƒN•`‰æ
+	main_.lock_.Run(main_.phandle_);
+}
 
+void Target3Shigella::Draw2(void)
+{
+	// main •`‰æ
+	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+	if (NyaInput::GetFrameCount() % 20 == 0)
+		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
+	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	// main ƒƒbƒN•`‰æ
 	main_.lock_.Run(main_.phandle_);
 
 	if (main_.phandle_->health_ < 0)
@@ -148,5 +172,4 @@ void Target3Shigella::Draw1(void)
 	}
 
 }
-
 

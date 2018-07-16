@@ -314,6 +314,13 @@ void NyaInterface::DrawTitle(int x, int y)
 	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
 }
 
+/**
+@brief ヘルス表示関数
+@note
+ handle_health_.value_の値を%として処理する
+ 0以下の値を指定されたときは0%として処理する
+ 100以上の値を指定されたときは100%として処理する
+**/
 void NyaInterface::DrawHealth(void)
 {
 	const double ex_max_size_x = 840.0;
@@ -323,6 +330,7 @@ void NyaInterface::DrawHealth(void)
 	if (!handle_health_.valid_)
 		return;
 
+	handle_health_.value_ = (handle_health_.value_ <= 0) ? 0 : (100 <= handle_health_.value_) ? 100 : handle_health_.value_;
 	DrawBox(0, 0, 850, 20, black, true);
 	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_health_.value_ / 100.0), 15, red, true);
 }

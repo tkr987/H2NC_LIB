@@ -69,8 +69,15 @@ NyaWindow::NyaWindow(string title)
 NyaWindow::~NyaWindow(void)
 {
 	// 親オブジェクトのNyaWindowを破棄するときに子オブジェクトを破棄する
+	delete child_.opening_;
+	child_.opening_ = nullptr;
 	for (auto& e : child_.mission_collection_)
+	{
 		delete e;
+		e = nullptr;
+	}
+	delete child_.ending_;
+	child_.ending_ = nullptr;
 
 	DxLib_End();
 }
@@ -86,10 +93,16 @@ void NyaWindow::Child(NyaMission* mission)
 	child_.mission_collection_.push_back(mission);
 }
 
-void NyaWindow::Child(NyaOpening * opening)
+void NyaWindow::Child(NyaOpening* opening)
 {
 	child_.opening_ = opening;
 }
+
+void NyaWindow::Child(NyaEnding* ending)
+{
+	child_.ending_ = ending;
+}
+
 
 /**
  @brief 実行関数
@@ -110,6 +123,7 @@ void NyaWindow::Run(void)
 		// 連続でリプレイ再生したときのバグ
 		// no_replayを[enter]したときの挙動
 		// タイトルでPositionHandleのクリアをする
+		// endingがないときのイベント遷移確認
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -341,8 +355,7 @@ void NyaWindow::Mission(void)
 	// 1. 有効化されているインターフェースハンドルの無効化
 	// 2. NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡してミッションを削除させる
 	// 3. eEVENT::ENDING_LOADに遷移する
-	if (event_ == eEVENT::MISSION_COMPLETE)
-	{
+	case eEVENT::MISSION_COMPLETE:
 		if (NyaInterface::GetHandleComplete()->valid_)
 			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_COMPLETE);
 		else
@@ -351,7 +364,7 @@ void NyaWindow::Mission(void)
 			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_DELETE);
 			event_next_ = eEVENT::ENDING_LOAD;
 		}
-	}
+		break;
 	// ミッション生成の処理(リプレイ)
 	// 1. NyaMission::Run()の引数にeEVENT::MISSION_REPLAY_CREATEを渡してミッションクリア時の処理をさせる
 	// 2. eEVENT::MISSION_REPLAY_RUNに遷移する

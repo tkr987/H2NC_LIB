@@ -1,11 +1,12 @@
-#include "NyaDevice.h"
-#include "NyaEffect.h"
-#include "NyaGraphic.h"
-#include "NyaInput.h"
-#include "NyaInterface.h"
-#include "NyaPosition.h"
+#include "HNLIB.h"
+#include "TargetLock.h"
 #include "TeemoEnum.h"
-#include "TeemoTargetEx3.h"
+#include "TeemoFactory.h"
+#include "TeemoMark3.h"
+
+#define TEEMO_EX3_MODE1_HEALTH	75
+#define TEEMO_EX3_MODE2_HEALTH	30
+#define TEEMO_EX3_MODE3_HEALTH	0
 
 using namespace std;
 using namespace HNLIB;
@@ -14,7 +15,7 @@ using namespace HNLIB;
 // Act1(), Draw1() で使うクラス
 //*************************************
 
-TeemoExDevice311::TeemoExDevice311()
+TeemoDevice311::TeemoDevice311()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
@@ -27,7 +28,7 @@ TeemoExDevice311::TeemoExDevice311()
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-TeemoExDevice311::~TeemoExDevice311()
+TeemoDevice311::~TeemoDevice311()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
@@ -41,19 +42,36 @@ TeemoExDevice311::~TeemoExDevice311()
 	effect_gpx_ = nullptr;
 }
 
-TeemoExCube31::TeemoExCube31()
+TeemoCube31::TeemoCube31()
 {
+	lock_ = new TargetLock;
+	lock_->LoadGraphic("img/target/lock_cube.png");
+
+	death_epx_ = new EffectPropertyX1;
+	death_gpx_ = new GraphicPropertyX4;
+	death_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+
 	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = 0.4;
-	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	TeemoFactory::TargetCube(gpx_);
+
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
-TeemoExCube31::~TeemoExCube31()
+TeemoCube31::~TeemoCube31()
 {
+	delete lock_;
+	lock_ = nullptr;
+	delete death_epx_;
+	death_epx_ = nullptr;
+	delete death_gpx_;
+	death_gpx_ = nullptr;
+	delete death_spx_;
+	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 
@@ -61,7 +79,7 @@ TeemoExCube31::~TeemoExCube31()
 // Act2(), Draw2() で使うクラス
 //*************************************
 
-TeemoExDevice321::TeemoExDevice321()
+TeemoDevice321::TeemoDevice321()
 {
 	dpx_ = new DevicePropertyX3;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
@@ -75,7 +93,7 @@ TeemoExDevice321::TeemoExDevice321()
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-TeemoExDevice321::~TeemoExDevice321()
+TeemoDevice321::~TeemoDevice321()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
@@ -89,7 +107,7 @@ TeemoExDevice321::~TeemoExDevice321()
 	effect_gpx_ = nullptr;
 }
 
-TeemoExDevice322::TeemoExDevice322()
+TeemoDevice322::TeemoDevice322()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
@@ -102,7 +120,7 @@ TeemoExDevice322::TeemoExDevice322()
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-TeemoExDevice322::~TeemoExDevice322()
+TeemoDevice322::~TeemoDevice322()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
@@ -116,13 +134,16 @@ TeemoExDevice322::~TeemoExDevice322()
 	effect_gpx_ = nullptr;
 }
 
-TeemoExCube32::TeemoExCube32()
+TeemoCube32::TeemoCube32()
 {
+	lock_ = new TargetLock;
+	lock_->LoadGraphic("img/target/lock_cube.png");
+
 	death_epx_ = new EffectPropertyX1;
-	death_epx_->interval_time_frame_ = 3;
 	death_gpx_ = new GraphicPropertyX4;
-	death_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death_gpx_->file_);
+	death_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.01;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
@@ -130,16 +151,20 @@ TeemoExCube32::TeemoExCube32()
 	phandle_->collision_range_ = 20;
 }
 
-TeemoExCube32::~TeemoExCube32()
+TeemoCube32::~TeemoCube32()
 {
 	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+
 	delete death_epx_;
 	death_epx_ = nullptr;
 	delete death_gpx_;
 	death_gpx_ = nullptr;
+	delete death_spx_;
+	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 
@@ -147,7 +172,7 @@ TeemoExCube32::~TeemoExCube32()
 // Act3(), Draw3() で使うクラス
 //*************************************
 
-TeemoExDevice331::TeemoExDevice331()
+TeemoDevice331::TeemoDevice331()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
@@ -164,10 +189,11 @@ TeemoExDevice331::TeemoExDevice331()
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-TeemoExDevice331::~TeemoExDevice331()
+TeemoDevice331::~TeemoDevice331()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -178,7 +204,7 @@ TeemoExDevice331::~TeemoExDevice331()
 	effect_gpx_ = nullptr;
 }
 
-TeemoExDevice332::TeemoExDevice332()
+TeemoDevice332::TeemoDevice332()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
@@ -191,10 +217,11 @@ TeemoExDevice332::TeemoExDevice332()
 	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
 }
 
-TeemoExDevice332::~TeemoExDevice332()
+TeemoDevice332::~TeemoDevice332()
 {
 	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -205,13 +232,16 @@ TeemoExDevice332::~TeemoExDevice332()
 	effect_gpx_ = nullptr;
 }
 
-TeemoExCube33::TeemoExCube33()
+TeemoCube33::TeemoCube33()
 {
+	lock_ = new TargetLock;
+	lock_->LoadGraphic("img/target/lock_cube.png");
+
 	death_epx_ = new EffectPropertyX1;
-	death_epx_->interval_time_frame_ = 3;
 	death_gpx_ = new GraphicPropertyX4;
-	death_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death_gpx_->file_);
+	death_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
 	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
@@ -219,38 +249,46 @@ TeemoExCube33::TeemoExCube33()
 	phandle_->collision_range_ = 20;
 }
 
-TeemoExCube33::~TeemoExCube33()
+TeemoCube33::~TeemoCube33()
 {
 	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+
+	delete lock_;
+	lock_ = nullptr;
 	delete death_epx_;
 	death_epx_ = nullptr;
 	delete death_gpx_;
 	death_gpx_ = nullptr;
+	delete death_spx_;
+	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 
 //*****************
-// TeemoEx3Main
+// Teemo3Main
 //*****************
 
-TeemoEx3Main::TeemoEx3Main() : health_max_(26000)
+TeemoMain3::TeemoMain3() : health_max_(230000)
 {
+	lock_ = new TargetLock;
+	lock_->LoadGraphic("img/target/lock_teemo_mark3.png");
+
 	death1_epx_ = new EffectPropertyX1;
-	death1_epx_->interval_time_frame_ = 3;
 	death1_gpx_ = new GraphicPropertyX4;
-	death1_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death1_gpx_->file_);
+	TeemoFactory::TargetDeath1(death1_epx_, death1_gpx_);
 
 	death2_epx_ = new EffectPropertyX1;
 	death2_epx_->interval_time_frame_ = 3;
 	death2_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(8, 8, "img/target/death2.png", &death2_gpx_->file_);
+	death_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death_spx_);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/teemo_ex3.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile("img/target/teemo_mark3.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->health_ = health_max_;
@@ -260,11 +298,12 @@ TeemoEx3Main::TeemoEx3Main() : health_max_(26000)
 	phandle_->grid_y_ = -100;
 }
 
-TeemoEx3Main::~TeemoEx3Main()
+TeemoMain3::~TeemoMain3()
 {
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&death1_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&death2_gpx_->file_);
+
+	delete lock_;
+	lock_ = nullptr;
 	delete death1_epx_;
 	death1_epx_ = nullptr;
 	delete death1_gpx_;
@@ -273,8 +312,11 @@ TeemoEx3Main::~TeemoEx3Main()
 	death2_epx_ = nullptr;
 	delete death2_gpx_;
 	death2_gpx_ = nullptr;
+	delete death_spx_;
+	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 
@@ -282,7 +324,7 @@ TeemoEx3Main::~TeemoEx3Main()
 // TeemoTargetEx コンストラクタ・デストラクタ
 //***********************************************
 
-TeemoTargetEx3::TeemoTargetEx3()
+TeemoMark3::TeemoMark3()
 {
 	// メンバ変数初期化
 	count_frame_ = 0;
@@ -293,7 +335,7 @@ TeemoTargetEx3::TeemoTargetEx3()
 }
 
 
-TeemoTargetEx3::~TeemoTargetEx3()
+TeemoMark3::~TeemoMark3()
 {
 	NyaInterface::GetHandleWarning()->DeleteSound();
 }
@@ -302,7 +344,7 @@ TeemoTargetEx3::~TeemoTargetEx3()
 // TeemoTargetEx メンバ関数
 //***************************
 
-void TeemoTargetEx3::Act(void)
+void TeemoMark3::Act(void)
 {
 	switch (mode_)
 	{
@@ -317,7 +359,7 @@ void TeemoTargetEx3::Act(void)
 		break;
 	case 4:
 		if (count_frame_ == FPS_MAX * 8)
-			NyaInterface::GetHandleComplete()->valid_ = true;
+			NyaInterface::GetHandleClear()->valid_ = true;
 		break;
 	}
 
@@ -328,13 +370,13 @@ void TeemoTargetEx3::Act(void)
 #endif
 }
 
-void TeemoTargetEx3::Draw(void)
+void TeemoMark3::Draw(void)
 {
 	switch (mode_)
 	{
 	case 1:
 		Draw1();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 70)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE1_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 2;
@@ -345,7 +387,7 @@ void TeemoTargetEx3::Draw(void)
 		break;
 	case 2:
 		Draw2();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 20)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE2_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 3;
@@ -356,7 +398,7 @@ void TeemoTargetEx3::Draw(void)
 		break;
 	case 3:
 		Draw3();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_EX3_MODE3_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 4;
@@ -370,7 +412,7 @@ void TeemoTargetEx3::Draw(void)
 	}
 }
 
-void TeemoTargetEx3::Act1(void)
+void TeemoMark3::Act1(void)
 {
 	static int cube_index = 0;
 
@@ -419,7 +461,7 @@ void TeemoTargetEx3::Act1(void)
 	}
 }
 
-void TeemoTargetEx3::Act2(void)
+void TeemoMark3::Act2(void)
 {
 	// 初期位置へ移動する
 	if (count_frame_ == 1)
@@ -503,7 +545,7 @@ void TeemoTargetEx3::Act2(void)
 
 }
 
-void TeemoTargetEx3::Act3(void)
+void TeemoMark3::Act3(void)
 {
 	// 行動開始1フレーム目
 	// 初期位置へ移動する
@@ -577,7 +619,7 @@ void TeemoTargetEx3::Act3(void)
 		EffectPropertyX1* cube_epx;
 		GraphicPropertyX4* cube_effect_gpx;
 		PositionHandle phandle_user;
-		NyaPosition::FindHandle("user_main_handle", &phandle_user);
+		NyaPosition::FindHandle("user", &phandle_user);
 		for (int i = 0; i < 4; i++)
 		{
 			cube_dpx = cube33_collection_[i].device332_.dpx_;
@@ -601,47 +643,49 @@ void TeemoTargetEx3::Act3(void)
 	}
 }
 
-void TeemoTargetEx3::Draw1(void)
+void TeemoMark3::Draw1(void)
 {
 	// main描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	main_.lock_->Run(main_.phandle_);
 
-	// ヘルスバー(%)の表示をする
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 
 	for (auto& e : cube31_collection_)
 	{	// cube描画
-		if (count_frame_ % 5 == 0)
+		if (NyaInput::GetFrameCount() % 5 == 0)
 			e.gpx_->file_div_ = ++e.gpx_->file_div_ % 5;
 		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
 		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
+		e.lock_->Run(e.phandle_);
 	}
 
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 70)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE1_HEALTH)
 	{	// cube爆発
-		for (auto& e : cube32_collection_)
+		for (auto& e : cube31_collection_)
 		{
 			e.death_epx_->grid_x_ = e.phandle_->grid_x_;
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
 			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
 		}
+		NyaSound::Play(cube31_collection_[0].death_spx_);
 	}
 }
 
-void TeemoTargetEx3::Draw2(void)
+void TeemoMark3::Draw2(void)
 {
 	// main描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	main_.lock_->Run(main_.phandle_);
 
-	// ヘルスバー(%)の表示をする
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 
 	if (count_frame_ < FPS_MAX * 3)
 		return;
@@ -650,14 +694,15 @@ void TeemoTargetEx3::Draw2(void)
 	{	// cube描画
 		if (e.gpx_->extend_rate_ < 0.4)
 			e.gpx_->extend_rate_ += 0.01;
-		if (count_frame_ % 5 == 0)
+		if (NyaInput::GetFrameCount() % 5 == 0)
 			e.gpx_->file_div_ = ++e.gpx_->file_div_ % 5;
 		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
 		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
+		e.lock_->Run(e.phandle_);
 	}
 
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 20)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE2_HEALTH)
 	{	// cube爆発
 		for (auto& e : cube32_collection_)
 		{
@@ -665,38 +710,36 @@ void TeemoTargetEx3::Draw2(void)
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
 			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
 		}
+		NyaSound::Play(cube32_collection_[0].death_spx_);
 	}
 }
 
-void TeemoTargetEx3::Draw3(void)
+void TeemoMark3::Draw3(void)
 {
 	// main描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	main_.lock_->Run(main_.phandle_);
 
-
-	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	else
-		NyaInterface::GetHandleHealth()->value_ = 0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 
 	if (count_frame_ < FPS_MAX * 3)
 		return;
 
 	for (auto& e : cube33_collection_)
 	{	// cube描画
-		if (count_frame_ % 5 == 0)
+		if (NyaInput::GetFrameCount() % 5 == 0)
 			e.gpx_->file_div_ = ++e.gpx_->file_div_ % 5;
 		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
 		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
+		e.lock_->Run(e.phandle_);
 	}
 
 	
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_EX3_MODE3_HEALTH)
 	{	// cube爆発
 		for (auto& e : cube33_collection_)
 		{
@@ -704,10 +747,11 @@ void TeemoTargetEx3::Draw3(void)
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
 			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
 		}
+		NyaSound::Play(cube33_collection_[0].death_spx_);
 	}
 }
 
-void TeemoTargetEx3::Draw4(void)
+void TeemoMark3::Draw4(void)
 {
 	if (count_frame_ < 30 * 7)
 	{
@@ -724,6 +768,7 @@ void TeemoTargetEx3::Draw4(void)
 		main_.death2_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death2_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death2_epx_, main_.death2_gpx_, eOBJECT::TARGET_EFFECT1);
+		NyaSound::Play(main_.death_spx_);
 		NyaGraphic::Swing();
 	}
 

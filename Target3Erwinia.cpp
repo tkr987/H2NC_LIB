@@ -38,7 +38,7 @@ Target3ErwiniaDeathDevice::Target3ErwiniaDeathDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->move_speed_ = 4;
 	gadget_gpx_ = new GraphicPropertyX4;
-	TeemoFactory::TargetAttackOrange5(dpx_, gadget_gpx_);
+	TeemoFactory::TargetAttackWhite5(dpx_, gadget_gpx_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -60,7 +60,7 @@ Target3ErwiniaDeathDevice::~Target3ErwiniaDeathDevice()
 
 Target3ErwiniaMain::Target3ErwiniaMain()
 {
-	health_max_ = 1000;
+	health_max_ = 500;
 	lock_.LoadGraphic("img/target/lock_erwinia.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -100,6 +100,7 @@ Target3ErwiniaMain::~Target3ErwiniaMain()
 
 Target3Erwinia::Target3Erwinia()
 {
+	count_frame_ = 0;
 	main_.phandle_->grid_x_ = NyaInput::GetRand(100, SCREEN_MAX_X - 50);
 	main_.phandle_->grid_y_ = NyaInput::GetRand(-200, -100);
 	mode_ = 1;
@@ -107,6 +108,7 @@ Target3Erwinia::Target3Erwinia()
 
 Target3Erwinia::Target3Erwinia(int x, int y)
 {
+	count_frame_ = 0;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
 	mode_ = 1;

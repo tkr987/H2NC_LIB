@@ -31,6 +31,7 @@ namespace HNLIB
 		~NyaWindow();
 		void Child(NyaOpening* opening);
 		void Child(NyaMission* mission);
+		void Child(NyaEnding* ending);
 		void Run(void);
 	private:
 		eEVENT event_;

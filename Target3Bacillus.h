@@ -22,9 +22,21 @@ public:
 	~Target3BacillusDevice();
 };
 
+class Target3BacillusDeathDevice
+{
+public:
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
+	Target3BacillusDeathDevice();
+	~Target3BacillusDeathDevice();
+};
+
 class Target3BacillusMain
 {
 public:
+	Target3BacillusDeathDevice device2_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

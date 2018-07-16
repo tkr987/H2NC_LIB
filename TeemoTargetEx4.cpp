@@ -362,6 +362,10 @@ void TeemoTargetEx4::Act(void)
 			mode_ = 4;
 		}
 		break;
+	case 4:
+		if (count_frame_ == FPS_MAX * 8)
+			NyaInterface::GetHandleComplete()->valid_ = true;
+		break;
 	}
 
 	count_frame_++;

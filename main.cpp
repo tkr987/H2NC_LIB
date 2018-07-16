@@ -14,6 +14,7 @@
 #include "TeemoMission3.h"
 #include "TeemoMission4.h"
 #include "TeemoOpening.h"
+#include "TeemoEnding.h"
 
 using namespace HNLIB;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -35,8 +36,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //	nya_window->Child(teemo_mission2);
 	HNLIB::NyaMission* teemo_mission3 = new TeemoMission3;
 	nya_window->Child(teemo_mission3);
-//	HNLIB::NyaMission* teemo_mission4 = new TeemoMission4;
-//	nya_window->Child(teemo_mission4);
+	HNLIB::NyaMission* teemo_mission4 = new TeemoMission4;
+	nya_window->Child(teemo_mission4);
+	NyaEnding* teemo_ending = new TeemoEnding;
+	nya_window->Child(teemo_ending);
 	// ŽÀs
 	nya_window->Run();
 

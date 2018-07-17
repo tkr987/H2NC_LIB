@@ -13,6 +13,10 @@
 
 #define __DEBUG__
 
+#define TEEMO_EX_MODE1_HEALTH	80
+#define TEEMO_EX_MODE2_HEALTH	40
+#define TEEMO_EX_MODE3_HEALTH	0
+
 using namespace std;
 using namespace HNLIB;
 
@@ -271,7 +275,7 @@ TeemoExCube43::~TeemoExCube43()
 
 
 
-TeemoEx4Main::TeemoEx4Main() : health_max_(1000)
+TeemoEx4Main::TeemoEx4Main() : health_max_(30000)
 {
 	death1_epx_ = new EffectPropertyX1;
 	death1_epx_->interval_time_frame_ = 3;
@@ -317,7 +321,7 @@ TeemoTargetEx4::TeemoTargetEx4()
 	main_.phandle_->grid_x_ =  SCREEN_MAX_X / 2;
 	main_.phandle_->grid_y_ = -100;
 
-	mode_ = 1;
+	mode_ = 0;
 
 	// フォント設定
 	NyaString::SettingFont("warning_logo_font", 64, 4);
@@ -334,11 +338,21 @@ TeemoTargetEx4::~TeemoTargetEx4()
 
 void TeemoTargetEx4::Act(void)
 {
+
 	switch (mode_)
 	{
+	case 0:
+		if (NyaInterface::GetHandleContinue()->cnum_ != 0)
+			NyaInterface::GetHandleComplete()->valid_ = true;
+		else
+		{
+			mode_ = 1;
+			count_frame_ = 0;
+		}
+		break;
 	case 1:
 		Act1();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 80)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX_MODE1_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 2;
@@ -347,7 +361,7 @@ void TeemoTargetEx4::Act(void)
 		break;
 	case 2:
 		Act2();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < 40)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX_MODE2_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 3;
@@ -356,7 +370,7 @@ void TeemoTargetEx4::Act(void)
 		break;
 	case 3:
 		Act3();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= 0)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_EX_MODE3_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 4;
@@ -767,13 +781,13 @@ void TeemoTargetEx4::Draw1(void)
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
 	// cube描画
-	for (int i = 0; i < 8; i++)
+	for (auto& e : cube1_collection_)
 	{
-		if (count_frame_ % 5 == 0)
-			cube1_collection_[i].gpx_->file_div_ = ++cube1_collection_[i].gpx_->file_div_ % 5;
-		cube1_collection_[i].gpx_->draw_grid_cx_ = cube1_collection_[i].phandle_->grid_x_;
-		cube1_collection_[i].gpx_->draw_grid_cy_ = cube1_collection_[i].phandle_->grid_y_;
-		NyaGraphic::Draw(cube1_collection_[i].gpx_, eOBJECT::TARGET1);
+		if (NyaInput::GetFrameCount() % 5 == 0)
+			e.gpx_->file_div_ = ++e.gpx_->file_div_ % e.gpx_->file_.div_total_;
+		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
+		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
+		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
 
 	// ヘルスバー(%)の表示をする
@@ -795,19 +809,17 @@ void TeemoTargetEx4::Draw2(void)
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 
 	// cube描画
-	for (int i = 0; i < 6; i++)
+	for (auto& e : cube2_collection_)
 	{
 		if (count_frame_ % 5 == 0)
-			cube2_collection_[i].gpx_->file_div_ = ++cube2_collection_[i].gpx_->file_div_ % 5;
-		cube2_collection_[i].gpx_->draw_grid_cx_ = cube2_collection_[i].phandle_->grid_x_;
-		cube2_collection_[i].gpx_->draw_grid_cy_ = cube2_collection_[i].phandle_->grid_y_;
-		NyaGraphic::Draw(cube2_collection_[i].gpx_, eOBJECT::TARGET1);
+			e.gpx_->file_div_ = ++e.gpx_->file_div_ % e.gpx_->file_.div_total_;
+		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
+		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
+		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
 
-	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
 void TeemoTargetEx4::Draw3(void)
@@ -831,21 +843,17 @@ void TeemoTargetEx4::Draw3(void)
 
 
 	// cube描画
-	for (int i = 0; i < 4; i++)
+	for (auto& e : cube3_collection_)
 	{
-		if (count_frame_ % 5 == 0)
-			cube3_collection_[i].gpx_->file_div_ = ++cube3_collection_[i].gpx_->file_div_ % 5;
-		cube3_collection_[i].gpx_->draw_grid_cx_ = cube3_collection_[i].phandle_->grid_x_;
-		cube3_collection_[i].gpx_->draw_grid_cy_ = cube3_collection_[i].phandle_->grid_y_;
-		NyaGraphic::Draw(cube3_collection_[i].gpx_, eOBJECT::TARGET1);
+		if (NyaInput::GetFrameCount() % 5 == 0)
+			e.gpx_->file_div_ = ++e.gpx_->file_div_ % e.gpx_->file_.div_total_;
+		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
+		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
+		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
 	}
 
-	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	else
-		NyaInterface::GetHandleHealth()->value_ = 0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
 void TeemoTargetEx4::Draw4(void)
@@ -875,11 +883,7 @@ void TeemoTargetEx4::Draw4(void)
 		NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	}
 
-	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	else
-		NyaInterface::GetHandleHealth()->value_ = 0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 

@@ -4,9 +4,9 @@
 #include "TeemoFactory.h"
 #include "TeemoMark3.h"
 
-#define TEEMO_EX3_MODE1_HEALTH	75
-#define TEEMO_EX3_MODE2_HEALTH	30
-#define TEEMO_EX3_MODE3_HEALTH	0
+#define TEEMO_MARK3_MODE1_HEALTH	75
+#define TEEMO_MARK3_MODE2_HEALTH	30
+#define TEEMO_MARK3_MODE3_HEALTH	0
 
 using namespace std;
 using namespace HNLIB;
@@ -376,7 +376,7 @@ void TeemoMark3::Draw(void)
 	{
 	case 1:
 		Draw1();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE1_HEALTH)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK3_MODE1_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 2;
@@ -387,7 +387,7 @@ void TeemoMark3::Draw(void)
 		break;
 	case 2:
 		Draw2();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE2_HEALTH)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK3_MODE2_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 3;
@@ -398,7 +398,7 @@ void TeemoMark3::Draw(void)
 		break;
 	case 3:
 		Draw3();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_EX3_MODE3_HEALTH)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_MARK3_MODE3_HEALTH)
 		{
 			count_frame_ = 0;
 			mode_ = 4;
@@ -664,7 +664,7 @@ void TeemoMark3::Draw1(void)
 		e.lock_->Run(e.phandle_);
 	}
 
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE1_HEALTH)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK3_MODE1_HEALTH)
 	{	// cube”š”­
 		for (auto& e : cube31_collection_)
 		{
@@ -702,7 +702,7 @@ void TeemoMark3::Draw2(void)
 		e.lock_->Run(e.phandle_);
 	}
 
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX3_MODE2_HEALTH)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK3_MODE2_HEALTH)
 	{	// cube”š”­
 		for (auto& e : cube32_collection_)
 		{
@@ -739,7 +739,7 @@ void TeemoMark3::Draw3(void)
 	}
 
 	
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_EX3_MODE3_HEALTH)
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_MARK3_MODE3_HEALTH)
 	{	// cube”š”­
 		for (auto& e : cube33_collection_)
 		{

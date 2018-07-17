@@ -301,9 +301,9 @@ TeemoExMain2::TeemoExMain2() : health_max_(15000)
 
 TeemoExMain2::~TeemoExMain2()
 {
+	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 }
 
 //*****************

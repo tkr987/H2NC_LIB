@@ -49,23 +49,27 @@ void NyaInput::Init(void)
 	if (local_time.tm_min < 10)
 		output_date_ << "0";
 	output_date_ << local_time.tm_min;
+	save_state_collection_.clear();
 }
 
-void NyaInput::InputReplay(string file_name)
+bool NyaInput::InputReplay(string file_name)
 {
 	string line;
-	ifstream ifs(file_name);
+	ifstream ifs;
+	
+	// ファイルオープン
+	// ファイルがなければ何もせず終了
+	ifs.open(file_name);
+	if (!ifs.is_open())
+		return false;
 
 	// 1行目は乱数のシード
 	getline(ifs, line);
 	mt_rand_.seed(std::atoi(line.c_str()));
-
 	// 2行目は日時なので読み飛ばす
 	getline(ifs, line);
-
 	// タイトルなので3行目も読み飛ばす
-	getline(ifs, line);
-	
+	getline(ifs, line);	
 	// リプレイファイルに書かれたキー入力の内容を全て読み込む
 	while (getline(ifs, line))
 	{
@@ -73,28 +77,27 @@ void NyaInput::InputReplay(string file_name)
 		line.clear();
 	}
 
+	// ファイルクローズ
+	// trueを返して終了
 	ifs.close();
+	return true;
 }
 
 void NyaInput::OutputReplay(string file_name)
 {
 	ofstream ofs(file_name);
 
-	if (!save_state_collection_.empty())
-	{
-		ofs << output_seed_.str();
-		ofs << endl;
-		ofs << output_date_.str();
-		ofs << endl;
-		ofs << NyaInterface::GetHandleTitle()->name_.str();
-		ofs << endl;
-	}
+	ofs << output_seed_.str();
+	ofs << endl;
+	ofs << output_date_.str();
+	ofs << endl;
+	ofs << NyaInterface::GetHandleTitle()->name_.str();
+	ofs << endl;
 
-	while (!save_state_collection_.empty())
+	for (auto& e : save_state_collection_)
 	{
-		ofs << save_state_collection_.front();
+		ofs << e;
 		ofs << endl;
-		save_state_collection_.pop_front();
 	}
 
 	ofs.close();

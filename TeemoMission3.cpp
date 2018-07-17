@@ -25,7 +25,7 @@ void TeemoMission3::Create(void)
 	AddTarget(ctime, ctime + 30, new Target3Pantoea(SCREEN_CENTER_X + 70, 300));
 	AddTarget(ctime, ctime + 30, new Target3Pantoea(SCREEN_CENTER_X + 210, 300));
 
-	ctime = 3;
+	//ctime = 3;
 	AddTarget(ctime, ctime + 300, new TeemoMark3);
 
 	////*******************************************
@@ -127,7 +127,7 @@ void TeemoMission3::Create(void)
 	//**************************************
 	// ユーザーを子オブジェクトとして追加
 	//**************************************
-	AddUser(new UserAi);
+	//AddUser(new UserAi);
 }
 
 void TeemoMission3::Delete(void)

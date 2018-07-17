@@ -75,7 +75,7 @@ namespace HNLIB {
 			return (x * 180.0 / 3.14159265359);
 		}
 		static void Init(void);
-		static void InputReplay(std::string file_name);
+		static bool InputReplay(std::string file_name);
 		static void OutputReplay(std::string file_name);
 		static void Run(const eEVENT check_event);
 	private:

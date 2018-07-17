@@ -123,7 +123,7 @@ void NyaWindow::Run(void)
 		// 連続でリプレイ再生したときのバグ
 		// no_replayを[enter]したときの挙動
 		// タイトルでPositionHandleのクリアをする
-		// endingがないときのイベント遷移確認
+		// target3 act3()の自機狙い確認
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -236,7 +236,11 @@ void NyaWindow::Ending(void)
 {
 	switch(event_)
 	{
-		case eEVENT::ENDING_LOAD:
+	case eEVENT::ENDING_LOAD:
+		if (NyaInterface::GetHandleContinue()->cnum_ != 0)
+			event_next_ = eEVENT::NOT_REPLAY_SAVE;
+		else
+		{
 			if (child_.ending_ == nullptr)
 				event_next_ = eEVENT::REPLAY_SAVE;
 			else
@@ -244,17 +248,18 @@ void NyaWindow::Ending(void)
 				child_.ending_->Load();
 				event_next_ = eEVENT::ENDING_RUN;
 			}
-			break;
-		case eEVENT::ENDING_RUN:
-			child_.ending_->Run();
-		if (NyaInput::IsPressKey(eINPUT::ENTER))
-			event_next_ = eEVENT::ENDING_DELETE;
-			break;
-		case eEVENT::ENDING_DELETE:
-			child_.ending_->Delete();
-			NyaInterface::Init();
-			event_next_ = eEVENT::REPLAY_SAVE;
-			break;
+		}
+		break;
+	case eEVENT::ENDING_RUN:
+		child_.ending_->Run();
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+		event_next_ = eEVENT::ENDING_DELETE;
+		break;
+	case eEVENT::ENDING_DELETE:
+		child_.ending_->Delete();
+		NyaInterface::Init();
+		event_next_ = eEVENT::REPLAY_SAVE;
+		break;
 	}
 }
 
@@ -750,38 +755,50 @@ void NyaWindow::Title(void)
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
 
-	//***********************
+	//***********************************************************************************
 	// 選択が決定された
-	//***********************
+	// イベントを遷移させるが、選択したリプレイファイルが存在しないときは遷移しない
+	//***********************************************************************************
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{	
-		ihandle_mission_skill->Clear();		// スキルのUIをクリア
-		child_.mission_index_ = 0;			// child_.mission_collection_[0]からミッション開始
+		// スキルのUIをクリア
+		// child_.mission_collection_[0]からミッション開始
+		ihandle_mission_skill->Clear();	
+		child_.mission_index_ = 0;
 
 		// ミッションの開始なら乱数の初期化と時刻の取得をおこなう
 		// リプレイの開始ならリプレイファイルを読み込む
 		// (リプレイファイル読み込み関数内で乱数の初期化がされる)
-		if (select == 0)
-			NyaInput::Init();	
-		else if (select == 1)
-			NyaInput::InputReplay("replay/replay1.rep");
-		else if (select == 2)
-			NyaInput::InputReplay("replay/replay2.rep");
-		else if (select == 3)
-			NyaInput::InputReplay("replay/replay3.rep");
-		else if (select == 4)
-			NyaInput::InputReplay("replay/replay4.rep");
-
+		// イベントの更新もおこなう
 		switch (select)
-		{	// イベントの更新
+		{
 		case 0:
+			NyaInput::Init();	
 			event_next_ = eEVENT::OPENING_LOAD;
 			break;
 		case 1:
+			if (NyaInput::InputReplay("replay/replay1.rep"))
+				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			else
+				event_next_ = eEVENT::TITLE;
+			break;
 		case 2:
+			if (NyaInput::InputReplay("replay/replay2.rep"))
+				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			else
+				event_next_ = eEVENT::TITLE;
+			break;
 		case 3:
+			if (NyaInput::InputReplay("replay/replay3.rep"))
+				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			else
+				event_next_ = eEVENT::TITLE;
+			break;
 		case 4:
-			event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			if (NyaInput::InputReplay("replay/replay4.rep"))
+				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			else
+				event_next_ = eEVENT::TITLE;
 			break;
 		case 5:
 			event_next_ = eEVENT::WINDOW_CLOSE;

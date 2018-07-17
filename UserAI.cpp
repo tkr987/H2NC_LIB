@@ -134,8 +134,8 @@ UserAiMain::UserAiMain()
 	phandle_->name_ = "user";
 
 	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
-	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1500000;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 800000;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 800000;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 410000;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 0;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 700000;
 }
@@ -172,7 +172,7 @@ UserAi::UserAi(void)
 	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)] = 200000;
 	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)] = 400000;
 	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)] = 600000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)] = 1500000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)] = 800000;
 	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)] = 200000;
 	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)] = 400000;
 	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)] = 600000;
@@ -181,10 +181,10 @@ UserAi::UserAi(void)
 	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)] = 20000;
 	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)] = 30000;
 	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)] = 40000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::R)] = 200000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::R)] = 400000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 600000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)] = 800000;
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::R)] = 300000;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::R)] = 600000;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 900000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)] = 1200000;
 
 	// è’ìÀîªíËê›íË
 	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);

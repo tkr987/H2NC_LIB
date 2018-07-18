@@ -54,8 +54,6 @@ public:
 	Target2AdenoDevice device_;
 	unsigned int health_max_;
 	TargetLock* lock_;
-	int move_end_x_;
-	int move_end_y_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
@@ -69,7 +67,7 @@ public:
 class Target2Adeno : public HNLIB::NyaTarget
 {
 public:
-	Target2Adeno(int x, int y, int move_end_x, int move_end_y);
+	Target2Adeno(int x, int y);
 	~Target2Adeno();
 	void Act(void);
 	void Draw(void);

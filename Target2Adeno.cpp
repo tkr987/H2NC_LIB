@@ -85,7 +85,7 @@ Target2AdenoDevice::~Target2AdenoDevice()
 
 Target2AdenoMain::Target2AdenoMain()
 {
-	health_max_ = 30000;
+	health_max_ = 25000;
 
 	lock_ = new TargetLock;
 	lock_->LoadGraphic("img/target/lock_adeno.png");
@@ -123,7 +123,7 @@ Target2AdenoMain::~Target2AdenoMain()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
-Target2Adeno::Target2Adeno(int x, int y, int move_end_x, int move_end_y)
+Target2Adeno::Target2Adeno(int x, int y)
 {
 	cube_collection_[0].phandle_->grid_x_ = x - 100;
 	cube_collection_[0].phandle_->grid_y_ = y - 50;
@@ -131,8 +131,6 @@ Target2Adeno::Target2Adeno(int x, int y, int move_end_x, int move_end_y)
 	cube_collection_[1].phandle_->grid_y_ = y - 50;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	main_.move_end_x_ = move_end_x;
-	main_.move_end_y_ = move_end_y;
 	mode_ = 1;
 }
 
@@ -192,10 +190,6 @@ void Target2Adeno::Act1(void)
 	cube_collection_[0].phandle_->grid_y_ = main_.phandle_->grid_y_ - 50;
 	cube_collection_[1].phandle_->grid_x_ = main_.phandle_->grid_x_ + 100;
 	cube_collection_[1].phandle_->grid_y_ = main_.phandle_->grid_y_ - 50;
-
-	if (count_frame_ == 1)
-		NyaPosition::MoveGridMode(main_.phandle_, main_.move_end_x_, main_.move_end_y_, FPS_MAX * 2);
-
 }
 
 void Target2Adeno::Act2(void)

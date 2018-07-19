@@ -14,6 +14,23 @@ TargetLock::TargetLock()
 	NyaSound::ChangeVolume(&spx_->file_, 50);
 }
 
+TargetLock::TargetLock(eLOCK type)
+{
+	lock_frame_ = 0;
+	
+	gpx_ = new GraphicPropertyX4;
+	switch (type)
+	{
+	case eLOCK::ECTROMELIA:
+		NyaGraphic::LoadGraphicFile("img/target/lock_ectromelia.png", &gpx_->file_);
+		break;
+	}
+
+	spx_ = new SoundPropertyX;
+	NyaSound::LoadFile("sound/lock.wav", &spx_->file_);
+	NyaSound::ChangeVolume(&spx_->file_, 50);
+}
+
 
 TargetLock::~TargetLock()
 {
@@ -23,6 +40,11 @@ TargetLock::~TargetLock()
 	gpx_ = nullptr;
 	delete spx_;
 	spx_ = nullptr;
+}
+
+void TargetLock::LoadGraphic(eLOCK type)
+{
+
 }
 
 void TargetLock::LoadGraphic(std::string pass)

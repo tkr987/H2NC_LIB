@@ -20,6 +20,14 @@ void TeemoFactory::TargetAttackBlue1(HNLIB::DevicePropertyX1* dpx, HNLIB::Graphi
 	NyaGraphic::LoadGraphicFile("img/target/attack_blue1.png", &gpx->file_);
 }
 
+void TeemoFactory::TargetAttackBlue2(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
+	NyaGraphic::LoadGraphicFile("img/target/attack_blue3.png", &gadget_gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx->file_);
+}
+
 void TeemoFactory::TargetAttackBlue7(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE7;

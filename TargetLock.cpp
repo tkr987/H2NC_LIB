@@ -24,6 +24,9 @@ TargetLock::TargetLock(eLOCK type)
 	case eLOCK::ECTROMELIA:
 		NyaGraphic::LoadGraphicFile("img/target/lock_ectromelia.png", &gpx_->file_);
 		break;
+	case eLOCK::PICORNA:
+		NyaGraphic::LoadGraphicFile("img/target/lock_picorna.png", &gpx_->file_);
+		break;
 	}
 
 	spx_ = new SoundPropertyX;

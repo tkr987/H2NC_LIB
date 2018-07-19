@@ -11,7 +11,7 @@ namespace HNLIB
 enum class eLOCK
 {
 	enum_zero,
-	ECTROMELIA,
+	ECTROMELIA, PICORNA, 
 };
 
 

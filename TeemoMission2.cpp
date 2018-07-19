@@ -1,6 +1,7 @@
 #include "Target2Adeno.h"
 #include "Target2Ectromelia.h"
 #include "Target2Pantoea.h"
+#include "Target2Picorna.h"
 #include "Target2Polyoma.h"
 #include "TeemoBack2.h"
 #include "TeemoMission2.h"
@@ -28,13 +29,7 @@ void TeemoMission2::Create(void)
 	AddTarget(ctime, ctime + 30, new Target2Pantoea(SCREEN_CENTER_X + 210, 300));
 
 	ctime = 3;
-	for (int i = 0; i < 30; i++)
-	{
-		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X - 300, SCREEN_MAX_Y + 150 + 50 * i));
-		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X - 100, SCREEN_MAX_Y + 150 + 50 * i));
-		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X + 100, SCREEN_MAX_Y + 150 + 50 * i));
-		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X + 300, SCREEN_MAX_Y + 150 + 50 * i));
-	}
+	AddTarget(ctime, ctime + 60, new Target2Picorna(SCREEN_CENTER_X, -100));
 
 	/*
 	ctime = 3;
@@ -56,6 +51,15 @@ void TeemoMission2::Create(void)
 		AddTarget(ctime + 7, ctime + 60, new Target2Polyoma(-150 - 50 * i, SCREEN_MAX_Y - 350, false));
 		AddTarget(ctime + 7, ctime + 60, new Target2Polyoma(-150 - 50 * i, SCREEN_MAX_Y - 450, false));
 		AddTarget(ctime + 7, ctime + 60, new Target2Polyoma(-150 - 50 * i, SCREEN_MAX_Y - 550, false));
+	}
+
+	ctime = 70;
+	for (int i = 0; i < 30; i++)
+	{
+		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X - 300, SCREEN_MAX_Y + 150 + 50 * i));
+		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X - 100, SCREEN_MAX_Y + 150 + 50 * i));
+		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X + 100, SCREEN_MAX_Y + 150 + 50 * i));
+		AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X + 300, SCREEN_MAX_Y + 150 + 50 * i));
 	}
 	*/
 

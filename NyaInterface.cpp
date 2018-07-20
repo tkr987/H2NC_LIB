@@ -55,21 +55,21 @@ void InterfaceHandleHealth::Clear()
 	value_ = 100;
 }
 
+void InterfaceHandleLife::Clear()
+{
+	value_ = 1;
+}
 
-void HNLIB::InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
+
+void InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
 {
 	NyaSound::LoadFile(file_pass, &spx_->file_);
 	NyaSound::ChangeVolume(&spx_->file_, volume);
 }
 
-void HNLIB::InterfaceHandleWarning::DeleteSound(void)
+void InterfaceHandleWarning::DeleteSound(void)
 {
 	NyaSound::DeleteSoundFile(&spx_->file_);
-}
-
-InterfaceHandleSkill::InterfaceHandleSkill()
-{
-	Clear();
 }
 
 void InterfaceHandleSkill::AddExp(unsigned int value)
@@ -117,11 +117,6 @@ InterfaceHandleWarning::~InterfaceHandleWarning()
 	spx_ = nullptr;
 }
 
-HNLIB::InterfaceHandleTitle::InterfaceHandleTitle()
-{
-
-}
-
 
 /**
  @brief 初期化関数
@@ -134,21 +129,21 @@ void NyaInterface::Init(void)
 	handle_continue_.Clear();
 	handle_end_.Clear();
 	handle_health_.Clear();
+	handle_life_.Clear();
 	handle_skill_.Clear();
-	handle_life_.value_ = 1;
 
 	NyaString::SettingFont("interface_continue_font", 40, 6);
-	NyaString::SettingFont("interface_title_font", 20, 6);
-	NyaString::SettingFont("interface_exp_font", 18, 2);
-	NyaString::SettingFont("interface_lib_font", 50, 6);
 	NyaString::SettingFont("interface_clear_big_font", 50, 2);
 	NyaString::SettingFont("interface_clear_small_font", 30, 2);
 	NyaString::SettingFont("interface_complete_big_font", 50, 2);
 	NyaString::SettingFont("interface_complete_small_font", 30, 2);
 	NyaString::SettingFont("interface_end_big_font", 50, 2);
 	NyaString::SettingFont("interface_end_small_font", 30, 2);
+	NyaString::SettingFont("interface_lib_font", 50, 6);
 	NyaString::SettingFont("interface_life_font", 30, 2);
-	NyaString::SettingFont("design_skill_font", 30, 2);
+	NyaString::SettingFont("interface_skill_font", 30, 2);
+	NyaString::SettingFont("interface_skill_exp_font", 18, 2);
+	NyaString::SettingFont("interface_title_font", 20, 6);
 	NyaString::SettingFont("design_input_font", 50, 2);
 	NyaString::SettingFont("design_warning_font", 64, 4);
 }
@@ -309,19 +304,12 @@ void NyaInterface::DrawLIB(int x, int y)
 	NyaString::Write("interface_lib_font", white, x, y + 50, "2 Nya");
 }
 
-void NyaInterface::DrawTitle(int x, int y)
-{
-	const tuple<int, int, int> white = make_tuple(212, 227, 255);
-
-	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
-}
-
 /**
 @brief ヘルス表示関数
 @note
  handle_health_.value_の値を%として処理する
- 0以下の値を指定されたときは0%として処理する
- 100以上の値を指定されたときは100%として処理する
+ 0以下の値が指定されたときは0%として処理する
+ 100以上の値が指定されたときは100%として処理する
 **/
 void NyaInterface::DrawHealth(void)
 {
@@ -351,6 +339,7 @@ void NyaInterface::DrawLife(int x, int y)
 
 	// ライフ描画
 	NyaString::Write("interface_life_font", white, x, y, "user:");
+
 	if      (handle_life_.value_ == 1)
 		NyaString::Write("interface_life_font", red, value_grid_x, y, "■□□□□□□□");
 	else if (handle_life_.value_ == 2)
@@ -367,6 +356,7 @@ void NyaInterface::DrawLife(int x, int y)
 		NyaString::Write("interface_life_font", red, value_grid_x, y, "■■■■■■■□");
 	else if (8 <= handle_life_.value_)
 		NyaString::Write("interface_life_font", red, value_grid_x, y, "■■■■■■■■");
+
 	NyaString::Write("interface_life_font", white, value_grid_x, y, "□□□□□□□□");
 }
 
@@ -395,11 +385,11 @@ void NyaInterface::DrawSkill(int x, int y)
 	//***********************
 	// スキル選択肢の表示
 	//***********************
-	NyaString::Write("design_skill_font", red, x, y + 90 * (static_cast<int>(handle_skill_.select_) - 1), "★");
+	NyaString::Write("interface_skill_font", red, x, y + 90 * (static_cast<int>(handle_skill_.select_) - 1), "★");
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
-		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1), "☆");
-		NyaString::Write("design_skill_font", white, x + 50, y + 90 * (skill - 1), handle_skill_.name_[skill]);
+		NyaString::Write("interface_skill_font", white, x, y + 90 * (skill - 1), "☆");
+		NyaString::Write("interface_skill_font", white, x + 50, y + 90 * (skill - 1), handle_skill_.name_[skill]);
 	}
 	
 	//*********************************
@@ -412,10 +402,10 @@ void NyaInterface::DrawSkill(int x, int y)
 		unsigned int lv2_exp = handle_skill_.lv2_exp_[skill];
 		unsigned int lv3_exp = handle_skill_.lv3_exp_[skill];
 		unsigned int lv4_exp = handle_skill_.lv4_exp_[skill];
-		NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 40, "Exp : %u pt", exp);
+		NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 40, "Exp : %u pt", exp);
 		if (exp < lv1_exp)
 		{
-			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv1_exp);
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv1_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)exp / (double)lv1_exp);
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
 			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
@@ -423,8 +413,8 @@ void NyaInterface::DrawSkill(int x, int y)
 		}
 		else if (lv1_exp <= exp && exp < lv2_exp)
 		{
-			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■□□□");
-			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv2_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■□□□");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv2_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)(exp - lv1_exp) / (double)(lv2_exp - lv1_exp));
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
 			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
@@ -432,8 +422,8 @@ void NyaInterface::DrawSkill(int x, int y)
 		}
 		else if (lv2_exp <= exp && exp < lv3_exp)
 		{
-			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■□□");
-			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv3_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■□□");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv3_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)(exp - lv2_exp) / (double)(lv3_exp - lv2_exp));
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
 			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
@@ -441,8 +431,8 @@ void NyaInterface::DrawSkill(int x, int y)
 		}
 		else if (lv3_exp <= exp && exp < lv4_exp)
 		{
-			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■□");
-			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■□");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)(exp - lv3_exp) / (double)(lv4_exp - lv3_exp));
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
 			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
@@ -450,14 +440,21 @@ void NyaInterface::DrawSkill(int x, int y)
 		}
 		else if (lv4_exp <= exp)
 		{
-			NyaString::Write("design_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■■");
-			NyaString::Write("interface_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■■");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
 			int red_width = 350 - 1;
 			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
 			DrawBox(x, y + 90 * (skill - 1) + 80, x + 350, y + 90 * (skill - 1) + 80 + 6, GetColor(255, 255, 255), false);
 		}
-		NyaString::Write("design_skill_font", white, x, y + 90 * (skill - 1) + 45, "□□□□");
+		NyaString::Write("interface_skill_font", white, x, y + 90 * (skill - 1) + 45, "□□□□");
 	}
+}
+
+void NyaInterface::DrawTitle(int x, int y)
+{
+	const tuple<int, int, int> white = make_tuple(212, 227, 255);
+
+	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
 }
 
 void NyaInterface::DrawWarning(void)

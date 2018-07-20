@@ -104,11 +104,9 @@ namespace HNLIB
 
 	// DXLIB âÒì]ï`âÊä÷êîIIIÇ…ëŒâû
 	// int DXLIB::DrawRotaGraph3(int x, int y,int cx, int cy, double ExtRateX, double ExtRateY, double Angle, int GrHandle, int TransFlag, int TurnFlag ) ;
-	class GraphicPropertyX6 
+	class GraphicPropertyX6
 	{
 	public:
-		GraphicFile file_;
-		int file_div_;
 		double draw_grid_x_;
 		double draw_grid_y_;
 		double draw_grid_cx_;
@@ -116,8 +114,11 @@ namespace HNLIB
 		double draw_angle_deg_;
 		double extend_ratex_;
 		double extend_ratey_;
+		GraphicFile file_;
+		int file_div_;
 		bool flag_turn_;
 		bool flag_trans_;
+		GraphicPropertyX6();
 	};
 
 	// DXLIB é©óRïœå`ï`âÊä÷êîÇ…ëŒâû
@@ -125,16 +126,16 @@ namespace HNLIB
 	class GraphicPropertyX7 
 	{
 	public:
+		double grid_x1_;
+		double grid_x2_;
+		double grid_x3_;
+		double grid_x4_;
+		double grid_y1_;
+		double grid_y2_;
+		double grid_y3_;
+		double grid_y4_;
 		GraphicFile file_;
 		int file_div_;
-		double pos_x1_;
-		double pos_x2_;
-		double pos_x3_;
-		double pos_x4_;
-		double pos_y1_;
-		double pos_y2_;
-		double pos_y3_;
-		double pos_y4_;
 		bool flag_trans_;
 	};
 
@@ -143,14 +144,14 @@ namespace HNLIB
 	class GraphicPropertyX8 
 	{
 	public:
+		double grid_dx_;
+		double grid_dy_;
+		double grid_sx_;
+		double grid_sy_;
+		int size_width_;
+		int size_height_;
 		GraphicFile file_;
 		int file_div_;
-		int pos_dx_;
-		int pos_dy_;
-		int pos_sx_;
-		int pos_sy_;
-		int val_width_;
-		int val_height_;
 		bool flag_turn_;
 		bool flag_trans_;
 	};

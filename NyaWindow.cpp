@@ -118,7 +118,6 @@ void NyaWindow::Run(void)
 
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
-
 		// TODO
 		// 連続でリプレイ再生したときのバグ
 		// タイトルでPositionHandleのクリアをする

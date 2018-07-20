@@ -16,7 +16,8 @@ namespace HNLIB
 	/**
 	@brief mission clear 操作クラス
 	@note
-	 変数valid_をtrueにするとmission completeを表示する
+	 - valid_:
+	 trueにするとmission completeを表示する
 	**/
 	class InterfaceHandleClear
 	{
@@ -28,7 +29,8 @@ namespace HNLIB
 	/**
 	@brief mission complete 操作クラス
 	@note
-	 変数valid_をtrueにするとmission completeを表示する
+	 - valid_:
+	 trueにするとmission completeを表示する
 	**/
 	class InterfaceHandleComplete
 	{
@@ -66,7 +68,8 @@ namespace HNLIB
 	/**
 	@brief replay end 操作クラス
 	@note
-	 変数valid_をtrueにするとreplay endを表示する
+	 - valid_:
+	 trueにするとreplay endを表示する。
 	**/
 	class InterfaceHandleEnd
 	{
@@ -75,18 +78,27 @@ namespace HNLIB
 		void Clear();
 	};
 
+	/**
+	@brief health 操作クラス
+	@note
+	 - valid_:
+	 trueにするとヘルスを表示する。
+	 - value_:
+	 値は百分率で処理される。
+	**/
 	class InterfaceHandleHealth
 	{
 	public:
-		bool valid_;
-		double value_;
+		bool valid_;		//!< health 表示の有効化
+		double value_;		//!< health の値(%)
 		void Clear();
 	};
 
 	/**
 	@brief ライフ操作クラス
 	@note
-	 メンバvalue_には[0-8]の値を設定することができる。
+	 - value_:
+	 [0-8]の値を設定することができる。
 	 0未満の値を設定したときは次フレームまでに0の値に自動的に変更される。
 	 9以上の値を設定したときは次フレームまでに8の値に自動的に変更される。
 	**/
@@ -94,6 +106,7 @@ namespace HNLIB
 	{
 	public:
 		int value_;		//!< ライフ数
+		void Clear();
 	};
 
 	class InterfaceHandleSkill
@@ -105,8 +118,7 @@ namespace HNLIB
 		std::array<unsigned int, static_cast<int>(eSKILL::sizeof_enum)> lv3_exp_;
 		std::array<unsigned int, static_cast<int>(eSKILL::sizeof_enum)> lv4_exp_;
 		std::array<std::string, static_cast<int>(eSKILL::sizeof_enum)> name_;
-		eSKILL select_;									// 現在選択しているスキル
-		InterfaceHandleSkill();
+		eSKILL select_;			// 現在選択しているスキル
 		void AddExp(unsigned int value);
 		void Clear(void);
 	};
@@ -133,7 +145,6 @@ namespace HNLIB
 	{
 	public:
 		std::stringstream name_;
-		InterfaceHandleTitle();
 	};
 
 

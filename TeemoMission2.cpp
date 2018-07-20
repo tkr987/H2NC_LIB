@@ -4,6 +4,7 @@
 #include "Target2Pantoea.h"
 #include "Target2Picorna.h"
 #include "Target2Polyoma.h"
+#include "Target2Spirochaetes.h"
 #include "TeemoBack2.h"
 #include "TeemoMission2.h"
 #include "TeemoTarget.h"
@@ -63,8 +64,44 @@ void TeemoMission2::Create(void)
 	}
 
 	// MID-BOSS
-	ctime = 44;
-	AddTarget(ctime, ctime + 60, new Target2Picorna(SCREEN_CENTER_X, -100));
+	ctime = 43;
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(140, -70));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(190, -70));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(140, -130));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(190, -130));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes( 90, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(140, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(190, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes( 90, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(140, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(190, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes( 90, -370));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(140, -370));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(190, -370));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes( 90, -430));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(140, -430));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(190, -430));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(250, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(250, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(310, -130));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(310, -190));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(310, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(310, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(370, -130));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(370, -190));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(370, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(370, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(440, -130));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(440, -190));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(440, -250));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(440, -310));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(620, -60));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(620, -120));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(620, -180));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(620, -240));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(700, -100));
+	AddTarget(ctime, ctime + 60, new Target2Spirochaetes(700, -235));
+	AddTarget(ctime + 1, ctime + 60, new Target2Picorna(SCREEN_CENTER_X, -100));
 
 	ctime = 70;
 	for (int i = 0; i < 30; i++)

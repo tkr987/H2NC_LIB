@@ -55,6 +55,16 @@ GraphicPropertyX5::GraphicPropertyX5()
 	flag_trans_ = true;
 }
 
+GraphicPropertyX6::GraphicPropertyX6()
+{
+	draw_angle_deg_ = 0;
+	extend_ratex_ = 1.0;
+	extend_ratey_ = 1.0;
+	file_div_ = 0;
+	flag_turn_ = false;
+	flag_trans_ = true;
+}
+
 
 //**********************
 // class GraphicSwing
@@ -562,15 +572,15 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx7_deque_.empty()) {
 		gpx7 = &layer_collection_.at(layer).gpx7_deque_.front();
 		DrawModiGraph(
-			(int)gpx7->pos_x1_ + swing_.grid_x_, (int)gpx7->pos_y1_, (int)gpx7->pos_x2_ + swing_.grid_x_, (int)gpx7->pos_y2_, 
-			(int)gpx7->pos_x3_ + swing_.grid_x_, (int)gpx7->pos_y3_, (int)gpx7->pos_x4_ + swing_.grid_x_, (int)gpx7->pos_y4_,
+			(int)gpx7->grid_x1_ + swing_.grid_x_, (int)gpx7->grid_y1_, (int)gpx7->grid_x2_ + swing_.grid_x_, (int)gpx7->grid_y2_, 
+			(int)gpx7->grid_x3_ + swing_.grid_x_, (int)gpx7->grid_y3_, (int)gpx7->grid_x4_ + swing_.grid_x_, (int)gpx7->grid_y4_,
 			gpx7->file_.div_collection_[gpx7->file_div_], gpx7->flag_trans_);
 		layer_collection_.at(layer).gpx7_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx8_deque_.empty()) {
 		gpx8 = &layer_collection_.at(layer).gpx8_deque_.front();
-		DrawRectGraph(gpx8->pos_dx_ + swing_.grid_x_, gpx8->pos_dy_, 
-			gpx8->pos_sx_ + swing_.grid_x_, gpx8->pos_sy_, gpx8->val_width_, gpx8->val_height_, 
+		DrawRectGraph((int)gpx8->grid_dx_ + swing_.grid_x_, (int)gpx8->grid_dy_, 
+			(int)gpx8->grid_sx_ + swing_.grid_x_, (int)gpx8->grid_sy_, gpx8->size_width_, gpx8->size_height_, 
 			gpx8->file_.div_collection_[gpx8->file_div_], gpx8->flag_trans_, gpx8->flag_turn_);
 		layer_collection_.at(layer).gpx8_deque_.pop_front();
 	}

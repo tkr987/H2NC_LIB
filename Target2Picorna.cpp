@@ -9,7 +9,7 @@ using namespace HNLIB;
 Target2PicornaCubeDevice::Target2PicornaCubeDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->move_speed_ = 4;
+	dpx_->move_speed_ = 3;
 	gadget_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -94,6 +94,7 @@ Target2PicornaMain::Target2PicornaMain() : health_max_(16000)
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
+	gpx_->extend_rate_ = 1.5;
 	NyaGraphic::LoadGraphicFile(2, 1, "img/target/main_picorna.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
@@ -247,7 +248,7 @@ void Target2Picorna::Act2(void)
 		}
 	}
 
-	if (count_frame_ % 20 == 0)
+	if (count_frame_ % 25 == 0)
 	{
 		for (auto& e : cube_collection_)
 		{	// cube çUåÇèàóù
@@ -269,6 +270,8 @@ void Target2Picorna::Act2(void)
 		}
 	}
 
+	if (count_frame_ == FPS_MAX * 22)
+		NyaPosition::MoveSpeedMode(main_.phandle_, -90, 3, FPS_MAX * 10);
 }
 
 void Target2Picorna::Draw1(void)

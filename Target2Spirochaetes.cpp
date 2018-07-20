@@ -1,25 +1,23 @@
+#include "Target2Spirochaetes.h"
 #include "HNLIB.h"
-#include "Target2Chloroflexi.h"
 #include "TargetLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
 using namespace HNLIB;
 
-Target2ChloroflexiDevice::Target2ChloroflexiDevice()
+Target2SpirochaetesDevice::Target2SpirochaetesDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	gadget_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	dpx_->move_speed_ = 1;
-	TeemoFactory::TargetAttackOrange3(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	dpx_->move_speed_ = 5;
+	TeemoFactory::TargetAttackBlue3(dpx_, gadget_gpx_, epx_, effect_gpx_);
 }
 
-Target2ChloroflexiDevice::~Target2ChloroflexiDevice()
+Target2SpirochaetesDevice::~Target2SpirochaetesDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -30,10 +28,10 @@ Target2ChloroflexiDevice::~Target2ChloroflexiDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(800)
+Target2SpirochaetesMain::Target2SpirochaetesMain() : health_max_(50)
 {
 	lock_ = new TargetLock;
-	lock_->LoadGraphic("img/target/lock_chloroflexi.png");
+	lock_->LoadGraphic("img/target/lock_spirochaetes.png");
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
@@ -42,7 +40,7 @@ Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(800)
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(2, 1, "img/target/main_chloroflexi.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile(6, 6, "img/target/main_spirochaetes.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -50,7 +48,7 @@ Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(800)
 	phandle_->health_ = health_max_;
 }
 
-Target2ChloroflexiMain::~Target2ChloroflexiMain()
+Target2SpirochaetesMain::~Target2SpirochaetesMain()
 {
 	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
 
@@ -68,7 +66,7 @@ Target2ChloroflexiMain::~Target2ChloroflexiMain()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
-Target2Chloroflexi::Target2Chloroflexi(int x, int y)
+Target2Spirochaetes::Target2Spirochaetes(int x, int y)
 {
 	count_frame_ = 0;
 	main_.phandle_->grid_x_ = x;
@@ -77,12 +75,12 @@ Target2Chloroflexi::Target2Chloroflexi(int x, int y)
 }
 
 
-Target2Chloroflexi::~Target2Chloroflexi()
+Target2Spirochaetes::~Target2Spirochaetes()
 {
 
 }
 
-void Target2Chloroflexi::Act(void)
+void Target2Spirochaetes::Act(void)
 {
 	switch(mode_)
 	{
@@ -97,7 +95,7 @@ void Target2Chloroflexi::Act(void)
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
 }
 
-void Target2Chloroflexi::Draw(void)
+void Target2Spirochaetes::Draw(void)
 {
 	switch(mode_)
 	{
@@ -117,39 +115,45 @@ void Target2Chloroflexi::Draw(void)
 			NyaInterface::GetHandleSkill()->AddExp(5000);
 			NyaSound::Play(main_.death_spx_);
 		}
+		if (!NyaPosition::InScreen(main_.phandle_))
+			mode_ = 3;
 		break;
 	};
 
 	count_frame_++;
 }
 
-void Target2Chloroflexi::Act1(void)
+void Target2Spirochaetes::Act1(void)
 {
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 }
 
-void Target2Chloroflexi::Act2(void)
+void Target2Spirochaetes::Act2(void)
 {
 	// 衝突判定　衝突ダメージだけ経験値を追加、ヘルス減少
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
 
-	if (count_frame_ == FPS_MAX * 3)
+	if (NyaInput::GetFrameCount() % 10 == 0 && main_.gpx_->file_div_ == 1)
 	{	// main 攻撃処理
+		PositionHandle phandle_user;
+		NyaPosition::FindHandle("user", &phandle_user);
+		main_.device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-2.0, 2.0);
 		main_.device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device_.dpx_->create_y_ = main_.phandle_->grid_y_;
-		for (int way = 0; way < 120; way++)
-		{
-			main_.device_.dpx_->move_angle_deg_ += 3;
-			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-		}
+		main_.device_.dpx_->delay_time_frame_ = 0;
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device_.dpx_->delay_time_frame_ = 5;
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device_.dpx_->delay_time_frame_ = 10;
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 }
 
-void Target2Chloroflexi::Draw1(void)
+void Target2Spirochaetes::Draw1(void)
 {
 	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
@@ -168,12 +172,12 @@ void Target2Chloroflexi::Draw1(void)
 	}
 }
 
-void Target2Chloroflexi::Draw2(void)
+void Target2Spirochaetes::Draw2(void)
 {
 	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	if (NyaInput::GetFrameCount() % 20 == 0)
+	if (NyaInput::GetFrameCount() % 10 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	// main ロック描画

@@ -74,7 +74,6 @@ void Target2Pantoea::Act(void)
 	};
 
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
-	count_frame_++;
 }
 
 void Target2Pantoea::Draw(void)
@@ -83,10 +82,16 @@ void Target2Pantoea::Draw(void)
 	{
 	case 1:
 		Draw1();
-		if (main_.phandle_->health_ < 0)
+		if (main_.phandle_->health_ <= 0)
+		{
 			mode_ = 2;
+			NyaSound::Play(main_.death_spx_);
+			NyaInterface::GetHandleSkill()->AddExp(5000);
+		}
 		break;
 	};
+
+	count_frame_++;
 }
 
 void Target2Pantoea::Act1(void)
@@ -114,8 +119,6 @@ void Target2Pantoea::Draw1(void)
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::TARGET_EFFECT1);
-		NyaSound::Play(main_.death_spx_);
-		NyaInterface::GetHandleSkill()->AddExp(10000);
 	}
 
 }

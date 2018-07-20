@@ -51,8 +51,8 @@ public:
 class Target2PicornaMain
 {
 public:
-	unsigned int health_max_;
 	Target2PicornaDevice device_;
+	const unsigned int health_max_;
 	TargetLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;

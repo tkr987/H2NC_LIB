@@ -69,7 +69,7 @@ Target3VibrioMain::Target3VibrioMain()
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(2, 1, "img/target/target_vibrio.png", &gpx_->file_);
+	NyaGraphic::LoadGraphicFile(2, 1, "img/target/main_vibrio.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;

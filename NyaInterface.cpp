@@ -134,14 +134,19 @@ void NyaInterface::Init(void)
 	handle_continue_.Clear();
 	handle_end_.Clear();
 	handle_health_.Clear();
+	handle_skill_.Clear();
 	handle_life_.value_ = 1;
 
 	NyaString::SettingFont("interface_continue_font", 40, 6);
 	NyaString::SettingFont("interface_title_font", 20, 6);
 	NyaString::SettingFont("interface_exp_font", 18, 2);
 	NyaString::SettingFont("interface_lib_font", 50, 6);
-	NyaString::SettingFont("design_mission_clear_big_font", 50, 2);
-	NyaString::SettingFont("design_mission_clear_small_font", 30, 2);
+	NyaString::SettingFont("interface_clear_big_font", 50, 2);
+	NyaString::SettingFont("interface_clear_small_font", 30, 2);
+	NyaString::SettingFont("interface_complete_big_font", 50, 2);
+	NyaString::SettingFont("interface_complete_small_font", 30, 2);
+	NyaString::SettingFont("interface_end_big_font", 50, 2);
+	NyaString::SettingFont("interface_end_small_font", 30, 2);
 	NyaString::SettingFont("interface_life_font", 30, 2);
 	NyaString::SettingFont("design_skill_font", 30, 2);
 	NyaString::SettingFont("design_input_font", 50, 2);
@@ -202,8 +207,8 @@ void NyaInterface::DrawComplete(int x, int y)
 		return;
 
 	DrawBox(x, y, x + 460, y + 150, black, true);
-	NyaString::Write("design_mission_clear_big_font", font_color, x + 20, y + 25, "MISSION COMPLETE");
-	NyaString::Write("design_mission_clear_small_font", font_color, x + 105, y + 90, "PRESS ENTER KEY");
+	NyaString::Write("interface_complete_big_font", font_color, x + 20, y + 25, "MISSION COMPLETE");
+	NyaString::Write("interface_complete_small_font", font_color, x + 105, y + 90, "PRESS ENTER KEY");
 
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 		handle_complete_.valid_ = false;
@@ -253,16 +258,13 @@ void NyaInterface::DrawEnd(int x, int y)
 		return;
 
 	DrawBox(x, y, x + 400, y + 150, black, true);
-	NyaString::Write("design_mission_clear_big_font", white, x + 75, y + 25, "REPLAY END");
-	NyaString::Write("design_mission_clear_small_font", white, x + 85, y + 90, "PRESS ENTER KEY");
+	NyaString::Write("interface_end_big_font", white, x + 75, y + 25, "REPLAY END");
+	NyaString::Write("interface_end_small_font", white, x + 85, y + 90, "PRESS ENTER KEY");
 
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 		handle_end_.valid_ = false;
 }
 
-/**
-@brief 入力表示関数
-**/
 void NyaInterface::DrawInput(int x, int y)
 {
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
@@ -335,9 +337,6 @@ void NyaInterface::DrawHealth(void)
 	DrawBox(5, 4, 5 + (int)(ex_max_size_x * handle_health_.value_ / 100.0), 15, red, true);
 }
 
-/**
-@brief ライフ表示関数
-**/
 void NyaInterface::DrawLife(int x, int y)
 {
 	int value_grid_x = x + 90;

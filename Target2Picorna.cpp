@@ -81,9 +81,8 @@ Target2PicornaDevice::~Target2PicornaDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2PicornaMain::Target2PicornaMain()
+Target2PicornaMain::Target2PicornaMain() : health_max_(16000)
 {
-	health_max_ = 33000;
 	lock_ = new TargetLock(eLOCK::ECTROMELIA);
 
 	death_epx_ = new EffectPropertyX1;
@@ -220,31 +219,31 @@ void Target2Picorna::Act2(void)
 		main_.device_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += (90 + 10);
-		for (int way = 0; way < 6; way++)
+		for (int way = 0; way < 8; way++)
 		{
 			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			main_.device_.dpx_->delay_time_frame_ += 5;
+			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += 90;
-		for (int way = 0; way < 6; way++)
+		for (int way = 0; way < 8; way++)
 		{
 			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			main_.device_.dpx_->delay_time_frame_ += 5;
+			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += 90;
-		for (int way = 0; way < 6; way++)
+		for (int way = 0; way < 8; way++)
 		{
 			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			main_.device_.dpx_->delay_time_frame_ += 5;
+			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += 90;
-		for (int way = 0; way < 6; way++)
+		for (int way = 0; way < 8; way++)
 		{
 			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-			main_.device_.dpx_->delay_time_frame_ += 5;
+			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 	}
 

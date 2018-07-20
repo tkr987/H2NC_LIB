@@ -13,10 +13,15 @@ namespace HNLIB
 {
 	class SoundPropertyX;
 
+	/**
+	@brief mission clear 操作クラス
+	@note
+	 変数valid_をtrueにするとmission completeを表示する
+	**/
 	class InterfaceHandleClear
 	{
 	public:
-		bool valid_;					//!< trueならmission clearと表示する
+		bool valid_;		//!< clear画面表示の有効化
 		void Clear();
 	};
 
@@ -152,8 +157,8 @@ namespace HNLIB
 		static InterfaceHandleComplete handle_complete_;
 		static InterfaceHandleContinue handle_continue_;
 		static InterfaceHandleEnd handle_end_;
-		static InterfaceHandleLife handle_life_;
 		static InterfaceHandleHealth handle_health_;
+		static InterfaceHandleLife handle_life_;
 		static InterfaceHandleSkill handle_skill_;
 		static InterfaceHandleTitle handle_title_;
 		static InterfaceHandleWarning handle_warning_;

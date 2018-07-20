@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "NyaEnum.h"
 #include "NyaGraphic.h"
+#include "NyaInput.h"
 #include "NyaString.h"
 #include <tuple>
 #include <iterator>
@@ -30,6 +31,12 @@ GraphicPropertyX2::GraphicPropertyX2()
 	flag_trans_ = true;
 }
 
+GraphicPropertyX3::GraphicPropertyX3()
+{
+	file_div_ = 0;
+	flag_trans_ = true;
+}
+
 GraphicPropertyX4::GraphicPropertyX4()
 {
 	draw_angle_deg_ = 0;
@@ -38,6 +45,16 @@ GraphicPropertyX4::GraphicPropertyX4()
 	flag_turn_ = false;
 	flag_trans_ = true;
 }
+
+GraphicPropertyX5::GraphicPropertyX5()
+{
+	draw_angle_deg_ = 0;
+	extend_rate_ = 1.0;
+	file_div_ = 0;
+	flag_turn_ = false;
+	flag_trans_ = true;
+}
+
 
 //**********************
 // class GraphicSwing
@@ -195,7 +212,6 @@ void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, Graphic
 	*file = *it;
 }
 
-
 /**
 @brief í èÌï`âÊä÷êî
 @param *gpx ï`âÊÉvÉçÉpÉeÉB
@@ -208,7 +224,6 @@ void NyaGraphic::Draw(const GraphicPropertyX1 *gpx, eOBJECT layer)
 {
 	layer_collection_[static_cast<int>(layer)].gpx1_deque_.push_back(*gpx);
 }
-
 
 /**
 @brief LRîΩì]ï`âÊä÷êî
@@ -284,7 +299,7 @@ void NyaGraphic::Draw(const GraphicPropertyX6 *gpx, eOBJECT layer)
 @param layer ï`âÊÉåÉCÉÑÅ[
 @return Ç»Çµ
 @note
- DXLIB::DrawRotaGraph3() Ç…ëŒâûÅB
+ DXLIB::DrawModiGraph() Ç…ëŒâûÅB
 **/
 void NyaGraphic::Draw(const GraphicPropertyX7 *gpx, eOBJECT layer)
 {
@@ -500,7 +515,6 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	GraphicPropertyX8b* gpx8b;
 	int layer = static_cast<int>(draw_layer);
 
-	// Ç±Ç±Ç©ÇÁï`âÊèàóù
 	while (!layer_collection_[layer].gpx1_deque_.empty())
 	{
 		gp1 = &layer_collection_[layer].gpx1_deque_.front();
@@ -527,29 +541,29 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	{
 		gp4 = &layer_collection_[layer].gpx4_deque_.front();
 		DrawRotaGraph((int)gp4->draw_grid_cx_ + swing_.grid_x_, (int)gp4->draw_grid_cy_, 
-			gp4->extend_rate_, AngleToRad(gp4->draw_angle_deg_),
+			gp4->extend_rate_, NyaInput::AngleToRad(gp4->draw_angle_deg_),
 			gp4->file_.div_collection_[gp4->file_div_], gp4->flag_trans_, gp4->flag_turn_);
 		layer_collection_[layer].gpx4_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx5_deque_.empty()) {
 		gpx5 = &layer_collection_.at(layer).gpx5_deque_.front();
 		DrawRotaGraph2((int)gpx5->draw_grid_x_ + swing_.grid_x_, (int)gpx5->draw_grid_y_, 
-			(int)gpx5->draw_grid_cx_ + swing_.grid_x_, (int)gpx5->draw_grid_cy_, gpx5->extend_rate_, AngleToRad(gpx5->draw_angle_deg_), 
+			(int)gpx5->draw_grid_cx_ + swing_.grid_x_, (int)gpx5->draw_grid_cy_, gpx5->extend_rate_, NyaInput::AngleToRad(gpx5->draw_angle_deg_), 
 			gpx5->file_.div_collection_[gpx5->file_div_], gpx5->flag_trans_, gpx5->flag_turn_);
 		layer_collection_.at(layer).gpx5_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx6_deque_.empty()) {
 		gpx6 = &layer_collection_.at(layer).gpx6_deque_.front();
 		DrawRotaGraph3((int)gpx6->draw_grid_x_ + swing_.grid_x_, (int)gpx6->draw_grid_y_, 
-			(int)gpx6->draw_grid_cx_ + swing_.grid_x_, (int)gpx6->draw_grid_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, AngleToRad(gpx6->draw_angle_deg_),
+			(int)gpx6->draw_grid_cx_ + swing_.grid_x_, (int)gpx6->draw_grid_cy_, gpx6->extend_ratex_, gpx6->extend_ratey_, NyaInput::AngleToRad(gpx6->draw_angle_deg_),
 			gpx6->file_.div_collection_[gpx6->file_div_], gpx6->flag_trans_, gpx6->flag_turn_);
 		layer_collection_.at(layer).gpx6_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx7_deque_.empty()) {
 		gpx7 = &layer_collection_.at(layer).gpx7_deque_.front();
 		DrawModiGraph(
-			gpx7->pos_x1_ + swing_.grid_x_, gpx7->pos_y1_, gpx7->pos_x2_ + swing_.grid_x_, gpx7->pos_y2_, 
-			gpx7->pos_x3_ + swing_.grid_x_, gpx7->pos_y3_, gpx7->pos_x4_ + swing_.grid_x_, gpx7->pos_y4_,
+			(int)gpx7->pos_x1_ + swing_.grid_x_, (int)gpx7->pos_y1_, (int)gpx7->pos_x2_ + swing_.grid_x_, (int)gpx7->pos_y2_, 
+			(int)gpx7->pos_x3_ + swing_.grid_x_, (int)gpx7->pos_y3_, (int)gpx7->pos_x4_ + swing_.grid_x_, (int)gpx7->pos_y4_,
 			gpx7->file_.div_collection_[gpx7->file_div_], gpx7->flag_trans_);
 		layer_collection_.at(layer).gpx7_deque_.pop_front();
 	}
@@ -588,7 +602,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx4b_deque_.empty()) {
 		gpx4b = &layer_collection_.at(layer).gpx4b_deque_.front();
 		SetDrawBlendMode(gpx4b->blend_mode_, gpx4b->blend_alpha_);
-		DrawRotaGraph(gpx4b->pos_cx_ + swing_.grid_x_, gpx4b->pos_cy_, gpx4b->extend_rate_, AngleToRad(gpx4b->draw_angle_deg_),
+		DrawRotaGraph(gpx4b->pos_cx_ + swing_.grid_x_, gpx4b->pos_cy_, gpx4b->extend_rate_, NyaInput::AngleToRad(gpx4b->draw_angle_deg_),
 			gpx4b->file_.div_collection_[gpx4b->file_div_], gpx4b->flag_trans_, gpx4b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx4b_deque_.pop_front();
@@ -597,7 +611,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 		gpx5b = &layer_collection_.at(layer).gpx5b_deque_.front();
 		SetDrawBlendMode(gpx5b->blend_mode_, gpx5b->blend_alpha_);
 		DrawRotaGraph2(gpx5b->pos_x_ + swing_.grid_x_, gpx5b->pos_y_, 
-			gpx5b->pos_cx_ + swing_.grid_x_, gpx5b->pos_cy_, gpx5b->extend_rate_, AngleToRad(gpx5b->draw_angle_deg_), 
+			gpx5b->pos_cx_ + swing_.grid_x_, gpx5b->pos_cy_, gpx5b->extend_rate_, NyaInput::AngleToRad(gpx5b->draw_angle_deg_), 
 			gpx5b->file_.div_collection_[gpx5b->file_div_], gpx5b->flag_trans_, gpx5b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx5b_deque_.pop_front();
@@ -606,7 +620,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 		gpx6b = &layer_collection_.at(layer).gpx6b_deque_.front();
 		SetDrawBlendMode(gpx6b->blend_mode_, gpx6b->blend_alpha_);
 		DrawRotaGraph3(gpx6b->pos_x_ + swing_.grid_x_, gpx6b->pos_y_, 
-			gpx6b->pos_cx_ + swing_.grid_x_, gpx6b->pos_cy_, gpx6b->extend_ratex_, gpx6b->extend_ratey_, AngleToRad(gpx6b->draw_angle_deg_),
+			gpx6b->pos_cx_ + swing_.grid_x_, gpx6b->pos_cy_, gpx6b->extend_ratex_, gpx6b->extend_ratey_, NyaInput::AngleToRad(gpx6b->draw_angle_deg_),
 			gpx6b->file_.div_collection_[gpx6b->file_div_], gpx6b->flag_trans_, gpx6b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx6b_deque_.pop_front();
@@ -631,5 +645,4 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 		layer_collection_.at(layer).gpx8b_deque_.pop_front();
 	}
 }
-
 

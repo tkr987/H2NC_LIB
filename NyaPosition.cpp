@@ -311,8 +311,6 @@ void NyaPosition::JudgeCollision(eOBJECT type1, eOBJECT type2)
 				e2->collision_hit_handle_ = e1;
 				e1->collision_hit_x_ = e1->grid_x_;
 				e1->collision_hit_y_ = e1->grid_y_;
-				e1->health_ -= e2->collision_power_;
-				e2->health_ -= e1->collision_power_;
 			}
 		}
 	}

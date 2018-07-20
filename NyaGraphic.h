@@ -65,11 +65,7 @@ namespace HNLIB
 		int file_div_;
 		bool flag_trans_;
 		GraphicFile file_;
-		GraphicPropertyX3()
-		{
-			file_div_ = 0;
-			flag_trans_ = true;
-		}
+		GraphicPropertyX3();
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰
@@ -86,7 +82,6 @@ namespace HNLIB
 		bool flag_turn_;
 		bool flag_trans_;
 		GraphicPropertyX4();
-
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”II‚É‘Î‰
@@ -94,16 +89,17 @@ namespace HNLIB
 	class GraphicPropertyX5 
 	{
 	public:
-		GraphicFile file_;
-		int file_div_;
 		double draw_grid_x_;
 		double draw_grid_y_;
 		double draw_grid_cx_;
 		double draw_grid_cy_;
 		double draw_angle_deg_;
 		double extend_rate_;
+		GraphicFile file_;
+		int file_div_;
 		bool flag_turn_;
 		bool flag_trans_;
+		GraphicPropertyX5();
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”III‚É‘Î‰
@@ -131,14 +127,14 @@ namespace HNLIB
 	public:
 		GraphicFile file_;
 		int file_div_;
-		int pos_x1_;
-		int pos_x2_;
-		int pos_x3_;
-		int pos_x4_;
-		int pos_y1_;
-		int pos_y2_;
-		int pos_y3_;
-		int pos_y4_;
+		double pos_x1_;
+		double pos_x2_;
+		double pos_x3_;
+		double pos_x4_;
+		double pos_y1_;
+		double pos_y2_;
+		double pos_y3_;
+		double pos_y4_;
 		bool flag_trans_;
 	};
 
@@ -385,8 +381,6 @@ namespace HNLIB
 		static GraphicSwing swing_;
 		static void CalculateSwing(void);
 		static void DrawAll(eOBJECT layer);
-		static double RadToAngle(double x) { return (x * 180.0 / 3.14159265359); }
-		static double AngleToRad(double x) { return (x * 3.14159265359 / 180.0); }
 	};
 
 }

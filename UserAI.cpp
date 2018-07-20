@@ -35,7 +35,7 @@ UserAiDevice::UserAiDevice()
 
 	effect_gpx_ = new GraphicPropertyX4;
 	effect_gpx_->extend_rate_ = 1.0;
-	NyaGraphic::LoadGraphicFile(11, 1, "img/user/attack_effect.png", &effect_gpx_->file_);
+	NyaGraphic::LoadGraphicFile(2, 2, "img/user/attack_effect.png", &effect_gpx_->file_);
 
 	for (int i = 0; i < 6; i++)
 	{
@@ -134,10 +134,10 @@ UserAiMain::UserAiMain()
 	phandle_->name_ = "user";
 
 	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
-	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 800000;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 410000;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1200001;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 300001;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 0;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 700000;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 800001;
 }
 
 UserAiMain::~UserAiMain()
@@ -169,22 +169,22 @@ UserAi::UserAi(void)
 	count_frame_ = 0;
 
 	// interface ƒXƒLƒ‹ Ý’è
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)] = 200000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)] = 400000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)] = 600000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)] = 800000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)] = 200000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)] = 400000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)] = 600000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)] = 800000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::E)] = 10000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)] = 20000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)] = 30000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)] = 40000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::R)] = 300000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::R)] = 600000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 900000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)] = 1200000;
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)] =  300000;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)] =  600000;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)] =  900000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)] = 1200000;
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)] =  300000;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)] =  600000;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)] =  900000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)] = 1200000;
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::E)] =    5000;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)] =   10000;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)] =   15000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)] =   20000;
+	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::R)] =  400000;
+	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::R)] =  800000;
+	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 1200000;
+	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)] = 1600000;
 
 	// Õ“Ë”»’èÝ’è
 	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
@@ -211,7 +211,7 @@ void UserAi::Act(void)
 	Act_AttackEx();
 
 	// Õ“Ë”»’è
-	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
+//	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
 	if (main_.phandle_->collision_hit_damage_ != 0)
 	{
 		size_t size = 0;

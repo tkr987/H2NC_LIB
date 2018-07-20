@@ -85,7 +85,7 @@ Target2AdenoDevice::~Target2AdenoDevice()
 
 Target2AdenoMain::Target2AdenoMain()
 {
-	health_max_ = 25000;
+	health_max_ = 12000;
 
 	lock_ = new TargetLock;
 	lock_->LoadGraphic("img/target/lock_adeno.png");

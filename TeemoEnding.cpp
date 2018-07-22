@@ -16,7 +16,7 @@ TeemoEnding::~TeemoEnding()
 
 void TeemoEnding::Load(void)
 {
-	NyaGraphic::LoadGraphicFile("img/back/ending.png", &gpx_->file_);
+	NyaGraphic::Load("img/back/ending.png", &gpx_->file_);
 }
 
 void TeemoEnding::Run(void)
@@ -26,6 +26,6 @@ void TeemoEnding::Run(void)
 
 void TeemoEnding::Delete(void)
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 }
 

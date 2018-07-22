@@ -63,13 +63,13 @@ void InterfaceHandleLife::Clear()
 
 void InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
 {
-	NyaSound::LoadFile(file_pass, &spx_->file_);
+	NyaSound::Load(file_pass, &spx_->file_);
 	NyaSound::ChangeVolume(&spx_->file_, volume);
 }
 
 void InterfaceHandleWarning::DeleteSound(void)
 {
-	NyaSound::DeleteSoundFile(&spx_->file_);
+	NyaSound::Delete(&spx_->file_);
 }
 
 void InterfaceHandleSkill::AddExp(unsigned int value)

@@ -1,6 +1,8 @@
 #pragma once
-
+#include <array>
 #include "NyaTarget.h"
+
+class TeemoLock;
 
 namespace HNLIB 
 {
@@ -9,44 +11,47 @@ namespace HNLIB
 	class EffectPropertyX1;
 	class GraphicPropertyX4;
 	class PositionHandle;
+	class SoundPropertyX;
 }
 
 //*************************************
 // Act1(), Draw1() で使うクラス
 //*************************************
-class TeemoExDevice211
+class TeemoDevice211
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice211();
-	~TeemoExDevice211();
+	TeemoDevice211();
+	~TeemoDevice211();
 };
 
-class TeemoExDevice212
+class TeemoDevice212
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice212();
-	~TeemoExDevice212();
+	TeemoDevice212();
+	~TeemoDevice212();
 };
 
-class TeemoExCube21
+class TeemoCube21
 {
 public:
-	TeemoExDevice212 device212_;
+	TeemoDevice212 device212_;
 	int device_gap_angle_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoExCube21();
-	~TeemoExCube21();
+	TeemoCube21();
+	~TeemoCube21();
 };
 
 
@@ -54,108 +59,110 @@ public:
 // Act2(), Draw2() で使うクラス
 //********************************
 
-class TeemoExDevice221
+class TeemoDevice221
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice221();
-	~TeemoExDevice221();
+	TeemoDevice221();
+	~TeemoDevice221();
 };
 
-class TeemoExDevice222
+class TeemoDevice222
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice222();
-	~TeemoExDevice222();
+	TeemoDevice222();
+	~TeemoDevice222();
 };
 
-class TeemoExDevice223
+class TeemoDevice223
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice223();
-	~TeemoExDevice223();
+	TeemoDevice223();
+	~TeemoDevice223();
 };
 
-class TeemoExCube22
+class TeemoCube22
 {
 public:
-	TeemoExDevice222 device222_;
-	TeemoExDevice222 device223_;
+	TeemoDevice222 device222_;
+	TeemoDevice222 device223_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoExCube22();
-	~TeemoExCube22();
+	TeemoCube22();
+	~TeemoCube22();
 };
 
 //********************************
 // Act3(), Draw3() で使うクラス
 //********************************
 
-class TeemoExDevice232
+class TeemoDevice232
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExDevice232();
-	~TeemoExDevice232();
+	TeemoDevice232();
+	~TeemoDevice232();
 };
 
-class TeemoExCube23
+class TeemoCube23
 {
 public:
-	TeemoExDevice232 device232_;
+	TeemoDevice232 device232_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoExCube23();
-	~TeemoExCube23();
+	TeemoCube23();
+	~TeemoCube23();
 };
 
-class TeemoExMain2
+class TeemoMain2
 {
 public:
+	TeemoDevice211 device211_;
+	TeemoDevice221 device221_;
+	const unsigned int health_max_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death1_epx_;
 	HNLIB::GraphicPropertyX4* death1_gpx_;
 	HNLIB::EffectPropertyX1* death2_epx_;
 	HNLIB::GraphicPropertyX4* death2_gpx_;
-	TeemoExDevice211 device211_;
-	TeemoExDevice221 device221_;
-	const unsigned int health_max_;
+	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoExMain2();
-	~TeemoExMain2();
+	TeemoMain2();
+	~TeemoMain2();
 };
 
-class TeemoTargetEx2 : public HNLIB::NyaTarget
+class TeemoMark2 : public HNLIB::NyaTarget
 {
 public:
-	TeemoTargetEx2();
-	~TeemoTargetEx2();
+	TeemoMark2();
+	~TeemoMark2();
 	void Act(void);
 	void Draw(void);
 private:
 	unsigned int count_frame_;
-	std::array<TeemoExCube21, 4> cube21_collection_;
-	std::array<TeemoExCube22, 2> cube22_collection_;
-	std::array<TeemoExCube23, 10> cube23_collection_;
-	TeemoExMain2 main_;
+	std::array<TeemoCube21, 4> cube21_collection_;
+	std::array<TeemoCube22, 2> cube22_collection_;
+	std::array<TeemoCube23, 10> cube23_collection_;
+	TeemoMain2 main_;
 	int mode_;
 	void Act1(void);
 	void Act2(void);

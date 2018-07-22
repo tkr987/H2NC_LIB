@@ -1,7 +1,8 @@
 #pragma once
-
 #include "NyaTarget.h"
 #include <array>
+
+class TeemoLock;
 
 namespace HNLIB 
 {
@@ -13,25 +14,30 @@ namespace HNLIB
 	class SoundPropertyX;
 }
 
-class TeemoExBullet41
+class TeemoExDevice411
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoExBullet41();
-	~TeemoExBullet41();
+	TeemoExDevice411();
+	~TeemoExDevice411();
 };
 
-class TeemoEx4Cube1
+class TeemoCube41
 {
 public:
-	HNLIB::GraphicPropertyX4* gpx_;
+	TeemoExDevice411 device411_;
+	TeemoLock* lock_;
 	double move_angle_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
+	HNLIB::SoundPropertyX* death_spx_;
+	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoEx4Cube1();
-	~TeemoEx4Cube1();
+	TeemoCube41();
+	~TeemoCube41();
 };
 
 //*************************************
@@ -142,27 +148,29 @@ public:
 	TeemoExDevice423 device23_;
 	TeemoExDevice424 device24_;
 	TeemoExDevice431 device31_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death1_epx_;
 	HNLIB::GraphicPropertyX4* death1_gpx_;
+	HNLIB::SoundPropertyX* death1_spx_;
 	HNLIB::EffectPropertyX1* death2_epx_;
 	HNLIB::GraphicPropertyX4* death2_gpx_;
+	HNLIB::SoundPropertyX* death2_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoEx4Main();
 	~TeemoEx4Main();
 };
 
-class TeemoTargetEx4 : public HNLIB::NyaTarget
+class TeemoEx : public HNLIB::NyaTarget
 {
 public:
-	TeemoTargetEx4();
-	~TeemoTargetEx4();
+	TeemoEx();
+	~TeemoEx();
 	void Act(void);
 	void Draw(void);
 private:
 	unsigned int count_frame_;
-	TeemoExBullet41 bullet1_;
-	std::array<TeemoEx4Cube1, 8> cube1_collection_;
+	std::array<TeemoCube41, 8> cube41_collection_;
 	std::array<TeemoExCube42, 6> cube2_collection_;
 	std::array<TeemoExCube43, 4> cube3_collection_;
 	TeemoEx4Main main_;

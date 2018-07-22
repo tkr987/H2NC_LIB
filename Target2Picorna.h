@@ -2,7 +2,7 @@
 #include <array>
 #include "NyaTarget.h"
 
-class TargetLock;
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -28,7 +28,7 @@ class Target2PicornaCube
 {
 public:
 	Target2PicornaCubeDevice device_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::GraphicPropertyX4* gpx_;
@@ -53,7 +53,7 @@ class Target2PicornaMain
 public:
 	Target2PicornaDevice device_;
 	const unsigned int health_max_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

@@ -1,12 +1,12 @@
-#include "Target2Spirochaetes.h"
+#include "Target2Spirochaete.h"
 #include "HNLIB.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
 using namespace HNLIB;
 
-Target2SpirochaetesDevice::Target2SpirochaetesDevice()
+Target2SpirochaeteDevice::Target2SpirochaeteDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	gadget_gpx_ = new GraphicPropertyX4;
@@ -16,7 +16,7 @@ Target2SpirochaetesDevice::Target2SpirochaetesDevice()
 	TeemoFactory::TargetAttackBlue3(dpx_, gadget_gpx_, epx_, effect_gpx_);
 }
 
-Target2SpirochaetesDevice::~Target2SpirochaetesDevice()
+Target2SpirochaeteDevice::~Target2SpirochaeteDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
@@ -28,10 +28,10 @@ Target2SpirochaetesDevice::~Target2SpirochaetesDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2SpirochaetesMain::Target2SpirochaetesMain() : health_max_(50)
+Target2SpirochaeteMain::Target2SpirochaeteMain() : health_max_(50)
 {
-	lock_ = new TargetLock;
-	lock_->LoadGraphic("img/target/lock_spirochaetes.png");
+	lock_ = new TeemoLock;
+	lock_->LoadGraphic("img/target/lock_Spirochaete.png");
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
@@ -40,7 +40,7 @@ Target2SpirochaetesMain::Target2SpirochaetesMain() : health_max_(50)
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(6, 6, "img/target/main_spirochaetes.png", &gpx_->file_);
+	NyaGraphic::Load(6, 6, "img/target/main_Spirochaete.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -48,9 +48,9 @@ Target2SpirochaetesMain::Target2SpirochaetesMain() : health_max_(50)
 	phandle_->health_ = health_max_;
 }
 
-Target2SpirochaetesMain::~Target2SpirochaetesMain()
+Target2SpirochaeteMain::~Target2SpirochaeteMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -66,7 +66,7 @@ Target2SpirochaetesMain::~Target2SpirochaetesMain()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
-Target2Spirochaetes::Target2Spirochaetes(int x, int y)
+Target2Spirochaete::Target2Spirochaete(int x, int y)
 {
 	count_frame_ = 0;
 	main_.phandle_->grid_x_ = x;
@@ -75,12 +75,12 @@ Target2Spirochaetes::Target2Spirochaetes(int x, int y)
 }
 
 
-Target2Spirochaetes::~Target2Spirochaetes()
+Target2Spirochaete::~Target2Spirochaete()
 {
 
 }
 
-void Target2Spirochaetes::Act(void)
+void Target2Spirochaete::Act(void)
 {
 	switch(mode_)
 	{
@@ -95,7 +95,7 @@ void Target2Spirochaetes::Act(void)
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
 }
 
-void Target2Spirochaetes::Draw(void)
+void Target2Spirochaete::Draw(void)
 {
 	switch(mode_)
 	{
@@ -123,14 +123,14 @@ void Target2Spirochaetes::Draw(void)
 	count_frame_++;
 }
 
-void Target2Spirochaetes::Act1(void)
+void Target2Spirochaete::Act1(void)
 {
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 }
 
-void Target2Spirochaetes::Act2(void)
+void Target2Spirochaete::Act2(void)
 {
 	// 衝突判定　衝突ダメージだけ経験値を追加、ヘルス減少
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
@@ -153,7 +153,7 @@ void Target2Spirochaetes::Act2(void)
 	}
 }
 
-void Target2Spirochaetes::Draw1(void)
+void Target2Spirochaete::Draw1(void)
 {
 	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
@@ -172,7 +172,7 @@ void Target2Spirochaetes::Draw1(void)
 	}
 }
 
-void Target2Spirochaetes::Draw2(void)
+void Target2Spirochaete::Draw2(void)
 {
 	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;

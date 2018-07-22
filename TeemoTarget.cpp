@@ -11,7 +11,7 @@ TeemoDevice::TeemoDevice()
 	dpx_->create_x_ = 400;
 	dpx_->create_y_ = 200;
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gpx_->file_);
+	NyaGraphic::Load("img/target/attack_red1.png", &gpx_->file_);
 }
 
 TeemoDevice::~TeemoDevice()
@@ -27,7 +27,7 @@ TeemoTargetMain::TeemoTargetMain()
 	gpx_ = new GraphicPropertyX4;
 	gpx_->draw_grid_cx_ = 400;
 	gpx_->draw_grid_cy_ = 200;
-	NyaGraphic::LoadGraphicFile("img/teemo_target.png", &gpx_->file_);
+	NyaGraphic::Load("img/teemo_target.png", &gpx_->file_);
 }
 
 TeemoTargetMain::~TeemoTargetMain()

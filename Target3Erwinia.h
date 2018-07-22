@@ -4,7 +4,7 @@
 #pragma once
 #include <array>
 #include "NyaTarget.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 
 namespace HNLIB
 {
@@ -44,7 +44,7 @@ public:
 	unsigned int health_max_;
 	Target3ErwiniaDevice device_;
 	Target3ErwiniaDeathDevice device2_;
-	TargetLock lock_;
+	TeemoLock lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

@@ -10,5 +10,6 @@
 #include "NyaMission.h"
 #include "NyaPosition.h"
 #include "NyaSound.h"
+#include "NyaString.h"
 #include "NyaUser.h"
 #include "NyaWindow.h"

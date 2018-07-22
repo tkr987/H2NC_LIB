@@ -1,6 +1,6 @@
 #include "HNLIB.h"
 #include "Target2Polyoma.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
@@ -18,7 +18,7 @@ Target2PolyomaDevice::Target2PolyomaDevice()
 
 Target2PolyomaDevice::~Target2PolyomaDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
 
 	delete dpx_;
 	dpx_ = nullptr;
@@ -32,7 +32,7 @@ Target2PolyomaDevice::~Target2PolyomaDevice()
 
 Target2PolyomaMain::Target2PolyomaMain() : health_max_(50)
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_polyoma.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -42,7 +42,7 @@ Target2PolyomaMain::Target2PolyomaMain() : health_max_(50)
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(2, 1, "img/target/target_polyoma.png", &gpx_->file_);
+	NyaGraphic::Load(2, 1, "img/target/target_polyoma.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -52,7 +52,7 @@ Target2PolyomaMain::Target2PolyomaMain() : health_max_(50)
 
 Target2PolyomaMain::~Target2PolyomaMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;

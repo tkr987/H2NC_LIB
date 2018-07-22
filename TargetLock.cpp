@@ -1,61 +1,73 @@
 #include "HNLIB.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 
 using namespace HNLIB;
 
-unsigned int TargetLock::played_sound_frame_ = 0;
+unsigned int TeemoLock::played_sound_frame_ = 0;
 
-TargetLock::TargetLock()
+TeemoLock::TeemoLock()
 {
 	gpx_ = new GraphicPropertyX4;
 	lock_frame_ = 0;
 	spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/lock.wav", &spx_->file_);
+	NyaSound::Load("sound/lock.wav", &spx_->file_);
 	NyaSound::ChangeVolume(&spx_->file_, 50);
 }
 
-TargetLock::TargetLock(eLOCK type)
+TeemoLock::TeemoLock(eLOCK type)
 {
 	lock_frame_ = 0;
 	
 	gpx_ = new GraphicPropertyX4;
 	switch (type)
 	{
+	case eLOCK::CUBE:
+		NyaGraphic::Load("img/target/lock_cube.png", &gpx_->file_);
+		break;
 	case eLOCK::ECTROMELIA:
-		NyaGraphic::LoadGraphicFile("img/target/lock_ectromelia.png", &gpx_->file_);
+		NyaGraphic::Load("img/target/lock_ectromelia.png", &gpx_->file_);
 		break;
 	case eLOCK::PICORNA:
-		NyaGraphic::LoadGraphicFile("img/target/lock_picorna.png", &gpx_->file_);
+		NyaGraphic::Load("img/target/lock_picorna.png", &gpx_->file_);
+		break;
+	case eLOCK::TEEMO_EX:
+		NyaGraphic::Load("img/target/lock_teemo_ex.png", &gpx_->file_);
+		break;
+	case eLOCK::TEEMO_MARK1:
+		NyaGraphic::Load("img/target/lock_teemo_mark1.png", &gpx_->file_);
+		break;
+	case eLOCK::TEEMO_MARK2:
+		NyaGraphic::Load("img/target/lock_teemo_mark2.png", &gpx_->file_);
 		break;
 	}
 
 	spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/lock.wav", &spx_->file_);
+	NyaSound::Load("sound/lock.wav", &spx_->file_);
 	NyaSound::ChangeVolume(&spx_->file_, 50);
 }
 
 
-TargetLock::~TargetLock()
+TeemoLock::~TeemoLock()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
-	NyaSound::DeleteSoundFile(&spx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&spx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 	delete spx_;
 	spx_ = nullptr;
 }
 
-void TargetLock::LoadGraphic(eLOCK type)
+void TeemoLock::LoadGraphic(eLOCK type)
 {
 
 }
 
-void TargetLock::LoadGraphic(std::string pass)
+void TeemoLock::LoadGraphic(std::string pass)
 {
-	NyaGraphic::LoadGraphicFile(pass, &gpx_->file_);
+	NyaGraphic::Load(pass, &gpx_->file_);
 }
 
-void TargetLock::Run(const PositionHandle* phandle)
+void TeemoLock::Run(const PositionHandle* phandle)
 {
 	// Å‰‚ÌÕ“Ë‚È‚çŒø‰Ê‰¹‚ðÄ¶
 	if (phandle->collision_hit_damage_ != 0)

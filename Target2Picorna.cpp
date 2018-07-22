@@ -1,6 +1,6 @@
 #include "HNLIB.h"
 #include "Target2Picorna.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
@@ -30,7 +30,7 @@ Target2PicornaCubeDevice::~Target2PicornaCubeDevice()
 
 Target2PicornaCube::Target2PicornaCube()
 {
-	lock_ = new TargetLock(eLOCK::ECTROMELIA);
+	lock_ = new TeemoLock(eLOCK::ECTROMELIA);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
@@ -69,8 +69,8 @@ Target2PicornaDevice::Target2PicornaDevice()
 
 Target2PicornaDevice::~Target2PicornaDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -81,21 +81,21 @@ Target2PicornaDevice::~Target2PicornaDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2PicornaMain::Target2PicornaMain() : health_max_(16000)
+Target2PicornaMain::Target2PicornaMain() : health_max_(25000)
 {
-	lock_ = new TargetLock(eLOCK::ECTROMELIA);
+	lock_ = new TeemoLock(eLOCK::ECTROMELIA);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetDeath2(death_epx_, death_gpx_);
 
 	death_spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/target_death2.wav", &death_spx_->file_);
+	NyaSound::Load("sound/target_death2.wav", &death_spx_->file_);
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(2, 1, "img/target/main_picorna.png", &gpx_->file_);
+	NyaGraphic::Load(2, 1, "img/target/main_picorna.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -105,7 +105,7 @@ Target2PicornaMain::Target2PicornaMain() : health_max_(16000)
 
 Target2PicornaMain::~Target2PicornaMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -177,6 +177,8 @@ void Target2Picorna::Draw(void)
 			NyaInterface::GetHandleSkill()->AddExp(30000);
 
 		}
+		if (FPS_MAX * 3 <= count_frame_ && !NyaPosition::InScreen(main_.phandle_))
+			mode_ = 3;
 		break;
 	};
 

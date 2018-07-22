@@ -1,5 +1,5 @@
 #include "HNLIB.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 #include "TeemoMark3.h"
@@ -21,17 +21,17 @@ TeemoDevice311::TeemoDevice311()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
 	dpx_->move_speed_ = 10;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_blue2.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_blue2.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 TeemoDevice311::~TeemoDevice311()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -44,7 +44,7 @@ TeemoDevice311::~TeemoDevice311()
 
 TeemoCube31::TeemoCube31()
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_cube.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -86,17 +86,17 @@ TeemoDevice321::TeemoDevice321()
 	dpx_->move_speed_ = 0.1;
 	dpx_->move_speed_accel_ = 0.02;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_blue2.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_blue2.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 TeemoDevice321::~TeemoDevice321()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -113,17 +113,17 @@ TeemoDevice322::TeemoDevice322()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
 	dpx_->move_speed_ = 8;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 TeemoDevice322::~TeemoDevice322()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -136,7 +136,7 @@ TeemoDevice322::~TeemoDevice322()
 
 TeemoCube32::TeemoCube32()
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_cube.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -146,15 +146,15 @@ TeemoCube32::TeemoCube32()
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.01;
-	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	NyaGraphic::Load(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
 TeemoCube32::~TeemoCube32()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete death_epx_;
 	death_epx_ = nullptr;
@@ -182,17 +182,17 @@ TeemoDevice331::TeemoDevice331()
 	way3_angle_ = 0;
 	way4_angle_ = 180;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_blue2.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_blue2.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 TeemoDevice331::~TeemoDevice331()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 
 	delete dpx_;
 	dpx_ = nullptr;
@@ -210,17 +210,17 @@ TeemoDevice332::TeemoDevice332()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
 	dpx_->move_speed_ = 3;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 TeemoDevice332::~TeemoDevice332()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 
 	delete dpx_;
 	dpx_ = nullptr;
@@ -234,7 +234,7 @@ TeemoDevice332::~TeemoDevice332()
 
 TeemoCube33::TeemoCube33()
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_cube.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -244,15 +244,15 @@ TeemoCube33::TeemoCube33()
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
-	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	NyaGraphic::Load(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
 TeemoCube33::~TeemoCube33()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -274,7 +274,7 @@ TeemoCube33::~TeemoCube33()
 
 TeemoMain3::TeemoMain3() : health_max_(230000)
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_teemo_mark3.png");
 
 	death1_epx_ = new EffectPropertyX1;
@@ -288,7 +288,7 @@ TeemoMain3::TeemoMain3() : health_max_(230000)
 	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death_spx_);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/teemo_mark3.png", &gpx_->file_);
+	NyaGraphic::Load("img/target/teemo_mark3.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->health_ = health_max_;
@@ -300,7 +300,7 @@ TeemoMain3::TeemoMain3() : health_max_(230000)
 
 TeemoMain3::~TeemoMain3()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;

@@ -11,18 +11,18 @@ Target3BacillusDevice::Target3BacillusDevice()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
 	dpx_->move_speed_ = 4;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 
 }
 
 Target3BacillusDevice::~Target3BacillusDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -42,12 +42,12 @@ Target3BacillusDeathDevice::Target3BacillusDeathDevice()
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 Target3BacillusDeathDevice::~Target3BacillusDeathDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -65,12 +65,12 @@ Target3BacillusMain::Target3BacillusMain()
 	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	death_spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_bacillus.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/target_bacillus.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -82,9 +82,9 @@ Target3BacillusMain::Target3BacillusMain()
 
 Target3BacillusMain::~Target3BacillusMain()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
-	NyaSound::DeleteSoundFile(&death_spx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete death_epx_;
 	death_epx_ = nullptr;

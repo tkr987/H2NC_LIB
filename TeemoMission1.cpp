@@ -1,14 +1,14 @@
 #include "TeemoBack1.h"
 #include "TeemoMission1.h"
 #include "TeemoTarget.h"
-#include "TeemoTargetEx.h"
+#include "TeemoMark1.h"
 #include "UserAI.h"
 
 using namespace HNLIB;
 
 void TeemoMission1::Create(void) 
 {
-	unsigned int id = 0;
+	unsigned int ctime = 0;
 	InterfaceHandleSkill* ihandle_mission_skill;
 
 	//*****************************************************
@@ -19,7 +19,8 @@ void TeemoMission1::Create(void)
 	//*******************************************
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
-	AddTarget(5, 600, new TargetExTeemo);
+	ctime = 2;
+	AddTarget(ctime, 600, new TeemoMark1);
 
 	//**************************************
 	// ユーザーを子オブジェクトとして追加
@@ -29,11 +30,13 @@ void TeemoMission1::Create(void)
 	//******************
 	// interface 設定
 	//******************
+	/*
 	ihandle_mission_skill = NyaInterface::GetHandleSkill();
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::Q)] = "Skill Q (power)";
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::W)] = "Passive W (bit)";
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::E)] = "Passive E (speed)";
 	ihandle_mission_skill->name_[static_cast<unsigned int>(eSKILL::R)] = "Skill R (ult)";
+	*/
 }
 
 void TeemoMission1::Delete(void)

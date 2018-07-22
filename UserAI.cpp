@@ -20,7 +20,7 @@ UserAiDevice::UserAiDevice()
 {
 	bit_gpx_ = new GraphicPropertyX4;
 	bit_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(16, 1,"img/user/bit.png", &bit_gpx_->file_);
+	NyaGraphic::Load(16, 1,"img/user/bit.png", &bit_gpx_->file_);
 
 	gadget_dpx_ = new DevicePropertyX1;
 	gadget_dpx_->collision_range_ = 10;
@@ -28,35 +28,35 @@ UserAiDevice::UserAiDevice()
 
 	gadget_gpx_ = new GraphicPropertyX4;
 	gadget_gpx_->extend_rate_ = 0.1;
-	NyaGraphic::LoadGraphicFile("img/user/attack.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/user/attack.png", &gadget_gpx_->file_);
 
 	effect_epx_ = new EffectPropertyX2;
 	effect_epx_->interval_time_frame_ = 2;
 
 	effect_gpx_ = new GraphicPropertyX4;
 	effect_gpx_->extend_rate_ = 1.0;
-	NyaGraphic::LoadGraphicFile(2, 2, "img/user/attack_effect.png", &effect_gpx_->file_);
+	NyaGraphic::Load(2, 2, "img/user/attack_effect.png", &effect_gpx_->file_);
 
 	for (int i = 0; i < 6; i++)
 	{
 		spx_[i] = new SoundPropertyX;
-		NyaSound::LoadFile("sound/user_attack.wav", &spx_[i]->file_);
+		NyaSound::Load("sound/user_attack.wav", &spx_[i]->file_);
 		NyaSound::ChangeVolume(&spx_[i]->file_, 50);
 		spx_ex_[i] = new SoundPropertyX;
-		NyaSound::LoadFile("sound/user_attack_ex.wav", &spx_ex_[i]->file_);
+		NyaSound::Load("sound/user_attack_ex.wav", &spx_ex_[i]->file_);
 		NyaSound::ChangeVolume(&spx_ex_[i]->file_, 30);
 	}
 }
 
 UserAiDevice::~UserAiDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&bit_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&bit_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	for (int i = 0; i < 6; i++)
-		NyaSound::DeleteSoundFile(&spx_[i]->file_);
+		NyaSound::Delete(&spx_[i]->file_);
 	for (int i = 0; i < 6; i++)
-		NyaSound::DeleteSoundFile(&spx_ex_[i]->file_);
+		NyaSound::Delete(&spx_ex_[i]->file_);
 
 	delete bit_gpx_;
 	bit_gpx_ = nullptr;
@@ -86,21 +86,21 @@ UserAiDeviceEx::UserAiDeviceEx()
 	effect_gpx_ = new GraphicPropertyX4;
 
 	bit_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(16, 1,"img/user/bit.png", &bit_gpx_->file_);
+	NyaGraphic::Load(16, 1,"img/user/bit.png", &bit_gpx_->file_);
 	gadget_dpx_->collision_range_ = 2;
 	gadget_dpx_->move_speed_ = 20;
 	gadget_gpx_->extend_rate_ = 0.2;
-	NyaGraphic::LoadGraphicFile("img/user/attack_ex.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/user/attack_ex.png", &gadget_gpx_->file_);
 	effect_epx_->interval_time_frame_ = 2;
 	effect_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(8, 2, "img/user/attack_ex_effect.png", &effect_gpx_->file_);
+	NyaGraphic::Load(8, 2, "img/user/attack_ex_effect.png", &effect_gpx_->file_);
 }
 
 UserAiDeviceEx::~UserAiDeviceEx()
 {
-	NyaGraphic::DeleteGraphicFile(&bit_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&bit_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete bit_gpx_;
 	bit_gpx_ = nullptr;
 	delete gadget_dpx_;
@@ -118,10 +118,10 @@ UserAiMain::UserAiMain()
 	death_epx_ = new EffectPropertyX1;
 	death_epx_->interval_time_frame_ = 3;
 	death_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/user/death.png", &death_gpx_->file_);
+	NyaGraphic::Load(4, 2, "img/user/death.png", &death_gpx_->file_);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(8, 2, "img/user/main.png", &gpx_->file_);
+	NyaGraphic::Load(8, 2, "img/user/main.png", &gpx_->file_);
 	gpx_->extend_rate_ = 0.4;
 	gpx_->draw_angle_deg_ = 0;
 
@@ -134,16 +134,16 @@ UserAiMain::UserAiMain()
 	phandle_->name_ = "user";
 
 	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
-	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1200001;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 300001;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 0;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 600001;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 1;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 15001;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 800001;
 }
 
 UserAiMain::~UserAiMain()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 	NyaPosition::DeleteHandle(phandle_);
@@ -152,12 +152,12 @@ UserAiMain::~UserAiMain()
 UserAiRange::UserAiRange()
 {
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/user/range.png", &gpx_->file_);
+	NyaGraphic::Load("img/user/range.png", &gpx_->file_);
 }
 
 UserAiRange::~UserAiRange()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 }
@@ -197,7 +197,7 @@ UserAi::UserAi(void)
 
 UserAi::~UserAi()
 {
-	NyaGraphic::DeleteGraphicFile(&main_.gpx_->file_);
+	NyaGraphic::Delete(&main_.gpx_->file_);
 }
 
 void UserAi::Act(void)
@@ -211,7 +211,7 @@ void UserAi::Act(void)
 	Act_AttackEx();
 
 	// Õ“Ë”»’è
-//	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
+	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
 	if (main_.phandle_->collision_hit_damage_ != 0)
 	{
 		size_t size = 0;

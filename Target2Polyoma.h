@@ -1,7 +1,7 @@
 #pragma once
 #include "NyaTarget.h"
 
-class TargetLock;
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -28,7 +28,7 @@ class Target2PolyomaMain
 public:
 	Target2PolyomaDevice device_;
 	const unsigned int health_max_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

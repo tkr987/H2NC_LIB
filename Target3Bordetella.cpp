@@ -11,17 +11,17 @@ Target3BordetellaCubeDevice::Target3BordetellaCubeDevice()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE2;
 	dpx_->move_speed_ = 3;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_orange2.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_orange2.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 Target3BordetellaCubeDevice::~Target3BordetellaCubeDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -64,17 +64,17 @@ Target3BordetellaDevice::Target3BordetellaDevice()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE3;
 	dpx_->move_speed_ = 4;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_blue3.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_blue3.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 }
 
 Target3BordetellaDevice::~Target3BordetellaDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -95,11 +95,11 @@ Target3BordetellaMain::Target3BordetellaMain()
 	TeemoFactory::TargetDeath2(death_epx_, death_gpx_);
 
 	death_spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/target_death2.wav", &death_spx_->file_);
+	NyaSound::Load("sound/target_death2.wav", &death_spx_->file_);
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_bordetella.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/target_bordetella.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -109,9 +109,9 @@ Target3BordetellaMain::Target3BordetellaMain()
 
 Target3BordetellaMain::~Target3BordetellaMain()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
-	NyaSound::DeleteSoundFile(&death_spx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete death_epx_;
 	death_epx_ = nullptr;

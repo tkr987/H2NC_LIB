@@ -1,6 +1,5 @@
 #pragma once
-
-#include "HNLIB.h"
+#include "NyaMission.h"
 
 class TeemoMission1 : public HNLIB::NyaMission {
 public:

@@ -10,13 +10,13 @@ TeemoBack1::TeemoBack1()
 	gpx_ = new GraphicPropertyX1;
 	gpx_->draw_grid_x_ = -400;
 	gpx_->draw_grid_y_ = -2560 + 720;
-	NyaGraphic::LoadGraphicFile("img/back/back1.png", &gpx_->file_);
+	NyaGraphic::Load("img/back/back1.png", &gpx_->file_);
 }
 
 
 TeemoBack1::~TeemoBack1()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 }

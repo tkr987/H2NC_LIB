@@ -1,6 +1,6 @@
 #include "HNLIB.h"
 #include "Target2Ectromelia.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
@@ -30,7 +30,7 @@ Target2EctromeliaDevice::~Target2EctromeliaDevice()
 
 Target2EctromeliaMain::Target2EctromeliaMain() : health_max_(6) 
 {
-	lock_ = new TargetLock(eLOCK::ECTROMELIA);
+	lock_ = new TeemoLock(eLOCK::ECTROMELIA);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
@@ -39,7 +39,7 @@ Target2EctromeliaMain::Target2EctromeliaMain() : health_max_(6)
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(4, 1, "img/target/main_ectromelia.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/main_ectromelia.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -49,7 +49,7 @@ Target2EctromeliaMain::Target2EctromeliaMain() : health_max_(6)
 
 Target2EctromeliaMain::~Target2EctromeliaMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;

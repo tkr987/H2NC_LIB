@@ -10,18 +10,18 @@ Target3KluyveraDevice::Target3KluyveraDevice()
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
 	dpx_->move_speed_ = 5;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_orange1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_orange1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 
 }
 
 Target3KluyveraDevice::~Target3KluyveraDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -39,14 +39,14 @@ Target3KluyveraMain::Target3KluyveraMain()
 
 	death_gpx_ = new GraphicPropertyX4;
 	death_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death_gpx_->file_);
+	NyaGraphic::Load(4, 2, "img/target/death1.png", &death_gpx_->file_);
 
 	death_spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(3, 1, "img/target/target_pantoea.png", &gpx_->file_);
+	NyaGraphic::Load(3, 1, "img/target/target_pantoea.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -57,9 +57,9 @@ Target3KluyveraMain::Target3KluyveraMain()
 
 Target3KluyveraMain::~Target3KluyveraMain()
 {
-	NyaGraphic::DeleteGraphicFile(&death_gpx_->file_);
-	NyaSound::DeleteSoundFile(&death_spx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete death_epx_;
 	death_epx_ = nullptr;

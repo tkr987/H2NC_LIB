@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 #include "NyaTarget.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 
 namespace HNLIB
 {
@@ -17,7 +17,7 @@ class Target3PseudomonadMain
 public:
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TargetLock lock_;
+	TeemoLock lock_;
 	Target3PseudomonadMain();
 	~Target3PseudomonadMain();
 };

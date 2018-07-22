@@ -1,7 +1,7 @@
 #pragma once
 #include "NyaTarget.h"
 
-class TargetLock;
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -12,43 +12,43 @@ namespace HNLIB
 	class SoundPropertyX;
 }
 
-class Target2SpirochaetesDevice
+class Target2SpirochaeteDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	Target2SpirochaetesDevice();
-	~Target2SpirochaetesDevice();
+	Target2SpirochaeteDevice();
+	~Target2SpirochaeteDevice();
 };
 
-class Target2SpirochaetesMain
+class Target2SpirochaeteMain
 {
 public:
-	Target2SpirochaetesDevice device_;
+	Target2SpirochaeteDevice device_;
 	const unsigned int health_max_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	Target2SpirochaetesMain();
-	~Target2SpirochaetesMain();
+	Target2SpirochaeteMain();
+	~Target2SpirochaeteMain();
 };
 
 
-class Target2Spirochaetes : public HNLIB::NyaTarget
+class Target2Spirochaete : public HNLIB::NyaTarget
 {
 public:
-	Target2Spirochaetes(int x, int y);
-	~Target2Spirochaetes();
+	Target2Spirochaete(int x, int y);
+	~Target2Spirochaete();
 	void Act(void);
 	void Draw(void);
 private:
 	unsigned int count_frame_;
-	Target2SpirochaetesMain main_;
+	Target2SpirochaeteMain main_;
 	unsigned int mode_;
 	bool turn_;
 	void Act1(void);

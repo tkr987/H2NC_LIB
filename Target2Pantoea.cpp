@@ -22,12 +22,12 @@ Target2PantoeaMain::Target2PantoeaMain()
 	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	death_spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_pantoea.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/target_pantoea.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -39,8 +39,8 @@ Target2PantoeaMain::Target2PantoeaMain()
 
 Target2PantoeaMain::~Target2PantoeaMain()
 {
-	NyaSound::DeleteSoundFile(&death_spx_->file_);
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete death_epx_;
 	death_epx_ = nullptr;

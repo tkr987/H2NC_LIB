@@ -110,7 +110,7 @@ void NyaGraphic::Clear(void)
  ファイルパスと分割数が両方同じファイルを削除する
  なお、ファイルパスが同じでも分割数が違うファイルは削除しない
 **/
-void NyaGraphic::DeleteGraphicFile(GraphicFile* file)
+void NyaGraphic::Delete(GraphicFile* file)
 {
 	if (file->pass_.empty())
 		return;
@@ -136,7 +136,7 @@ void NyaGraphic::DeleteGraphicFile(GraphicFile* file)
  既にロード済みの画像だった場合、新しくロードせずにデータを格納してファイル構造体を返す。
  fileはNyaGraphic::Draw()などで利用する。
 **/
-void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
+void NyaGraphic::Load(std::string file_pass, GraphicFile* file)
 {
 	int check_graphic_handle, check_size_x, check_size_y;
 	list<GraphicFile>::iterator it;
@@ -182,7 +182,7 @@ void NyaGraphic::LoadGraphicFile(std::string file_pass, GraphicFile* file)
  既に分割数が全く同じロード済みの画像だった場合、新しくロードせずにデータを格納してファイル構造体を返す。
  fileはNyaGraphic::Draw()などで利用する。
 **/
-void NyaGraphic::LoadGraphicFile(int div_x, int div_y, string file_pass, GraphicFile* file)
+void NyaGraphic::Load(int div_x, int div_y, string file_pass, GraphicFile* file)
 {
 	int check_graphic_handle, check_size_x, check_size_y;
 	static list<GraphicFile>::iterator it;

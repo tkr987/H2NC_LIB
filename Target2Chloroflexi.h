@@ -1,9 +1,7 @@
 #pragma once
-
-#pragma once
 #include "NyaTarget.h"
 
-class TargetLock;
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -13,6 +11,17 @@ namespace HNLIB
 	class PositionHandle;
 	class SoundPropertyX;
 }
+
+class Target2ChloroflexiDeathDevice
+{
+public:
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
+	Target2ChloroflexiDeathDevice();
+	~Target2ChloroflexiDeathDevice();
+};
 
 class Target2ChloroflexiDevice
 {
@@ -29,8 +38,9 @@ class Target2ChloroflexiMain
 {
 public:
 	Target2ChloroflexiDevice device_;
+	Target2ChloroflexiDeathDevice device_death_;
 	const unsigned int health_max_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

@@ -16,7 +16,7 @@ TeemoOpening::~TeemoOpening()
 
 void TeemoOpening::Load(void)
 {
-	NyaGraphic::LoadGraphicFile("img/back/opening.png", &gpx_->file_);
+	NyaGraphic::Load("img/back/opening.png", &gpx_->file_);
 }
 
 void TeemoOpening::Run(void)
@@ -26,5 +26,5 @@ void TeemoOpening::Run(void)
 
 void TeemoOpening::Delete(void)
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 }

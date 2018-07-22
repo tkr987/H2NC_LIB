@@ -3,7 +3,7 @@
 #include <array>
 #include "NyaTarget.h"
 
-class TargetLock;
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -32,7 +32,7 @@ public:
 class TeemoCube31
 {
 public:
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
@@ -71,7 +71,7 @@ class TeemoCube32
 {
 public:
 	TeemoDevice322 device322_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
@@ -116,7 +116,7 @@ class TeemoCube33
 {
 public:
 	TeemoDevice332 device332_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
@@ -133,7 +133,7 @@ public:
 	TeemoDevice321 device321_;
 	TeemoDevice331 device331_;
 	const int health_max_;
-	TargetLock* lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death1_epx_;
 	HNLIB::GraphicPropertyX4* death1_gpx_;
 	HNLIB::EffectPropertyX1* death2_epx_;

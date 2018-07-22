@@ -1,10 +1,32 @@
 #include "HNLIB.h"
 #include "Target2Chloroflexi.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
 using namespace HNLIB;
+
+Target2ChloroflexiDeathDevice::Target2ChloroflexiDeathDevice()
+{
+	dpx_ = new DevicePropertyX1;
+	gadget_gpx_ = new GraphicPropertyX4;
+	epx_ = new EffectPropertyX1;
+	effect_gpx_ = new GraphicPropertyX4;
+	dpx_->move_speed_ = 3;
+	TeemoFactory::TargetAttackRed5(dpx_, gadget_gpx_, epx_, effect_gpx_);
+}
+
+Target2ChloroflexiDeathDevice::~Target2ChloroflexiDeathDevice()
+{
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+}
 
 Target2ChloroflexiDevice::Target2ChloroflexiDevice()
 {
@@ -18,8 +40,6 @@ Target2ChloroflexiDevice::Target2ChloroflexiDevice()
 
 Target2ChloroflexiDevice::~Target2ChloroflexiDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -30,9 +50,9 @@ Target2ChloroflexiDevice::~Target2ChloroflexiDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(800)
+Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(600)
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_chloroflexi.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -42,7 +62,7 @@ Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(800)
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(2, 1, "img/target/main_chloroflexi.png", &gpx_->file_);
+	NyaGraphic::Load(2, 1, "img/target/main_chloroflexi.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -52,7 +72,7 @@ Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(800)
 
 Target2ChloroflexiMain::~Target2ChloroflexiMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -146,6 +166,22 @@ void Target2Chloroflexi::Act2(void)
 			main_.device_.dpx_->move_angle_deg_ += 3;
 			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
+	}
+
+	if (main_.phandle_->health_ <= 0)
+	{
+		PositionHandle phandle_user;
+		main_.device_death_.dpx_->create_x_ = main_.phandle_->grid_x_;
+		main_.device_death_.dpx_->create_y_ = main_.phandle_->grid_y_;
+		NyaPosition::FindHandle("user", &phandle_user);
+		main_.device_death_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-3.0, 3.0);
+		NyaDevice::Attack1414(main_.device_death_.dpx_, main_.device_death_.gadget_gpx_, main_.device_death_.epx_, main_.device_death_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device_death_.dpx_->delay_time_frame_ += 3;
+		main_.device_death_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-3.0, 3.0);
+		NyaDevice::Attack1414(main_.device_death_.dpx_, main_.device_death_.gadget_gpx_, main_.device_death_.epx_, main_.device_death_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device_death_.dpx_->delay_time_frame_ += 3;
+		main_.device_death_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-3.0, 3.0);
+		NyaDevice::Attack1414(main_.device_death_.dpx_, main_.device_death_.gadget_gpx_, main_.device_death_.epx_, main_.device_death_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 }
 

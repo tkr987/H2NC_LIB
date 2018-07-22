@@ -7,7 +7,7 @@ TeemoUser::TeemoUser()
 	gpx_ = new GraphicPropertyX4;
 	gpx_->draw_grid_cx_ = 100;
 	gpx_->draw_grid_cy_ = 500;
-	NyaGraphic::LoadGraphicFile("img/teemo.png", &gpx_->file_);
+	NyaGraphic::Load("img/teemo.png", &gpx_->file_);
 }
 
 TeemoUser::~TeemoUser()

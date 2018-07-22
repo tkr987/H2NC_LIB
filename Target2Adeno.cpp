@@ -1,6 +1,6 @@
 #include "HNLIB.h"
 #include "Target2Adeno.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
@@ -31,7 +31,7 @@ Target2AdenoCubeDevice::~Target2AdenoCubeDevice()
 
 Target2AdenoCube::Target2AdenoCube()
 {
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_cube.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -71,7 +71,7 @@ Target2AdenoDevice::Target2AdenoDevice()
 
 Target2AdenoDevice::~Target2AdenoDevice()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
 
 	delete dpx_;
 	dpx_ = nullptr;
@@ -87,7 +87,7 @@ Target2AdenoMain::Target2AdenoMain()
 {
 	health_max_ = 12000;
 
-	lock_ = new TargetLock;
+	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_adeno.png");
 
 	death_epx_ = new EffectPropertyX1;
@@ -97,7 +97,7 @@ Target2AdenoMain::Target2AdenoMain()
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::LoadGraphicFile(4, 1, "img/target/target_adeno.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/target_adeno.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -107,7 +107,7 @@ Target2AdenoMain::Target2AdenoMain()
 
 Target2AdenoMain::~Target2AdenoMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;

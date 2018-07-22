@@ -7,7 +7,7 @@ using namespace HNLIB;
 Target3PseudomonadMain::Target3PseudomonadMain()
 {
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/target_methanobacterium.png", &gpx_->file_);
+	NyaGraphic::Load("img/target/target_methanobacterium.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
@@ -18,7 +18,7 @@ Target3PseudomonadMain::Target3PseudomonadMain()
 
 Target3PseudomonadMain::~Target3PseudomonadMain()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 
 	delete gpx_;
 	gpx_ = nullptr;

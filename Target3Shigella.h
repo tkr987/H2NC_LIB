@@ -1,6 +1,6 @@
 #pragma once
 #include "NyaTarget.h"
-#include "TargetLock.h"
+#include "TeemoLock.h"
 
 namespace HNLIB
 {
@@ -30,7 +30,7 @@ public:
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TargetLock lock_;
+	TeemoLock lock_;
 	Target3ShigellaMain();
 	~Target3ShigellaMain();
 };

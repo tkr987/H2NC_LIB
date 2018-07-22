@@ -11,18 +11,20 @@ namespace HNLIB
 enum class eLOCK
 {
 	enum_zero,
-	ECTROMELIA, PICORNA, 
+	CUBE, ECTROMELIA, PICORNA, 
+	TEEMO_EX, TEEMO_MARK1, TEEMO_MARK2, 
+	sizeof_enum,
 };
 
 
-class TargetLock
+class TeemoLock
 {
 public:
 	void LoadGraphic(std::string);
 	void Run(const HNLIB::PositionHandle* phandle);
-	TargetLock();
-	TargetLock(eLOCK type);
-	~TargetLock();
+	TeemoLock();
+	TeemoLock(eLOCK type);
+	~TeemoLock();
 private:
 	HNLIB::GraphicPropertyX4* gpx_;
 	unsigned int lock_frame_;

@@ -41,7 +41,7 @@ void NyaSound::ChangeVolume(SoundFile* file, int volume)
 	ChangeVolumeSoundMem((int)change_value, file->id_);
 }
 
-void NyaSound::DeleteSoundFile(SoundFile* file)
+void NyaSound::Delete(SoundFile* file)
 {
 	// ファイルパスが同じファイルを削除する
 	for (list<SoundFile>::iterator it = file_collection_.begin(); it != file_collection_.end(); ++it)
@@ -55,7 +55,7 @@ void NyaSound::DeleteSoundFile(SoundFile* file)
 	}
 }
 
-void NyaSound::LoadFile(std::string file_pass, SoundFile* file)
+void NyaSound::Load(std::string file_pass, SoundFile* file)
 {
 	list<SoundFile>::iterator it;
 	SoundFile new_file;

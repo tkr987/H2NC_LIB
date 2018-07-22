@@ -30,12 +30,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	nya_window->Child(teemo_opening);
 //	HNLIB::NyaMission* teemo_mission = new TeemoMission;
 //	nya_window->Child(teemo_mission);
-//	NyaMission* teemo_mission1 = new TeemoMission1;
-//	nya_window->Child(teemo_mission1);
-	HNLIB::NyaMission* teemo_mission2 = new TeemoMission2;
-	nya_window->Child(teemo_mission2);
-	HNLIB::NyaMission* teemo_mission3 = new TeemoMission3;
-	nya_window->Child(teemo_mission3);
+	NyaMission* teemo_mission1 = new TeemoMission1;
+	nya_window->Child(teemo_mission1);
+//	HNLIB::NyaMission* teemo_mission2 = new TeemoMission2;
+//	nya_window->Child(teemo_mission2);
+//	HNLIB::NyaMission* teemo_mission3 = new TeemoMission3;
+//	nya_window->Child(teemo_mission3);
 	HNLIB::NyaMission* teemo_mission4 = new TeemoMission4;
 	nya_window->Child(teemo_mission4);
 	NyaEnding* teemo_ending = new TeemoEnding;

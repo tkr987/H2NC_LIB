@@ -355,7 +355,7 @@ namespace HNLIB
 		NyaGraphic();
 		~NyaGraphic();
 		static void Clear(void);
-		static void DeleteGraphicFile(GraphicFile* file);
+		static void Delete(GraphicFile* file);
 		static void Draw(const GraphicPropertyX1* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX2* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX3* gpx, eOBJECT layer);
@@ -372,8 +372,8 @@ namespace HNLIB
 		static void Draw(const GraphicPropertyX6b* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX7b* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX8b* gpx, eOBJECT layer);
-		static void LoadGraphicFile(std::string file_pass, GraphicFile* file);
-		static void LoadGraphicFile(int div_x, int div_y, std::string file_pass, GraphicFile* file);
+		static void Load(std::string file_pass, GraphicFile* file);
+		static void Load(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		static void Run(void);
 		static void Swing(void);
 	private:

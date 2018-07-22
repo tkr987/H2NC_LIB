@@ -1,40 +1,30 @@
 #include <tuple>
-#include "NyaDevice.h"
-#include "NyaEffect.h"
-#include "NyaEnum.h"
-#include "NyaGraphic.h"
-#include "NyaInput.h"
-#include "NyaInterface.h"
-#include "NyaPosition.h"
-#include "NyaSound.h"
-#include "NyaString.h"
+#include "HNLIB.h"
+#include "TeemoLock.h"
 #include "TeemoEnum.h"
-#include "TeemoTargetEx4.h"
+#include "TeemoEx.h"
+#include "TeemoFactory.h"
 
 #define __DEBUG__
-
-#define TEEMO_EX_MODE1_HEALTH	80
-#define TEEMO_EX_MODE2_HEALTH	40
-#define TEEMO_EX_MODE3_HEALTH	0
 
 using namespace std;
 using namespace HNLIB;
 
-TeemoExBullet41::TeemoExBullet41()
+//*************************************
+// Act1(), Draw1() で使うクラス
+//*************************************
+
+TeemoExDevice411::TeemoExDevice411()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->collision_power_ = 1;
-	dpx_->collision_range_ = 2;
-	dpx_->move_speed_ = 8;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
-	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	TeemoFactory::TargetAttackOrange9(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	dpx_->move_speed_ = 8;
 };
 
-TeemoExBullet41::~TeemoExBullet41()
+TeemoExDevice411::~TeemoExDevice411()
 {
 	delete dpx_;
 	dpx_ = nullptr;
@@ -45,6 +35,40 @@ TeemoExBullet41::~TeemoExBullet41()
 	delete effect_gpx_;
 	effect_gpx_ = nullptr;
 }
+
+TeemoCube41::TeemoCube41()
+{
+	move_angle_ = 0;
+	lock_ = new TeemoLock(eLOCK::CUBE);
+
+	death_epx_ = new EffectPropertyX1;
+	death_gpx_ = new GraphicPropertyX4;
+	death_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+
+	gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetCube(gpx_);
+
+	phandle_ = NyaPosition::CreateHandle();
+	phandle_->collision_range_ = 20;
+}
+
+TeemoCube41::~TeemoCube41()
+{
+	delete lock_;
+	lock_ = nullptr;
+	delete death_epx_;
+	death_epx_ = nullptr;
+	delete death_gpx_;
+	death_gpx_ = nullptr;
+	delete death_spx_;
+	death_gpx_ = nullptr;
+	delete gpx_;
+	gpx_ = nullptr;
+
+	NyaPosition::DeleteHandle(phandle_);
+}
+
 
 //*************************************
 // Act2(), Draw2() で使うクラス
@@ -57,17 +81,17 @@ TeemoExDevice421::TeemoExDevice421()
 	dpx_->collision_range_ = 5;
 	dpx_->move_speed_ = 2.5;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 };
 
 TeemoExDevice421::~TeemoExDevice421()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -85,17 +109,17 @@ TeemoExDevice422::TeemoExDevice422()
 	dpx_->collision_range_ = 10;
 	dpx_->move_speed_ = 9;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_green1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_green1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 };
 
 TeemoExDevice422::~TeemoExDevice422()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -114,17 +138,17 @@ TeemoExDevice423::TeemoExDevice423()
 	dpx_->draw_angle_speed_deg_ = 2;
 	dpx_->move_speed_ = 10;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_green4.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_green4.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 };
 
 TeemoExDevice423::~TeemoExDevice423()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -143,17 +167,17 @@ TeemoExDevice424::TeemoExDevice424()
 	dpx_->draw_angle_speed_deg_ = 2;
 	dpx_->move_speed_ = 8;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_green5.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_green5.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 };
 
 TeemoExDevice424::~TeemoExDevice424()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -168,14 +192,14 @@ TeemoExCube42::TeemoExCube42()
 {
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
-	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	NyaGraphic::Load(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
 TeemoExCube42::~TeemoExCube42()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 	NyaPosition::DeleteHandle(phandle_);
@@ -189,17 +213,17 @@ TeemoExDevice431::TeemoExDevice431()
 	dpx_->collision_range_ = 10;
 	dpx_->move_speed_ = 12;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_green3.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_green3.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 };
 
 TeemoExDevice431::~TeemoExDevice431()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -217,17 +241,17 @@ TeemoExDevice432::TeemoExDevice432()
 	dpx_->collision_range_ = 6;
 	dpx_->move_speed_ = 10;
 	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/attack_red1.png", &gadget_gpx_->file_);
+	NyaGraphic::Load("img/target/attack_red1.png", &gadget_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = 120;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile("img/target/point.png", &effect_gpx_->file_);
+	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
 };
 
 TeemoExDevice432::~TeemoExDevice432()
 {
-	NyaGraphic::DeleteGraphicFile(&gadget_gpx_->file_);
-	NyaGraphic::DeleteGraphicFile(&effect_gpx_->file_);
+	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;
@@ -238,36 +262,19 @@ TeemoExDevice432::~TeemoExDevice432()
 	effect_gpx_ = nullptr;
 }
 
-TeemoEx4Cube1::TeemoEx4Cube1()
-{
-	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = 0.4;
-	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
-	move_angle_ = 0;
-	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_range_ = 20;
-}
-
-TeemoEx4Cube1::~TeemoEx4Cube1()
-{
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
-	delete gpx_;
-	gpx_ = nullptr;
-	NyaPosition::DeleteHandle(phandle_);
-}
 
 TeemoExCube43::TeemoExCube43()
 {
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 0.4;
-	NyaGraphic::LoadGraphicFile(5, 1, "img/target/cube_orange.png", &gpx_->file_);
+	NyaGraphic::Load(5, 1, "img/target/cube_orange.png", &gpx_->file_);
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 20;
 }
 
 TeemoExCube43::~TeemoExCube43()
 {
-	NyaGraphic::DeleteGraphicFile(&gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
 	delete gpx_;
 	gpx_ = nullptr;
 	NyaPosition::DeleteHandle(phandle_);
@@ -275,51 +282,62 @@ TeemoExCube43::~TeemoExCube43()
 
 
 
-TeemoEx4Main::TeemoEx4Main() : health_max_(30000)
+TeemoEx4Main::TeemoEx4Main() : health_max_(150000)
 {
+	lock_ = new TeemoLock(eLOCK::TEEMO_EX);
+
 	death1_epx_ = new EffectPropertyX1;
-	death1_epx_->interval_time_frame_ = 3;
 	death1_gpx_ = new GraphicPropertyX4;
-	death1_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::LoadGraphicFile(4, 2, "img/target/death1.png", &death1_gpx_->file_);
+	death1_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath1(death1_epx_, death1_gpx_, death1_spx_);
 
 	death2_epx_ = new EffectPropertyX1;
-	death2_epx_->interval_time_frame_ = 3;
 	death2_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::LoadGraphicFile(8, 8, "img/target/death2.png", &death2_gpx_->file_);
+	death2_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death2_spx_);
 
 	gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/teemo_ex4.png", &gpx_->file_);
+
 	phandle_ = NyaPosition::CreateHandle();
+	phandle_->collision_power_ = 1;
+	phandle_->collision_range_ = 10;
+	phandle_->grid_x_ =  SCREEN_MAX_X / 2;
+	phandle_->grid_y_ = -100;
+	phandle_->health_ = health_max_;
 }
 
 TeemoEx4Main::~TeemoEx4Main()
 {
-	NyaGraphic::DeleteGraphicFile(&death1_gpx_->file_);
+	NyaGraphic::Delete(&gpx_->file_);
+
+	delete lock_;
+	lock_ = nullptr;
 	delete death1_epx_;
 	death1_epx_ = nullptr;
 	delete death1_gpx_;
 	death1_gpx_ = nullptr;
+	delete death1_spx_;
+	death1_spx_ = nullptr;
+	delete death2_epx_;
+	death1_epx_ = nullptr;
+	delete death2_gpx_;
+	death1_gpx_ = nullptr;
+	delete death2_spx_;
+	death1_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
-	delete phandle_;
-	phandle_ = nullptr;
+
+	NyaPosition::DeleteHandle(phandle_);
 }
 
-TeemoTargetEx4::TeemoTargetEx4()
+TeemoEx::TeemoEx()
 {
 	// メンバ変数初期化
 	count_frame_ = 0;
 	warning_spx_ = new SoundPropertyX;
-	NyaSound::LoadFile("sound/warning.wav", &warning_spx_->file_);
+	NyaSound::Load("sound/warning.wav", &warning_spx_->file_);
 	NyaSound::ChangeVolume(&warning_spx_->file_, 20);
-
-	// main メンバの初期化
-	NyaGraphic::LoadGraphicFile("img/target/teemo_ex4.png", &main_.gpx_->file_);
-	main_.phandle_->health_ = 1000;
-	main_.phandle_->collision_power_ = 1;
-	main_.phandle_->collision_range_ = 10;
-	main_.phandle_->grid_x_ =  SCREEN_MAX_X / 2;
-	main_.phandle_->grid_y_ = -100;
 
 	mode_ = 0;
 
@@ -329,14 +347,14 @@ TeemoTargetEx4::TeemoTargetEx4()
 }
 
 
-TeemoTargetEx4::~TeemoTargetEx4()
+TeemoEx::~TeemoEx()
 {
 	delete warning_spx_;
 	warning_spx_ = nullptr;
-	NyaGraphic::DeleteGraphicFile(&main_.gpx_->file_);
+	NyaGraphic::Delete(&main_.gpx_->file_);
 }
 
-void TeemoTargetEx4::Act(void)
+void TeemoEx::Act(void)
 {
 
 	switch (mode_)
@@ -356,7 +374,9 @@ void TeemoTargetEx4::Act(void)
 		{
 			count_frame_ = 0;
 			mode_ = 2;
+			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 			NyaGraphic::Swing();
+			NyaSound::Play(cube41_collection_[0].death_spx_);
 		}
 		break;
 	case 2:
@@ -385,7 +405,7 @@ void TeemoTargetEx4::Act(void)
 	count_frame_++;
 }
 
-void TeemoTargetEx4::Draw(void)
+void TeemoEx::Draw(void)
 {
 	switch (mode_)
 	{
@@ -409,17 +429,13 @@ void TeemoTargetEx4::Draw(void)
 #endif
 }
 
-void TeemoTargetEx4::Act1(void)
+void TeemoEx::Act1(void)
 {
-	InterfaceHandleSkill *ihandle_mission_skill;
-
 	// 行動開始1フレーム目
-	// mission ex モードをtrueにする
-	// mission warning 表示を実行する
+	// ヘルス表示、WARNING SE 再生
 	if (count_frame_ == 1)
 	{
 		NyaInterface::GetHandleHealth()->valid_ = true;
-		NyaInterface::GetHandleHealth()->value_ = 100;
 		NyaSound::Play(warning_spx_);
 	}
 
@@ -427,56 +443,62 @@ void TeemoTargetEx4::Act1(void)
 	if (main_.phandle_->grid_y_ < 140)
 		main_.phandle_->grid_y_++;
 
-	// 衝突判定　衝突ダメージだけ経験値を追加
-	ihandle_mission_skill = NyaInterface::GetHandleSkill();
-	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
-	ihandle_mission_skill->AddExp(main_.phandle_->collision_hit_damage_);
-
 	if (count_frame_ == 350)
 	{
-		for (int i = 0; i < 8; i++)
+		int cube_index = 0;
+		for (auto& e : cube41_collection_)
 		{
-			cube1_collection_[i].move_angle_ = i * 45;
-			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_;
-			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_;
-			NyaPosition::MoveLengthMode(cube1_collection_[i].phandle_, i * 45, 130, FPS_MAX * 3);
+			e.move_angle_ = cube_index * 45;
+			e.phandle_->grid_x_ = main_.phandle_->grid_x_;
+			e.phandle_->grid_y_ = main_.phandle_->grid_y_;
+			NyaPosition::MoveLengthMode(e.phandle_, cube_index * 45, 130, FPS_MAX * 3);
+			cube_index++;
 		}
 	}
 
 	if (count_frame_ < 350 + FPS_MAX * 2)
 		return;
 
-	for (int i = 0; i < 8; i++)
+	// 衝突判定　衝突ダメージだけ経験値を追加
+	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
+	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
+	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
+	for (auto& e : cube41_collection_)
 	{
-		ihandle_mission_skill->AddExp(cube1_collection_[i].phandle_->collision_hit_damage_);
-		NyaPosition::Collide(cube1_collection_[i].phandle_, eOBJECT::TARGET1);
-		main_.phandle_->health_ -= cube1_collection_[i].phandle_->collision_hit_damage_;
+		NyaPosition::Collide(e.phandle_, eOBJECT::TARGET1);
+		NyaInterface::GetHandleSkill()->AddExp(e.phandle_->collision_hit_damage_);
+		main_.phandle_->health_ -= e.phandle_->collision_hit_damage_;
 	}
 
 
 	if (600 <= count_frame_)
 	{
-		for (int i = 0; i < 8; i++)
+		int cube_index = 0;
+		for (auto& e : cube41_collection_)
 		{
-			cube1_collection_[i].move_angle_ += 5;
-			cube1_collection_[i].phandle_->grid_x_ = main_.phandle_->grid_x_ + 130 * cos(AngleToRad(cube1_collection_[i].move_angle_));
-			cube1_collection_[i].phandle_->grid_y_ = main_.phandle_->grid_y_ + 130 * sin(AngleToRad(cube1_collection_[i].move_angle_));
-			NyaPosition::MoveLengthMode(cube1_collection_[i].phandle_, i * 45, 140, FPS_MAX * 3);
+			e.move_angle_ += 4.5;
+			e.phandle_->grid_x_ = main_.phandle_->grid_x_ + 130 * cos(AngleToRad(e.move_angle_));
+			e.phandle_->grid_y_ = main_.phandle_->grid_y_ + 130 * sin(AngleToRad(e.move_angle_));
 			if (count_frame_ % 15 == 0)
 			{
-				bullet1_.dpx_->create_x_ = cube1_collection_[i].phandle_->grid_x_;
-				bullet1_.dpx_->create_y_ = cube1_collection_[i].phandle_->grid_y_;
-				for (int bullet_index = -11; bullet_index < 12; bullet_index++)
+				DevicePropertyX1* cube_dpx = e.device411_.dpx_;
+				GraphicPropertyX4* cube_gadget_gpx = e.device411_.gadget_gpx_;
+				EffectPropertyX1* cube_epx = e.device411_.epx_;
+				GraphicPropertyX4* cube_effect_gpx = e.device411_.effect_gpx_;
+				cube_dpx->create_x_ = e.phandle_->grid_x_;
+				cube_dpx->create_y_ = e.phandle_->grid_y_;
+				for (int bullet_index = -6; bullet_index < 7; bullet_index++)
 				{
-					bullet1_.dpx_->move_angle_deg_ = cube1_collection_[i].move_angle_ + (bullet_index * 2);
-					NyaDevice::Attack1414(bullet1_.dpx_, bullet1_.gadget_gpx_, bullet1_.epx_, bullet1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+					cube_dpx->move_angle_deg_ = e.move_angle_ + (bullet_index * 4);
+					NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 				}
 			}
+			cube_index++;
 		}
 	}
 }
 
-void TeemoTargetEx4::Act2(void)
+void TeemoEx::Act2(void)
 {
 	DevicePropertyX1* cube_dpx;
 	GraphicPropertyX4* cube_effect_gpx;
@@ -638,7 +660,7 @@ void TeemoTargetEx4::Act2(void)
 	}
 }
 
-void TeemoTargetEx4::Act3(void)
+void TeemoEx::Act3(void)
 {
 	static int update_device_angle = -5;
 	InterfaceHandleSkill *ihandle_mission_skill;
@@ -764,7 +786,7 @@ void TeemoTargetEx4::Act3(void)
 }
 
 
-void TeemoTargetEx4::Draw1(void)
+void TeemoEx::Draw1(void)
 {
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -775,28 +797,39 @@ void TeemoTargetEx4::Draw1(void)
 		NyaString::Write("ex_logo_font", red, 255, 300, "EX BOSS");
 	}
 
-	// main描画
+	// main 描画
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	// main ロック描画
+	main_.lock_->Run(main_.phandle_);
 
-	// cube描画
-	for (auto& e : cube1_collection_)
-	{
+	for (auto& e : cube41_collection_)
+	{	// cube 描画
 		if (NyaInput::GetFrameCount() % 5 == 0)
 			e.gpx_->file_div_ = ++e.gpx_->file_div_ % e.gpx_->file_.div_total_;
 		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
 		e.gpx_->draw_grid_cy_ = e.phandle_->grid_y_;
 		NyaGraphic::Draw(e.gpx_, eOBJECT::TARGET1);
+		// cube ロック描画
+		e.lock_->Run(e.phandle_);
+	}
+	
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_EX_MODE1_HEALTH)
+	{	// cube爆発
+		for (auto& e : cube41_collection_)
+		{
+			e.death_epx_->grid_x_ = e.phandle_->grid_x_;
+			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
+			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
+		}
 	}
 
-	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
-void TeemoTargetEx4::Draw2(void)
+void TeemoEx::Draw2(void)
 {
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -822,7 +855,7 @@ void TeemoTargetEx4::Draw2(void)
 	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
-void TeemoTargetEx4::Draw3(void)
+void TeemoEx::Draw3(void)
 {
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
@@ -856,7 +889,7 @@ void TeemoTargetEx4::Draw3(void)
 	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
-void TeemoTargetEx4::Draw4(void)
+void TeemoEx::Draw4(void)
 {
 	if (count_frame_ < 30 * 7)
 	{

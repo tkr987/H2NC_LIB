@@ -58,6 +58,7 @@ NyaWindow::NyaWindow(string title)
 	// フォント設定
 	NyaString::SettingFont("fps_font", 14, 2);
 	NyaString::SettingFont("window_title_font", 30, 4);
+	NyaString::SettingFont("not_replay_font", 50, 6);
 	NyaString::SettingFont("debug_font", 10, 2);
 
 	// メンバ変数の初期化
@@ -598,13 +599,13 @@ void NyaWindow::NotSaveReplay(void)
 	// まず、インターフェースの初期化をしておく
 	NyaInterface::Init();
 
-	NyaString::Write("window_title_font", white, 32, 100, "コンテニューしたので");
-	NyaString::Write("window_title_font", white, 32, 150, "リプレイの保存はできません");
+	NyaString::Write("window_title_font", white, SCREEN_CENTER_X - 150, 100, "コンテニューしたので");
+	NyaString::Write("window_title_font", white, SCREEN_CENTER_X - 195, 150, "リプレイの保存はできません");
 
 	//**************************
 	// 終了の選択肢を表示
 	//**************************
-	NyaString::Write("window_title_font", white, 32, 250, "PRESS ENTER");
+	NyaString::Write("not_replay_font", white, SCREEN_CENTER_X - 140, SCREEN_MAX_Y - 250, "PRESS ENTER");
 
 	//******************
 	// イベントの更新

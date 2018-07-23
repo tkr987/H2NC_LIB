@@ -144,7 +144,7 @@ void NyaInterface::Init(void)
 	NyaString::SettingFont("interface_skill_font", 30, 2);
 	NyaString::SettingFont("interface_skill_exp_font", 18, 2);
 	NyaString::SettingFont("interface_title_font", 20, 6);
-	NyaString::SettingFont("design_input_font", 50, 2);
+	NyaString::SettingFont("interface_input_font", 50, 2);
 	NyaString::SettingFont("design_warning_font", 64, 4);
 }
 
@@ -186,8 +186,8 @@ void NyaInterface::DrawClear(int x, int y)
 		return;
 
 	DrawBox(x, y, x + 400, y + 150, black, true);
-	NyaString::Write("design_mission_clear_big_font", font_color, x + 40, y + 25, "MISSION CLEAR");
-	NyaString::Write("design_mission_clear_small_font", font_color, x + 80, y + 90, "PRESS ENTER KEY");
+	NyaString::Write("interface_clear_big_font", font_color, x + 40, y + 25, "MISSION CLEAR");
+	NyaString::Write("interface_clear_small_font", font_color, x + 80, y + 90, "PRESS ENTER KEY");
 
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 		handle_clear_.valid_ = false;
@@ -267,33 +267,33 @@ void NyaInterface::DrawInput(int x, int y)
 
 	// Q, W, E, R, SPACE
 	if (NyaInput::GetKeyStateNow(eINPUT::Q))
-		NyaString::Write("design_input_font", red, x, y, "Å°");
-	NyaString::Write("design_input_font", white, x, y, "Å†");
+		NyaString::Write("interface_input_font", red, x, y, "Å°");
+	NyaString::Write("interface_input_font", white, x, y, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::W))
-		NyaString::Write("design_input_font", red, x + 50, y, "Å°");
-	NyaString::Write("design_input_font", white, x + 50, y, "Å†");
+		NyaString::Write("interface_input_font", red, x + 50, y, "Å°");
+	NyaString::Write("interface_input_font", white, x + 50, y, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::E))
-		NyaString::Write("design_input_font", red, x + 100, y, "Å°");
-	NyaString::Write("design_input_font", white, x + 100, y, "Å†");
+		NyaString::Write("interface_input_font", red, x + 100, y, "Å°");
+	NyaString::Write("interface_input_font", white, x + 100, y, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::R))
-		NyaString::Write("design_input_font", red, x + 150, y, "Å°");
-	NyaString::Write("design_input_font", white, x + 150, y, "Å†");
+		NyaString::Write("interface_input_font", red, x + 150, y, "Å°");
+	NyaString::Write("interface_input_font", white, x + 150, y, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::SPACE))
-		NyaString::Write("design_input_font", red, x + 200, y, "Å°");
-	NyaString::Write("design_input_font", white, x + 200, y, "Å†");
+		NyaString::Write("interface_input_font", red, x + 200, y, "Å°");
+	NyaString::Write("interface_input_font", white, x + 200, y, "Å†");
 	// up, right, down, left
 	if (NyaInput::GetKeyStateNow(eINPUT::UP))
-		NyaString::Write("design_input_font", red, x + 275, y -120, "Å°");
-	NyaString::Write("design_input_font", white, x + 275, y - 120, "Å†");
+		NyaString::Write("interface_input_font", red, x + 275, y -120, "Å°");
+	NyaString::Write("interface_input_font", white, x + 275, y - 120, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::RIGHT))
-		NyaString::Write("design_input_font", red, x + 325, y - 70, "Å°");
-	NyaString::Write("design_input_font", white, x + 325, y - 70, "Å†");
+		NyaString::Write("interface_input_font", red, x + 325, y - 70, "Å°");
+	NyaString::Write("interface_input_font", white, x + 325, y - 70, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::DOWN))
-		NyaString::Write("design_input_font", red, x + 275, y - 20, "Å°");
-	NyaString::Write("design_input_font", white, x + 275, y -20, "Å†");
+		NyaString::Write("interface_input_font", red, x + 275, y - 20, "Å°");
+	NyaString::Write("interface_input_font", white, x + 275, y -20, "Å†");
 	if (NyaInput::GetKeyStateNow(eINPUT::LEFT))
-		NyaString::Write("design_input_font", red, x + 225, y - 70, "Å°");
-	NyaString::Write("design_input_font", white, x + 225, y - 70, "Å†");
+		NyaString::Write("interface_input_font", red, x + 225, y - 70, "Å°");
+	NyaString::Write("interface_input_font", white, x + 225, y - 70, "Å†");
 }
 
 void NyaInterface::DrawLIB(int x, int y)

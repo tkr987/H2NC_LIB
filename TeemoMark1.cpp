@@ -20,7 +20,6 @@ TeemoDevice111::TeemoDevice111()
 	gadget_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	dpx_->move_speed_ = 10;
 	TeemoFactory::TargetAttackOrange1(dpx_, gadget_gpx_, epx_, effect_gpx_);
 }
 
@@ -68,11 +67,37 @@ TeemoCube11::~TeemoCube11()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
+//*************************************
+// Act2(), Draw2() ‚ÅŽg‚¤ƒNƒ‰ƒX
+//*************************************
+
+TeemoDevice121::TeemoDevice121()
+{
+	dpx_ = new DevicePropertyX1;
+	gadget_gpx_ = new GraphicPropertyX4;
+	epx_ = new EffectPropertyX1;
+	effect_gpx_ = new GraphicPropertyX4;
+	dpx_->move_speed_ = 8;
+	TeemoFactory::TargetAttackOrange1(dpx_, gadget_gpx_, epx_, effect_gpx_);
+}
+
+TeemoDevice121::~TeemoDevice121()
+{
+	delete dpx_;
+	dpx_ = nullptr;
+	delete gadget_gpx_;
+	gadget_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+}
+
 //*****************
 // TeemoMain
 //*****************
 
-TeemoMain1::TeemoMain1() : health_max_(150000) 
+TeemoMain1::TeemoMain1() : health_max_(17000) 
 {
 	lock_ = new TeemoLock(eLOCK::TEEMO_MARK1);
 
@@ -82,7 +107,8 @@ TeemoMain1::TeemoMain1() : health_max_(150000)
 
 	death2_epx_ = new EffectPropertyX1;
 	death2_gpx_ = new GraphicPropertyX4;
-	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_);
+	death_spx_ = new SoundPropertyX;
+	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death_spx_);
 
 	gpx_ = new GraphicPropertyX4;
 	NyaGraphic::Load("img/target/teemo_mark1.png", &gpx_->file_);
@@ -135,6 +161,30 @@ void TeemoMark1::Act(void)
 	{ 
 	case 1:
 		Act1();
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE1_MIN_HEALTH)
+		{
+			count_frame_ = 0;
+			mode_ = 2;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
+			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+			NyaSound::Play(cube11_collection_[0].death_spx_);
+		}
+		break;
+	case 2:
+		Act2();
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE2_MIN_HEALTH)
+		{
+			count_frame_ = 0;
+			mode_ = 3;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
+			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+		}
+		break;
+	case 3:
+		if (count_frame_ == 30 * 8)
+			NyaSound::Play(main_.death_spx_);
+		if (count_frame_ == 30 * 18)
+			NyaInterface::GetHandleClear()->valid_ = true;
 		break;
 	}
 
@@ -147,6 +197,12 @@ void TeemoMark1::Draw(void)
 	{
 	case 1:
 		Draw1();
+		break;
+	case 2:
+		Draw2();
+		break;
+	case 3:
+		Draw3();
 		break;
 	}
 }
@@ -170,9 +226,6 @@ void TeemoMark1::Act1(void)
 	cube11_collection_[1].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150;
 	cube11_collection_[1].phandle_->grid_y_ = main_.phandle_->grid_y_;
 
-	if (count_frame_ < FPS_MAX * 3)
-		return;
-
 	// Õ“Ë”»’è@Õ“Ëƒ_ƒ[ƒW‚¾‚¯ŒoŒ±’l‚ð’Ç‰Á
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
@@ -184,7 +237,7 @@ void TeemoMark1::Act1(void)
 		main_.phandle_->health_ -= e.phandle_->collision_hit_damage_;
 	}
 
-	if (FPS_MAX * 3 <= count_frame_ && count_frame_ < FPS_MAX * 9)
+	if (FPS_MAX * 5 <= count_frame_ && count_frame_ < FPS_MAX * 11)
 	{
 		if (count_frame_ % 30 == 0)
 		{
@@ -195,6 +248,7 @@ void TeemoMark1::Act1(void)
 			GraphicPropertyX4* cube_effect_gpx = cube11_collection_[0].device111_.effect_gpx_;
 			cube_dpx->create_x_ = cube11_collection_[0].phandle_->grid_x_;
 			cube_dpx->create_y_ = cube11_collection_[0].phandle_->grid_y_;
+			cube_dpx->move_speed_ = 10;
 			for (int way = 0; way < 12; way++)
 			{
 				cube_dpx->delay_time_frame_ = way;
@@ -211,6 +265,7 @@ void TeemoMark1::Act1(void)
 			GraphicPropertyX4* cube_effect_gpx = cube11_collection_[1].device111_.effect_gpx_;
 			cube_dpx->create_x_ = cube11_collection_[1].phandle_->grid_x_;
 			cube_dpx->create_y_ = cube11_collection_[1].phandle_->grid_y_;
+			cube_dpx->move_speed_ = 10;
 			for (int way = 0; way < 12; way++)
 			{
 				cube_dpx->delay_time_frame_ = way;
@@ -220,52 +275,167 @@ void TeemoMark1::Act1(void)
 		}
 	}
 
-	//for (auto& e : cube11_collection_)
-	//{
-	//	e.move_angle_ ++;
-	//	e.phandle_->grid_x_ = main_.phandle_->grid_x_ + 100 * cos(NyaInput::AngleToRad(e.move_angle_));
-	//	e.phandle_->grid_y_ = main_.phandle_->grid_y_ + 100 * sin(NyaInput::AngleToRad(e.move_angle_));
-	//}
+	if (FPS_MAX * 12 <= count_frame_ && count_frame_ < FPS_MAX * 16)
+	{
+		// cube ˆÚ“®
+		int cube_index = 0;
+		cube11_collection_[cube_index].move_angle_  += 1.5;
+		cube11_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150 * cos(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube11_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_ + 150 * sin(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube_index = 1;
+		cube11_collection_[cube_index].move_angle_  += 1.5;
+		cube11_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150 * cos(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube11_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_ + 150 * sin(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
 
-	//if (count_frame_ % 4 == 0 && count_frame_ % (FPS_MAX * 8) < FPS_MAX * 3)
-	//{	// cubeUŒ‚ˆ—
-	//	for (int cube_index = 0; cube_index < 4; cube_index++)
-	//	{
-	//		NyaPosition::FindHandle("user", &phandle_user);
-	//		cube21_collection_[cube_index].device212_.dpx_->create_x_ = cube21_collection_[cube_index].phandle_->grid_x_;
-	//		cube21_collection_[cube_index].device212_.dpx_->create_y_ = cube21_collection_[cube_index].phandle_->grid_y_;
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube21_collection_[cube_index].phandle_, &phandle_user);
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ += cube21_collection_[cube_index].device_gap_angle_;
-	//		NyaDevice::Attack1414(cube21_collection_[cube_index].device212_.dpx_, cube21_collection_[cube_index].device212_.gadget_gpx_, cube21_collection_[cube_index].device212_.epx_, cube21_collection_[cube_index].device212_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube21_collection_[cube_index].phandle_, &phandle_user);
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ -= cube21_collection_[cube_index].device_gap_angle_;
-	//		NyaDevice::Attack1414(cube21_collection_[cube_index].device212_.dpx_, cube21_collection_[cube_index].device212_.gadget_gpx_, cube21_collection_[cube_index].device212_.epx_, cube21_collection_[cube_index].device212_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-	//		if (6 < cube21_collection_[cube_index].device_gap_angle_)
-	//			cube21_collection_[cube_index].device_gap_angle_--;
-	//	}
-	//}
-	//else if (count_frame_ % 4 == 0 && FPS_MAX * 3 <= count_frame_ % (FPS_MAX * 8))
-	//{	// cubeUŒ‚ˆ—
-	//	for (int cube_index = 0; cube_index < 4; cube_index++)
-	//	{
-	//		NyaPosition::FindHandle("user", &phandle_user);
-	//		cube21_collection_[cube_index].device212_.dpx_->create_x_ = cube21_collection_[cube_index].phandle_->grid_x_;
-	//		cube21_collection_[cube_index].device212_.dpx_->create_y_ = cube21_collection_[cube_index].phandle_->grid_y_;
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube21_collection_[cube_index].phandle_, &phandle_user);
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ += cube21_collection_[cube_index].device_gap_angle_;
-	//		NyaDevice::Attack1414(cube21_collection_[cube_index].device212_.dpx_, cube21_collection_[cube_index].device212_.gadget_gpx_, cube21_collection_[cube_index].device212_.epx_, cube21_collection_[cube_index].device212_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ =  NyaPosition::Angle(cube21_collection_[cube_index].phandle_, &phandle_user);
-	//		cube21_collection_[cube_index].device212_.dpx_->move_angle_deg_ -= cube21_collection_[cube_index].device_gap_angle_;
-	//		NyaDevice::Attack1414(cube21_collection_[cube_index].device212_.dpx_, cube21_collection_[cube_index].device212_.gadget_gpx_, cube21_collection_[cube_index].device212_.epx_, cube21_collection_[cube_index].device212_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
-	//		if (cube21_collection_[cube_index].device_gap_angle_ < 40)
-	//			cube21_collection_[cube_index].device_gap_angle_ ++;
-	//	}
-	//}
+		if (count_frame_ % 60 == 0)
+		{	// cube UŒ‚
+			cube_index = 0;
+			DevicePropertyX1* cube_dpx = cube11_collection_[cube_index].device111_.dpx_;
+			GraphicPropertyX4* cube_gadget_gpx = cube11_collection_[cube_index].device111_.gadget_gpx_;
+			EffectPropertyX1* cube_epx = cube11_collection_[cube_index].device111_.epx_;
+			GraphicPropertyX4* cube_effect_gpx = cube11_collection_[cube_index].device111_.effect_gpx_;
+			cube_dpx->create_x_ = cube11_collection_[cube_index].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube11_collection_[cube_index].phandle_->grid_y_;
+			cube_dpx->delay_time_frame_ = 0;
+			cube_dpx->move_speed_ = 3;
+			for (int way = 0; way < 37; way++)
+			{
+				cube_dpx->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			}
+			cube_index = 1;
+			cube_dpx = cube11_collection_[cube_index].device111_.dpx_;
+			cube_gadget_gpx = cube11_collection_[cube_index].device111_.gadget_gpx_;
+			cube_epx = cube11_collection_[cube_index].device111_.epx_;
+			cube_effect_gpx = cube11_collection_[cube_index].device111_.effect_gpx_;
+			cube_dpx->create_x_ = cube11_collection_[cube_index].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube11_collection_[cube_index].phandle_->grid_y_;
+			cube_dpx->delay_time_frame_ = 0;
+			cube_dpx->move_speed_ = 3;
+			for (int way = 0; way < 37; way++)
+			{	
+				cube_dpx->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			}
+		}
+	}
+	else if (FPS_MAX * 16 <= count_frame_ && count_frame_ < FPS_MAX * 20)
+	{
+		// cube ˆÚ“®
+		int cube_index = 0;
+		cube11_collection_[cube_index].move_angle_  += 1.5;
+		cube11_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150 * cos(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube11_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_ + 150 * sin(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube_index = 1;
+		cube11_collection_[cube_index].move_angle_  += 1.5;
+		cube11_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150 * cos(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube11_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_ + 150 * sin(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+
+		if (count_frame_ % 30 == 0)
+		{	// cube UŒ‚
+			cube_index = 0;
+			DevicePropertyX1* cube_dpx = cube11_collection_[cube_index].device111_.dpx_;
+			GraphicPropertyX4* cube_gadget_gpx = cube11_collection_[cube_index].device111_.gadget_gpx_;
+			EffectPropertyX1* cube_epx = cube11_collection_[cube_index].device111_.epx_;
+			GraphicPropertyX4* cube_effect_gpx = cube11_collection_[cube_index].device111_.effect_gpx_;
+			cube_dpx->create_x_ = cube11_collection_[cube_index].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube11_collection_[cube_index].phandle_->grid_y_;
+			cube_dpx->delay_time_frame_ = 0;
+			cube_dpx->move_speed_ = 3.5;
+			for (int way = 0; way < 41; way++)
+			{
+				cube_dpx->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			}
+			cube_index = 1;
+			cube_dpx = cube11_collection_[cube_index].device111_.dpx_;
+			cube_gadget_gpx = cube11_collection_[cube_index].device111_.gadget_gpx_;
+			cube_epx = cube11_collection_[cube_index].device111_.epx_;
+			cube_effect_gpx = cube11_collection_[cube_index].device111_.effect_gpx_;
+			cube_dpx->create_x_ = cube11_collection_[cube_index].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube11_collection_[cube_index].phandle_->grid_y_;
+			cube_dpx->delay_time_frame_ = 0;
+			cube_dpx->move_speed_ = 3.5;
+			for (int way = 0; way < 41; way++)
+			{	
+				cube_dpx->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			}
+		}
+	}
+	else if (FPS_MAX * 20 <= count_frame_ && count_frame_ < FPS_MAX * 24)
+	{
+		// cube ˆÚ“®
+		int cube_index = 0;
+		cube11_collection_[cube_index].move_angle_  += 1.5;
+		cube11_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150 * cos(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube11_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_ + 150 * sin(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube_index = 1;
+		cube11_collection_[cube_index].move_angle_  += 1.5;
+		cube11_collection_[cube_index].phandle_->grid_x_ = main_.phandle_->grid_x_ + 150 * cos(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+		cube11_collection_[cube_index].phandle_->grid_y_ = main_.phandle_->grid_y_ + 150 * sin(NyaInput::AngleToRad(cube11_collection_[cube_index].move_angle_));
+
+		if (count_frame_ % 15 == 0)
+		{	// cube UŒ‚
+			cube_index = 0;
+			DevicePropertyX1* cube_dpx = cube11_collection_[cube_index].device111_.dpx_;
+			GraphicPropertyX4* cube_gadget_gpx = cube11_collection_[cube_index].device111_.gadget_gpx_;
+			EffectPropertyX1* cube_epx = cube11_collection_[cube_index].device111_.epx_;
+			GraphicPropertyX4* cube_effect_gpx = cube11_collection_[cube_index].device111_.effect_gpx_;
+			cube_dpx->create_x_ = cube11_collection_[cube_index].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube11_collection_[cube_index].phandle_->grid_y_;
+			cube_dpx->delay_time_frame_ = 0;
+			cube_dpx->move_speed_ = 4;
+			for (int way = 0; way <45; way++)
+			{
+				cube_dpx->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			}
+			cube_index = 1;
+			cube_dpx = cube11_collection_[cube_index].device111_.dpx_;
+			cube_gadget_gpx = cube11_collection_[cube_index].device111_.gadget_gpx_;
+			cube_epx = cube11_collection_[cube_index].device111_.epx_;
+			cube_effect_gpx = cube11_collection_[cube_index].device111_.effect_gpx_;
+			cube_dpx->create_x_ = cube11_collection_[cube_index].phandle_->grid_x_;
+			cube_dpx->create_y_ = cube11_collection_[cube_index].phandle_->grid_y_;
+			cube_dpx->delay_time_frame_ = 0;
+			cube_dpx->move_speed_ = 4;
+			for (int way = 0; way < 45; way++)
+			{	
+				cube_dpx->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			}
+		}
+	}
+
+	if (count_frame_ == FPS_MAX * 24)
+		count_frame_ = FPS_MAX;
+}
+
+void TeemoMark1::Act2(void)
+{
+	if (count_frame_ < FPS_MAX * 2)
+		return;
+
+	// Õ“Ë”»’è@Õ“Ëƒ_ƒ[ƒW‚¾‚¯ŒoŒ±’l‚ð’Ç‰Á
+	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
+	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
+	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
+
+	if (count_frame_ % 5)
+	{	// main UŒ‚
+		main_.device121_.dpx_->create_x_ = main_.phandle_->grid_x_;
+		main_.device121_.dpx_->create_y_ = main_.phandle_->grid_y_;
+		main_.device121_.dpx_->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+		NyaDevice::Attack1414(main_.device121_.dpx_, main_.device121_.gadget_gpx_, main_.device121_.epx_, main_.device121_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		main_.device121_.dpx_->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+		NyaDevice::Attack1414(main_.device121_.dpx_, main_.device121_.gadget_gpx_, main_.device121_.epx_, main_.device121_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+	}
 }
 
 void TeemoMark1::Draw1(void)
 {
-	// main•`‰æ
+	// main •`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
@@ -273,11 +443,7 @@ void TeemoMark1::Draw1(void)
 	main_.lock_->Run(main_.phandle_);
 
 	for (auto& e : cube11_collection_)
-	{
-		// cubeŠg‘å
-		if (e.gpx_->extend_rate_ < 0.4)
-			e.gpx_->extend_rate_ += 0.01;
-		// cube•`‰æ
+	{	// cube •`‰æ
 		if (NyaInput::GetFrameCount() % CUBE_ANIMATION_INTERVAL_FRAME == 0)
 			e.gpx_->file_div_ = ++e.gpx_->file_div_ % e.gpx_->file_.div_total_;
 		e.gpx_->draw_grid_cx_ = e.phandle_->grid_x_;
@@ -290,21 +456,59 @@ void TeemoMark1::Draw1(void)
 	// ƒwƒ‹ƒX•\Ž¦
 	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 
-	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE1_HEALTH)
-	{	// cube”š”­
+	if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE1_MIN_HEALTH)
+	{	// cube ”š”­
 		for (auto& e : cube11_collection_)
 		{
 			e.death_epx_->grid_x_ = e.phandle_->grid_x_;
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
 			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
 		}
+		NyaGraphic::Swing();
 	}
 }
 
-TeemoDevice121::TeemoDevice121()
+void TeemoMark1::Draw2(void)
 {
+	// main •`‰æ
+	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	// main ƒƒbƒN•`‰æ
+	main_.lock_->Run(main_.phandle_);
+
+	// ƒwƒ‹ƒX•\Ž¦
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
 
-TeemoDevice121::~TeemoDevice121()
+void TeemoMark1::Draw3(void)
 {
+	if (count_frame_ < 30 * 7)
+	{
+		if (count_frame_ % 30 == 0)
+		{	//¬”š”­
+			main_.death1_epx_->grid_x_ = main_.phandle_->grid_x_ + NyaInput::GetRand(-30, 30);
+			main_.death1_epx_->grid_y_ = main_.phandle_->grid_y_ + NyaInput::GetRand(-30, 30);
+			NyaEffect::Draw(main_.death1_epx_, main_.death1_gpx_, eOBJECT::TARGET_EFFECT1);
+		}
+	}
+
+	if (count_frame_ == 30 * 8)
+	{	// ‘å”š”­
+		main_.death2_epx_->grid_x_ = main_.phandle_->grid_x_;
+		main_.death2_epx_->grid_y_ = main_.phandle_->grid_y_;
+		NyaEffect::Draw(main_.death2_epx_, main_.death2_gpx_, eOBJECT::TARGET_EFFECT1);
+		NyaGraphic::Swing();
+	}
+
+	if (count_frame_ < 30 * 10)
+	{	// main •`‰æ
+		main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+		main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
+		NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
+	}
+
+	// ƒwƒ‹ƒX•\Ž¦
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }
+

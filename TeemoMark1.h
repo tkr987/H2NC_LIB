@@ -28,7 +28,10 @@ public:
 class TeemoDevice121
 {
 public:
-	HNLIB::GraphicPropertyX4* gpx_;
+	HNLIB::DevicePropertyX1* dpx_;
+	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::EffectPropertyX1* epx_;
+	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice121();
 	~TeemoDevice121();
 };
@@ -77,8 +80,11 @@ private:
 	TeemoMain1 main_;
 	unsigned int mode_;
 	void Act(void);
-	void Draw(void);
 	void Act1(void);
+	void Act2(void);
+	void Draw(void);
 	void Draw1(void);
+	void Draw2(void);
+	void Draw3(void);
 };
 

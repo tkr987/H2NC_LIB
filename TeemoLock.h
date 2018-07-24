@@ -11,7 +11,7 @@ namespace HNLIB
 enum class eLOCK
 {
 	enum_zero,
-	CUBE, ECTROMELIA, PICORNA, 
+	CUBE, CHLAMYDIAE, ECTROMELIA, PICORNA, 
 	TEEMO_EX, TEEMO_MARK1, TEEMO_MARK2, 
 	sizeof_enum,
 };

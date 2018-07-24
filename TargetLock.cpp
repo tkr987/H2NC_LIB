@@ -24,6 +24,9 @@ TeemoLock::TeemoLock(eLOCK type)
 	case eLOCK::CUBE:
 		NyaGraphic::Load("img/target/lock_cube.png", &gpx_->file_);
 		break;
+	case eLOCK::CHLAMYDIAE:
+		NyaGraphic::Load("img/target/lock_chlamydiae.png", &gpx_->file_);
+		break;
 	case eLOCK::ECTROMELIA:
 		NyaGraphic::Load("img/target/lock_ectromelia.png", &gpx_->file_);
 		break;

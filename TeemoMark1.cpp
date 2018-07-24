@@ -111,6 +111,7 @@ TeemoMain1::TeemoMain1() : health_max_(17000)
 	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death_spx_);
 
 	gpx_ = new GraphicPropertyX4;
+	gpx_->extend_rate_ = 1.5;
 	NyaGraphic::Load("img/target/teemo_mark1.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
@@ -422,7 +423,7 @@ void TeemoMark1::Act2(void)
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
 
-	if (count_frame_ % 5)
+	if (count_frame_ % 5 == 0)
 	{	// main UŒ‚
 		main_.device121_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device121_.dpx_->create_y_ = main_.phandle_->grid_y_;

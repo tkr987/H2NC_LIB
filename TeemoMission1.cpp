@@ -1,3 +1,4 @@
+#include "Target1Chlamydiae.h"
 #include "TeemoBack1.h"
 #include "TeemoMission1.h"
 #include "TeemoTarget.h"
@@ -9,7 +10,6 @@ using namespace HNLIB;
 void TeemoMission1::Create(void) 
 {
 	unsigned int ctime = 0;
-	InterfaceHandleSkill* ihandle_mission_skill;
 
 	//*****************************************************
 	// スクロールする背景やBGMを子オブジェクトとして追加
@@ -20,7 +20,8 @@ void TeemoMission1::Create(void)
 	// ターゲットを子オブジェクトとして追加
 	//*******************************************
 	ctime = 2;
-	AddTarget(ctime, 600, new TeemoMark1);
+	AddTarget(ctime, ctime + 60, new Target1Chlamydiae(SCREEN_CENTER_X, -200));
+	//AddTarget(ctime, 600, new TeemoMark1);
 
 	//**************************************
 	// ユーザーを子オブジェクトとして追加

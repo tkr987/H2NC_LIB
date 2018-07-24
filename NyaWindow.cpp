@@ -38,7 +38,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v78");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v80");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化

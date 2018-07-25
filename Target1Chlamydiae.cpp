@@ -5,8 +5,6 @@
 #include "Target1Chlamydiae.h"
 #include "TeemoLock.h"
 
-#define __DEBUG__
-
 using namespace std;
 using namespace HNLIB;
 

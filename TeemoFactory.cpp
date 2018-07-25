@@ -14,13 +14,13 @@ TeemoFactory::~TeemoFactory()
 {
 }
 
-void TeemoFactory::TargetAttackBlue1(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx)
+void TeemoFactory::TargetAttackBlue1(DevicePropertyX1* dpx, GraphicPropertyX4* gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE1;
 	NyaGraphic::Load("img/target/attack_blue1.png", &gpx->file_);
 }
 
-void TeemoFactory::TargetAttackBlue2(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackBlue2(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
 	NyaGraphic::Load("img/target/attack_blue2.png", &gadget_gpx->file_);
@@ -28,7 +28,7 @@ void TeemoFactory::TargetAttackBlue2(HNLIB::DevicePropertyX1 * dpx, HNLIB::Graph
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackBlue3(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackBlue3(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE3;
 	NyaGraphic::Load("img/target/attack_blue3.png", &gadget_gpx->file_);
@@ -36,7 +36,7 @@ void TeemoFactory::TargetAttackBlue3(HNLIB::DevicePropertyX1 * dpx, HNLIB::Graph
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackBlue4(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackBlue4(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE4;
 	NyaGraphic::Load("img/target/attack_blue4.png", &gadget_gpx->file_);
@@ -44,7 +44,7 @@ void TeemoFactory::TargetAttackBlue4(HNLIB::DevicePropertyX1 * dpx, HNLIB::Graph
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackBlue7(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackBlue7(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE7;
 	NyaGraphic::Load("img/target/attack_blue7.png", &gadget_gpx->file_);
@@ -52,7 +52,7 @@ void TeemoFactory::TargetAttackBlue7(HNLIB::DevicePropertyX1 * dpx, HNLIB::Graph
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackOrange1(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackOrange1(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
 	NyaGraphic::Load("img/target/attack_orange1.png", &gadget_gpx->file_);
@@ -60,7 +60,15 @@ void TeemoFactory::TargetAttackOrange1(HNLIB::DevicePropertyX1 * dpx, HNLIB::Gra
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackOrange9(HNLIB::DevicePropertyX1 * dpx, HNLIB::GraphicPropertyX4 * gadget_gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackOrange2(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE2;
+	NyaGraphic::Load("img/target/attack_orange2.png", &gadget_gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+void TeemoFactory::TargetAttackOrange9(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE9;
 	NyaGraphic::Load("img/target/attack_orange9.png", &gadget_gpx->file_);
@@ -68,7 +76,7 @@ void TeemoFactory::TargetAttackOrange9(HNLIB::DevicePropertyX1 * dpx, HNLIB::Gra
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackOrange3(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackOrange3(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE3;
 	NyaGraphic::Load("img/target/attack_orange3.png", &gpx->file_);
@@ -76,21 +84,21 @@ void TeemoFactory::TargetAttackOrange3(HNLIB::DevicePropertyX1* dpx, HNLIB::Grap
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackRed5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1 * epx, HNLIB::GraphicPropertyX4 * effect_gpx)
+void TeemoFactory::TargetAttackRed5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_RED5;
 	dpx->draw_angle_speed_deg_ = 2;
 	NyaGraphic::Load("img/target/attack_red5.png", &gpx->file_);
 }
 
-void TeemoFactory::TargetAttackOrange5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx)
+void TeemoFactory::TargetAttackOrange5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE5;
 	dpx->draw_angle_speed_deg_ = 2;
 	NyaGraphic::Load("img/target/attack_orange5.png", &gpx->file_);
 }
 
-void TeemoFactory::TargetAttackPurple3(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gadget_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx)
+void TeemoFactory::TargetAttackPurple3(DevicePropertyX1* dpx, GraphicPropertyX4* gadget_gpx, EffectPropertyX1* epx, GraphicPropertyX4* effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_PURPLE3;
 	NyaGraphic::Load("img/target/attack_purple3.png", &gadget_gpx->file_);
@@ -99,7 +107,7 @@ void TeemoFactory::TargetAttackPurple3(HNLIB::DevicePropertyX1* dpx, HNLIB::Grap
 
 }
 
-void TeemoFactory::TargetAttackWhite5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx)
+void TeemoFactory::TargetAttackWhite5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_WHITE5;
 	dpx->draw_angle_speed_deg_ = 2;
@@ -118,13 +126,13 @@ void TeemoFactory::TargetCubeBlue(GraphicPropertyX4* gpx)
 	NyaGraphic::Load(5, 1, "img/target/cube_blue.png", &gpx->file_);
 }
 
-void TeemoFactory::TargetDeath1(HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* gpx)
+void TeemoFactory::TargetDeath1(EffectPropertyX1* epx, GraphicPropertyX4* gpx)
 {
 	epx->interval_time_frame_ = 3;
 	NyaGraphic::Load(4, 2, "img/target/death1.png", &gpx->file_);
 }
 
-void TeemoFactory::TargetDeath1(HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* gpx, SoundPropertyX* spx)
+void TeemoFactory::TargetDeath1(EffectPropertyX1* epx, GraphicPropertyX4* gpx, SoundPropertyX* spx)
 {
 	epx->interval_time_frame_ = 3;
 	NyaGraphic::Load(4, 2, "img/target/death1.png", &gpx->file_);
@@ -132,14 +140,14 @@ void TeemoFactory::TargetDeath1(HNLIB::EffectPropertyX1* epx, HNLIB::GraphicProp
 	NyaSound::ChangeVolume(&spx->file_, 40);
 }
 
-void TeemoFactory::TargetDeath2(HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* gpx)
+void TeemoFactory::TargetDeath2(EffectPropertyX1* epx, GraphicPropertyX4* gpx)
 {
 	epx->interval_time_frame_ = 3;
 	gpx->extend_rate_ = 0.8;
 	NyaGraphic::Load(8, 8, "img/target/death2.png", &gpx->file_);
 }
 
-void TeemoFactory::TargetDeath2(HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* gpx, HNLIB::SoundPropertyX* spx)
+void TeemoFactory::TargetDeath2(EffectPropertyX1* epx, GraphicPropertyX4* gpx, SoundPropertyX* spx)
 {
 	epx->interval_time_frame_ = 3;
 	gpx->extend_rate_ = 0.8;

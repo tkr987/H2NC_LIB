@@ -134,9 +134,9 @@ UserAiMain::UserAiMain()
 	phandle_->name_ = "user";
 
 	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
-	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 600001;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 1;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 15001;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 1;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 800001;
 }
 

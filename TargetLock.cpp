@@ -21,8 +21,8 @@ TeemoLock::TeemoLock(eLOCK type)
 	gpx_ = new GraphicPropertyX4;
 	switch (type)
 	{
-	case eLOCK::CUBE:
-		NyaGraphic::Load("img/target/lock_cube.png", &gpx_->file_);
+	case eLOCK::AQUIFICAE:
+		NyaGraphic::Load("img/target/lock_aquificae.png", &gpx_->file_);
 		break;
 	case eLOCK::CHLAMYDIAE:
 		NyaGraphic::Load("img/target/lock_chlamydiae.png", &gpx_->file_);
@@ -41,6 +41,9 @@ TeemoLock::TeemoLock(eLOCK type)
 		break;
 	case eLOCK::TENERICUTES:
 		NyaGraphic::Load("img/target/llock_tenericutes.png", &gpx_->file_);
+		break;
+	case eLOCK::CUBE:
+		NyaGraphic::Load("img/target/lock_cube.png", &gpx_->file_);
 		break;
 	case eLOCK::TEEMO_EX:
 		NyaGraphic::Load("img/target/lock_teemo_ex.png", &gpx_->file_);

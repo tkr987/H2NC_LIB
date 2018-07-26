@@ -1,6 +1,7 @@
 #include "Target1Chlamydiae.h"
 #include "Target1Dictyoglomi.h"
 #include "Target1Pantoea.h"
+#include "Target1Tenericutes.h"
 #include "TeemoBack1.h"
 #include "TeemoMission1.h"
 #include "TeemoTarget.h"
@@ -26,7 +27,11 @@ void TeemoMission1::Create(void)
 	AddTarget(ctime, ctime + 30, new Target1Pantoea(SCREEN_CENTER_X + 70, 300));
 	AddTarget(ctime, ctime + 30, new Target1Pantoea(SCREEN_CENTER_X + 210, 300));
 
+	ctime = 5;
+	AddTarget(ctime, ctime + 60, new Target1Tenericutes(SCREEN_MAX_X - 200, -200));
+
 	// ‰ºˆÚ“®+Ž©‹@‘_‚¢ˆÚ“®
+	/*
 	ctime = 5;
 	AddTarget(ctime, ctime + 30, new Target1Dictyoglomi(SCREEN_CENTER_X - 250, -200, SCREEN_CENTER_X - 200, 200));
 	AddTarget(ctime, ctime + 30, new Target1Dictyoglomi(SCREEN_CENTER_X      , -200, SCREEN_CENTER_X      , 200));
@@ -42,7 +47,7 @@ void TeemoMission1::Create(void)
 	AddTarget(ctime, ctime + 30, new Target1Dictyoglomi(SCREEN_CENTER_X      , -200, SCREEN_CENTER_X      , 200));
 	AddTarget(ctime, ctime + 30, new Target1Dictyoglomi(SCREEN_CENTER_X + 120, -200, SCREEN_CENTER_X + 120, 200));
 	AddTarget(ctime, ctime + 30, new Target1Dictyoglomi(SCREEN_CENTER_X + 240, -200, SCREEN_CENTER_X + 240, 200));
-
+	*/
 
 	ctime = 50;
 	AddTarget(ctime, ctime + 60, new Target1Chlamydiae(SCREEN_CENTER_X, -200));

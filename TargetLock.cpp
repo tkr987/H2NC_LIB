@@ -39,6 +39,9 @@ TeemoLock::TeemoLock(eLOCK type)
 	case eLOCK::PICORNA:
 		NyaGraphic::Load("img/target/lock_picorna.png", &gpx_->file_);
 		break;
+	case eLOCK::TENERICUTES:
+		NyaGraphic::Load("img/target/llock_tenericutes.png", &gpx_->file_);
+		break;
 	case eLOCK::TEEMO_EX:
 		NyaGraphic::Load("img/target/lock_teemo_ex.png", &gpx_->file_);
 		break;

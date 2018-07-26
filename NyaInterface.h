@@ -128,15 +128,8 @@ namespace HNLIB
 	public:
 		unsigned int draw_frame_;
 		unsigned int draw_frame_max_;
-		int draw_grid_x_;
-		int draw_grid_y_;
-		bool draw_valid_;
-		SoundPropertyX* spx_;
-		bool sound_valid_;
-		void LoadSound(std::string file_pass, unsigned int volume = 100);
-		void DeleteSound(void);
-		InterfaceHandleWarning();
-		~InterfaceHandleWarning();
+		bool valid_;
+		void Clear(void);
 	};
 
 
@@ -178,13 +171,13 @@ namespace HNLIB
 		static void DrawComplete(int x, int y);
 		static void DrawContinue(int x, int y, eEVENT event_check);
 		static void DrawEnd(int x, int y);
-		static void DrawLIB(int x, int y);
 		static void DrawHealth(void);
-		static void DrawTitle(int x, int y);
 		static void DrawInput(int x, int y);
 		static void DrawLife(int x, int y);
+		static void DrawLIB(int x, int y);
 		static void DrawSkill(int x, int y);
-		static void DrawWarning(void);
+		static void DrawTitle(int x, int y);
+		static void DrawWarning(int x, int y);
 	};
 
 }

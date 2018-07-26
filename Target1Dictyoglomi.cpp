@@ -152,7 +152,7 @@ void Target1Dictyoglomi::Act1(void)
 	{	// user‘_‚¢‚ÌˆÚ“®ˆ—
 		NyaPosition::FindHandle("user", &phandle_user);
 		move_angle_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
-		NyaPosition::MoveSpeedMode(main_.phandle_, move_angle_, 5, FPS_MAX * 10);
+		NyaPosition::MoveSpeedMode(main_.phandle_, move_angle_, 5, FPS_MAX * 5);
 	}
 }
 

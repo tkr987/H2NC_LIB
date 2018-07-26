@@ -14,78 +14,74 @@ namespace HNLIB
 	class SoundPropertyX;
 }
 
-class TeemoDevice111
+class Target1TenericutesCubeDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoDevice111();
-	~TeemoDevice111();
+	Target1TenericutesCubeDevice();
+	~Target1TenericutesCubeDevice();
 };
 
-class TeemoDevice121
+
+class Target1TenericutesMainDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
 	HNLIB::GraphicPropertyX4* gadget_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	TeemoDevice121();
-	~TeemoDevice121();
+	Target1TenericutesMainDevice();
+	~Target1TenericutesMainDevice();
 };
 
-
-class TeemoCube11
+class Target1TenericutesCube
 {
 public:
-	TeemoDevice111 device111_;
+	Target1TenericutesCubeDevice device_;
 	TeemoLock* lock_;
-	double move_angle_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoCube11();
-	~TeemoCube11();
+	Target1TenericutesCube();
+	~Target1TenericutesCube();
 };
 
-class TeemoMain1
+class Target1TenericutesMain
 {
 public:
-	TeemoDevice121 device121_;
+	Target1TenericutesMainDevice device_;
 	const unsigned int health_max_;
 	TeemoLock* lock_;
-	HNLIB::EffectPropertyX1* death1_epx_;
-	HNLIB::GraphicPropertyX4* death1_gpx_;
-	HNLIB::EffectPropertyX1* death2_epx_;
-	HNLIB::GraphicPropertyX4* death2_gpx_;
+	const unsigned int exp_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoMain1();
-	~TeemoMain1();
+	Target1TenericutesMain();
+	~Target1TenericutesMain();
 };
 
-class TeemoMark1 : public HNLIB::NyaTarget
+class Target1Tenericutes : public HNLIB::NyaTarget
 {
 public:
-	TeemoMark1();
-	~TeemoMark1();
+	Target1Tenericutes(int x, int y);
+	~Target1Tenericutes();
 private:
 	unsigned int count_frame_;
-	std::array<TeemoCube11, 2> cube11_collection_;
-	TeemoMain1 main_;
+	std::array<Target1TenericutesCube, 2> cube_collection_;
+	Target1TenericutesMain main_;
 	unsigned int mode_;
-	HNLIB::SoundPropertyX* warning_spx_;
 	void Act(void);
 	void Act1(void);
-	void Act2(void);
 	void Draw(void);
 	void Draw1(void);
-	void Draw2(void);
-	void Draw3(void);
 };
+
+
 

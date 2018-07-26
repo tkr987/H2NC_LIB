@@ -161,6 +161,7 @@ private:
 	std::array<TeemoCube33, 4> cube33_collection_;
 	TeemoMain3 main_;
 	int mode_;
+	HNLIB::SoundPropertyX* warning_spx_;
 	void Act1(void);
 	void Act2(void);
 	void Act3(void);

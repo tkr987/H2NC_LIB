@@ -60,18 +60,6 @@ void InterfaceHandleLife::Clear()
 	value_ = 1;
 }
 
-
-void InterfaceHandleWarning::LoadSound(std::string file_pass, unsigned int volume)
-{
-	NyaSound::Load(file_pass, &spx_->file_);
-	NyaSound::ChangeVolume(&spx_->file_, volume);
-}
-
-void InterfaceHandleWarning::DeleteSound(void)
-{
-	NyaSound::Delete(&spx_->file_);
-}
-
 void InterfaceHandleSkill::AddExp(unsigned int value)
 {
 	exp_[static_cast<int>(select_)] += value;
@@ -94,29 +82,12 @@ void InterfaceHandleSkill::Clear(void)
 	select_ = eSKILL::Q;
 }
 
-InterfaceHandleWarning::InterfaceHandleWarning()
+void InterfaceHandleWarning::Clear(void)
 {
-	draw_grid_x_ = 225;
-	draw_grid_y_ = 200;
 	draw_frame_ = 0;
 	draw_frame_max_ = FPS_MAX * 4;
-	draw_valid_ = false;
-	sound_valid_ = false;
-	spx_ = new SoundPropertyX;
+	valid_ = false;
 }
-
-InterfaceHandleWarning::~InterfaceHandleWarning()
-{
-	draw_grid_x_ = 225;
-	draw_grid_y_ = 200;
-	draw_frame_ = 0;
-	draw_frame_max_ = 300;
-	draw_valid_ = false;
-	sound_valid_ = false;
-	delete spx_;
-	spx_ = nullptr;
-}
-
 
 /**
  @brief èâä˙âªä÷êî
@@ -131,6 +102,7 @@ void NyaInterface::Init(void)
 	handle_health_.Clear();
 	handle_life_.Clear();
 	handle_skill_.Clear();
+	handle_warning_.Clear();
 
 	NyaString::SettingFont("interface_continue_font", 40, 6);
 	NyaString::SettingFont("interface_clear_big_font", 50, 2);
@@ -145,7 +117,7 @@ void NyaInterface::Init(void)
 	NyaString::SettingFont("interface_skill_exp_font", 18, 2);
 	NyaString::SettingFont("interface_title_font", 20, 6);
 	NyaString::SettingFont("interface_input_font", 50, 2);
-	NyaString::SettingFont("design_warning_font", 64, 4);
+	NyaString::SettingFont("interface_warning_font", 64, 4);
 }
 
 /**
@@ -167,7 +139,7 @@ void NyaInterface::Run(eEVENT event_check)
 	DrawContinue(220, 200, event_check);
 	DrawEnd(225, 200);
 	DrawHealth();
-	DrawWarning();
+	DrawWarning(225, 200);
 }
 
 void NyaInterface::DrawBlack(int x, int y, int x2, int y2) 
@@ -457,31 +429,20 @@ void NyaInterface::DrawTitle(int x, int y)
 	NyaString::Write("interface_title_font", white, x, y, "%s", handle_title_.name_.str());
 }
 
-void NyaInterface::DrawWarning(void)
+void NyaInterface::DrawWarning(int x, int y)
 {
-	int draw_grid_x, draw_grid_y;
 	const int black = GetColor(0, 0, 0);
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 
-	// å¯â âπçƒê∂
-	if (handle_warning_.sound_valid_)
-	{
-		NyaSound::Play(handle_warning_.spx_);
-		handle_warning_.sound_valid_ = false;
-	}
-
-	// warningï\é¶
-	if (handle_warning_.draw_valid_)
-	{
-		draw_grid_x = handle_warning_.draw_grid_x_;
-		draw_grid_y = handle_warning_.draw_grid_y_;
-		DrawBox(draw_grid_x, draw_grid_y, draw_grid_x + 400, draw_grid_y + 150, black, true);
-		NyaString::Write("design_warning_font", red, draw_grid_x + 90, draw_grid_y + 25, "WARNING");
+	if (handle_warning_.valid_)
+	{	// warning ï\é¶
+		DrawBox(x, y, x + 400, y + 150, black, true);
+		NyaString::Write("interface_warning_font", red, x + 90, y + 25, "WARNING");
 		handle_warning_.draw_frame_++;
 
 		if (handle_warning_.draw_frame_ == handle_warning_.draw_frame_max_)
 		{
-			handle_warning_.draw_valid_ = false;
+			handle_warning_.valid_ = false;
 			handle_warning_.draw_frame_ = 0;
 		}
 	}	

@@ -316,12 +316,16 @@ TeemoMark2::TeemoMark2(void)
 {
 	count_frame_ = 0;
 	mode_ = 1;
-	NyaInterface::GetHandleWarning()->LoadSound("sound/warning.wav", 30);
+
+	warning_spx_ = new SoundPropertyX;
+	NyaSound::Load("sound/warning.wav", &warning_spx_->file_);
+	NyaSound::ChangeVolume(&warning_spx_->file_, 20);
 }
 
 TeemoMark2::~TeemoMark2(void)
 {
-	NyaInterface::GetHandleWarning()->DeleteSound();
+	delete warning_spx_;
+	warning_spx_ = nullptr;
 }
 
 //***************************
@@ -396,8 +400,8 @@ void TeemoMark2::Act1(void)
 	if (count_frame_ == 1)
 	{	// 行動開始1フレーム目
 		NyaInterface::GetHandleHealth()->valid_ = true;
-		NyaInterface::GetHandleWarning()->draw_valid_ = true;
-		NyaInterface::GetHandleWarning()->sound_valid_ = true;
+		NyaInterface::GetHandleWarning()->valid_ = true;
+		NyaSound::Play(warning_spx_);
 		NyaPosition::MoveGridMode(main_.phandle_, SCREEN_MAX_X / 2, SCREEN_MIN_Y + 150, FPS_MAX * 3);
 	}
 

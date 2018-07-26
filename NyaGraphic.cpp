@@ -65,6 +65,19 @@ GraphicPropertyX6::GraphicPropertyX6()
 	flag_trans_ = true;
 }
 
+GraphicPropertyX7::GraphicPropertyX7()
+{
+	file_div_ = 0;
+	flag_trans_ = true;
+}
+
+GraphicPropertyX8::GraphicPropertyX8()
+{
+	file_div_ = 0;
+	flag_turn_ = false;
+	flag_trans_ = true;
+}
+
 
 //**********************
 // class GraphicSwing
@@ -89,6 +102,10 @@ NyaGraphic::~NyaGraphic()
 {
 	Clear();
 }
+
+//***************************
+// NyaGraphic ƒƒ“ƒoŠÖ”
+//***************************
 
 void NyaGraphic::Clear(void)
 {
@@ -572,22 +589,22 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx7_deque_.empty()) {
 		gpx7 = &layer_collection_.at(layer).gpx7_deque_.front();
 		DrawModiGraph(
-			(int)gpx7->grid_x1_ + swing_.grid_x_, (int)gpx7->grid_y1_, (int)gpx7->grid_x2_ + swing_.grid_x_, (int)gpx7->grid_y2_, 
-			(int)gpx7->grid_x3_ + swing_.grid_x_, (int)gpx7->grid_y3_, (int)gpx7->grid_x4_ + swing_.grid_x_, (int)gpx7->grid_y4_,
+			(int)gpx7->draw_grid_x1_ + swing_.grid_x_, (int)gpx7->draw_grid_y1_, (int)gpx7->draw_grid_x2_ + swing_.grid_x_, (int)gpx7->draw_grid_y2_, 
+			(int)gpx7->draw_grid_x3_ + swing_.grid_x_, (int)gpx7->draw_grid_y3_, (int)gpx7->draw_grid_x4_ + swing_.grid_x_, (int)gpx7->draw_grid_y4_,
 			gpx7->file_.div_collection_[gpx7->file_div_], gpx7->flag_trans_);
 		layer_collection_.at(layer).gpx7_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx8_deque_.empty()) {
 		gpx8 = &layer_collection_.at(layer).gpx8_deque_.front();
-		DrawRectGraph((int)gpx8->grid_dx_ + swing_.grid_x_, (int)gpx8->grid_dy_, 
-			(int)gpx8->grid_sx_ + swing_.grid_x_, (int)gpx8->grid_sy_, gpx8->size_width_, gpx8->size_height_, 
+		DrawRectGraph((int)gpx8->draw_grid_dx_ + swing_.grid_x_, (int)gpx8->draw_grid_dy_, 
+			(int)gpx8->draw_grid_sx_ + swing_.grid_x_, (int)gpx8->draw_grid_sy_, gpx8->size_width_, gpx8->size_height_, 
 			gpx8->file_.div_collection_[gpx8->file_div_], gpx8->flag_trans_, gpx8->flag_turn_);
 		layer_collection_.at(layer).gpx8_deque_.pop_front();
 	}
 	while (!layer_collection_.at(layer).gpx1b_deque_.empty()) {
 		gpx1b = &layer_collection_.at(layer).gpx1b_deque_.front();
 		SetDrawBlendMode(gpx1b->blend_mode_, gpx1b->blend_alpha_);
-		DrawGraph(gpx1b->pos_x_ + swing_.grid_x_, gpx1b->pos_y_, 
+		DrawGraph(gpx1b->draw_grid_x_ + swing_.grid_x_, gpx1b->draw_grid_y_, 
 			gpx1b->file_.div_collection_[gpx1b->file_div_], gpx1b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx1b_deque_.pop_front();

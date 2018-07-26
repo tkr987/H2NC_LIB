@@ -3,6 +3,8 @@
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 
+
+
 using namespace HNLIB;
 
 TeemoFactory::TeemoFactory()
@@ -112,6 +114,22 @@ void TeemoFactory::TargetAttackWhite5(DevicePropertyX1* dpx, GraphicPropertyX4* 
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_WHITE5;
 	dpx->draw_angle_speed_deg_ = 2;
 	NyaGraphic::Load("img/target/attack_white5.png", &gpx->file_);
+}
+
+void TeemoFactory::TargetAttackYellow1(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_YELLOW1;
+	NyaGraphic::Load("img/target/attack_yellow1.png", &gadget_gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+void TeemoFactory::TargetAttackYellow2(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_YELLOW2;
+	NyaGraphic::Load("img/target/attack_yellow2.png", &gadget_gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
 void TeemoFactory::TargetCube(GraphicPropertyX4* gpx)

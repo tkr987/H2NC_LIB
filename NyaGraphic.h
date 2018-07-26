@@ -47,9 +47,9 @@ namespace HNLIB
 	public:
 		double draw_grid_x_;
 		double draw_grid_y_;
+		GraphicFile file_;
 		int file_div_;
 		bool flag_trans_;
-		GraphicFile file_;
 		GraphicPropertyX2();
 	};
 
@@ -62,9 +62,9 @@ namespace HNLIB
 		double draw_grid_x2_;
 		double draw_grid_y1_;
 		double draw_grid_y2_;
+		GraphicFile file_;
 		int file_div_;
 		bool flag_trans_;
-		GraphicFile file_;
 		GraphicPropertyX3();
 	};
 
@@ -126,17 +126,18 @@ namespace HNLIB
 	class GraphicPropertyX7 
 	{
 	public:
-		double grid_x1_;
-		double grid_x2_;
-		double grid_x3_;
-		double grid_x4_;
-		double grid_y1_;
-		double grid_y2_;
-		double grid_y3_;
-		double grid_y4_;
+		double draw_grid_x1_;
+		double draw_grid_x2_;
+		double draw_grid_x3_;
+		double draw_grid_x4_;
+		double draw_grid_y1_;
+		double draw_grid_y2_;
+		double draw_grid_y3_;
+		double draw_grid_y4_;
 		GraphicFile file_;
 		int file_div_;
 		bool flag_trans_;
+		GraphicPropertyX7();
 	};
 
 	// DXLIB éwíËãÈå`ï`âÊä÷êîÇ…ëŒâû
@@ -144,16 +145,17 @@ namespace HNLIB
 	class GraphicPropertyX8 
 	{
 	public:
-		double grid_dx_;
-		double grid_dy_;
-		double grid_sx_;
-		double grid_sy_;
-		int size_width_;
-		int size_height_;
+		double draw_grid_dx_;
+		double draw_grid_dy_;
+		double draw_grid_sx_;
+		double draw_grid_sy_;
 		GraphicFile file_;
 		int file_div_;
 		bool flag_turn_;
 		bool flag_trans_;
+		int size_width_;
+		int size_height_;
+		GraphicPropertyX8();
 	};
 
 	// DXLIB í èÌï`âÊä÷êîÇ…ëŒâû
@@ -162,10 +164,10 @@ namespace HNLIB
 	class GraphicPropertyX1b 
 	{
 	public:
+		int draw_grid_x_;
+		int draw_grid_y_;
 		GraphicFile file_;
 		int file_div_;
-		int pos_x_;
-		int pos_y_;
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;

@@ -4,21 +4,7 @@
 #include <string>
 #include <tuple>
 #include "DxLib.h"
-#include "NyaDevice.h"
-#include "NyaEffect.h"
-#include "NyaEnding.h"
-#include "NyaGraphic.h"
-#include "NyaInput.h"
-#include "NyaInterface.h"
-#include "NyaMission.h"
-#include "NyaOpening.h"
-#include "NyaPosition.h"
-#include "NyaSound.h"
-#include "NyaString.h"
-#include "NyaTarget.h"
-#include "NyaUser.h"
-#include "NyaWindow.h"
-
+#include "HNLIB.h"
 #define __DEBUG__
 
 using namespace std;
@@ -84,7 +70,7 @@ NyaWindow::~NyaWindow(void)
 }
 
 /**
-@brief ミッションを追加する関数
+@brief ミッションを追加する
 @param mission 追加するミッション
 @note
  NyaWindowの子オブジェクトとしてミッションが追加される。
@@ -106,10 +92,10 @@ void NyaWindow::Child(NyaEnding* ending)
 
 
 /**
- @brief 実行関数
+ @brief ライブラリを実行する
  @note
-  ライブラリの全ての処理が実行される
-  よって、ライブラリ使用者はmain関数で必ず呼び出す必要がある
+  この関数を呼ばない限りライブラリの処理は実行されない。
+  ライブラリ使用者はmain関数で必ず呼び出す必要がある。
 **/
 void NyaWindow::Run(void)
 {
@@ -123,6 +109,7 @@ void NyaWindow::Run(void)
 		// 連続でリプレイ再生したときのバグ
 		// タイトルでPositionHandleのクリアをする
 		// TeemoEX Act1までok
+		// mission 実行前に mission clearを実行しておく
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -227,7 +214,7 @@ void NyaWindow::Run(void)
 }
 
 /**
-@brief エンディングの処理をする関数
+@brief エンディングの処理をする
 @note
  エンディングが登録されてないときは何もせず次のイベントに遷移する
 **/
@@ -271,7 +258,7 @@ void NyaWindow::Ending(void)
 void NyaWindow::Mission(void)
 {
 	if (child_.mission_collection_.size() == 0)
-	{
+	{	// ミッションが登録されていないので何もしない
 		event_next_ = eEVENT::TITLE;
 		return;
 	}
@@ -319,18 +306,12 @@ void NyaWindow::Mission(void)
 			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_CONTINUE);
 		else
 		{
-			if (NyaInterface::GetHandleContinue()->select_ == 0)
+			if (NyaInterface::GetHandleContinue()->select_ == InterfaceHandleContinue::eSELECT::YES)
 				event_next_ = eEVENT::MISSION_RUN;
-			if (NyaInterface::GetHandleContinue()->select_ == 1 && NyaInterface::GetHandleContinue()->cnum_ == 0)
-			{
-				child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_DELETE);
+			if (NyaInterface::GetHandleContinue()->select_ == InterfaceHandleContinue::eSELECT::NO && NyaInterface::GetHandleContinue()->cnum_ == 0)
 				event_next_ = eEVENT::REPLAY_SAVE;
-			}
-			if (NyaInterface::GetHandleContinue()->select_ == 1 && NyaInterface::GetHandleContinue()->cnum_ != 0)
-			{
-				child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_DELETE);
+			if (NyaInterface::GetHandleContinue()->select_ == InterfaceHandleContinue::eSELECT::NO && NyaInterface::GetHandleContinue()->cnum_ != 0)
 				event_next_ = eEVENT::NOT_REPLAY_SAVE;
-			}
 		}
 		break;
 	// ミッションクリアの処理
@@ -357,15 +338,13 @@ void NyaWindow::Mission(void)
 	// NyaMission::Run()の引数にeEVENT::MISSION_COMPLETEを渡してミッションコンプリート時の処理をさせる
 	// - mission complete 画面の表示が終わったとき
 	// 1. 有効化されているインターフェースハンドルの無効化
-	// 2. NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡してミッションを削除させる
-	// 3. eEVENT::ENDING_LOADに遷移する
+	// 2. eEVENT::ENDING_LOADに遷移する
 	case eEVENT::MISSION_COMPLETE:
 		if (NyaInterface::GetHandleComplete()->valid_)
 			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_COMPLETE);
 		else
 		{
 			NyaInterface::GetHandleHealth()->valid_ = false;
-			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_DELETE);
 			event_next_ = eEVENT::ENDING_LOAD;
 		}
 		break;
@@ -400,15 +379,13 @@ void NyaWindow::Mission(void)
 	// 2. リプレイ終了画面の表示をする
 	// - replay end 画面の表示が終わったとき
 	// 1. インターフェースを初期化する
-	// 2. NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡してミッションを削除させる
-	// 3. eEVENT::TITLEに遷移する
+	// 2. eEVENT::TITLEに遷移する
 	case eEVENT::MISSION_REPLAY_END:
 		if (NyaInterface::GetHandleEnd()->valid_)
 			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_REPLAY_END);
 		else
 		{
 			NyaInterface::Init();
-			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_DELETE);
 			event_next_ = eEVENT::TITLE;
 		}
 		break;
@@ -436,15 +413,13 @@ void NyaWindow::Mission(void)
 	// NyaMission::Run()の引数にeEVENT::MISSION_COMPLETEを渡してミッションコンプリート時の処理をさせる
 	// - mission complete 画面の表示が終わったとき
 	// 1. インターフェースの初期化
-	// 2. NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡してミッションを削除させる
-	// 3. eEVENT::TITLEに遷移する
+	// 2. eEVENT::TITLEに遷移する
 	case eEVENT::MISSION_REPLAY_COMPLETE:
 		if (NyaInterface::GetHandleComplete()->valid_)
 			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_REPLAY_COMPLETE);
 		else
 		{
 			NyaInterface::Init();
-			child_.mission_collection_[child_.mission_index_]->Run(eEVENT::MISSION_DELETE);
 			event_next_ = eEVENT::TITLE;
 		}
 		break;
@@ -761,8 +736,12 @@ void NyaWindow::Title(void)
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{	
 		// スキルのUIをクリア
-		// child_.mission_collection_[0]からミッション開始
+		// 前回のミッション内容が残っていることもあるので
+		// NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡して全ミッションをクリアしておく
+		// child_.mission_collection_[0]からミッション開始するためindexを0にする
 		ihandle_mission_skill->Clear();	
+		for (auto& e : child_.mission_collection_)
+			e->Run(eEVENT::MISSION_DELETE);
 		child_.mission_index_ = 0;
 
 		// ミッションの開始なら乱数の初期化と時刻の取得をおこなう

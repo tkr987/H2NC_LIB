@@ -24,6 +24,9 @@ TeemoLock::TeemoLock(eLOCK type)
 	case eLOCK::AQUIFICAE:
 		NyaGraphic::Load("img/target/lock_aquificae.png", &gpx_->file_);
 		break;
+	case eLOCK::CHLOROBI:
+		NyaGraphic::Load("img/target/lock_chlorobi.png", &gpx_->file_);
+		break;
 	case eLOCK::CHLAMYDIAE:
 		NyaGraphic::Load("img/target/lock_chlamydiae.png", &gpx_->file_);
 		break;
@@ -32,6 +35,9 @@ TeemoLock::TeemoLock(eLOCK type)
 		break;
 	case eLOCK::ECTROMELIA:
 		NyaGraphic::Load("img/target/lock_ectromelia.png", &gpx_->file_);
+		break;
+	case eLOCK::FIRMICUTES:
+		NyaGraphic::Load("img/target/lock_firmicutes.png", &gpx_->file_);
 		break;
 	case eLOCK::PANTOEA:
 		NyaGraphic::Load("img/target/lock_pantoea.png", &gpx_->file_);

@@ -43,24 +43,25 @@ namespace HNLIB
 	@brief continue 操作クラス
 	@note
 	 ライブラリ使用者はvalid_とrecovery_以外のメンバ変数を使う必要はない。
-	 - recovery_:
-	 値を設定するとコンテニュー画面から戻ったときライフ数に反映される。
-	 デフォルトでは値1に設定されている。
-	 - valid_:
-	 trueにするとコンテニュー画面を表示する。
-	 [enter]キーで選択するとコンテニュー画面は自動的に閉じられる。
 	 - cnum_:
 	 0ならMISSION_COMPLETE時にリプレイをセーブするイベントに移行。
 	 0以外ならMISSION_COMPLETE時にリプレイをセーブしない。
-	 コンテニュー画面に表示される選択肢は2つなので、メンバ変数select_の値は[0,1]のみ。
-	 メンバselect_の値を[0,1]以外にすると選択できなくなる。
+	 - recovery_:
+	 値を設定するとコンテニュー画面から戻ったときライフ数に反映される。
+	 デフォルトでは値1に設定されている。
+	 - select_;
+	 continue画面で現在選択している項目。
+	 - valid_:
+	 trueにするとコンテニュー画面を表示する。
+	 [enter]キーで選択が決定されたとき自動的にfalseになり、コンテニュー画面が自動的に閉じる。
 	**/
 	class InterfaceHandleContinue
 	{
 	public:
+		enum class eSELECT { YES, NO };
 		unsigned int cnum_;				//!< continue回数
 		unsigned int recovery_;			//!< continueから戻ったときのライフ数
-		int select_;					//!< continue画面で現在選択している項目
+		eSELECT select_;				//!< continue画面で現在選択している項目
 		bool valid_;					//!< continue画面表示の有効化
 		void Clear();
 	};
@@ -175,7 +176,7 @@ namespace HNLIB
 		static void DrawInput(int x, int y);
 		static void DrawLife(int x, int y);
 		static void DrawLIB(int x, int y);
-		static void DrawSkill(int x, int y);
+		static void DrawSkill(int x, int y, eEVENT event_check);
 		static void DrawTitle(int x, int y);
 		static void DrawWarning(int x, int y);
 	};

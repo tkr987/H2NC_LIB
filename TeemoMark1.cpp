@@ -10,6 +10,7 @@
 using namespace std;
 using namespace HNLIB;
 
+
 //*************************************
 // Act1(), Draw1() ‚ÅŽg‚¤ƒNƒ‰ƒX
 //*************************************
@@ -97,7 +98,7 @@ TeemoDevice121::~TeemoDevice121()
 // TeemoMain
 //*****************
 
-TeemoMain1::TeemoMain1() : health_max_(17000) 
+TeemoMain1::TeemoMain1() : health_max_(18000) 
 {
 	lock_ = new TeemoLock(eLOCK::TEEMO_MARK1);
 
@@ -111,7 +112,6 @@ TeemoMain1::TeemoMain1() : health_max_(17000)
 	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death_spx_);
 
 	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = 1.5;
 	NyaGraphic::Load("img/target/teemo_mark1.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
@@ -429,6 +429,8 @@ void TeemoMark1::Act2(void)
 	{	// main UŒ‚
 		main_.device121_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device121_.dpx_->create_y_ = main_.phandle_->grid_y_;
+		main_.device121_.dpx_->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
+		NyaDevice::Attack1414(main_.device121_.dpx_, main_.device121_.gadget_gpx_, main_.device121_.epx_, main_.device121_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device121_.dpx_->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);
 		NyaDevice::Attack1414(main_.device121_.dpx_, main_.device121_.gadget_gpx_, main_.device121_.epx_, main_.device121_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device121_.dpx_->move_angle_deg_ = NyaInput::GetRand(0.0, 360.0);

@@ -18,7 +18,7 @@ void TeemoMission4::Create(void)
 	//*******************************************
 	AddTarget(3, 3600, new TeemoEx);
 
-	//AddUser(new UserAi);
+	AddUser(new UserAi);
 }
 
 void TeemoMission4::Delete(void)

@@ -10,17 +10,39 @@
 #include "NyaString.h"
 #include "UserAi.h"
 
+#define USER_BARRIER_EXTEND_MAX_RATE	0.4
+#define USER_MAIN_COLLISION_RANGE		5
 #define __DEBUG__
 
 using namespace std;
 using namespace HNLIB;
 
+UserAiBarrier::UserAiBarrier()
+{
+	count_frame_ = 0;
+	valid_ = false;
+
+	gpx_ = new GraphicPropertyX4;
+	gpx_->extend_rate_ = USER_BARRIER_EXTEND_MAX_RATE;
+	NyaGraphic::Load("img/user/barrier.png", &gpx_->file_);
+}
+
+UserAiBarrier::~UserAiBarrier()
+{
+	NyaGraphic::Delete(&gpx_->file_);
+
+	delete gpx_;
+	gpx_ = nullptr;
+}
 
 UserAiDevice::UserAiDevice()
 {
+	sound_index_ = 0;
+
 	bit_gpx_ = new GraphicPropertyX4;
 	bit_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::Load(16, 1,"img/user/bit.png", &bit_gpx_->file_);
+	bit_gpx_->draw_angle_deg_ = -90;
+	NyaGraphic::Load(9, 1,"img/user/bit.png", &bit_gpx_->file_);
 
 	gadget_dpx_ = new DevicePropertyX1;
 	gadget_dpx_->collision_range_ = 10;
@@ -79,19 +101,26 @@ UserAiDevice::~UserAiDevice()
 
 UserAiDeviceEx::UserAiDeviceEx()
 {
-	bit_gpx_ = new GraphicPropertyX4;
-	gadget_dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
-	effect_epx_ = new EffectPropertyX2;
-	effect_gpx_ = new GraphicPropertyX4;
+	count_ult_frame_ = 0;
+	sound_index_ = 0;
+	valid_ = false;
 
+	bit_gpx_ = new GraphicPropertyX4;
 	bit_gpx_->extend_rate_ = 0.5;
-	NyaGraphic::Load(16, 1,"img/user/bit.png", &bit_gpx_->file_);
+	NyaGraphic::Load(9, 1, "img/user/bit.png", &bit_gpx_->file_);
+
+	gadget_dpx_ = new DevicePropertyX1;
 	gadget_dpx_->collision_range_ = 2;
 	gadget_dpx_->move_speed_ = 20;
+
+	gadget_gpx_ = new GraphicPropertyX4;
 	gadget_gpx_->extend_rate_ = 0.2;
 	NyaGraphic::Load("img/user/attack_ex.png", &gadget_gpx_->file_);
+
+	effect_epx_ = new EffectPropertyX2;
 	effect_epx_->interval_time_frame_ = 2;
+
+	effect_gpx_ = new GraphicPropertyX4;
 	effect_gpx_->extend_rate_ = 0.5;
 	NyaGraphic::Load(8, 2, "img/user/attack_ex_effect.png", &effect_gpx_->file_);
 }
@@ -101,6 +130,7 @@ UserAiDeviceEx::~UserAiDeviceEx()
 	NyaGraphic::Delete(&bit_gpx_->file_);
 	NyaGraphic::Delete(&gadget_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
+
 	delete bit_gpx_;
 	bit_gpx_ = nullptr;
 	delete gadget_dpx_;
@@ -117,35 +147,48 @@ UserAiMain::UserAiMain()
 {
 	death_epx_ = new EffectPropertyX1;
 	death_epx_->interval_time_frame_ = 3;
+
 	death_gpx_ = new GraphicPropertyX4;
 	NyaGraphic::Load(4, 2, "img/user/death.png", &death_gpx_->file_);
+
+	death_spx_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_death.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 35);
 
 	gpx_ = new GraphicPropertyX4;
 	NyaGraphic::Load(8, 2, "img/user/main.png", &gpx_->file_);
 	gpx_->extend_rate_ = 0.4;
-	gpx_->draw_angle_deg_ = 0;
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->health_ = 1;
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 5;
-	phandle_->grid_x_ = 100;
-	phandle_->grid_y_ = 500;
+	phandle_->collision_range_ = USER_MAIN_COLLISION_RANGE;
+	phandle_->grid_x_ = SCREEN_CENTER_X;
+	phandle_->grid_y_ = SCREEN_MAX_Y - 150;
 	phandle_->name_ = "user";
 
 	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
-	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 1;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 1;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 1600001;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 1600001;
+	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 15001;
 	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 800001;
 }
 
 UserAiMain::~UserAiMain()
 {
 	NyaGraphic::Delete(&death_gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 	NyaGraphic::Delete(&gpx_->file_);
+
+	delete death_epx_;
+	death_epx_ = nullptr;
+	delete death_gpx_;
+	death_gpx_ = nullptr;
+	delete death_spx_;
+	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 
@@ -162,101 +205,148 @@ UserAiRange::~UserAiRange()
 	gpx_ = nullptr;
 }
 
+UserSkill::UserSkill()
+{
+	spx_q_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_q_->file_);
+	NyaSound::ChangeVolume(&spx_q_->file_, 30);
+	spx_w_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_w_->file_);
+	NyaSound::ChangeVolume(&spx_w_->file_, 30);
+	spx_e_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_e_->file_);
+	NyaSound::ChangeVolume(&spx_e_->file_, 30);
+	spx_r_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_r_->file_);
+	NyaSound::ChangeVolume(&spx_r_->file_, 30);
+
+	gpx_q_ = new GraphicPropertyX4;
+	gpx_q_->extend_rate_ = 0.2;
+	NyaGraphic::Load("img/user/skill_q.png", &gpx_q_->file_);
+	gpx_w_ = new GraphicPropertyX4;
+	gpx_w_->extend_rate_ = 0.2;
+	NyaGraphic::Load("img/user/skill_w.png", &gpx_w_->file_);
+	gpx_e_ = new GraphicPropertyX4;
+	gpx_e_->extend_rate_ = 0.2;
+	NyaGraphic::Load("img/user/skill_e.png", &gpx_e_->file_);
+	gpx_r_ = new GraphicPropertyX4;
+	gpx_r_->extend_rate_ = 0.2;
+	NyaGraphic::Load("img/user/skill_r.png", &gpx_r_->file_);
+}
+
+UserSkill::~UserSkill()
+{
+	NyaGraphic::Delete(&gpx_q_->file_);
+	NyaGraphic::Delete(&gpx_w_->file_);
+	NyaGraphic::Delete(&gpx_e_->file_);
+	NyaGraphic::Delete(&gpx_r_->file_);
+
+	NyaSound::Delete(&spx_q_->file_);
+	NyaSound::Delete(&spx_w_->file_);
+	NyaSound::Delete(&spx_e_->file_);
+	NyaSound::Delete(&spx_r_->file_);
+
+	delete gpx_q_;
+	gpx_q_ = nullptr;
+	delete gpx_w_;
+	gpx_w_ = nullptr;
+	delete gpx_e_;
+	gpx_e_ = nullptr;
+	delete gpx_r_;
+	gpx_r_ = nullptr;
+
+	delete spx_q_;
+	spx_q_ = nullptr;
+	delete spx_w_;
+	spx_w_ = nullptr;
+	delete spx_e_;
+	spx_e_ = nullptr;
+	delete spx_r_;
+	spx_r_ = nullptr;
+}
+
 UserAi::UserAi(void)
 {
-	InterfaceHandleSkill* ihandle_mission_skill = NyaInterface::GetHandleSkill();
-
 	count_frame_ = 0;
 
 	// interface スキル 設定
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)] =  300000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)] =  600000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)] =  900000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)] = 1200000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)] =  300000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)] =  600000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)] =  900000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)] = 1200000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::E)] =    5000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)] =   10000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)] =   15000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)] =   20000;
-	ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::R)] =  400000;
-	ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::R)] =  800000;
-	ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::R)] = 1200000;
-	ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::R)] = 1600000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::Q)] =  400000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::Q)] =  800000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::Q)] = 1200000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)] = 1600000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::W)] =  400000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::W)] =  800000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::W)] = 1200000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::W)] = 1600000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)] =    5000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::E)] =   10000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::E)] =   15000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::E)] =   20000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::R)] =  300000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::R)] =  600000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::R)] =  900000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::R)] = 1200000;
+
+	// interface 残機設定
+//	NyaInterface::GetHandleLife()->value_ = 2;
+	NyaInterface::GetHandleLife()->value_ = 4;
 
 	// 衝突判定設定
 	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
 	NyaPosition::CollisionPair(eOBJECT::USER1, eOBJECT::TARGET_ATTACK1);
 	NyaPosition::CollisionPair(eOBJECT::USER1, eOBJECT::TARGET1);
-
-	// デバッグ
-	NyaString::SettingFont("teemo_font", 10, 2);
 }
 
 UserAi::~UserAi()
 {
-	NyaGraphic::Delete(&main_.gpx_->file_);
+
 }
 
+//**********************
+// UserAi メンバ関数
+//**********************
 void UserAi::Act(void)
 {
-	// 移動処理
-	Act_Move();
-
 	// 攻撃処理
 	Act_Ult();
 	Act_Attack();
 	Act_AttackEx();
 
+	// スキル変更
+	Act_ChangeSkill();
 	// 衝突判定
-//	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
-	if (main_.phandle_->collision_hit_damage_ != 0)
-	{
-		size_t size = 0;
-		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK1);
-		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK2);
-		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK3);
-		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK4);
-		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK5);
-		NyaInterface::GetHandleSkill()->AddExp((unsigned int)size);
-		NyaInterface::GetHandleLife()->value_--;
-		if (NyaInterface::GetHandleLife()->value_ == 0)
-			NyaInterface::GetHandleContinue()->valid_ = true;
-	}
+	Act_Collide();
+	// 移動処理
+	Act_Move();
 
 	count_frame_++;
 }
 
 /**
-@brief 攻撃処理関数
+@brief 攻撃をする(通常状態のとき)
 **/
 void UserAi::Act_Attack(void)
 {
-	int device_collision_accuracy = 2;
-	InterfaceHandleSkill *ihandle_mission_skill = NyaInterface::GetHandleSkill();
-	int exp_q = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::Q)];
-	int lv1_exp_q = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)];
-	int lv2_exp_q = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)];
-	int lv3_exp_q = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)];
-	int lv4_exp_q = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)];
-	int exp_w = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::W)];
-	int lv1_exp_w = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)];
-	int lv2_exp_w = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)];
-	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
-	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
-	static int sound_index = 0;
+	const int device_collision_accuracy = 2;
+	int exp_q = NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::Q)];
+	int lv1_exp_q = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::Q)];
+	int lv2_exp_q = NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::Q)];
+	int lv3_exp_q = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::Q)];
+	int lv4_exp_q = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)];
+	int exp_w = NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::W)];
+	int lv1_exp_w = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::W)];
+	int lv2_exp_w = NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::W)];
+	int lv3_exp_w = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::W)];
+	int lv4_exp_w = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::W)];
 
-	// ウルト実行中ならば、この関数では何もしない
+	// ウルト実行中の時は何もしない
 	if (device_ex_.valid_)
 		return;
 
-	// 発射音の再生
 	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 6 == 0)
-	{
-		NyaSound::Play(device_.spx_[sound_index]);
-		sound_index = (++sound_index) % 6;
+	{	// 発射SEの再生
+		NyaSound::Play(device_.spx_[device_.sound_index_]);
+		device_.sound_index_ = (++device_.sound_index_) % 6;
 	}
 
 
@@ -457,33 +547,30 @@ void UserAi::Act_Attack(void)
 }
 
 /**
-@brief 攻撃処理関数
+@brief 攻撃をする(ult状態のとき)
 **/
 void UserAi::Act_AttackEx(void)
 {
-	int device_collision_accuracy = 2;
-	InterfaceHandleSkill *ihandle_mission_skill = NyaInterface::GetHandleSkill();
-	int exp_q = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::Q)];
-	int lv1_exp_q = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::Q)];
-	int lv2_exp_q = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::Q)];
-	int lv3_exp_q = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::Q)];
-	int lv4_exp_q = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::Q)];
-	int exp_w = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::W)];
-	int lv1_exp_w = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::W)];
-	int lv2_exp_w = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::W)];
-	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
-	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
-	static int sound_index = 0;
+	const int device_collision_accuracy = 2;
+	int exp_q = NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::Q)];
+	int lv1_exp_q = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::Q)];
+	int lv2_exp_q = NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::Q)];
+	int lv3_exp_q = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::Q)];
+	int lv4_exp_q = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)];
+	int exp_w = NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::W)];
+	int lv1_exp_w = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::W)];
+	int lv2_exp_w = NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::W)];
+	int lv3_exp_w = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::W)];
+	int lv4_exp_w = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::W)];
 
-	// ウルト実行中でないなら、この関数では何もしない
+	// ウルト実行中でない時は何もしない
 	if (!device_ex_.valid_)
 		return;
 
-	// 発射音の再生
 	if (NyaInput::GetKeyStateNow(eINPUT::Q) == true && count_frame_ % 6 == 0)
-	{
-		NyaSound::Play(device_.spx_ex_[sound_index]);
-		sound_index = (++sound_index) % 6;
+	{	// 発射音の再生
+		NyaSound::Play(device_.spx_ex_[device_ex_.sound_index_]);
+		device_ex_.sound_index_ = (++device_ex_.sound_index_) % 6;
 	}
 
 
@@ -723,17 +810,63 @@ void UserAi::Act_AttackEx(void)
 	}
 }
 
+void UserAi::Act_ChangeSkill(void)
+{
+	if (NyaInput::IsPressKey(eINPUT::SPACE))
+	{	// スキル切り替え時のSE再生
+		if (NyaInterface::GetHandleSkill()->select_ == eSKILL::Q)
+			NyaSound::Play(skill_.spx_q_);
+		else if (NyaInterface::GetHandleSkill()->select_ == eSKILL::W)
+			NyaSound::Play(skill_.spx_w_);
+		else if (NyaInterface::GetHandleSkill()->select_ == eSKILL::E)
+			NyaSound::Play(skill_.spx_e_);
+		else
+			NyaSound::Play(skill_.spx_r_);
+	}
+}
 
+void UserAi::Act_Collide(void)
+{
+	NyaPosition::Collide(main_.phandle_, eOBJECT::USER1);
+	if (main_.phandle_->collision_hit_damage_ != 0 && !barrier_.valid_)
+	{	// オブジェクトTARGETまたはTARGET_ATTACKと衝突した
+		size_t size = 0;
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK1);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK2);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK3);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK4);
+		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK5);
+		NyaInterface::GetHandleSkill()->AddExp((unsigned int)size);
+		NyaInterface::GetHandleLife()->value_--;
+		NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::R)] = 400000;
+		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+		NyaSound::Play(main_.death_spx_);
+		if (NyaInterface::GetHandleLife()->value_ == 0)
+			NyaInterface::GetHandleContinue()->valid_ = true;
+	}
+
+	// バリア時の衝突判定変更
+	if (barrier_.valid_)
+		main_.phandle_->collision_range_ = USER_MAIN_COLLISION_RANGE + 15;
+	else
+		main_.phandle_->collision_range_ = USER_MAIN_COLLISION_RANGE;
+}
+
+/**
+@brief userを移動する
+**/
 void UserAi::Act_Move(void)
 {
 	int speed;
-	InterfaceHandleSkill *ihandle_mission_skill = NyaInterface::GetHandleSkill();
-	int exp_e = ihandle_mission_skill->exp_[static_cast<int>(eSKILL::E)];
-	int lv1_exp_e = ihandle_mission_skill->lv1_exp_[static_cast<int>(eSKILL::E)];
-	int lv2_exp_e = ihandle_mission_skill->lv2_exp_[static_cast<int>(eSKILL::E)];
-	int lv3_exp_e = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::E)];
-	int lv4_exp_e = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::E)];
+	int exp_e = NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)];
+	int lv1_exp_e = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)];
+	int lv2_exp_e = NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::E)];
+	int lv3_exp_e = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::E)];
+	int lv4_exp_e = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::E)];
 
+	//*********************************
+	// 入力に応じて移動量を決める
+	//*********************************
 	if (NyaInput::GetKeyStateNow(eINPUT::W))
 	{
 		if     (exp_e < lv1_exp_e)
@@ -762,6 +895,9 @@ void UserAi::Act_Move(void)
 
 	}
 
+	//*********************************
+	// 入力に応じて座標を更新する
+	//*********************************
 	if (NyaInput::GetKeyStateNow(eINPUT::RIGHT))
 	{
 		if (NyaInput::GetKeyStateNow(eINPUT::UP))
@@ -823,7 +959,9 @@ void UserAi::Act_Move(void)
 			main_.phandle_->grid_y_ += speed;
 	}
 
+	//******************
 	// 境界チェック
+	//******************
 	if (main_.phandle_->grid_x_ < SCREEN_MIN_X + 20)
 		main_.phandle_->grid_x_ = SCREEN_MIN_X + 20;
 	if (main_.phandle_->grid_y_ < SCREEN_MIN_Y + 40)
@@ -835,7 +973,7 @@ void UserAi::Act_Move(void)
 }
 
 /**
- @brief ウルトの実行
+ @brief ウルト発動した瞬間の処理をする
 **/
 void UserAi::Act_Ult(void)
 {
@@ -876,7 +1014,7 @@ void UserAi::Act_Ult(void)
 
 
 /**
- @brief 描画関数
+ @brief userを描画する
 **/
 void UserAi::Draw(void)
 {
@@ -888,7 +1026,42 @@ void UserAi::Draw(void)
 	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
 
 	//*************
-	// main描画
+	// skill 描画
+	//*************
+	if (!barrier_.valid_)
+	{
+		if (NyaInterface::GetHandleSkill()->select_ == eSKILL::Q)
+		{
+			skill_.gpx_q_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
+			skill_.gpx_q_->draw_grid_cy_ = (int)main_.phandle_->grid_y_ - 8;
+			skill_.gpx_q_->draw_angle_deg_ += 2;
+			NyaGraphic::Draw(skill_.gpx_q_, eOBJECT::USER1);
+		}
+		else if (NyaInterface::GetHandleSkill()->select_ == eSKILL::W)
+		{
+			skill_.gpx_w_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
+			skill_.gpx_w_->draw_grid_cy_ = (int)main_.phandle_->grid_y_ - 8;
+			skill_.gpx_w_->draw_angle_deg_ += 2;
+			NyaGraphic::Draw(skill_.gpx_w_, eOBJECT::USER1);
+		}
+		else if (NyaInterface::GetHandleSkill()->select_ == eSKILL::E)
+		{
+			skill_.gpx_e_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
+			skill_.gpx_e_->draw_grid_cy_ = (int)main_.phandle_->grid_y_ - 8;
+			skill_.gpx_e_->draw_angle_deg_ += 2;
+			NyaGraphic::Draw(skill_.gpx_e_, eOBJECT::USER1);
+		}
+		else
+		{
+			skill_.gpx_r_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
+			skill_.gpx_r_->draw_grid_cy_ = (int)main_.phandle_->grid_y_ - 8;
+			skill_.gpx_r_->draw_angle_deg_ += 2;
+			NyaGraphic::Draw(skill_.gpx_r_, eOBJECT::USER1);
+		}
+	}
+
+	//*************
+	// main 描画
 	//*************
 	main_.gpx_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = (int)main_.phandle_->grid_y_;
@@ -897,11 +1070,12 @@ void UserAi::Draw(void)
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::USER1);
 
 	//*************
-	// bit描画
+	// bit 描画
 	//*************
 	if (!NyaInput::GetKeyStateNow(eINPUT::W))
 	{
-		device_.bit_gpx_->file_div_ = ++device_.bit_gpx_->file_div_ % 16;
+		if (NyaInput::GetFrameCount() % 2 == 0)
+			device_.bit_gpx_->file_div_ = ++device_.bit_gpx_->file_div_ % device_.bit_gpx_->file_.div_total_;
 		if (lv1_exp_w <= exp_w)
 		{
 			device_.bit_gpx_->draw_grid_cx_ = main_.phandle_->grid_x_ - 35;
@@ -943,12 +1117,30 @@ void UserAi::Draw(void)
 	//******************
 	// 衝突エフェクト
 	//******************
-	if (main_.phandle_->collision_hit_damage_ != 0)
+	if (main_.phandle_->collision_hit_damage_ != 0 && !barrier_.valid_)
 	{
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::USER_EFFECT1);
-		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+		// barrier 有効化
+		barrier_.count_frame_ = 0;
+		barrier_.valid_ = true;
+		barrier_.gpx_->extend_rate_ = USER_BARRIER_EXTEND_MAX_RATE;
+	}
+
+	//***********************
+	// barrier エフェクト
+	//***********************
+	if (barrier_.valid_)
+	{
+		barrier_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
+		barrier_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_ - 10;
+		barrier_.gpx_->draw_angle_deg_ += 2;
+		barrier_.gpx_->extend_rate_ -= 0.002;
+		NyaGraphic::Draw(barrier_.gpx_, eOBJECT::USER_EFFECT1);
+		barrier_.count_frame_++;
+		if (barrier_.count_frame_ == FPS_MAX * 3)
+			barrier_.valid_ = false;
 	}
 
 #ifdef __DEBUG__
@@ -956,11 +1148,8 @@ void UserAi::Draw(void)
 	range_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	range_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;	
 	NyaGraphic::Draw(range_.gpx_, eOBJECT::USER1);
-	// デバッグ情報
-	const tuple<int, int, int> white = make_tuple(255, 255, 255);
-	NyaString::Write("teemo_font", white, 50, 70, "[50, 70] teemo count = %d", (int)count_frame_);
-	NyaString::Write("teemo_font", white, 50, 110, "[50, 110] teemo x = %d", (int)main_.phandle_->grid_x_);
-	NyaString::Write("teemo_font", white, 50, 130, "[50, 130] teemo y = %d", (int)main_.phandle_->grid_y_);
 #endif
 
 }
+
+

@@ -14,7 +14,7 @@ Target1ChlamydiaeCubeDevice::Target1ChlamydiaeCubeDevice()
 	gadget_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	dpx_->move_speed_ = 8;
+	dpx_->move_speed_ = 7;
 	TeemoFactory::TargetAttackOrange1(dpx_, gadget_gpx_, epx_, effect_gpx_);
 }
 
@@ -68,7 +68,7 @@ Target1ChlamydiaeMainDevice::Target1ChlamydiaeMainDevice()
 	gadget_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	dpx_->move_speed_ = 6;
+	dpx_->move_speed_ = 5;
 	TeemoFactory::TargetAttackBlue2(dpx_, gadget_gpx_, epx_, effect_gpx_);
 }
 
@@ -84,7 +84,7 @@ Target1ChlamydiaeMainDevice::~Target1ChlamydiaeMainDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target1ChlamydiaeMain::Target1ChlamydiaeMain() : health_max_(5000) 
+Target1ChlamydiaeMain::Target1ChlamydiaeMain() : health_max_(3000) 
 {
 	lock_ = new TeemoLock(eLOCK::CHLAMYDIAE);
 
@@ -225,10 +225,10 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 8; n++)
+			for (int n = 0; n < 6; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-				cube_dpx->delay_time_frame_ += 2;
+				cube_dpx->delay_time_frame_ += 3;
 			}
 			cube_dpx->move_angle_deg_ += 90;	
 		}
@@ -243,10 +243,10 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 8; n++)
+			for (int n = 0; n < 6; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-				cube_dpx->delay_time_frame_ += 2;
+				cube_dpx->delay_time_frame_ += 3;
 			}
 			cube_dpx->move_angle_deg_ += 90;	
 		}
@@ -261,10 +261,10 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 8; n++)
+			for (int n = 0; n < 6; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-				cube_dpx->delay_time_frame_ += 2;
+				cube_dpx->delay_time_frame_ += 3;
 			}
 			cube_dpx->move_angle_deg_ += 90;	
 		}
@@ -279,10 +279,10 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 8; n++)
+			for (int n = 0; n < 6; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-				cube_dpx->delay_time_frame_ += 2;
+				cube_dpx->delay_time_frame_ += 3;
 			}
 			cube_dpx->move_angle_deg_ += 90;	
 		}
@@ -310,7 +310,7 @@ void Target1Chlamydiae::Act1(void)
 		main_.device2_.dpx_->move_angle_deg_ += 10;
 	}
 
-	if (count_frame_ == FPS_MAX * 20)
+	if (count_frame_ == FPS_MAX * 18)
 		NyaPosition::MoveGridMode(main_.phandle_, main_.phandle_->grid_x_, -200, FPS_MAX * 2);
 }
 

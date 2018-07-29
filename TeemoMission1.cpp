@@ -1,6 +1,8 @@
 #include "Target1Aquificae.h"
 #include "Target1Chlamydiae.h"
+#include "Target1Chlorobi.h"
 #include "Target1Dictyoglomi.h"
+#include "Target1Firmicutes.h"
 #include "Target1Pantoea.h"
 #include "Target1Tenericutes.h"
 #include "TeemoBack1.h"
@@ -67,8 +69,31 @@ void TeemoMission1::Create(void)
 
 	ctime = 50;
 	AddTarget(ctime, ctime + 60, new Target1Chlamydiae(SCREEN_CENTER_X, -200));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(100, -80));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(150, -80));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(200, -80));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 200, -80));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 150, -80));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 100, -80));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(100, -200));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(150, -200));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(200, -200));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 200, -200));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 150, -200));
+	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 100, -200));
 
-	ctime = 80;
+	ctime = 70;
+	for (int i = 0; i < 8; i++)
+	{
+		AddTarget(ctime, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime + 1, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime + 2, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime + 3, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime + 4, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime + 5, ctime + 20, new Target1Chlorobi());
+	}
+
+	ctime = 78;
 	AddTarget(ctime, ctime + 600, new TeemoMark1);
 
 

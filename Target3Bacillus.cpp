@@ -36,18 +36,15 @@ Target3BacillusDevice::~Target3BacillusDevice()
 Target3BacillusDeathDevice::Target3BacillusDeathDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->move_speed_ = 4;
 	gadget_gpx_ = new GraphicPropertyX4;
-	TeemoFactory::TargetAttackWhite5(dpx_, gadget_gpx_);
 	epx_ = new EffectPropertyX1;
-	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
+	dpx_->move_speed_ = 4;
+	TeemoFactory::TargetAttackWhite5(dpx_, gadget_gpx_, epx_, effect_gpx_);
 }
 
 Target3BacillusDeathDevice::~Target3BacillusDeathDevice()
 {
-	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete gadget_gpx_;

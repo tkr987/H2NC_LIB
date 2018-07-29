@@ -49,6 +49,8 @@ void NyaInput::Init(void)
 	if (local_time.tm_min < 10)
 		output_date_ << "0";
 	output_date_ << local_time.tm_min;
+
+	// 入力保存用(リプレイセーブ用)コンテナのクリア
 	save_state_collection_.clear();
 }
 
@@ -71,6 +73,7 @@ bool NyaInput::InputReplay(string file_name)
 	// タイトルなので3行目も読み飛ばす
 	getline(ifs, line);	
 	// リプレイファイルに書かれたキー入力の内容を全て読み込む
+	save_state_collection_.clear();
 	while (getline(ifs, line))
 	{
 		save_state_collection_.push_back(atoi(line.c_str()));

@@ -26,7 +26,7 @@ public:
 	static void TargetAttackOrange9(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gadget_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackPurple3(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gadget_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackRed5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
-	static void TargetAttackWhite5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx);
+	static void TargetAttackWhite5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackYellow1(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gadget_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackYellow2(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gadget_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetCube(HNLIB::GraphicPropertyX4* gpx);

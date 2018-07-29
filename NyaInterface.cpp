@@ -39,7 +39,7 @@ void InterfaceHandleContinue::Clear()
 {
 	cnum_ = 0;
 	recovery_ = 1;
-	select_ = 0;
+	select_ = InterfaceHandleContinue::eSELECT::YES;
 	valid_ = false;
 }
 
@@ -130,7 +130,7 @@ void NyaInterface::Run(eEVENT event_check)
 	DrawBlack(850, 0, 1280, 720);
 	DrawTitle(875, 35);
 	DrawLife(875, 75);
-	DrawSkill(875, 135);
+	DrawSkill(875, 135, event_check);
 	DrawLIB(910, 520);
 	DrawInput(875, 640);
 
@@ -193,23 +193,33 @@ void NyaInterface::DrawContinue(int x, int y, eEVENT event_check)
 	if (event_check != eEVENT::MISSION_RUN && event_check != eEVENT::MISSION_CONTINUE)
 		return;
 
+	//***********************
+	// continue 画面表示
+	//***********************
 	DrawBox(x, y, x + 400, y + 200, black, true);
-
-	if (handle_continue_.select_ == 0)
+	if (handle_continue_.select_ == InterfaceHandleContinue::eSELECT::YES)
 		NyaString::Write("interface_continue_font", red, x + 20, y + 80, "★");
-	if (handle_continue_.select_ == 1)
+	if (handle_continue_.select_ == InterfaceHandleContinue::eSELECT::NO)
 		NyaString::Write("interface_continue_font", red, x + 20, y + 130, "★");
-
-	if (NyaInput::IsPressKey(eINPUT::UP) || NyaInput::IsPressKey(eINPUT::DOWN))
-		handle_continue_.select_ = ++handle_continue_.select_ % 2;
 
 	NyaString::Write("interface_continue_font", white, x + 100, y + 20, "continue?");
 	NyaString::Write("interface_continue_font", white, x + 20, y + 80, "☆　yes");
 	NyaString::Write("interface_continue_font", white, x + 20, y + 130, "☆　no");
 
-	if (NyaInput::IsPressKey(eINPUT::ENTER))
+	//******************
+	// 選択肢の更新
+	//******************
+	if (NyaInput::IsPressKey(eINPUT::UP) || NyaInput::IsPressKey(eINPUT::DOWN))
 	{
-		if (handle_continue_.select_ == 0)
+		if (handle_continue_.select_ == InterfaceHandleContinue::eSELECT::YES)
+			handle_continue_.select_ = InterfaceHandleContinue::eSELECT::NO;
+		else
+			handle_continue_.select_ = InterfaceHandleContinue::eSELECT::YES;
+	}
+
+	if (NyaInput::IsPressKey(eINPUT::ENTER))
+	{	// 選択が決定された
+		if (handle_continue_.select_ == InterfaceHandleContinue::eSELECT::YES)
 			handle_continue_.cnum_++;
 		handle_continue_.valid_ = false;
 		handle_life_.value_ = handle_continue_.recovery_;
@@ -333,26 +343,10 @@ void NyaInterface::DrawLife(int x, int y)
 }
 
 
-void NyaInterface::DrawSkill(int x, int y)
+void NyaInterface::DrawSkill(int x, int y, eEVENT event_check)
 {
 	const tuple<int, int, int> red = make_tuple(255, 0, 0);
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
-
-	//***********************
-	// スキルの選択肢を更新
-	//***********************
-	if (NyaInput::IsPressKey(eINPUT::SPACE))
-	{
-		if      (handle_skill_.select_ == eSKILL::Q)
-			handle_skill_.select_ = eSKILL::W;
-		else if (handle_skill_.select_ == eSKILL::W)
-			handle_skill_.select_ = eSKILL::E;
-		else if (handle_skill_.select_ == eSKILL::E)
-			handle_skill_.select_ = eSKILL::R;
-		else
-			handle_skill_.select_ = eSKILL::Q;
-	}
-
 	
 	//***********************
 	// スキル選択肢の表示
@@ -420,6 +414,25 @@ void NyaInterface::DrawSkill(int x, int y)
 		}
 		NyaString::Write("interface_skill_font", white, x, y + 90 * (skill - 1) + 45, "□□□□");
 	}
+
+	if (event_check != eEVENT::MISSION_RUN && event_check != eEVENT::MISSION_REPLAY_RUN)
+		return;
+
+	//***********************
+	// スキルの選択肢を更新
+	//***********************
+	if (NyaInput::IsPressKey(eINPUT::SPACE))
+	{
+		if (handle_skill_.select_ == eSKILL::Q)
+			handle_skill_.select_ = eSKILL::W;
+		else if (handle_skill_.select_ == eSKILL::W)
+			handle_skill_.select_ = eSKILL::E;
+		else if (handle_skill_.select_ == eSKILL::E)
+			handle_skill_.select_ = eSKILL::R;
+		else
+			handle_skill_.select_ = eSKILL::Q;
+	}
+
 }
 
 void NyaInterface::DrawTitle(int x, int y)

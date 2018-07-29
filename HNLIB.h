@@ -4,10 +4,12 @@
 
 #include "NyaDevice.h"
 #include "NyaEffect.h"
+#include "NyaEnding.h"
 #include "NyaGraphic.h"
 #include "NyaInterface.h"
 #include "NyaInput.h"
 #include "NyaMission.h"
+#include "NyaOpening.h"
 #include "NyaPosition.h"
 #include "NyaSound.h"
 #include "NyaString.h"

@@ -1,23 +1,23 @@
 #include "HNLIB.h"
-#include "Target1Aquificae.h"
+#include "Target1Firmicutes.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
 #include "TeemoLock.h"
 
 using namespace HNLIB;
 
-Target1AquificaeMainDevice::Target1AquificaeMainDevice()
+Target1FirmicutesMainDevice::Target1FirmicutesMainDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	gadget_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackBlue2(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackOrange2(dpx_, gadget_gpx_, epx_, effect_gpx_);
 
 }
 
-Target1AquificaeMainDevice::~Target1AquificaeMainDevice()
+Target1FirmicutesMainDevice::~Target1FirmicutesMainDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
@@ -29,7 +29,7 @@ Target1AquificaeMainDevice::~Target1AquificaeMainDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target1AquificaeMain::Target1AquificaeMain() : exp_(5000), health_max_(30)
+Target1FirmicutesMain::Target1FirmicutesMain() : exp_(5000), health_max_(50)
 {
 	lock_ = new TeemoLock(eLOCK::AQUIFICAE);
 
@@ -40,14 +40,14 @@ Target1AquificaeMain::Target1AquificaeMain() : exp_(5000), health_max_(30)
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::Load(5, 3, "img/target/main_aquificae.png", &gpx_->file_);
+	NyaGraphic::Load(10, 2, "img/target/main_firmicutes.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_range_ = 16;
 	phandle_->health_ = health_max_;
 }
 
-Target1AquificaeMain::~Target1AquificaeMain()
+Target1FirmicutesMain::~Target1FirmicutesMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
 
@@ -63,7 +63,7 @@ Target1AquificaeMain::~Target1AquificaeMain()
 	NyaPosition::DeleteHandle(phandle_);
 }
 
-Target1Aquificae::Target1Aquificae(int x, int y)
+Target1Firmicutes::Target1Firmicutes(int x, int y)
 {
 	count_frame_ = 0;
 	main_.phandle_->grid_x_ = x;
@@ -71,12 +71,12 @@ Target1Aquificae::Target1Aquificae(int x, int y)
 	mode_ = 1;
 }
 
-Target1Aquificae::~Target1Aquificae()
+Target1Firmicutes::~Target1Firmicutes()
 {
 
 }
 
-void Target1Aquificae::Act(void)
+void Target1Firmicutes::Act(void)
 {
 	switch(mode_)
 	{
@@ -96,7 +96,7 @@ void Target1Aquificae::Act(void)
 	count_frame_++;
 }
 
-void Target1Aquificae::Draw(void)
+void Target1Firmicutes::Draw(void)
 {
 	switch(mode_)
 	{
@@ -112,7 +112,7 @@ void Target1Aquificae::Draw(void)
 	};
 }
 
-void Target1Aquificae::Act1(void)
+void Target1Firmicutes::Act1(void)
 {
 
 	if (!NyaPosition::InScreen(main_.phandle_))
@@ -123,23 +123,23 @@ void Target1Aquificae::Act1(void)
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
 
-	if (count_frame_ % 10 == 0)
+	if (main_.gpx_->file_div_== 1 && count_frame_ % 5 == 0)
 	{	// UŒ‚ˆ—
+		PositionHandle phandle_user;
+		NyaPosition::FindHandle("user", &phandle_user);
 		main_.device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device_.dpx_->create_y_ = main_.phandle_->grid_y_;
-		main_.device_.dpx_->move_angle_deg_ = 5.62;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
-		main_.device_.dpx_->move_angle_deg_ = 180 - 5.62;
+		main_.device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-3.0, 3.0);
 		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 }
 
-void Target1Aquificae::Draw1(void)
+void Target1Firmicutes::Draw1(void)
 {
 	// main •`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	if (NyaInput::GetFrameCount() % 20 == 0)
+	if (NyaInput::GetFrameCount() % 5 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;	
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	// main ƒƒbƒN•`‰æ

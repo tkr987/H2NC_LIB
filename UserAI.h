@@ -36,7 +36,7 @@ public:
 	int sound_index_;
 	HNLIB::GraphicPropertyX4* bit_gpx_;
 	HNLIB::DevicePropertyX1* gadget_dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX2* effect_epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	HNLIB::SoundPropertyX* spx_[6];
@@ -53,7 +53,7 @@ public:
 	bool valid_;
 	HNLIB::GraphicPropertyX4* bit_gpx_;
 	HNLIB::DevicePropertyX1* gadget_dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX2* effect_epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	UserAiDeviceEx();

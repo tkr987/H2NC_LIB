@@ -11,8 +11,8 @@ Target3ErwiniaDevice::Target3ErwiniaDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE2;
 	dpx_->move_speed_ = 9;
-	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_orange2.png", &gadget_gpx_->file_);
+	device_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/attack_orange2.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -21,12 +21,12 @@ Target3ErwiniaDevice::Target3ErwiniaDevice()
 
 Target3ErwiniaDevice::~Target3ErwiniaDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -36,11 +36,11 @@ Target3ErwiniaDevice::~Target3ErwiniaDevice()
 Target3ErwiniaDeathDevice::Target3ErwiniaDeathDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackWhite5(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackWhite5(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target3ErwiniaDeathDevice::~Target3ErwiniaDeathDevice()
@@ -48,8 +48,8 @@ Target3ErwiniaDeathDevice::~Target3ErwiniaDeathDevice()
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -185,7 +185,7 @@ void Target3Erwinia::Act2(void)
 		main_.device_.dpx_->move_angle_deg_ = 78;
 		for (int way = 0; way < 9; way++)
 		{
-			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
+			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1, 2);
 			main_.device_.dpx_->move_angle_deg_ += 3;
 		}
 	}
@@ -200,18 +200,18 @@ void Target3Erwinia::Act2(void)
 		dpx_angle = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-1.0, 1.0);
 		main_.device2_.dpx_->delay_time_frame_ = 0;
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle - 5;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle + 5;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->delay_time_frame_ = 10;
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle - 5;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle + 5;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 
 }

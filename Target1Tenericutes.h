@@ -18,7 +18,7 @@ class Target1TenericutesCubeDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	Target1TenericutesCubeDevice();
@@ -30,7 +30,7 @@ class Target1TenericutesMainDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	Target1TenericutesMainDevice();

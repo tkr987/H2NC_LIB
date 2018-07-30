@@ -21,7 +21,7 @@ class TeemoDevice211
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice211();
@@ -32,7 +32,7 @@ class TeemoDevice212
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice212();
@@ -63,7 +63,7 @@ class TeemoDevice221
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice221();
@@ -74,7 +74,7 @@ class TeemoDevice222
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice222();
@@ -85,7 +85,7 @@ class TeemoDevice223
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice223();
@@ -113,7 +113,7 @@ class TeemoDevice232
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoDevice232();

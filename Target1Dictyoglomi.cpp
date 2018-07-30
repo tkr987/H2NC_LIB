@@ -9,22 +9,22 @@ using namespace HNLIB;
 Target1DictyoglomiMainDevice::Target1DictyoglomiMainDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackOrange2(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackOrange2(dpx_, device_gpx_, epx_, effect_gpx_);
 
 }
 
 Target1DictyoglomiMainDevice::~Target1DictyoglomiMainDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -141,11 +141,11 @@ void Target1Dictyoglomi::Act1(void)
 
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ =  attack_angle - 5;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device_.dpx_->move_angle_deg_ = attack_angle;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device_.dpx_->move_angle_deg_ = attack_angle + 5;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 	
 	if (count_frame_ == FPS_MAX * 3)

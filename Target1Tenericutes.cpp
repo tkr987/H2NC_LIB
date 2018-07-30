@@ -11,19 +11,19 @@ using namespace HNLIB;
 Target1TenericutesCubeDevice::Target1TenericutesCubeDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 5;
-	TeemoFactory::TargetAttackOrange9(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackOrange9(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target1TenericutesCubeDevice::~Target1TenericutesCubeDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -65,19 +65,19 @@ Target1TenericutesCube::~Target1TenericutesCube()
 Target1TenericutesMainDevice::Target1TenericutesMainDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 6;
-	TeemoFactory::TargetAttackYellow2(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackYellow2(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target1TenericutesMainDevice::~Target1TenericutesMainDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -212,7 +212,7 @@ void Target1Tenericutes::Act1(void)
 	{	// cube UŒ‚
 		int cube_index = 0;
 		DevicePropertyX1* cube_dpx = cube_collection_[cube_index].device_.dpx_;
-		GraphicPropertyX4* cube_gadget_gpx = cube_collection_[cube_index].device_.gadget_gpx_;
+		GraphicPropertyX4* cube_gadget_gpx = cube_collection_[cube_index].device_.device_gpx_;
 		EffectPropertyX1* cube_epx = cube_collection_[cube_index].device_.epx_;
 		GraphicPropertyX4* cube_effect_gpx = cube_collection_[cube_index].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[cube_index].phandle_->grid_x_;
@@ -221,7 +221,7 @@ void Target1Tenericutes::Act1(void)
 		NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		cube_index = 1;
 		cube_dpx = cube_collection_[cube_index].device_.dpx_;
-		cube_gadget_gpx = cube_collection_[cube_index].device_.gadget_gpx_;
+		cube_gadget_gpx = cube_collection_[cube_index].device_.device_gpx_;
 		cube_epx = cube_collection_[cube_index].device_.epx_;
 		cube_effect_gpx = cube_collection_[cube_index].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[cube_index].phandle_->grid_x_;
@@ -238,11 +238,11 @@ void Target1Tenericutes::Act1(void)
 		NyaPosition::FindHandle("user", &phandle_user);
 		main_.device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user);
 		main_.device_.dpx_->delay_time_frame_ = 0;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device_.dpx_->delay_time_frame_ = 3;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device_.dpx_->delay_time_frame_ = 6;
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 }
 

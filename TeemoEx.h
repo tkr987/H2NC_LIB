@@ -18,7 +18,7 @@ class TeemoExDevice411
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice411();
@@ -33,7 +33,6 @@ public:
 	double move_angle_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
-	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoCube41();
@@ -47,7 +46,7 @@ class TeemoExDevice421
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice421();
@@ -58,7 +57,7 @@ class TeemoExDevice422
 {
 public:
 	HNLIB::DevicePropertyX2* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice422();
@@ -69,7 +68,7 @@ class TeemoExDevice423
 {
 public:
 	HNLIB::DevicePropertyX2* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice423();
@@ -80,7 +79,7 @@ class TeemoExDevice424
 {
 public:
 	HNLIB::DevicePropertyX2* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice424();
@@ -90,7 +89,10 @@ public:
 class TeemoExCube42
 {
 public:
-	TeemoExDevice421 device21_;
+	TeemoExDevice421 device421_;
+	TeemoLock* lock_;
+	HNLIB::EffectPropertyX1* death_epx_;
+	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoExCube42();
@@ -105,7 +107,7 @@ class TeemoExDevice431
 {
 public:
 	HNLIB::DevicePropertyX2* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice431();
@@ -116,7 +118,7 @@ class TeemoExDevice432
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	TeemoExDevice432();
@@ -171,7 +173,7 @@ public:
 private:
 	unsigned int count_frame_;
 	std::array<TeemoCube41, 8> cube41_collection_;
-	std::array<TeemoExCube42, 6> cube2_collection_;
+	std::array<TeemoExCube42, 6> cube42_collection_;
 	std::array<TeemoExCube43, 4> cube3_collection_;
 	TeemoEx4Main main_;
 	int mode_;

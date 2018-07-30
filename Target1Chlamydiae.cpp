@@ -11,19 +11,19 @@ using namespace HNLIB;
 Target1ChlamydiaeCubeDevice::Target1ChlamydiaeCubeDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 7;
-	TeemoFactory::TargetAttackOrange1(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackOrange1(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target1ChlamydiaeCubeDevice::~Target1ChlamydiaeCubeDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -65,19 +65,19 @@ Target1ChlamydiaeCube::~Target1ChlamydiaeCube()
 Target1ChlamydiaeMainDevice::Target1ChlamydiaeMainDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 5;
-	TeemoFactory::TargetAttackBlue2(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackBlue2(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target1ChlamydiaeMainDevice::~Target1ChlamydiaeMainDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -216,7 +216,7 @@ void Target1Chlamydiae::Act1(void)
 	{	// cube UŒ‚
 		int cube_index = 0;
 		DevicePropertyX1* cube_dpx = cube_collection_[cube_index].device_.dpx_;
-		GraphicPropertyX4* cube_gadget_gpx = cube_collection_[cube_index].device_.gadget_gpx_;
+		GraphicPropertyX4* cube_gadget_gpx = cube_collection_[cube_index].device_.device_gpx_;
 		EffectPropertyX1* cube_epx = cube_collection_[cube_index].device_.epx_;
 		GraphicPropertyX4* cube_effect_gpx = cube_collection_[cube_index].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[cube_index].phandle_->grid_x_;
@@ -234,7 +234,7 @@ void Target1Chlamydiae::Act1(void)
 		}
 		cube_index = 1;
 		cube_dpx = cube_collection_[cube_index].device_.dpx_;
-		cube_gadget_gpx = cube_collection_[cube_index].device_.gadget_gpx_;
+		cube_gadget_gpx = cube_collection_[cube_index].device_.device_gpx_;
 		cube_epx = cube_collection_[cube_index].device_.epx_;
 		cube_effect_gpx = cube_collection_[cube_index].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[cube_index].phandle_->grid_x_;
@@ -252,7 +252,7 @@ void Target1Chlamydiae::Act1(void)
 		}
 		cube_index = 2;
 		cube_dpx = cube_collection_[cube_index].device_.dpx_;
-		cube_gadget_gpx = cube_collection_[cube_index].device_.gadget_gpx_;
+		cube_gadget_gpx = cube_collection_[cube_index].device_.device_gpx_;
 		cube_epx = cube_collection_[cube_index].device_.epx_;
 		cube_effect_gpx = cube_collection_[cube_index].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[cube_index].phandle_->grid_x_;
@@ -270,7 +270,7 @@ void Target1Chlamydiae::Act1(void)
 		}
 		cube_index = 3;
 		cube_dpx = cube_collection_[cube_index].device_.dpx_;
-		cube_gadget_gpx = cube_collection_[cube_index].device_.gadget_gpx_;
+		cube_gadget_gpx = cube_collection_[cube_index].device_.device_gpx_;
 		cube_epx = cube_collection_[cube_index].device_.epx_;
 		cube_effect_gpx = cube_collection_[cube_index].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[cube_index].phandle_->grid_x_;
@@ -293,19 +293,19 @@ void Target1Chlamydiae::Act1(void)
 		main_.device1_.dpx_->create_x_ = main_.phandle_->grid_x_ - 10;
 		main_.device1_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		main_.device1_.dpx_->delay_time_frame_ = 0;
-		NyaDevice::Attack1414(main_.device1_.dpx_, main_.device1_.gadget_gpx_, main_.device1_.epx_, main_.device1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device1_.dpx_, main_.device1_.device_gpx_, main_.device1_.epx_, main_.device1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device1_.dpx_->delay_time_frame_ = 3;
-		NyaDevice::Attack1414(main_.device1_.dpx_, main_.device1_.gadget_gpx_, main_.device1_.epx_, main_.device1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device1_.dpx_, main_.device1_.device_gpx_, main_.device1_.epx_, main_.device1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device1_.dpx_->delay_time_frame_ = 6;
-		NyaDevice::Attack1414(main_.device1_.dpx_, main_.device1_.gadget_gpx_, main_.device1_.epx_, main_.device1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device1_.dpx_, main_.device1_.device_gpx_, main_.device1_.epx_, main_.device1_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->create_x_ = main_.phandle_->grid_x_ + 10;
 		main_.device2_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		main_.device2_.dpx_->delay_time_frame_ = 0;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->delay_time_frame_ = 3;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->delay_time_frame_ = 6;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device1_.dpx_->move_angle_deg_ -= 10;
 		main_.device2_.dpx_->move_angle_deg_ += 10;
 	}

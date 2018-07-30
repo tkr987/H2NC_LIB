@@ -9,8 +9,8 @@ Target3ShigellaDevice::Target3ShigellaDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
 	dpx_->move_speed_ = 2;
-	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_orange1.png", &gadget_gpx_->file_);
+	device_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/attack_orange1.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -19,12 +19,12 @@ Target3ShigellaDevice::Target3ShigellaDevice()
 
 Target3ShigellaDevice::~Target3ShigellaDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -129,7 +129,7 @@ void Target3Shigella::Act2(void)
 		for (int way = 0; way < 360 / 6; way++)
 		{
 			device_.dpx_->move_angle_deg_ += 6;
-			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.dpx_, device_.device_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 	}
 

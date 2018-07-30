@@ -18,7 +18,7 @@ class Target1ChlamydiaeCubeDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	Target1ChlamydiaeCubeDevice();
@@ -30,7 +30,7 @@ class Target1ChlamydiaeMainDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	Target1ChlamydiaeMainDevice();

@@ -17,7 +17,7 @@ class Target2PicornaCubeDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	Target2PicornaCubeDevice();
@@ -41,7 +41,7 @@ class Target2PicornaDevice
 {
 public:
 	HNLIB::DevicePropertyX1* dpx_;
-	HNLIB::GraphicPropertyX4* gadget_gpx_;
+	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX1* epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
 	Target2PicornaDevice();

@@ -54,6 +54,47 @@ void TeemoFactory::TargetAttackBlue7(DevicePropertyX1 * dpx, GraphicPropertyX4 *
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
+void TeemoFactory::TargetAttackGreen3(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_GREEN3;
+	NyaGraphic::Load("img/target/attack_green3.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+void TeemoFactory::TargetAttackGreen3(DevicePropertyX2* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_GREEN3;
+	NyaGraphic::Load("img/target/attack_green3.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+void TeemoFactory::TargetAttackGreen11(DevicePropertyX2* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_GREEN11;
+	NyaGraphic::Load("img/target/attack_green11.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+void TeemoFactory::TargetAttackGreen12(DevicePropertyX2* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_GREEN12;
+	NyaGraphic::Load("img/target/attack_green12.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+void TeemoFactory::TargetAttackGreen13(DevicePropertyX2* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_GREEN13;
+	NyaGraphic::Load("img/target/attack_green13.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
+
 void TeemoFactory::TargetAttackOrange1(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
@@ -139,6 +180,13 @@ void TeemoFactory::TargetCube(GraphicPropertyX4* gpx)
 	NyaGraphic::Load(5, 1, "img/target/cube_orange.png", &gpx->file_);
 }
 
+void TeemoFactory::TargetCube(GraphicPropertyX4* gpx, PositionHandle* phandle)
+{
+	gpx->extend_rate_ = 0.4;
+	NyaGraphic::Load(5, 1, "img/target/cube_orange.png", &gpx->file_);
+	phandle->collision_range_ = TARGET_CUBE_RANGE;
+}
+
 void TeemoFactory::TargetCubeBlue(GraphicPropertyX4* gpx)
 {
 	gpx->extend_rate_ = 0.4;
@@ -156,7 +204,7 @@ void TeemoFactory::TargetDeath1(EffectPropertyX1* epx, GraphicPropertyX4* gpx, S
 	epx->interval_time_frame_ = 3;
 	NyaGraphic::Load(4, 2, "img/target/death1.png", &gpx->file_);
 	NyaSound::Load("sound/target_death1.wav", &spx->file_);
-	NyaSound::ChangeVolume(&spx->file_, 40);
+	NyaSound::ChangeVolume(&spx->file_, 50);
 }
 
 void TeemoFactory::TargetDeath2(EffectPropertyX1* epx, GraphicPropertyX4* gpx)

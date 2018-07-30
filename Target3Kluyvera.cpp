@@ -9,8 +9,8 @@ Target3KluyveraDevice::Target3KluyveraDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
 	dpx_->move_speed_ = 5;
-	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_orange1.png", &gadget_gpx_->file_);
+	device_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/attack_orange1.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -20,12 +20,12 @@ Target3KluyveraDevice::Target3KluyveraDevice()
 
 Target3KluyveraDevice::~Target3KluyveraDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -140,7 +140,7 @@ void Target3Kluyvera::Act1(void)
 			for (int delay = 0; delay < 10; delay+= 2)
 			{
 				device_.dpx_->delay_time_frame_ = delay;
-				NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+				NyaDevice::Attack1414(device_.dpx_, device_.device_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			}
 		}
 	}

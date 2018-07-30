@@ -10,8 +10,8 @@ Target3VibrioDevice::Target3VibrioDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE1;
 	dpx_->move_speed_ = 2;
-	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_orange1.png", &gadget_gpx_->file_);
+	device_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/attack_orange1.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -20,12 +20,12 @@ Target3VibrioDevice::Target3VibrioDevice()
 
 Target3VibrioDevice::~Target3VibrioDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -36,8 +36,8 @@ Target3VibrioDeathDevice::Target3VibrioDeathDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->move_speed_ = 4;
-	gadget_gpx_ = new GraphicPropertyX4;
-	TeemoFactory::TargetAttackOrange5(dpx_, gadget_gpx_);
+	device_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetAttackOrange5(dpx_, device_gpx_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -49,8 +49,8 @@ Target3VibrioDeathDevice::~Target3VibrioDeathDevice()
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -149,7 +149,7 @@ void Target3Vibrio::Act1(void)
 		for (int way = 0; way < 360 / 8; way++)
 		{
 			device_.dpx_->move_angle_deg_ += 8;
-			NyaDevice::Attack1414(device_.dpx_, device_.gadget_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(device_.dpx_, device_.device_gpx_, device_.epx_, device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 	}
 
@@ -167,11 +167,11 @@ void Target3Vibrio::Act1(void)
 		main_.device2_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		dpx_angle = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-1.0, 1.0);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle - 5;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		main_.device2_.dpx_->move_angle_deg_ = dpx_angle + 5;
-		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.gadget_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device2_.dpx_, main_.device2_.device_gpx_, main_.device2_.epx_, main_.device2_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 
 	// UÉ^Å[Éìà⁄ìÆ

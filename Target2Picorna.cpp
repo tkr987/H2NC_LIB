@@ -10,18 +10,18 @@ Target2PicornaCubeDevice::Target2PicornaCubeDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->move_speed_ = 3;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	TeemoFactory::TargetAttackOrange3(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackOrange3(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target2PicornaCubeDevice::~Target2PicornaCubeDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -61,20 +61,20 @@ Target2PicornaDevice::Target2PicornaDevice()
 {
 	dpx_ = new DevicePropertyX1;
 	dpx_->move_speed_ = 6;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	TeemoFactory::TargetAttackBlue2(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackBlue2(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target2PicornaDevice::~Target2PicornaDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -224,28 +224,28 @@ void Target2Picorna::Act2(void)
 		main_.device_.dpx_->move_angle_deg_ += (90 + 10);
 		for (int way = 0; way < 8; way++)
 		{
-			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += 90;
 		for (int way = 0; way < 8; way++)
 		{
-			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += 90;
 		for (int way = 0; way < 8; way++)
 		{
-			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 		main_.device_.dpx_->delay_time_frame_ = 0;
 		main_.device_.dpx_->move_angle_deg_ += 90;
 		for (int way = 0; way < 8; way++)
 		{
-			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+			NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			main_.device_.dpx_->delay_time_frame_ += 4;
 		}
 	}
@@ -255,7 +255,7 @@ void Target2Picorna::Act2(void)
 		for (auto& e : cube_collection_)
 		{	// cube UŒ‚ˆ—
 			DevicePropertyX1* cube_dpx = e.device_.dpx_;
-			GraphicPropertyX4* cube_gadget_gpx = e.device_.gadget_gpx_;
+			GraphicPropertyX4* cube_gadget_gpx = e.device_.device_gpx_;
 			EffectPropertyX1* cube_epx = e.device_.epx_;
 			GraphicPropertyX4* cube_effect_gpx = e.device_.effect_gpx_;
 			cube_dpx->create_x_ = e.phandle_->grid_x_;

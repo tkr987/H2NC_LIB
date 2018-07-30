@@ -5,6 +5,7 @@
 #include "NyaDevice.h"
 #include "NyaEffect.h"
 #include "NyaEnding.h"
+#include "NyaEnum.h"
 #include "NyaGraphic.h"
 #include "NyaInterface.h"
 #include "NyaInput.h"

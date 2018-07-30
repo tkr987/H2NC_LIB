@@ -9,11 +9,11 @@ using namespace HNLIB;
 Target1FirmicutesMainDevice::Target1FirmicutesMainDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	gadget_gpx_ = new GraphicPropertyX4;
+	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackOrange2(dpx_, gadget_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackOrange2(dpx_, device_gpx_, epx_, effect_gpx_);
 
 }
 
@@ -21,8 +21,8 @@ Target1FirmicutesMainDevice::~Target1FirmicutesMainDevice()
 {
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -130,7 +130,7 @@ void Target1Firmicutes::Act1(void)
 		main_.device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		main_.device_.dpx_->move_angle_deg_ = NyaPosition::Angle(main_.phandle_, &phandle_user) + NyaInput::GetRand(-3.0, 3.0);
-		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+		NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 	}
 }
 

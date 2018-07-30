@@ -10,8 +10,8 @@ Target3BordetellaCubeDevice::Target3BordetellaCubeDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE2;
 	dpx_->move_speed_ = 3;
-	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_orange2.png", &gadget_gpx_->file_);
+	device_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/attack_orange2.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -20,12 +20,12 @@ Target3BordetellaCubeDevice::Target3BordetellaCubeDevice()
 
 Target3BordetellaCubeDevice::~Target3BordetellaCubeDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -63,8 +63,8 @@ Target3BordetellaDevice::Target3BordetellaDevice()
 	dpx_ = new DevicePropertyX1;
 	dpx_->collision_range_ = TARGET_ATTACK_RANGE_BLUE3;
 	dpx_->move_speed_ = 4;
-	gadget_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_blue3.png", &gadget_gpx_->file_);
+	device_gpx_ = new GraphicPropertyX4;
+	NyaGraphic::Load("img/target/attack_blue3.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
 	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
@@ -73,12 +73,12 @@ Target3BordetellaDevice::Target3BordetellaDevice()
 
 Target3BordetellaDevice::~Target3BordetellaDevice()
 {
-	NyaGraphic::Delete(&gadget_gpx_->file_);
+	NyaGraphic::Delete(&device_gpx_->file_);
 	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
-	delete gadget_gpx_;
-	gadget_gpx_ = nullptr;
+	delete device_gpx_;
+	device_gpx_ = nullptr;
 	delete epx_;
 	epx_ = nullptr;
 	delete effect_gpx_;
@@ -224,7 +224,7 @@ void Target3Bordetella::Act2(void)
 			for (int way = 0; way < 360 / 6; way++)
 			{
 				main_.device_.dpx_->move_angle_deg_ += 6;
-				NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+				NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			}
 		}
 		if (count_frame_ % 120 == 60 || count_frame_ % 120 == 80 || count_frame_ % 120 == 100)
@@ -235,7 +235,7 @@ void Target3Bordetella::Act2(void)
 			for (int way = 0; way < 360 / 6; way++)
 			{
 				main_.device_.dpx_->move_angle_deg_ += 6;
-				NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.gadget_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
+				NyaDevice::Attack1414(main_.device_.dpx_, main_.device_.device_gpx_, main_.device_.epx_, main_.device_.effect_gpx_, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 			}
 		}
 	}
@@ -243,7 +243,7 @@ void Target3Bordetella::Act2(void)
 	if (count_frame_ == FPS_MAX * 11)
 	{
 		DevicePropertyX1* cube_dpx = cube_collection_[0].device_.dpx_;
-		GraphicPropertyX4* cube_gadget_gpx = cube_collection_[0].device_.gadget_gpx_;
+		GraphicPropertyX4* cube_gadget_gpx = cube_collection_[0].device_.device_gpx_;
 		EffectPropertyX1* cube_epx = cube_collection_[0].device_.epx_;
 		GraphicPropertyX4* cube_effect_gpx = cube_collection_[0].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[0].phandle_->grid_x_;
@@ -257,7 +257,7 @@ void Target3Bordetella::Act2(void)
 			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 		}
 		cube_dpx = cube_collection_[1].device_.dpx_;
-		cube_gadget_gpx = cube_collection_[1].device_.gadget_gpx_;
+		cube_gadget_gpx = cube_collection_[1].device_.device_gpx_;
 		cube_epx = cube_collection_[1].device_.epx_;
 		cube_effect_gpx = cube_collection_[1].device_.effect_gpx_;
 		cube_dpx->create_x_ = cube_collection_[1].phandle_->grid_x_;

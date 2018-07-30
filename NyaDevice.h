@@ -79,7 +79,7 @@ namespace HNLIB
 		double move_x_;
 		double move_y_;
 		DevicePropertyX1* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget14();
 		~DeviceGadget14();
@@ -100,7 +100,7 @@ namespace HNLIB
 		double move_x_;
 		double move_y_;
 		DevicePropertyX2* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget24();
 		~DeviceGadget24();
@@ -121,7 +121,7 @@ namespace HNLIB
 		double move_x_;
 		double move_y_;
 		DevicePropertyX3* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget34();
 		~DeviceGadget34();
@@ -145,7 +145,7 @@ namespace HNLIB
 		EffectPropertyX1* effect_epx_;
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX1* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget1414();
 		~DeviceGadget1414();
@@ -169,7 +169,7 @@ namespace HNLIB
 		EffectPropertyX2* effect_epx_;
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX1* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget1424();
 		~DeviceGadget1424();
@@ -193,7 +193,7 @@ namespace HNLIB
 		EffectPropertyX1* effect_epx_;
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX2* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget2414();
 		~DeviceGadget2414();
@@ -217,7 +217,7 @@ namespace HNLIB
 		EffectPropertyX1* effect_epx_;
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX3* gadget_dpx_;
-		GraphicPropertyX4* gadget_gpx_;
+		GraphicPropertyX4* device_gpx_;
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget3414();
 		~DeviceGadget3414();

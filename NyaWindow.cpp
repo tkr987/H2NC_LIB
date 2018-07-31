@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <string>
+#include <thread>
 #include <tuple>
 #include "DxLib.h"
 #include "HNLIB.h"
@@ -24,7 +25,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v80");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v83");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -106,9 +107,7 @@ void NyaWindow::Run(void)
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
 		// TODO
-		// 連続でリプレイ再生したときのバグ
 		// タイトルでPositionHandleのクリアをする
-		// TeemoEX Act1までok
 		// mission 実行前に mission clearを実行しておく
 
 		//*********************************************************************
@@ -141,7 +140,7 @@ void NyaWindow::Run(void)
 		debug_time_msec = std::chrono::duration_cast<std::chrono::milliseconds>(debug_time_end - debug_time_start).count();
 		NyaString::Write("debug_font", white, 600, 640, "[600, 640] NyaEffect::Run() %d msec", (int)debug_time_msec);
 #else 
-		NyaEffect::Run();
+		NyaEffect::Run(event_);
 #endif
 
 #ifdef __DEBUG__
@@ -175,7 +174,7 @@ void NyaWindow::Run(void)
 		NyaString::Write("debug_font", white, 600, 700, "[600, 700] Nya*****::Run() %d msec", (int)debug_time_msec);
 #else
 		NyaInput::Run(event_);
-		NyaInterface::Run();
+		NyaInterface::Run(event_);
 		NyaSound::Run();
 		NyaString::Run();
 #endif
@@ -786,67 +785,65 @@ void NyaWindow::Title(void)
 }
 
 
-
-
 /**
- @param FPS更新関数
- @note
-  フレームレートの処理をする
+@param FPSを更新する(milliseconds version)
 **/
 void NyaWindow::WaitFPS(int x, int y)
 {
-
-	static	int frame_ave_ = 0;					//フレームレート平均
-	static	int wtime_ave_ = 0;					//wait時間平均
-	static	int ltime_ave_ = 0;					//loop時間平均
-	static	int frame_[FPS_MAX] = {};			//フレームレート
-	static	int ltime_[FPS_MAX] = {};			//loop時間
-	static	int wtime_[FPS_MAX] = {};			//wait時間
-	static	int prev_time_ = 0;					//1フレーム前の時間
-	static	int frame_count_ = 0;				//現在のフレーム(0～FPS_MAX-1)
-	static unsigned int all_frame_count_ = 0;	//フレーム数をカウントし続ける変数
 	const tuple<int, int, int> white = make_tuple(255, 255, 255);
 
-
-
-//#ifdef __DEBUG__
-//	if (frame_ave_ != 0) 
-//	{
-//		NyaString::Write("fps_font", white, x, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
-//		NyaString::Write("fps_font", white, x + 100, y, "loop[%d ms]", ltime_ave_);
-//		NyaString::Write("fps_font", white, x + 180, y, "wait[%d ms]", wtime_ave_);
-//	}
-//#else
-	if (frame_ave_ != 0)
-		NyaString::Write("fps_font", white, x + 170, y, "fps[%.1f fps]", 1000.0 / (double)frame_ave_);
-//#endif
-
-
-	frame_count_ = ++all_frame_count_ % FPS_MAX;
-	/*平均算出*/
-	if (frame_count_ == FPS_MAX - 1)
-	{
-		frame_ave_ = 0;
-		ltime_ave_ = 0;
-		wtime_ave_ = 0;
-		for (int i = 0; i < FPS_MAX; i++)
-		{
-			frame_ave_ += frame_[i];
-			ltime_ave_ += ltime_[i];
-			wtime_ave_ += wtime_[i];
-		}
-		frame_ave_ = frame_ave_ / FPS_MAX;
-		ltime_ave_ = ltime_ave_ / FPS_MAX;
-		wtime_ave_ = wtime_ave_ / FPS_MAX;
+	// フレームレート表示
+	if (NyaInput::GetFrameCount() % FPS_MAX == 0)
+	{	// １秒に１回の頻度で１フレームの処理にかかった平均時間を計算する
+		fps_.frame_average_time_ = 0;
+		for (auto& e : fps_.frame_time_collection_)
+			fps_.frame_average_time_ += e;
+		fps_.frame_average_time_ /= FPS_MAX;
 	}
+	if (fps_.frame_average_time_ != 0)
+		NyaString::Write("fps_font", white, x + 170, y, "fps[%.1lf fps]", 1000.0 / (double)fps_.frame_average_time_);
+	else
+		NyaString::Write("fps_font", white, x + 170, y, "fps[%.1lf fps]", 0);
 
-	ltime_[frame_count_] = GetNowCount() - prev_time_;
-	/*wait処理*/
-	wtime_[frame_count_] = (1000 / FPS_MAX) - ltime_[frame_count_];
-	if (0 < wtime_[frame_count_])
-		Sleep(wtime_[frame_count_]);
-	frame_[frame_count_] = GetNowCount() - prev_time_;
-	prev_time_ = GetNowCount();
+	// wait 処理
+	fps_.frame_count_ = ++fps_.frame_count_ % FPS_MAX;
+	fps_.wait_time_ = (1000 / FPS_MAX) - (GetNowCount() - fps_.prev_time_);
+	if (0 < fps_.wait_time_)
+		this_thread::sleep_for(std::chrono::milliseconds(fps_.wait_time_));
+	fps_.frame_time_collection_[fps_.frame_count_] = GetNowCount() - fps_.prev_time_;
+	fps_.prev_time_ = GetNowCount();
 }
 
+
+/**
+@param FPSを更新する(microseconds version)
+**/
+void NyaWindow::WaitFPS2(int x, int y)
+{
+	LONGLONG now_time;
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+
+	// フレームレート表示
+	if (NyaInput::GetFrameCount() % FPS_MAX == 0)
+	{	// １秒に１回の頻度で１フレームの処理にかかった平均時間を計算する
+		fps2_.frame_average_time_ = 0;
+		for (auto& e : fps2_.frame_time_collection_)
+			fps2_.frame_average_time_ += e;
+		fps2_.frame_average_time_ /= FPS_MAX;
+	}
+	if (fps2_.frame_average_time_ != 0)
+		NyaString::Write("fps2_font", white, x + 170, y, "fps[%.1lf fps]", (double)(1000000 / fps2_.frame_average_time_));
+	else
+		NyaString::Write("fps2_font", white, x + 170, y, "fps[%.1lf fps]", 0);
+
+	// wait 処理
+	fps2_.frame_count_ = ++fps2_.frame_count_ % FPS_MAX;
+	now_time = GetNowHiPerformanceCount();
+	fps2_.wait_time_ = (1000000 / FPS_MAX) - (now_time - fps2_.prev_time_); // 2 - 1 = 1
+	if (0 < fps2_.wait_time_)
+		this_thread::sleep_for(std::chrono::microseconds(fps2_.wait_time_));
+	fps2_.frame_time_collection_[fps2_.frame_count_] = fps2_.prev_time_;
+	fps2_.prev_time_ = GetNowHiPerformanceCount();
+	fps2_.frame_time_collection_[fps2_.frame_count_] = fps2_.prev_time_ - fps2_.frame_time_collection_[fps2_.frame_count_];
+}
 

@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <utility>
 #include "HNLIB.h"
 
@@ -39,8 +40,7 @@ public:
 	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX2* effect_epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
-	HNLIB::SoundPropertyX* spx_[6];
-	HNLIB::SoundPropertyX* spx_ex_[6];
+	std::array<HNLIB::SoundPropertyX*, 6> spx_collection_;
 	UserAiDevice();
 	~UserAiDevice();
 };
@@ -56,6 +56,7 @@ public:
 	HNLIB::GraphicPropertyX4* device_gpx_;
 	HNLIB::EffectPropertyX2* effect_epx_;
 	HNLIB::GraphicPropertyX4* effect_gpx_;
+	std::array<HNLIB::SoundPropertyX*, 6> spx_collection_;
 	UserAiDeviceEx();
 	~UserAiDeviceEx();
 };
@@ -68,6 +69,9 @@ public:
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
+	HNLIB::EffectPropertyX2* ult_epx_;
+	HNLIB::GraphicPropertyX4* ult_gpx_;
+	std::array<HNLIB::SoundPropertyX*, 4> ult_spx_collection_;
 	UserAiMain();
 	~UserAiMain();
 };

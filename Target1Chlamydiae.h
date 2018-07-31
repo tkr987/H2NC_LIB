@@ -57,6 +57,7 @@ class Target1ChlamydiaeMain
 public:
 	Target1ChlamydiaeMainDevice device1_;
 	Target1ChlamydiaeMainDevice device2_;
+	const unsigned int exp_;
 	const unsigned int health_max_;
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;

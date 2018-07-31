@@ -1,5 +1,5 @@
 #pragma once
-
+#include <array>
 #include <string>
 #include <vector>
 #include <utility>
@@ -10,6 +10,27 @@ namespace HNLIB
 	class NyaEnding;
 	class NyaMission;
 	class NyaOpening;
+
+	class WindowFPS
+	{
+	public:
+		int frame_average_time_;
+		int frame_count_;
+		std::array<int, FPS_MAX> frame_time_collection_;
+		int prev_time_;
+		int wait_time_;
+	};
+
+	class WindowFPS2
+	{
+	public:
+		LONGLONG frame_average_time_;
+		int frame_count_;
+		std::array<LONGLONG, FPS_MAX> frame_time_collection_;
+		LONGLONG prev_time_;
+		LONGLONG wait_time_;
+	};
+
 
 	// 子オブジェクト
 	class WindowChild
@@ -37,6 +58,8 @@ namespace HNLIB
 		eEVENT event_;
 		eEVENT event_next_;
 		WindowChild child_;
+		WindowFPS fps_;
+		WindowFPS2 fps2_;
 		void Ending(void);
 		void Mission(void);
 		void NotSaveReplay(void);
@@ -44,6 +67,7 @@ namespace HNLIB
 		void SaveReplay(void);
 		void Title(void);
 		void WaitFPS(int x, int y);
+		void WaitFPS2(int x, int y);
 	};
 
 }

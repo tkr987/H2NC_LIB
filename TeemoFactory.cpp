@@ -127,11 +127,21 @@ void TeemoFactory::TargetAttackOrange3(DevicePropertyX1* dpx, GraphicPropertyX4*
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
+void TeemoFactory::TargetAttackRed2(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_RED2;
+	NyaGraphic::Load("img/target/attack_red2.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
 void TeemoFactory::TargetAttackRed5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_RED5;
 	dpx->draw_angle_speed_deg_ = 2;
 	NyaGraphic::Load("img/target/attack_red5.png", &gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
 void TeemoFactory::TargetAttackOrange5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx)

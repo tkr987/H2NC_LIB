@@ -170,6 +170,8 @@ void Target1Tenericutes::Draw(void)
 		Draw1();
 		if (main_.phandle_->health_ <= 0)
 			mode_ = 2;
+		if (FPS_MAX * 30 < count_frame_)
+			mode_ = 2;
 		break;
 	case 2:
 		return;

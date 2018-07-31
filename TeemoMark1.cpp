@@ -78,8 +78,8 @@ TeemoDevice121::TeemoDevice121()
 	device_gpx_ = new GraphicPropertyX4;
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
-	dpx_->move_speed_ = 8;
-	TeemoFactory::TargetAttackOrange1(dpx_, device_gpx_, epx_, effect_gpx_);
+	dpx_->move_speed_ = 9;
+	TeemoFactory::TargetAttackRed2(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 TeemoDevice121::~TeemoDevice121()
@@ -98,7 +98,7 @@ TeemoDevice121::~TeemoDevice121()
 // TeemoMain
 //*****************
 
-TeemoMain1::TeemoMain1() : health_max_(18000) 
+TeemoMain1::TeemoMain1() : exp_(50000), health_max_(15000) 
 {
 	lock_ = new TeemoLock(eLOCK::TEEMO_MARK1);
 
@@ -115,11 +115,11 @@ TeemoMain1::TeemoMain1() : health_max_(18000)
 	NyaGraphic::Load("img/target/teemo_mark1.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->health_ = health_max_;
 	phandle_->collision_power_ = 1;
 	phandle_->collision_range_ = 20;
 	phandle_->grid_x_ = SCREEN_MAX_X / 2;
 	phandle_->grid_y_ = -200;
+	phandle_->health_ = health_max_;
 }
 
 TeemoMain1::~TeemoMain1()
@@ -149,7 +149,7 @@ TeemoMark1::TeemoMark1(void)
 
 	warning_spx_ = new SoundPropertyX;
 	NyaSound::Load("sound/warning.wav", &warning_spx_->file_);
-	NyaSound::ChangeVolume(&warning_spx_->file_, 20);
+	NyaSound::ChangeVolume(&warning_spx_->file_, 35);
 }
 
 TeemoMark1::~TeemoMark1(void)
@@ -167,7 +167,6 @@ void TeemoMark1::Act(void)
 		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE1_MIN_HEALTH)
 		{
 			count_frame_ = 0;
-			mode_ = 2;
 			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
 			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 			NyaSound::Play(cube11_collection_[0].death_spx_);
@@ -175,17 +174,20 @@ void TeemoMark1::Act(void)
 		break;
 	case 2:
 		Act2();
-		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE2_MIN_HEALTH)
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_MARK1_MODE2_MIN_HEALTH)
 		{
 			count_frame_ = 0;
-			mode_ = 3;
 			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
 			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 		}
 		break;
 	case 3:
 		if (count_frame_ == 30 * 8)
+		{
+			NyaInterface::GetHandleLife()->value_ += 1;
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
 			NyaSound::Play(main_.death_spx_);
+		}
 		if (count_frame_ == 30 * 18)
 			NyaInterface::GetHandleClear()->valid_ = true;
 		break;
@@ -200,9 +202,13 @@ void TeemoMark1::Draw(void)
 	{
 	case 1:
 		Draw1();
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 < TEEMO_MARK1_MODE1_MIN_HEALTH)
+			mode_ = 2;
 		break;
 	case 2:
 		Draw2();
+		if ((double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0 <= TEEMO_MARK1_MODE2_MIN_HEALTH)
+			mode_ = 3;
 		break;
 	case 3:
 		Draw3();
@@ -425,7 +431,7 @@ void TeemoMark1::Act2(void)
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);
 	main_.phandle_->health_ -= main_.phandle_->collision_hit_damage_;
 
-	if (count_frame_ % 5 == 0)
+	if (count_frame_ % 4 == 0)
 	{	// main UŒ‚
 		main_.device121_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device121_.dpx_->create_y_ = main_.phandle_->grid_y_;

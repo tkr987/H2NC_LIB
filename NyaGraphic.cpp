@@ -78,6 +78,12 @@ GraphicPropertyX8::GraphicPropertyX8()
 	flag_trans_ = true;
 }
 
+GraphicPropertyX1b::GraphicPropertyX1b()
+{
+	file_div_ = 0;
+	flag_trans_ = true;
+}
+
 
 //**********************
 // class GraphicSwing
@@ -103,10 +109,13 @@ NyaGraphic::~NyaGraphic()
 	Clear();
 }
 
-//***************************
-// NyaGraphic メンバ関数
-//***************************
+//*************************************
+// NyaGraphic メンバ関数 (public)
+//*************************************
 
+/**
+@brief メモリにロードした画像を全てクリアする
+**/
 void NyaGraphic::Clear(void)
 {
 	for (auto& e : file_collection_)
@@ -121,11 +130,11 @@ void NyaGraphic::Clear(void)
 		e.Clear();
 }
 /**
-@brief メモリにロードした画像を削除する関数
+@brief メモリにロードした画像を削除する
 @param file_pass メモリにロードしたデータが格納されたファイル構造体
 @note
- ファイルパスと分割数が両方同じファイルを削除する
- なお、ファイルパスが同じでも分割数が違うファイルは削除しない
+ ファイルパスと分割数が両方同じファイルを削除する。
+ なお、ファイルパスが同じでも分割数が違うファイルは削除しない。
 **/
 void NyaGraphic::Delete(GraphicFile* file)
 {
@@ -146,9 +155,9 @@ void NyaGraphic::Delete(GraphicFile* file)
 }
 
 /**
-@brief 画像をメモリにロードする関数
+@brief 画像をメモリにロードする
 @param file_pass メモリにロードする画像のファイルパス
-@param *file メモリにロードされたデータが格納されたファイル構造体
+@param *file メモリにロードされたデータを格納するファイル構造体
 @note
  既にロード済みの画像だった場合、新しくロードせずにデータを格納してファイル構造体を返す。
  fileはNyaGraphic::Draw()などで利用する。
@@ -190,11 +199,11 @@ void NyaGraphic::Load(std::string file_pass, GraphicFile* file)
 }
 
 /**
-@brief 画像を分割してメモリにロードする関数
+@brief 画像を分割してメモリにロードする
 @param div_x x軸方向分割数
 @param div_y y軸方向分割数
 @param file_pass ファイルパス
-@param *file ロード結果
+@param *file メモリにロードされたデータを格納するファイル構造体
 @note
  既に分割数が全く同じロード済みの画像だった場合、新しくロードせずにデータを格納してファイル構造体を返す。
  fileはNyaGraphic::Draw()などで利用する。
@@ -240,7 +249,7 @@ void NyaGraphic::Load(int div_x, int div_y, string file_pass, GraphicFile* file)
 }
 
 /**
-@brief 通常描画関数
+@brief 通常描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -253,7 +262,7 @@ void NyaGraphic::Draw(const GraphicPropertyX1 *gpx, eOBJECT layer)
 }
 
 /**
-@brief LR反転描画関数
+@brief LR反転描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -267,7 +276,7 @@ void NyaGraphic::Draw(const GraphicPropertyX2 *gpx, eOBJECT layer)
 
 
 /**
-@brief 拡大縮小描画関数
+@brief 拡大縮小描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -280,7 +289,7 @@ void NyaGraphic::Draw(const GraphicPropertyX3 *gpx, eOBJECT layer)
 }
 
 /**
-@brief 回転描画関数
+@brief 回転描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -294,7 +303,7 @@ void NyaGraphic::Draw(const GraphicPropertyX4 *gpx, eOBJECT layer)
 
 
 /**
-@brief 回転描画関数II
+@brief 回転描画(回転中心指定あり)をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -308,7 +317,7 @@ void NyaGraphic::Draw(const GraphicPropertyX5 *gpx, eOBJECT layer)
 
 
 /**
-@brief 回転描画関数III
+@brief 回転描画(回転中心指定あり、縦横拡大率別指定)をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -321,7 +330,7 @@ void NyaGraphic::Draw(const GraphicPropertyX6 *gpx, eOBJECT layer)
 }
 
 /**
-@brief 自由変形描画関数
+@brief 自由変形描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -334,7 +343,7 @@ void NyaGraphic::Draw(const GraphicPropertyX7 *gpx, eOBJECT layer)
 }
 
 /**
-@brief 定矩形描画関数
+@brief 定矩形描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -347,7 +356,7 @@ void NyaGraphic::Draw(const GraphicPropertyX8 *gpx, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き通常描画関数
+@brief ブレンドモード付きで通常描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -360,7 +369,7 @@ void NyaGraphic::Draw(const GraphicPropertyX1b *gp, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付きLR反転描画関数
+@brief ブレンドモード付きでLR反転描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -373,7 +382,7 @@ void NyaGraphic::Draw(const GraphicPropertyX2b *gp, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き拡大縮小描画関数
+@brief ブレンドモード付きで拡大縮小描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -386,7 +395,7 @@ void NyaGraphic::Draw(const GraphicPropertyX3b *gp, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き回転描画関数
+@brief ブレンドモード付きで回転描画関数をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -399,7 +408,7 @@ void NyaGraphic::Draw(const GraphicPropertyX4b *gpx, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き回転描画関数II
+@brief ブレンドモード付きで回転描画(回転中心指定あり)をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -412,7 +421,7 @@ void NyaGraphic::Draw(const GraphicPropertyX5b *gpx, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き回転描画関数III
+@brief ブレンドモード付きで回転描画(回転中心指定あり、縦横拡大率別指定)をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -425,7 +434,7 @@ void NyaGraphic::Draw(const GraphicPropertyX6b *gpx, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き自由変形描画関数
+@brief ブレンドモード付きで自由変形描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -438,7 +447,7 @@ void NyaGraphic::Draw(const GraphicPropertyX7b *gpx, eOBJECT layer)
 }
 
 /**
-@brief ブレンドモード付き指定矩形描画関数
+@brief ブレンドモード付きで指定矩形描画をする
 @param *gpx 描画プロパティ
 @param layer 描画レイヤー
 @return なし
@@ -451,7 +460,7 @@ void NyaGraphic::Draw(const GraphicPropertyX8b *gpx, eOBJECT layer)
 }
 
 /**
-@brief 全ての処理を実行する関数
+@brief 全ての処理を実行する
 @note
  NyaWindow内で自動的に実行されるので、ライブラリ使用者が呼び出す必要はない。
 **/
@@ -469,7 +478,7 @@ void NyaGraphic::Run(void)
 }
 
 /**
-@brief 振動命令を出す関数
+@brief 振動命令を出す
 **/
 void HNLIB::NyaGraphic::Swing(void)
 {
@@ -480,8 +489,12 @@ void HNLIB::NyaGraphic::Swing(void)
 	swing_.grid_x_ = 0;
 }
 
+//*************************************
+// NyaGraphic メンバ関数 (private)
+//*************************************
+
 /**
-@brief 振動処理の計算をする関数
+@brief 振動処理の計算をする
 **/
 void NyaGraphic::CalculateSwing(void)
 {
@@ -519,7 +532,7 @@ void NyaGraphic::CalculateSwing(void)
 }
 
 /**
-@brief 全てのグラフィックデータを描画する関数
+@brief 全てのグラフィックデータを描画する
 @param draw_layer 描画するレイヤー
 **/
 void NyaGraphic::DrawAll(eOBJECT draw_layer)

@@ -85,7 +85,7 @@ void TeemoMission1::Create(void)
 	ctime = 70;
 	for (int i = 0; i < 8; i++)
 	{
-		AddTarget(ctime, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime    , ctime + 20, new Target1Chlorobi());
 		AddTarget(ctime + 1, ctime + 20, new Target1Chlorobi());
 		AddTarget(ctime + 2, ctime + 20, new Target1Chlorobi());
 		AddTarget(ctime + 3, ctime + 20, new Target1Chlorobi());
@@ -116,7 +116,7 @@ void TeemoMission1::Create(void)
 
 void TeemoMission1::Delete(void)
 {
-	// user以外は次のミッションに引き継がないので初期化しておく
+	// user以外は次のミッションに引き継がないのでクリアしておく
 	ClearBackground();
 	ClearTarget();
 }

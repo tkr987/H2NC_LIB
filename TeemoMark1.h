@@ -56,6 +56,7 @@ class TeemoMain1
 {
 public:
 	TeemoDevice121 device121_;
+	const unsigned int exp_;
 	const unsigned int health_max_;
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death1_epx_;

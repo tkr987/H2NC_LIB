@@ -171,6 +171,7 @@ namespace HNLIB
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
+		GraphicPropertyX1b();
 	};
 
 	// DXLIB LR”½“]•`‰æŠÖ”‚É‘Î‰

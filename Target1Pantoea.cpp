@@ -52,6 +52,7 @@ Target1PantoeaMain::~Target1PantoeaMain()
 
 Target1Pantoea::Target1Pantoea(int x, int y)
 {
+	count_frame_ = 0;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
 	mode_ = 1;
@@ -68,7 +69,7 @@ void Target1Pantoea::Act(void)
 	{
 	case 1:
 		Act1();
-		if (main_.phandle_->health_ < 0)
+		if (main_.phandle_->health_ <= 0)
 		{
 			NyaSound::Play(main_.death_spx_);
 			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
@@ -88,7 +89,9 @@ void Target1Pantoea::Draw(void)
 	{
 	case 1:
 		Draw1();
-		if (main_.phandle_->health_ < 0)
+		if (main_.phandle_->health_ <= 0)
+			mode_ = 2;
+		if (FPS_MAX * 20 < count_frame_)
 			mode_ = 2;
 		break;
 	case 2:
@@ -116,7 +119,7 @@ void Target1Pantoea::Draw1(void)
 	// main ƒƒbƒN•`‰æ
 	main_.lock_->Run(main_.phandle_);
 
-	if (main_.phandle_->health_ < 0)
+	if (main_.phandle_->health_ <= 0)
 	{	// ”š”­•`‰æ
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;

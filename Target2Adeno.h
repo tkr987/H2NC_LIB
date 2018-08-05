@@ -52,7 +52,8 @@ class Target2AdenoMain
 {
 public:
 	Target2AdenoDevice device_;
-	unsigned int health_max_;
+	const unsigned int exp_;
+	const unsigned int health_max_;
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;

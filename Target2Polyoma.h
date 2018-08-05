@@ -27,6 +27,7 @@ class Target2PolyomaMain
 {
 public:
 	Target2PolyomaDevice device_;
+	const unsigned int exp_;
 	const unsigned int health_max_;
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
@@ -50,7 +51,7 @@ private:
 	unsigned int count_frame_;
 	Target2PolyomaMain main_;
 	unsigned int mode_;
-	bool turn_;
+//	bool turn_;
 	void Act1(void);
 	void Act2(void);
 	void Draw1(void);

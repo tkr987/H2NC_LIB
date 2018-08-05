@@ -14,7 +14,6 @@ Target1FirmicutesMainDevice::Target1FirmicutesMainDevice()
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
 	TeemoFactory::TargetAttackOrange2(dpx_, device_gpx_, epx_, effect_gpx_);
-
 }
 
 Target1FirmicutesMainDevice::~Target1FirmicutesMainDevice()
@@ -29,14 +28,16 @@ Target1FirmicutesMainDevice::~Target1FirmicutesMainDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target1FirmicutesMain::Target1FirmicutesMain() : exp_(5000), health_max_(50)
+Target1FirmicutesMain::Target1FirmicutesMain() : exp_(5000), health_max_(10)
 {
 	lock_ = new TeemoLock(eLOCK::AQUIFICAE);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
@@ -50,7 +51,10 @@ Target1FirmicutesMain::Target1FirmicutesMain() : exp_(5000), health_max_(50)
 Target1FirmicutesMain::~Target1FirmicutesMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
+	delete lock_;
+	lock_ = nullptr;
 	delete death_epx_;
 	death_epx_ = nullptr;
 	delete death_gpx_;
@@ -66,9 +70,9 @@ Target1FirmicutesMain::~Target1FirmicutesMain()
 Target1Firmicutes::Target1Firmicutes(int x, int y)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 Target1Firmicutes::~Target1Firmicutes()
@@ -150,7 +154,6 @@ void Target1Firmicutes::Draw1(void)
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::TARGET_EFFECT1);
-
 	}
 
 }

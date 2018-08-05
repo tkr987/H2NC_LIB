@@ -25,7 +25,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v83");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v84");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -109,6 +109,8 @@ void NyaWindow::Run(void)
 		// TODO
 		// タイトルでPositionHandleのクリアをする
 		// mission 実行前に mission clearを実行しておく
+		// stage1
+		// new delete ok, collision range, stage1 main_img extend rate
 
 		//*********************************************************************
 		// イベントの更新に使う変数をenum_zeroで初期化しておく
@@ -832,14 +834,14 @@ void NyaWindow::WaitFPS2(int x, int y)
 		fps2_.frame_average_time_ /= FPS_MAX;
 	}
 	if (fps2_.frame_average_time_ != 0)
-		NyaString::Write("fps2_font", white, x + 170, y, "fps[%.1lf fps]", (double)(1000000 / fps2_.frame_average_time_));
+		NyaString::Write("fps_font", white, x + 170, y, "fps[%.1lf fps]", (double)(1000000 / fps2_.frame_average_time_));
 	else
-		NyaString::Write("fps2_font", white, x + 170, y, "fps[%.1lf fps]", 0);
+		NyaString::Write("fps_font", white, x + 170, y, "fps[%.1lf fps]", 0);
 
 	// wait 処理
 	fps2_.frame_count_ = ++fps2_.frame_count_ % FPS_MAX;
 	now_time = GetNowHiPerformanceCount();
-	fps2_.wait_time_ = (1000000 / FPS_MAX) - (now_time - fps2_.prev_time_); // 2 - 1 = 1
+	fps2_.wait_time_ = (1000000 / FPS_MAX) - (now_time - fps2_.prev_time_);
 	if (0 < fps2_.wait_time_)
 		this_thread::sleep_for(std::chrono::microseconds(fps2_.wait_time_));
 	fps2_.frame_time_collection_[fps2_.frame_count_] = fps2_.prev_time_;

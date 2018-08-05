@@ -258,13 +258,17 @@ TeemoEx4Main::TeemoEx4Main() : health_max_(170000)
 
 	death1_epx_ = new EffectPropertyX1;
 	death1_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death1_epx_, death1_gpx_);
 	death1_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death1_epx_, death1_gpx_, death1_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death1_spx_->file_);
+	NyaSound::ChangeVolume(&death1_spx_->file_, 50);
 
 	death2_epx_ = new EffectPropertyX1;
 	death2_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_);
 	death2_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death2_spx_);
+	NyaSound::Load("sound/target_death2.wav", &death2_spx_->file_);
+	NyaSound::ChangeVolume(&death2_spx_->file_, 40);
 
 	gpx_ = new GraphicPropertyX4;
 	NyaGraphic::Load("img/target/teemo_ex.png", &gpx_->file_);

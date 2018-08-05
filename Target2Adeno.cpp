@@ -83,31 +83,30 @@ Target2AdenoDevice::~Target2AdenoDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2AdenoMain::Target2AdenoMain()
+Target2AdenoMain::Target2AdenoMain() : exp_(20000), health_max_(6000)
 {
-	health_max_ = 12000;
-
-	lock_ = new TeemoLock;
-	lock_->LoadGraphic("img/target/lock_adeno.png");
+	lock_ = new TeemoLock(eLOCK::ADENO);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath2(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath2(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death2.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, TARGET_DEATH2_SOUND_VOLUME);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::Load(4, 1, "img/target/target_adeno.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/main_adeno.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 10;
+	phandle_->collision_range_ = 20;
 	phandle_->health_ = health_max_;
 }
 
 Target2AdenoMain::~Target2AdenoMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -125,13 +124,14 @@ Target2AdenoMain::~Target2AdenoMain()
 
 Target2Adeno::Target2Adeno(int x, int y)
 {
+	count_frame_ = 0;
+	mode_ = 1;
 	cube_collection_[0].phandle_->grid_x_ = x - 100;
 	cube_collection_[0].phandle_->grid_y_ = y - 50;
 	cube_collection_[1].phandle_->grid_x_ = x + 100;
 	cube_collection_[1].phandle_->grid_y_ = y - 50;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 
@@ -146,13 +146,25 @@ void Target2Adeno::Act(void)
 	{
 	case 1:
 		Act1();
+		if (NyaPosition::InScreen(main_.phandle_))
+			count_frame_ = 0;
 		break;
 	case 2:
 		Act2();
+		if (main_.phandle_->health_ <= 0)
+		{
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
+			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
+			NyaSound::Play(main_.death_spx_);
+		}
 		break;
+	case 3:
+		return;
 	};
 
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
+	count_frame_++;
 }
 
 void Target2Adeno::Draw(void)
@@ -162,25 +174,16 @@ void Target2Adeno::Draw(void)
 	case 1:
 		Draw1();
 		if (NyaPosition::InScreen(main_.phandle_))
-		{
-			count_frame_ = 0;
 			mode_ = 2;
-		}
 		break;
 	case 2:
 		Draw2();
 		if (main_.phandle_->health_ <= 0)
-		{
 			mode_ = 3;
-			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
-			NyaGraphic::Swing();
-			NyaInterface::GetHandleSkill()->AddExp(50000);
-			NyaSound::Play(main_.death_spx_);
-		}
 		break;
+	case 3:
+		return;
 	};
-
-	count_frame_++;
 }
 
 void Target2Adeno::Act1(void)
@@ -293,6 +296,7 @@ void Target2Adeno::Draw1(void)
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::TARGET_EFFECT1);
+		NyaGraphic::Swing();
 
 		for (auto& e : cube_collection_)
 		{	// cube ”š”­•`‰æ
@@ -300,9 +304,6 @@ void Target2Adeno::Draw1(void)
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
 			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
 		}
-
-		NyaSound::Play(main_.death_spx_);
-		NyaInterface::GetHandleSkill()->AddExp(10000);
 	}
 }
 

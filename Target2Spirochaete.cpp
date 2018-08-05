@@ -28,23 +28,23 @@ Target2SpirochaeteDevice::~Target2SpirochaeteDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2SpirochaeteMain::Target2SpirochaeteMain() : health_max_(50)
+Target2SpirochaeteMain::Target2SpirochaeteMain() : exp_(2000), health_max_(50)
 {
-	lock_ = new TeemoLock;
-	lock_->LoadGraphic("img/target/lock_Spirochaete.png");
+	lock_ = new TeemoLock(eLOCK::SPIROCHAETE);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, TARGET_DEATH1_SOUND_VOLUME);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
 	NyaGraphic::Load(6, 6, "img/target/main_Spirochaete.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 15;
+	phandle_->collision_range_ = 20;
 	phandle_->health_ = health_max_;
 }
 
@@ -86,13 +86,23 @@ void Target2Spirochaete::Act(void)
 	{
 	case 1:
 		Act1();
+		if (NyaPosition::InScreen(main_.phandle_))
+			count_frame_ = 0;
 		break;
 	case 2:
 		Act2();
+		if (main_.phandle_->health_ <= 0)
+		{
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
+			NyaSound::Play(main_.death_spx_);
+		}
 		break;
+	case 3:
+		return;
 	};
 
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
+	count_frame_++;
 }
 
 void Target2Spirochaete::Draw(void)
@@ -102,25 +112,18 @@ void Target2Spirochaete::Draw(void)
 	case 1:
 		Draw1();
 		if (NyaPosition::InScreen(main_.phandle_))
-		{
-			count_frame_ = 0;
 			mode_ = 2;
-		}
 		break;
 	case 2:
 		Draw2();
 		if (main_.phandle_->health_ <= 0)
-		{
 			mode_ = 3;
-			NyaInterface::GetHandleSkill()->AddExp(5000);
-			NyaSound::Play(main_.death_spx_);
-		}
-		if (!NyaPosition::InScreen(main_.phandle_))
+		if (FPS_MAX * 30 < count_frame_)
 			mode_ = 3;
 		break;
+	case 3:
+		return;
 	};
-
-	count_frame_++;
 }
 
 void Target2Spirochaete::Act1(void)
@@ -163,13 +166,6 @@ void Target2Spirochaete::Draw1(void)
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	// main ƒƒbƒN•`‰æ
 	main_.lock_->Run(main_.phandle_);
-
-	if (main_.phandle_->health_ <= 0)
-	{	// main ”š”­•`‰æ
-		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
-		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
-		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::TARGET_EFFECT1);
-	}
 }
 
 void Target2Spirochaete::Draw2(void)

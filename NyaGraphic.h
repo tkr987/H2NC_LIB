@@ -180,13 +180,14 @@ namespace HNLIB
 	class GraphicPropertyX2b 
 	{
 	public:
-		GraphicFile file_;
-		int file_div_;
-		int pos_x_;
-		int pos_y_;
-		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
+		GraphicFile file_;
+		int file_div_;
+		bool flag_trans_;
+		int grid_x_;
+		int grid_y_;
+		GraphicPropertyX2b();
 	};
 
 	// DXLIB Šg‘åk¬•`‰æŠÖ”‚É‘Î‰
@@ -195,15 +196,16 @@ namespace HNLIB
 	class GraphicPropertyX3b 
 	{
 	public:
-		GraphicFile file_;
-		int file_div_;
-		int pos_x1_;
-		int pos_y1_;
-		int pos_x2_;
-		int pos_y2_;
-		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
+		GraphicFile file_;
+		int file_div_;
+		bool flag_trans_;
+		int grid_x1_;
+		int grid_y1_;
+		int grid_x2_;
+		int grid_y2_;
+		GraphicPropertyX3b();
 	};
 
 	// DXLIB ‰ñ“]•`‰æŠÖ”‚É‘Î‰

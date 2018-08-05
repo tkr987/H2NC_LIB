@@ -179,12 +179,6 @@ UserAiMain::UserAiMain()
 	phandle_->grid_x_ = SCREEN_CENTER_X;
 	phandle_->grid_y_ = SCREEN_MAX_Y - 150;
 	phandle_->name_ = "user";
-
-	InterfaceHandleSkill* ihandle_skill = NyaInterface::GetHandleSkill();
-	ihandle_skill->exp_[static_cast<int>(eSKILL::Q)] = 0;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::W)] = 0;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::E)] = 400000;
-	ihandle_skill->exp_[static_cast<int>(eSKILL::R)] = 0;
 }
 
 UserAiMain::~UserAiMain()
@@ -294,22 +288,28 @@ UserAi::UserAi(void)
 	count_frame_ = 0;
 
 	// interface スキル 設定
-	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::Q)] =  500000;
-	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::Q)] = 1000000;
-	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::Q)] = 1500000;
-	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)] = 2000000;
-	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::W)] =  500000;
-	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::W)] = 1000000;
-	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::W)] = 1500000;
-	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::W)] = 2000000;
-	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)] =  400000;
-	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::E)] =  800000;
-	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::E)] = 1200000;
-	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::E)] = 1600000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::Q)] =  400000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::Q)] =  800000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::Q)] = 1200000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)] = 1600000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::W)] =  400000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::W)] =  800000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::W)] = 1200000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::W)] = 1600000;
+	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)] =  500000;
+	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::E)] = 1000000;
+	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::E)] = 1500000;
+	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::E)] = 2000000;
 	NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::R)] =    5000;
 	NyaInterface::GetHandleSkill()->lv2_exp_[static_cast<int>(eSKILL::R)] =   10000;
 	NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::R)] =   15000;
 	NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::R)] =   20000;
+
+	// interface スキル 初期化
+	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::Q)] = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)];
+	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::W)] = 0;
+	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)] = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)];
+	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::R)] = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::R)];
 
 
 	// interface 残機設定
@@ -343,6 +343,10 @@ void UserAi::Act(void)
 	Act_Collide();
 	// 移動処理
 	Act_Move();
+
+	// ライフがゼロならコンテニュー画面を表示する
+	if (NyaInterface::GetHandleLife()->value_ == 0)
+		NyaInterface::GetHandleContinue()->valid_ = true;
 
 	count_frame_++;
 }
@@ -863,11 +867,9 @@ void UserAi::Act_Collide(void)
 		size += NyaDevice::Size(eOBJECT::TARGET_ATTACK5);
 		NyaInterface::GetHandleSkill()->AddExp((unsigned int)size);
 		NyaInterface::GetHandleLife()->value_--;
-		NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)] = 400000;
+		NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)] = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)];
 		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 		NyaSound::Play(main_.death_spx_);
-		if (NyaInterface::GetHandleLife()->value_ == 0)
-			NyaInterface::GetHandleContinue()->valid_ = true;
 	}
 
 	// バリア時の衝突判定変更

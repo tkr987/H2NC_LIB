@@ -30,29 +30,31 @@ Target2PolyomaDevice::~Target2PolyomaDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2PolyomaMain::Target2PolyomaMain() : health_max_(50)
+Target2PolyomaMain::Target2PolyomaMain() : exp_(2000), health_max_(50)
 {
-	lock_ = new TeemoLock;
-	lock_->LoadGraphic("img/target/lock_polyoma.png");
+	lock_ = new TeemoLock(eLOCK::POLYOMA);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, TARGET_DEATH1_SOUND_VOLUME);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::Load(2, 1, "img/target/target_polyoma.png", &gpx_->file_);
+	NyaGraphic::Load(2, 1, "img/target/main_polyoma.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
 	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 15;
+	phandle_->collision_range_ = 20;
 	phandle_->health_ = health_max_;
 }
 
 Target2PolyomaMain::~Target2PolyomaMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -71,11 +73,10 @@ Target2PolyomaMain::~Target2PolyomaMain()
 Target2Polyoma::Target2Polyoma(int x, int y, bool turn)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.gpx_->flag_turn_ = turn;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
-	turn_ = turn;
 }
 
 
@@ -114,7 +115,7 @@ void Target2Polyoma::Draw(void)
 		if (main_.phandle_->health_ <= 0)
 		{
 			mode_ = 3;
-			NyaInterface::GetHandleSkill()->AddExp(5000);
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
 			NyaSound::Play(main_.death_spx_);
 		}
 		if (!NyaPosition::InScreen(main_.phandle_))
@@ -127,11 +128,10 @@ void Target2Polyoma::Draw(void)
 
 void Target2Polyoma::Act1(void)
 {
-	if (count_frame_ == 1 && turn_)
+	if (count_frame_ == 1 && main_.gpx_->flag_turn_)
 		NyaPosition::MoveSpeedMode(main_.phandle_, 180, 6, FPS_MAX * 10);
-	else if (count_frame_ == 1 && !turn_)
+	else if (count_frame_ == 1 && !main_.gpx_->flag_turn_)
 		NyaPosition::MoveSpeedMode(main_.phandle_, 0, 6, FPS_MAX * 10);
-
 }
 
 void Target2Polyoma::Act2(void)

@@ -25,12 +25,14 @@ public:
 class Target2PantoeaMain
 {
 public:
+	const unsigned int exp_;
+	const unsigned int health_max_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoLock lock_;
 	Target2PantoeaMain();
 	~Target2PantoeaMain();
 };

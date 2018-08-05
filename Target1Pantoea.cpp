@@ -21,8 +21,10 @@ Target1PantoeaMain::Target1PantoeaMain(): exp_(5000), health_max_(10)
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
@@ -37,7 +39,10 @@ Target1PantoeaMain::Target1PantoeaMain(): exp_(5000), health_max_(10)
 Target1PantoeaMain::~Target1PantoeaMain() 
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
+	delete lock_;
+	lock_ = nullptr;
 	delete death_epx_;
 	death_epx_ = nullptr;
 	delete death_gpx_;
@@ -101,7 +106,6 @@ void Target1Pantoea::Draw(void)
 
 void Target1Pantoea::Act1(void)
 {
-
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);
 	NyaInterface::GetHandleSkill()->AddExp(main_.phandle_->collision_hit_damage_);

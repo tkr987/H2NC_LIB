@@ -40,6 +40,8 @@ void NyaInput::Init(void)
 		output_date_ << "0";
 	output_date_ << local_time.tm_mon + 1;
 	output_date_ << "/";
+	if (local_time.tm_mday < 10)
+		output_date_ << "0";
 	output_date_ << local_time.tm_mday;
 	output_date_ << " ";
 	if (local_time.tm_hour < 10)

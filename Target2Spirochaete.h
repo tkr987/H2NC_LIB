@@ -27,6 +27,7 @@ class Target2SpirochaeteMain
 {
 public:
 	Target2SpirochaeteDevice device_;
+	const unsigned int exp_;
 	const unsigned int health_max_;
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;

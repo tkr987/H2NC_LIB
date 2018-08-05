@@ -49,41 +49,41 @@ void TeemoMission1::Create(void)
 
 	// angle move + user狙い, 横攻撃
 	ctime = 15;
-	AddTarget(ctime, ctime + 60, new Target1Tenericutes(SCREEN_MAX_X - 200, -200));
-	AddTarget(ctime    , ctime + 60, new Target1Aquificae(100, -80));
-	AddTarget(ctime + 3, ctime + 60, new Target1Aquificae(150, -80));
-	AddTarget(ctime + 6, ctime + 60, new Target1Aquificae(200, -80));
+	AddTarget(ctime, ctime + 50, new Target1Tenericutes(SCREEN_MAX_X - 200, -200));
+	AddTarget(ctime    , ctime + 50, new Target1Aquificae(100, -80));
+	AddTarget(ctime + 3, ctime + 50, new Target1Aquificae(150, -80));
+	AddTarget(ctime + 6, ctime + 50, new Target1Aquificae(200, -80));
 	ctime = 25;
-	AddTarget(ctime, ctime + 60, new Target1Tenericutes(SCREEN_CENTER_X, -200));
-	AddTarget(ctime    , ctime + 60, new Target1Aquificae(SCREEN_MAX_X - 100, -80));
-	AddTarget(ctime + 3, ctime + 60, new Target1Aquificae(SCREEN_MAX_X - 150, -80));
-	AddTarget(ctime + 6, ctime + 60, new Target1Aquificae(SCREEN_MAX_X - 200, -80));
+	AddTarget(ctime, ctime + 50, new Target1Tenericutes(SCREEN_CENTER_X, -200));
+	AddTarget(ctime    , ctime + 50, new Target1Aquificae(SCREEN_MAX_X - 100, -80));
+	AddTarget(ctime + 3, ctime + 50, new Target1Aquificae(SCREEN_MAX_X - 150, -80));
+	AddTarget(ctime + 6, ctime + 50, new Target1Aquificae(SCREEN_MAX_X - 200, -80));
 	ctime = 35;
-	AddTarget(ctime, ctime + 60, new Target1Tenericutes(200, -200));
-	AddTarget(ctime    , ctime + 60, new Target1Aquificae(SCREEN_CENTER_X - 90, -80));
-	AddTarget(ctime + 3, ctime + 60, new Target1Aquificae(SCREEN_CENTER_X - 90, -80));
-	AddTarget(ctime + 6, ctime + 60, new Target1Aquificae(SCREEN_CENTER_X - 90, -80));
-	AddTarget(ctime    , ctime + 60, new Target1Aquificae(SCREEN_CENTER_X + 90, -120));
-	AddTarget(ctime + 3, ctime + 60, new Target1Aquificae(SCREEN_CENTER_X + 90, -120));
-	AddTarget(ctime + 6, ctime + 60, new Target1Aquificae(SCREEN_CENTER_X + 90, -120));
+	AddTarget(ctime, ctime + 50, new Target1Tenericutes(200, -200));
+	AddTarget(ctime    , ctime + 50, new Target1Aquificae(SCREEN_CENTER_X - 90, -80));
+	AddTarget(ctime + 3, ctime + 50, new Target1Aquificae(SCREEN_CENTER_X - 90, -80));
+	AddTarget(ctime + 6, ctime + 50, new Target1Aquificae(SCREEN_CENTER_X - 90, -80));
+	AddTarget(ctime    , ctime + 50, new Target1Aquificae(SCREEN_CENTER_X + 90, -120));
+	AddTarget(ctime + 3, ctime + 50, new Target1Aquificae(SCREEN_CENTER_X + 90, -120));
+	AddTarget(ctime + 6, ctime + 50, new Target1Aquificae(SCREEN_CENTER_X + 90, -120));
 
 	ctime = 50;
-	AddTarget(ctime, ctime + 60, new Target1Chlamydiae(SCREEN_CENTER_X, -200));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(100, -80));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(150, -80));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(200, -80));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 200, -80));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 150, -80));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 100, -80));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(100, -200));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(150, -200));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(200, -200));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 200, -200));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 150, -200));
-	AddTarget(ctime, ctime + 60, new Target1Firmicutes(SCREEN_MAX_X - 100, -200));
+	AddTarget(ctime + 1, ctime + 50, new Target1Chlamydiae(SCREEN_CENTER_X, -200));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(100, -80));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(150, -80));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(200, -80));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(SCREEN_MAX_X - 200, -80));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(SCREEN_MAX_X - 150, -80));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(SCREEN_MAX_X - 100, -80));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(100, -200));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(150, -200));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(200, -200));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(SCREEN_MAX_X - 200, -200));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(SCREEN_MAX_X - 150, -200));
+	AddTarget(ctime, ctime + 50, new Target1Firmicutes(SCREEN_MAX_X - 100, -200));
 
-	ctime = 70;
-	for (int i = 0; i < 8; i++)
+	ctime = 67;
+	for (int i = 0; i < 7; i++)
 	{
 		AddTarget(ctime    , ctime + 20, new Target1Chlorobi());
 		AddTarget(ctime + 1, ctime + 20, new Target1Chlorobi());
@@ -91,10 +91,11 @@ void TeemoMission1::Create(void)
 		AddTarget(ctime + 3, ctime + 20, new Target1Chlorobi());
 		AddTarget(ctime + 4, ctime + 20, new Target1Chlorobi());
 		AddTarget(ctime + 5, ctime + 20, new Target1Chlorobi());
+		AddTarget(ctime + 6, ctime + 20, new Target1Chlorobi());
 	}
 
 	ctime = 78;
-	AddTarget(ctime, ctime + 600, new TeemoMark1);
+	AddTarget(ctime, ctime + 300, new TeemoMark1);
 
 
 	//**************************************
@@ -116,7 +117,7 @@ void TeemoMission1::Create(void)
 
 void TeemoMission1::Delete(void)
 {
-	// user以外は次のミッションに引き継がないのでクリアしておく
+	// user 以外は次のミッションに引き継がないのでクリアしておく
 	ClearBackground();
 	ClearTarget();
 }

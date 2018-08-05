@@ -84,6 +84,17 @@ GraphicPropertyX1b::GraphicPropertyX1b()
 	flag_trans_ = true;
 }
 
+GraphicPropertyX2b::GraphicPropertyX2b()
+{
+	file_div_ = 0;
+	flag_trans_ = true;
+}
+
+GraphicPropertyX3b::GraphicPropertyX3b()
+{
+	file_div_ = 0;
+	flag_trans_ = true;
+}
 
 //**********************
 // class GraphicSwing
@@ -625,7 +636,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx2b_deque_.empty()) {
 		gpx2b = &layer_collection_.at(layer).gpx2b_deque_.front();
 		SetDrawBlendMode(gpx2b->blend_mode_, gpx2b->blend_alpha_);
-		DrawTurnGraph(gpx2b->pos_x_ + swing_.grid_x_, gpx2b->pos_y_,
+		DrawTurnGraph(gpx2b->grid_x_ + swing_.grid_x_, gpx2b->grid_y_,
 			gpx2b->file_.div_collection_[gpx2b->file_div_], gpx2b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx2b_deque_.pop_front();
@@ -633,8 +644,8 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx3b_deque_.empty()) {
 		gpx3b = &layer_collection_.at(layer).gpx3b_deque_.front();
 		SetDrawBlendMode(gpx3b->blend_mode_, gpx3b->blend_alpha_);
-		DrawExtendGraph(gpx3b->pos_x1_ + swing_.grid_x_, gpx3b->pos_y1_,
-			gpx3b->pos_x2_ + swing_.grid_x_, gpx3b->pos_y2_, 
+		DrawExtendGraph(gpx3b->grid_x1_ + swing_.grid_x_, gpx3b->grid_y1_,
+			gpx3b->grid_x2_ + swing_.grid_x_, gpx3b->grid_y2_, 
 			gpx3b->file_.div_collection_[gpx3b->file_div_], gpx3b->flag_trans_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx3b_deque_.pop_front();

@@ -36,8 +36,7 @@ Target1TenericutesCube::Target1TenericutesCube()
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
-	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetCube(gpx_);
@@ -54,8 +53,6 @@ Target1TenericutesCube::~Target1TenericutesCube()
 	death_epx_ = nullptr;
 	delete death_gpx_;
 	death_gpx_ = nullptr;
-	delete death_spx_;
-	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
 
@@ -84,14 +81,16 @@ Target1TenericutesMainDevice::~Target1TenericutesMainDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target1TenericutesMain::Target1TenericutesMain() : health_max_(400), exp_(20000)
+Target1TenericutesMain::Target1TenericutesMain() : health_max_(350), exp_(20000)
 {
 	lock_ = new TeemoLock(eLOCK::CHLAMYDIAE);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath2(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath2(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death2.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 40);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
@@ -108,6 +107,7 @@ Target1TenericutesMain::Target1TenericutesMain() : health_max_(400), exp_(20000)
 Target1TenericutesMain::~Target1TenericutesMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -126,9 +126,9 @@ Target1TenericutesMain::~Target1TenericutesMain()
 Target1Tenericutes::Target1Tenericutes(int x, int y)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 Target1Tenericutes::~Target1Tenericutes()
@@ -170,7 +170,7 @@ void Target1Tenericutes::Draw(void)
 		Draw1();
 		if (main_.phandle_->health_ <= 0)
 			mode_ = 2;
-		if (FPS_MAX * 30 < count_frame_)
+		if (FPS_MAX * 40 < count_frame_)
 			mode_ = 2;
 		break;
 	case 2:

@@ -128,9 +128,9 @@ void NyaInterface::Init(void)
 void NyaInterface::Run(eEVENT event_check)
 {
 	DrawBlack(850, 0, 1280, 720);
-	DrawTitle(875, 35);
-	DrawLife(875, 75);
-	DrawSkill(875, 135, event_check);
+	DrawTitle(875, 30);
+	DrawLife(875, 70);
+	DrawSkill(875, 120, event_check);
 	DrawLIB(910, 520);
 	DrawInput(875, 640);
 
@@ -351,11 +351,11 @@ void NyaInterface::DrawSkill(int x, int y, eEVENT event_check)
 	//***********************
 	// スキル選択肢の表示
 	//***********************
-	NyaString::Write("interface_skill_font", red, x, y + 90 * (static_cast<int>(handle_skill_.select_) - 1), "★");
+	NyaString::Write("interface_skill_font", red, x, y + 100 * (static_cast<int>(handle_skill_.select_) - 1), "★");
 	for (int skill = static_cast<int>(eSKILL::Q); skill < static_cast<int>(eSKILL::sizeof_enum); skill++)
 	{
-		NyaString::Write("interface_skill_font", white, x, y + 90 * (skill - 1), "☆");
-		NyaString::Write("interface_skill_font", white, x + 50, y + 90 * (skill - 1), handle_skill_.name_[skill]);
+		NyaString::Write("interface_skill_font", white, x, y + 100 * (skill - 1), "☆");
+		NyaString::Write("interface_skill_font", white, x + 50, y + 100 * (skill - 1), handle_skill_.name_[skill]);
 	}
 	
 	//*********************************
@@ -368,51 +368,51 @@ void NyaInterface::DrawSkill(int x, int y, eEVENT event_check)
 		unsigned int lv2_exp = handle_skill_.lv2_exp_[skill];
 		unsigned int lv3_exp = handle_skill_.lv3_exp_[skill];
 		unsigned int lv4_exp = handle_skill_.lv4_exp_[skill];
-		NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 40, "Exp : %u pt", exp);
+		NyaString::Write("interface_skill_exp_font", white, x + 150, y + 100 * (skill - 1) + 35, "Exp : %u pt", exp);
 		if (exp < lv1_exp)
 		{
-			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv1_exp);
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 100 * (skill - 1) + 55, "Next: %u pt", lv1_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)exp / (double)lv1_exp);
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
-			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
-			DrawBox(x, y + 90 * (skill - 1) + 80, x + 350, y + 90 * (skill - 1) + 80 + 6, GetColor(255, 255, 255), false);
+			DrawBox(x + 1, y + 100 * (skill - 1) + 75 + 1, x + red_width, y + 100 * (skill - 1) + 75 + 6 - 1, GetColor(255, 0, 0), true);
+			DrawBox(x, y + 100 * (skill - 1) + 75, x + 350, y + 100 * (skill - 1) + 75 + 6, GetColor(255, 255, 255), false);
 		}
 		else if (lv1_exp <= exp && exp < lv2_exp)
 		{
-			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■□□□");
-			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv2_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 100 * (skill - 1) + 40, "■□□□");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 100 * (skill - 1) + 55, "Next: %u pt", lv2_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)(exp - lv1_exp) / (double)(lv2_exp - lv1_exp));
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
-			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
-			DrawBox(x, y + 90 * (skill - 1) + 80, x + 350, y + 90 * (skill - 1) + 80 + 6, GetColor(255, 255, 255), false);
+			DrawBox(x + 1, y + 100 * (skill - 1) + 75 + 1, x + red_width, y + 100 * (skill - 1) + 75 + 6 - 1, GetColor(255, 0, 0), true);
+			DrawBox(x, y + 100 * (skill - 1) + 75, x + 350, y + 100 * (skill - 1) + 75 + 6, GetColor(255, 255, 255), false);
 		}
 		else if (lv2_exp <= exp && exp < lv3_exp)
 		{
-			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■□□");
-			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv3_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 100 * (skill - 1) + 40, "■■□□");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 100 * (skill - 1) + 55, "Next: %u pt", lv3_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)(exp - lv2_exp) / (double)(lv3_exp - lv2_exp));
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
-			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
-			DrawBox(x, y + 90 * (skill - 1) + 80, x + 350, y + 90 * (skill - 1) + 80 + 6, GetColor(255, 255, 255), false);
+			DrawBox(x + 1, y + 100 * (skill - 1) + 75 + 1, x + red_width, y + 100 * (skill - 1) + 75 + 6 - 1, GetColor(255, 0, 0), true);
+			DrawBox(x, y + 100 * (skill - 1) + 75, x + 350, y + 100 * (skill - 1) + 75 + 6, GetColor(255, 255, 255), false);
 		}
 		else if (lv3_exp <= exp && exp < lv4_exp)
 		{
-			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■□");
-			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 100 * (skill - 1) + 40, "■■■□");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 100 * (skill - 1) + 55, "Next: %u pt", lv4_exp);
 			int red_width = (int)((350.0 - 1.0) * (double)(exp - lv3_exp) / (double)(lv4_exp - lv3_exp));
 			red_width = (350 - 1 < red_width) ? 350 : red_width;
-			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
-			DrawBox(x, y + 90 * (skill - 1) + 80, x + 350, y + 90 * (skill - 1) + 80 + 6, GetColor(255, 255, 255), false);
+			DrawBox(x + 1, y + 100 * (skill - 1) + 75 + 1, x + red_width, y + 100 * (skill - 1) + 75 + 6 - 1, GetColor(255, 0, 0), true);
+			DrawBox(x, y + 100 * (skill - 1) + 75, x + 350, y + 100 * (skill - 1) + 75 + 6, GetColor(255, 255, 255), false);
 		}
 		else if (lv4_exp <= exp)
 		{
-			NyaString::Write("interface_skill_font", red, x, y + 90 * (skill - 1) + 45, "■■■■");
-			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 90 * (skill - 1) + 60, "Next: %u pt", lv4_exp);
+			NyaString::Write("interface_skill_font", red, x, y + 100 * (skill - 1) + 40, "■■■■");
+			NyaString::Write("interface_skill_exp_font", white, x + 150, y + 100 * (skill - 1) + 55, "Next: %u pt", lv4_exp);
 			int red_width = 350 - 1;
-			DrawBox(x + 1, y + 90 * (skill - 1) + 80 + 1, x + red_width, y + 90 * (skill - 1) + 80 + 6 - 1, GetColor(255, 0, 0), true);
-			DrawBox(x, y + 90 * (skill - 1) + 80, x + 350, y + 90 * (skill - 1) + 80 + 6, GetColor(255, 255, 255), false);
+			DrawBox(x + 1, y + 100 * (skill - 1) + 75 + 1, x + red_width, y + 100 * (skill - 1) + 75 + 6 - 1, GetColor(255, 0, 0), true);
+			DrawBox(x, y + 100 * (skill - 1) + 75, x + 350, y + 100 * (skill - 1) + 75 + 6, GetColor(255, 255, 255), false);
 		}
-		NyaString::Write("interface_skill_font", white, x, y + 90 * (skill - 1) + 45, "□□□□");
+		NyaString::Write("interface_skill_font", white, x, y + 100 * (skill - 1) + 40, "□□□□");
 	}
 
 	if (event_check != eEVENT::MISSION_RUN && event_check != eEVENT::MISSION_REPLAY_RUN)

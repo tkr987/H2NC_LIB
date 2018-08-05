@@ -36,8 +36,7 @@ Target1ChlamydiaeCube::Target1ChlamydiaeCube()
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
-	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetCube(gpx_);
@@ -54,8 +53,6 @@ Target1ChlamydiaeCube::~Target1ChlamydiaeCube()
 	death_epx_ = nullptr;
 	delete death_gpx_;
 	death_gpx_ = nullptr;
-	delete death_spx_;
-	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
 
@@ -84,14 +81,16 @@ Target1ChlamydiaeMainDevice::~Target1ChlamydiaeMainDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target1ChlamydiaeMain::Target1ChlamydiaeMain() : exp_(20000), health_max_(1900)
+Target1ChlamydiaeMain::Target1ChlamydiaeMain() : exp_(20000), health_max_(1800)
 {
 	lock_ = new TeemoLock(eLOCK::CHLAMYDIAE);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath2(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath2(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death2.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 40);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
@@ -107,6 +106,7 @@ Target1ChlamydiaeMain::Target1ChlamydiaeMain() : exp_(20000), health_max_(1900)
 Target1ChlamydiaeMain::~Target1ChlamydiaeMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -125,9 +125,9 @@ Target1ChlamydiaeMain::~Target1ChlamydiaeMain()
 Target1Chlamydiae::Target1Chlamydiae(int x, int y)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 Target1Chlamydiae::~Target1Chlamydiae()
@@ -227,7 +227,7 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 4; n++)
+			for (int n = 0; n < 5; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 				cube_dpx->delay_time_frame_ += 3;
@@ -245,7 +245,7 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 4; n++)
+			for (int n = 0; n < 5; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 				cube_dpx->delay_time_frame_ += 3;
@@ -263,7 +263,7 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 4; n++)
+			for (int n = 0; n < 5; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 				cube_dpx->delay_time_frame_ += 3;
@@ -281,7 +281,7 @@ void Target1Chlamydiae::Act1(void)
 		for (int way = 0; way < 4; way++)
 		{
 			cube_dpx->delay_time_frame_ = 0;
-			for (int n = 0; n < 4; n++)
+			for (int n = 0; n < 5; n++)
 			{
 				NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
 				cube_dpx->delay_time_frame_ += 3;

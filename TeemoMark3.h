@@ -35,7 +35,6 @@ public:
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
-	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoCube31();
@@ -74,7 +73,6 @@ public:
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
-	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoCube32();
@@ -119,7 +117,6 @@ public:
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
-	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoCube33();
@@ -136,9 +133,10 @@ public:
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death1_epx_;
 	HNLIB::GraphicPropertyX4* death1_gpx_;
+	HNLIB::SoundPropertyX* death1_spx_;
 	HNLIB::EffectPropertyX1* death2_epx_;
 	HNLIB::GraphicPropertyX4* death2_gpx_;
-	HNLIB::SoundPropertyX* death_spx_;
+	HNLIB::SoundPropertyX* death2_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
 	TeemoMain3();

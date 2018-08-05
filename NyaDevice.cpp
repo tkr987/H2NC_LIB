@@ -27,7 +27,9 @@ list<DeviceGadget2414> NyaDevice::gadget2414_wait_list_;
 list<DeviceGadget2424> NyaDevice::gadget2424_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
 list<DeviceGadget2424> NyaDevice::gadget2424_wait_list_; 
 list<DeviceGadget3414> NyaDevice::gadget3414_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
-list<DeviceGadget3414> NyaDevice::gadget3414_wait_list_;
+list<DeviceGadget3414> NyaDevice::gadget3414_wait_list_; 
+list<DeviceGadget3424> NyaDevice::gadget3424_attack_list_[static_cast<int>(eOBJECT::sizeof_enum)];
+list<DeviceGadget3424> NyaDevice::gadget3424_wait_list_;
 
 //***************************
 // class DevicePropertyX
@@ -296,13 +298,42 @@ DeviceGadget3414::~DeviceGadget3414()
 	}
 }
 
+HNLIB::DeviceGadget3424::DeviceGadget3424()
+{
+	device_gpx_ = new GraphicPropertyX4;
+	dpx_ = new DevicePropertyX3;
+	effect_gpx_ = new GraphicPropertyX4;
+	epx_ = new EffectPropertyX2;
+	for (auto& e: phandle_collection_)
+	{	// デストラクタの処理と統一させるためnew演算子で動的生成する
+		e = new PositionHandle;
+		NyaPosition::CreateHandle(e);
+	}
+}
+
+DeviceGadget3424::~DeviceGadget3424()
+{
+	delete device_gpx_;
+	device_gpx_ = nullptr;
+	delete dpx_;
+	dpx_ = nullptr;
+	delete effect_gpx_;
+	effect_gpx_ = nullptr;
+	delete epx_;
+	epx_ = nullptr;
+	for (auto& e: phandle_collection_)
+	{	// コンストラクタの処理と統一するためNyaPosition::DeleteHandle(PositionHandle*)でなくdeleteを使う
+		delete e;
+		e = nullptr;
+	}
+}
+
 //*************************************
 // NyaDevice メンバ関数 (public)
 //*************************************
 
-
 /**
-@brief 攻撃14関数
+@brief 攻撃 type-14
 @param gadget_dpx ガジェット用デバイスプロパティ
 @param gadget_gpx ガジェット用グラフィックプロパティ
 @param gadget_type ガジェットのオブジェクトタイプ
@@ -350,7 +381,7 @@ void NyaDevice::Attack14(const DevicePropertyX1* const gadget_dpx, const Graphic
 }
 
 /**
-@brief 攻撃24関数
+@brief 攻撃 type-24
 @param gadget_dpx ガジェット用デバイスプロパティ
 @param gadget_gpx ガジェット用グラフィックプロパティ
 @param gadget_type ガジェットのオブジェクトタイプ
@@ -398,7 +429,7 @@ void NyaDevice::Attack24(const DevicePropertyX2* const gadget_dpx, const Graphic
 }
 
 /**
-@brief 攻撃34関数
+@brief 攻撃 type-34
 @param gadget_dpx ガジェット用デバイスプロパティ
 @param gadget_gpx ガジェット用グラフィックプロパティ
 @param gadget_type ガジェットのオブジェクトタイプ
@@ -446,7 +477,7 @@ void NyaDevice::Attack34(const DevicePropertyX3* const gadget_dpx, const Graphic
 }
 
 /**
-@brief 攻撃1414関数
+@brief 攻撃 type-1414
 @param gadget_dpx ガジェット用デバイスプロパティ
 @param gadget_gpx ガジェット用グラフィックプロパティ
 @param effect_dpx エフェクト用デバイスプロパティ
@@ -501,7 +532,7 @@ void NyaDevice::Attack1414(const DevicePropertyX1* gadget_dpx, const GraphicProp
 }
 
 /**
-@brief 攻撃1424関数
+@brief 攻撃 type-1424
 @param gadget_dpx ガジェット用デバイスプロパティ
 @param gadget_gpx ガジェット用グラフィックプロパティ
 @param effect_dpx エフェクト用デバイスプロパティ
@@ -556,7 +587,7 @@ void NyaDevice::Attack1424(const DevicePropertyX1* gadget_dpx, const GraphicProp
 }
 
 /**
-@brief 攻撃2414関数
+@brief 攻撃 type-2414
 @param gadget_dpx ガジェット用デバイスプロパティ
 @param gadget_gpx ガジェット用グラフィックプロパティ
 @param effect_dpx エフェクト用デバイスプロパティ
@@ -796,6 +827,7 @@ void NyaDevice::Calculate(eOBJECT type)
 	deque<list<DeviceGadget2414>::iterator> gadget2414_delete_deque;
 	deque<list<DeviceGadget2424>::iterator> gadget2424_delete_deque;
 	deque<list<DeviceGadget3414>::iterator> gadget3414_delete_deque;
+	deque<list<DeviceGadget3424>::iterator> gadget3424_delete_deque;
 
 	//**********************************************************
 	// Gadget14 削除処理
@@ -1028,8 +1060,8 @@ void NyaDevice::Calculate(eOBJECT type)
 			{
 				if (it->gadget_phandle_collection_[i]->collision_hit_damage_ != 0)
 				{
-					it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[i]->collision_hit_x_;
-					it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[i]->collision_hit_y_;
+					it->effect_epx_->grid_x_ = it->gadget_phandle_collection_[i]->collision_hit_x_;
+					it->effect_epx_->grid_y_ = it->gadget_phandle_collection_[i]->collision_hit_y_;
 					NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
 					gadget1414_delete_deque.push_back(it);
 					break;
@@ -1170,8 +1202,8 @@ void NyaDevice::Calculate(eOBJECT type)
 			gadget2414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
-			it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
-			it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
+			it->effect_epx_->grid_x_ = it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
+			it->effect_epx_->grid_y_ = it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
 			NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
 			gadget2414_delete_deque.push_back(it);
 		}
@@ -1328,8 +1360,8 @@ void NyaDevice::Calculate(eOBJECT type)
 			gadget3414_delete_deque.push_back(it);
 		else if (it->clear_)
 		{
-			it->effect_epx_->grid_x_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
-			it->effect_epx_->grid_y_ = (int)it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
+			it->effect_epx_->grid_x_ = it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
+			it->effect_epx_->grid_y_ = it->gadget_phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
 			NyaEffect::Draw(it->effect_epx_, it->effect_gpx_, it->effect_type_);
 			gadget3414_delete_deque.push_back(it);
 		}
@@ -1388,5 +1420,86 @@ void NyaDevice::Calculate(eOBJECT type)
 		NyaGraphic::Draw(e.device_gpx_, type);
 		e.gadget_dpx_->draw_angle_deg_ += e.gadget_dpx_->draw_angle_speed_deg_;
 	}
+
+	//**********************************************************
+	// gadget3414 削除処理
+	// イテレータをコンテナに保存するため範囲for文は使わない
+	// 削除するときにエフェクト描画もおこなう
+	//**********************************************************
+
+	for (auto it = gadget3424_attack_list_[static_cast<int>(type)].begin(); it != gadget3424_attack_list_[static_cast<int>(type)].end(); ++it)
+	{
+		// フレームカウントが遅延時間に達していないなら何もしない
+		if (it->count_frame_ < it->dpx_->delay_time_frame_)
+			continue;
+
+		// 表示領域の限界を超えた
+		// クリアを指定された
+		// 他のオブジェクトと衝突した
+		if (!NyaPosition::InScreen(it->phandle_collection_[it->collision_accuracy_ - 1], 128))
+			gadget3424_delete_deque.push_back(it);
+		else if (it->clear_)
+		{
+			it->epx_->grid_x_ = &it->phandle_collection_[it->collision_accuracy_ - 1]->grid_x_;
+			it->epx_->grid_y_ = &it->phandle_collection_[it->collision_accuracy_ - 1]->grid_y_;
+			NyaEffect::Draw(it->epx_, it->effect_gpx_, it->effect_type_);
+			gadget3424_delete_deque.push_back(it);
+		}
+		else
+		{
+			for (unsigned int i = 0; i < it->collision_accuracy_; i++)
+			{
+				if (it->phandle_collection_[i]->collision_hit_damage_ != 0)
+				{
+					it->epx_->grid_x_ = &it->phandle_collection_[i]->collision_hit_x_;
+					it->epx_->grid_y_ = &it->phandle_collection_[i]->collision_hit_y_;
+					NyaEffect::Draw(it->epx_, it->effect_gpx_, it->effect_type_);
+					gadget3424_delete_deque.push_back(it);
+					break;
+				}
+			}
+		}
+	}
+	while (!gadget3424_delete_deque.empty())
+	{
+		gadget3424_wait_list_.splice(gadget3424_wait_list_.begin(), move(gadget3424_attack_list_[static_cast<int>(type)]), gadget3424_delete_deque.front());
+		gadget3424_delete_deque.pop_front();
+	}
+
+	//****************************
+	// gadget3424 削除以外の処理
+	//****************************
+
+	for (auto& e : gadget3424_attack_list_[static_cast<int>(type)])
+	{
+		// count_frame_の初期値は0になっている
+		// delay_time_frame_が1なら1フレームは何もしないようにしたい
+		// したがって、インクリメントしてから判定してるのでcount_frame_ - 1で比較
+		e.count_frame_++;
+		if (e.count_frame_ - 1 < e.dpx_->delay_time_frame_)
+			continue;
+
+		// 移動処理と衝突判定処理
+		for (unsigned int i = 0; i < e.collision_accuracy_; i++)
+		{
+			e.phandle_collection_[i]->grid_x_ = e.phandle_collection_[e.collision_accuracy_ - 1]->grid_x_ + e.move_x_ * (i + 1);
+			e.phandle_collection_[i]->grid_y_ = e.phandle_collection_[e.collision_accuracy_ - 1]->grid_y_ + e.move_y_ * (i + 1);
+			NyaPosition::Collide(e.phandle_collection_[i], type);
+		}
+		// 加速度の処理
+		e.dpx_->move_speed_ += e.dpx_->move_speed_accel_;
+		e.move_x_ = cos(e.move_angle_rad_) * e.dpx_->move_speed_;
+		e.move_x_ /= e.collision_accuracy_;
+		e.move_y_ = sin(e.move_angle_rad_) * e.dpx_->move_speed_;
+		e.move_y_ /= e.collision_accuracy_;
+
+		// 描画処理
+		e.device_gpx_->draw_grid_cx_ = (int)e.phandle_collection_[e.collision_accuracy_ - 1]->grid_x_;
+		e.device_gpx_->draw_grid_cy_ = (int)e.phandle_collection_[e.collision_accuracy_ - 1]->grid_y_;
+		e.device_gpx_->draw_angle_deg_ = e.dpx_->draw_angle_deg_;
+		NyaGraphic::Draw(e.device_gpx_, type);
+		e.dpx_->draw_angle_deg_ += e.dpx_->draw_angle_speed_deg_;
+	}
 }
+
 

@@ -42,8 +42,7 @@ TeemoCube11::TeemoCube11()
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
-	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetCube(gpx_);
@@ -60,8 +59,6 @@ TeemoCube11::~TeemoCube11()
 	death_epx_ = nullptr;
 	delete death_gpx_;
 	death_gpx_ = nullptr;
-	delete death_spx_;
-	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
 
@@ -98,19 +95,23 @@ TeemoDevice121::~TeemoDevice121()
 // TeemoMain
 //*****************
 
-TeemoMain1::TeemoMain1() : exp_(50000), health_max_(15000) 
+TeemoMain1::TeemoMain1() : exp_(50000), health_max_(22000) 
 {
 	lock_ = new TeemoLock(eLOCK::TEEMO_MARK1);
 
 	death1_epx_ = new EffectPropertyX1;
 	death1_gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetDeath1(death1_epx_, death1_gpx_);
+	death1_spx_ = new SoundPropertyX;
+	NyaSound::Load("sound/target_death1.wav", &death1_spx_->file_);
+	NyaSound::ChangeVolume(&death1_spx_->file_, 50);
 
 	death2_epx_ = new EffectPropertyX1;
 	death2_gpx_ = new GraphicPropertyX4;
-	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_, death_spx_);
-
+	TeemoFactory::TargetDeath2(death2_epx_, death2_gpx_);
+	death2_spx_ = new SoundPropertyX;
+	NyaSound::Load("sound/target_death2.wav", &death2_spx_->file_);
+	NyaSound::ChangeVolume(&death2_spx_->file_, 40);
 	gpx_ = new GraphicPropertyX4;
 	NyaGraphic::Load("img/target/teemo_mark1.png", &gpx_->file_);
 
@@ -125,6 +126,8 @@ TeemoMain1::TeemoMain1() : exp_(50000), health_max_(15000)
 TeemoMain1::~TeemoMain1()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death1_spx_->file_);
+	NyaSound::Delete(&death2_spx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -132,10 +135,14 @@ TeemoMain1::~TeemoMain1()
 	death1_epx_ = nullptr;
 	delete death1_gpx_;
 	death1_gpx_ = nullptr;
+	delete death1_spx_;
+	death1_spx_ = nullptr;
 	delete death2_epx_;
 	death2_epx_ = nullptr;
 	delete death2_gpx_;
 	death2_gpx_ = nullptr;
+	delete death2_spx_;
+	death2_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
 
@@ -149,11 +156,13 @@ TeemoMark1::TeemoMark1(void)
 
 	warning_spx_ = new SoundPropertyX;
 	NyaSound::Load("sound/warning.wav", &warning_spx_->file_);
-	NyaSound::ChangeVolume(&warning_spx_->file_, 35);
+	NyaSound::ChangeVolume(&warning_spx_->file_, 30);
 }
 
 TeemoMark1::~TeemoMark1(void)
 {
+	NyaSound::Delete(&warning_spx_->file_);
+
 	delete warning_spx_;
 	warning_spx_ = nullptr;
 }
@@ -169,7 +178,7 @@ void TeemoMark1::Act(void)
 			count_frame_ = 0;
 			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
 			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
-			NyaSound::Play(cube11_collection_[0].death_spx_);
+			NyaSound::Play(main_.death1_spx_);
 		}
 		break;
 	case 2:
@@ -186,13 +195,16 @@ void TeemoMark1::Act(void)
 		{
 			NyaInterface::GetHandleLife()->value_ += 1;
 			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
-			NyaSound::Play(main_.death_spx_);
+			NyaSound::Play(main_.death2_spx_);
 		}
 		if (count_frame_ == 30 * 18)
 			NyaInterface::GetHandleClear()->valid_ = true;
 		break;
 	}
 
+
+	if (FPS_MAX * 60 * 4 < count_frame_)
+		NyaInterface::GetHandleLife()->value_ = 0;
 	count_frame_++;
 }
 

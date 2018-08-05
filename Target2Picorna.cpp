@@ -81,9 +81,9 @@ Target2PicornaDevice::~Target2PicornaDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2PicornaMain::Target2PicornaMain() : health_max_(25000)
+Target2PicornaMain::Target2PicornaMain() : exp_(20000), health_max_(27000)
 {
-	lock_ = new TeemoLock(eLOCK::ECTROMELIA);
+	lock_ = new TeemoLock(eLOCK::PICORNA);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
@@ -91,21 +91,21 @@ Target2PicornaMain::Target2PicornaMain() : health_max_(25000)
 
 	death_spx_ = new SoundPropertyX;
 	NyaSound::Load("sound/target_death2.wav", &death_spx_->file_);
-	NyaSound::ChangeVolume(&death_spx_->file_, 50);
+	NyaSound::ChangeVolume(&death_spx_->file_, TARGET_DEATH2_SOUND_VOLUME);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
 	NyaGraphic::Load(2, 1, "img/target/main_picorna.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 10;
+	phandle_->collision_range_ = 20;
 	phandle_->health_ = health_max_;
 }
 
 Target2PicornaMain::~Target2PicornaMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
 	delete lock_;
 	lock_ = nullptr;
@@ -123,9 +123,10 @@ Target2PicornaMain::~Target2PicornaMain()
 
 Target2Picorna::Target2Picorna(int x, int y)
 {
+	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 	cube_collection_[0].phandle_->grid_x_ = x - 240;
 	cube_collection_[0].phandle_->grid_y_ = y - 60;
 	cube_collection_[1].phandle_->grid_x_ = x - 80;
@@ -148,11 +149,26 @@ void Target2Picorna::Act(void)
 	{
 	case 1:
 		Act1();
+		count_frame_ = 0;
+		NyaInterface::GetHandleHealth()->valid_ = true;
 		break;
 	case 2:
 		Act2();
+		if (main_.phandle_->health_ <= 0)
+		{
+			NyaInterface::GetHandleHealth()->valid_ = false;
+			NyaInterface::GetHandleSkill()->AddExp((unsigned int)NyaDevice::Size(eOBJECT::TARGET_ATTACK1) * 1000);
+			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
+			NyaSound::Play(main_.death_spx_);
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
+		}
 		break;
+	case 3:
+		return;
 	};
+
+
+	count_frame_++;
 }
 
 void Target2Picorna::Draw(void)
@@ -161,28 +177,18 @@ void Target2Picorna::Draw(void)
 	{
 	case 1:
 		Draw1();
-		count_frame_ = 0;
 		mode_ = 2;
-		NyaInterface::GetHandleHealth()->valid_ = true;
 		break;
 	case 2:
 		Draw2();
 		if (main_.phandle_->health_ <= 0)
-		{
 			mode_ = 3;
-			NyaInterface::GetHandleHealth()->valid_ = false;
-			NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
-			NyaGraphic::Swing();
-			NyaSound::Play(main_.death_spx_);
-			NyaInterface::GetHandleSkill()->AddExp(30000);
-
-		}
-		if (FPS_MAX * 3 <= count_frame_ && !NyaPosition::InScreen(main_.phandle_))
+		if (FPS_MAX * 30 < count_frame_)
 			mode_ = 3;
 		break;
+	case 3:
+		return;
 	};
-
-	count_frame_++;
 }
 
 void Target2Picorna::Act1(void)
@@ -217,7 +223,7 @@ void Target2Picorna::Act2(void)
 		return;
 
 	if (count_frame_ % 40 == 0)
-	{
+	{	// main UŒ‚ˆ—
 		main_.device_.dpx_->create_x_ = main_.phandle_->grid_x_;
 		main_.device_.dpx_->create_y_ = main_.phandle_->grid_y_;
 		main_.device_.dpx_->delay_time_frame_ = 0;
@@ -251,9 +257,9 @@ void Target2Picorna::Act2(void)
 	}
 
 	if (count_frame_ % 25 == 0)
-	{
+	{	// cube UŒ‚ˆ—
 		for (auto& e : cube_collection_)
-		{	// cube UŒ‚ˆ—
+		{
 			DevicePropertyX1* cube_dpx = e.device_.dpx_;
 			GraphicPropertyX4* cube_gadget_gpx = e.device_.device_gpx_;
 			EffectPropertyX1* cube_epx = e.device_.epx_;
@@ -317,6 +323,7 @@ void Target2Picorna::Draw2(void)
 			e.death_epx_->grid_y_ = e.phandle_->grid_y_;
 			NyaEffect::Draw(e.death_epx_, e.death_gpx_, eOBJECT::TARGET_EFFECT1);
 		}
+		NyaGraphic::Swing();
 	}
 
 }

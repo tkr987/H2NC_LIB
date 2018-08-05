@@ -223,10 +223,10 @@ namespace HNLIB
 		~DeviceGadget2424();
 	};
 
-	//*****************************************************
+	//**********************************************************
 	// class DeviceGadget3414
-	// DevicePropertyX3とEffectPropertyX1の組み合わせ
-	//*****************************************************
+	// DevicePropertyX3とEffectPropertyX1の組み合わせで構成
+	//**********************************************************
 	class DeviceGadget3414
 	{
 	public:
@@ -245,6 +245,30 @@ namespace HNLIB
 		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
 		DeviceGadget3414();
 		~DeviceGadget3414();
+	};
+
+	//**********************************************************
+	// class DeviceGadget3424
+	// DevicePropertyX3とEffectPropertyX2の組み合わせで構成
+	//**********************************************************
+	class DeviceGadget3424
+	{
+	public:
+		bool clear_;
+		unsigned int collision_accuracy_;
+		unsigned int count_frame_;
+		eOBJECT effect_type_;
+		double move_angle_deg_;
+		double move_angle_rad_;
+		double move_x_;
+		double move_y_;
+		GraphicPropertyX4* device_gpx_;
+		DevicePropertyX3* dpx_;
+		GraphicPropertyX4* effect_gpx_;
+		EffectPropertyX2* epx_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
+		DeviceGadget3424();
+		~DeviceGadget3424();
 	};
 
 
@@ -279,6 +303,8 @@ namespace HNLIB
 		static std::list<DeviceGadget2424> gadget2424_wait_list_;
 		static std::list<DeviceGadget3414> gadget3414_attack_list_[(int)eOBJECT::sizeof_enum];
 		static std::list<DeviceGadget3414> gadget3414_wait_list_;
+		static std::list<DeviceGadget3424> gadget3424_attack_list_[(int)eOBJECT::sizeof_enum];
+		static std::list<DeviceGadget3424> gadget3424_wait_list_;
 		static void Calculate(eOBJECT group);
 		static double RadToAngle(double x) { return (x * 180.0 / 3.14159); }
 		static double AngleToRad(double x) { return (x * 3.14159 / 180.0); }

@@ -50,15 +50,17 @@ Target2ChloroflexiDevice::~Target2ChloroflexiDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(600)
+Target2ChloroflexiMain::Target2ChloroflexiMain() : health_max_(100)
 {
 	lock_ = new TeemoLock;
 	lock_->LoadGraphic("img/target/lock_chloroflexi.png");
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;

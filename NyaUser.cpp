@@ -16,12 +16,5 @@ void NyaUser::Run(eEVENT check_event)
 		Act();
 		Draw();
 		break;
-	case eEVENT::MISSION_CLEAR:
-	case eEVENT::MISSION_COMPLETE:
-	case eEVENT::MISSION_REPLAY_END:
-	case eEVENT::MISSION_REPLAY_CLEAR:
-	case eEVENT::MISSION_REPLAY_COMPLETE:
-		Draw();
-		break;
 	}
 }

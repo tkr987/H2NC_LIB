@@ -19,8 +19,6 @@ Target1DictyoglomiMainDevice::Target1DictyoglomiMainDevice()
 
 Target1DictyoglomiMainDevice::~Target1DictyoglomiMainDevice()
 {
-	NyaGraphic::Delete(&device_gpx_->file_);
-	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete device_gpx_;
@@ -37,8 +35,10 @@ Target1DictyoglomiMain::Target1DictyoglomiMain() : exp_(5000), health_max_(10)
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
+	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 	death_spx_ = new SoundPropertyX;
-	TeemoFactory::TargetDeath1(death_epx_, death_gpx_, death_spx_);
+	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
+	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
@@ -53,7 +53,10 @@ Target1DictyoglomiMain::Target1DictyoglomiMain() : exp_(5000), health_max_(10)
 Target1DictyoglomiMain::~Target1DictyoglomiMain()
 {
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaSound::Delete(&death_spx_->file_);
 
+	delete lock_;
+	lock_ = nullptr;
 	delete death_epx_;
 	death_epx_ = nullptr;
 	delete death_gpx_;
@@ -108,7 +111,7 @@ void Target1Dictyoglomi::Draw(void)
 		Draw1();
 		if (main_.phandle_->health_ <= 0)
 			mode_ = 2;
-		if (FPS_MAX * 10 < count_frame_)
+		if (FPS_MAX * 15 < count_frame_)
 			mode_ = 2;
 		break;
 	case 2:

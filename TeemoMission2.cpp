@@ -119,8 +119,8 @@ void TeemoMission2::Create(void)
 	//	AddTarget(ctime, ctime + 30, new Target2Ectromelia(SCREEN_CENTER_X + 300, SCREEN_MAX_Y + 150 + 50 * i));
 	//}
 
-//	ctime = 79;
-//	AddTarget(ctime, ctime + 300, new TeemoMark2);
+	//ctime = 79;
+	//AddTarget(ctime, ctime + 300, new TeemoMark2);
 
 	//**************************************
 	// ユーザーを子オブジェクトとして追加
@@ -132,5 +132,4 @@ void TeemoMission2::Delete(void)
 {
 	ClearBackground();
 	ClearTarget();
-	ClearUser();
 }

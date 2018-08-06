@@ -759,10 +759,6 @@ void TeemoMark3::Draw4(void)
 		NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	}
 
-	// ヘルスバー(%)の表示をする
-	// ただし、ヘルス0以下のときゲージ0(%)として表示する
-	if (0 < main_.phandle_->health_) 
-		NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
-	else
-		NyaInterface::GetHandleHealth()->value_ = 0;
+	// ヘルス表示
+	NyaInterface::GetHandleHealth()->value_ = (double)main_.phandle_->health_ / (double)main_.health_max_ * 100.0;
 }

@@ -119,7 +119,7 @@ TeemoMain1::TeemoMain1() : exp_(50000), health_max_(22000)
 	phandle_->collision_power_ = 1;
 	phandle_->collision_range_ = 20;
 	phandle_->grid_x_ = SCREEN_MAX_X / 2;
-	phandle_->grid_y_ = -200;
+	phandle_->grid_y_ = -100;
 	phandle_->health_ = health_max_;
 }
 

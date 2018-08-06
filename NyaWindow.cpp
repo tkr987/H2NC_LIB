@@ -25,7 +25,7 @@ NyaWindow::NyaWindow(string title)
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v84");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v85");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -109,6 +109,8 @@ void NyaWindow::Run(void)
 		// TODO
 		// タイトルでPositionHandleのクリアをする
 		// mission 実行前に mission clearを実行しておく
+		// コンテニュー時に無敵処理追加
+		// ウルト途中に死ぬ→ウルト終了(初期化)させる
 		// stage1
 		// new delete ok, collision range, stage1 main_img extend rate
 

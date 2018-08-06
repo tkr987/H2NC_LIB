@@ -129,7 +129,8 @@ public:
 	TeemoDevice311 device311_;
 	TeemoDevice321 device321_;
 	TeemoDevice331 device331_;
-	const int health_max_;
+	const unsigned int exp_;
+	const unsigned int health_max_;
 	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death1_epx_;
 	HNLIB::GraphicPropertyX4* death1_gpx_;
@@ -154,11 +155,11 @@ public:
 	void Draw(void);
 private:
 	int count_frame_;
+	int mode_;
 	std::array<TeemoCube31, 100> cube31_collection_;
 	std::array<TeemoCube32, 6> cube32_collection_;
 	std::array<TeemoCube33, 4> cube33_collection_;
 	TeemoMain3 main_;
-	int mode_;
 	HNLIB::SoundPropertyX* warning_spx_;
 	void Act1(void);
 	void Act2(void);

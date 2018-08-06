@@ -69,6 +69,9 @@ TeemoLock::TeemoLock(eLOCK type)
 	case eLOCK::TEEMO_MARK2:
 		NyaGraphic::Load("img/target/lock_teemo_mark2.png", &gpx_->file_);
 		break;
+	case eLOCK::TEEMO_MARK3:
+		NyaGraphic::Load("img/target/lock_teemo_mark3.png", &gpx_->file_);
+		break;
 	}
 
 	spx_ = new SoundPropertyX;

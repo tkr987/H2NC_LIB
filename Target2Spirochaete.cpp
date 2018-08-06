@@ -69,9 +69,9 @@ Target2SpirochaeteMain::~Target2SpirochaeteMain()
 Target2Spirochaete::Target2Spirochaete(int x, int y)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 

@@ -23,14 +23,13 @@ Target3PantoeaMain::Target3PantoeaMain()
 
 	death_spx_ = new SoundPropertyX;
 	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
-	NyaSound::ChangeVolume(&death_spx_->file_, 50);
+	NyaSound::ChangeVolume(&death_spx_->file_, TARGET_DEATH1_SOUND_VOLUME);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::Load(4, 1, "img/target/target_pantoea.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/main_pantoea.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_power_ = 1;
 	phandle_->collision_range_ = 20;
 	phandle_->health_ = 300;
 

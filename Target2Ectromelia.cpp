@@ -70,9 +70,9 @@ Target2EctromeliaMain::~Target2EctromeliaMain()
 Target2Ectromelia::Target2Ectromelia(int x, int y)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 
@@ -87,11 +87,22 @@ void Target2Ectromelia::Act(void)
 	{
 	case 1:
 		Act1();
+		if (NyaPosition::InScreen(main_.phandle_))
+			count_frame_ = 0;
 		break;
 	case 2:
 		Act2();
+		if (main_.phandle_->health_ <= 0)
+		{
+			NyaInterface::GetHandleSkill()->AddExp(2000);
+			NyaSound::Play(main_.death_spx_);
+		}
 		break;
+	case 3:
+		return;
 	};
+
+	count_frame_++;
 }
 
 void Target2Ectromelia::Draw(void)
@@ -101,23 +112,18 @@ void Target2Ectromelia::Draw(void)
 	case 1:
 		Draw1();
 		if (NyaPosition::InScreen(main_.phandle_))
-		{
-			count_frame_ = 0;
 			mode_ = 2;
-		}
 		break;
 	case 2:
 		Draw2();
 		if (main_.phandle_->health_ <= 0)
-		{
 			mode_ = 3;
-			NyaInterface::GetHandleSkill()->AddExp(10000);
-			NyaSound::Play(main_.death_spx_);
-		}
+		if (FPS_MAX * 5 < count_frame_)
+			mode_ = 3;
 		break;
+	case 3:
+		return;
 	};
-
-	count_frame_++;
 }
 
 void Target2Ectromelia::Act1(void)

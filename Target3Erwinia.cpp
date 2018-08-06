@@ -2,6 +2,7 @@
 #include "Target3Erwinia.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
+#include "TeemoLock.h"
 
 using namespace HNLIB;
 
@@ -9,20 +10,15 @@ using namespace HNLIB;
 Target3ErwiniaDevice::Target3ErwiniaDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->collision_range_ = TARGET_ATTACK_RANGE_ORANGE2;
-	dpx_->move_speed_ = 9;
 	device_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_orange2.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
-	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
+	dpx_->move_speed_ = 8;
+	TeemoFactory::TargetAttackRed2(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target3ErwiniaDevice::~Target3ErwiniaDevice()
 {
-	NyaGraphic::Delete(&device_gpx_->file_);
-	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete device_gpx_;
@@ -40,12 +36,11 @@ Target3ErwiniaDeathDevice::Target3ErwiniaDeathDevice()
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackWhite5(dpx_, device_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackWhite6(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target3ErwiniaDeathDevice::~Target3ErwiniaDeathDevice()
 {
-	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete device_gpx_;
@@ -56,10 +51,9 @@ Target3ErwiniaDeathDevice::~Target3ErwiniaDeathDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target3ErwiniaMain::Target3ErwiniaMain()
+Target3ErwiniaMain::Target3ErwiniaMain(): exp_(2000), health_max_(500)
 {
-	health_max_ = 500;
-	lock_.LoadGraphic("img/target/lock_erwinia.png");
+	lock_ = new TeemoLock(eLOCK::ERWINIA);
 
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
@@ -70,20 +64,21 @@ Target3ErwiniaMain::Target3ErwiniaMain()
 	NyaSound::ChangeVolume(&death_spx_->file_, 50);
 
 	gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load(2, 1, "img/target/target_erwinia.png", &gpx_->file_);
+	gpx_->extend_rate_ = 1.5;
+	NyaGraphic::Load(2, 1, "img/target/main_erwinia.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 10;
+	phandle_->collision_range_ = 20;
 	phandle_->health_ = health_max_;
 }
 
 Target3ErwiniaMain::~Target3ErwiniaMain()
 {
-	NyaGraphic::Delete(&death_gpx_->file_);
 	NyaSound::Delete(&death_spx_->file_);
 	NyaGraphic::Delete(&gpx_->file_);
 
+	delete lock_;
+	lock_ = nullptr;
 	delete death_epx_;
 	death_epx_ = nullptr;
 	delete death_gpx_;
@@ -99,17 +94,17 @@ Target3ErwiniaMain::~Target3ErwiniaMain()
 Target3Erwinia::Target3Erwinia()
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = NyaInput::GetRand(100, SCREEN_MAX_X - 50);
 	main_.phandle_->grid_y_ = NyaInput::GetRand(-200, -100);
-	mode_ = 1;
 }
 
 Target3Erwinia::Target3Erwinia(int x, int y)
 {
 	count_frame_ = 0;
+	mode_ = 1;
 	main_.phandle_->grid_x_ = x;
 	main_.phandle_->grid_y_ = y;
-	mode_ = 1;
 }
 
 
@@ -125,14 +120,19 @@ void Target3Erwinia::Act(void)
 	case 1:
 		Act1();
 		if (NyaPosition::InScreen(main_.phandle_))
-		{
 			count_frame_ = 0;
-			mode_ = 2;
-		}
 		break;
 	case 2:
 		Act2();
+		if (main_.phandle_->health_ <= 0)
+		{
+			count_frame_ = 0;
+			NyaSound::Play(main_.death_spx_);
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
+		}
 		break;
+	case 3:
+		return;
 	};
 
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
@@ -145,12 +145,18 @@ void Target3Erwinia::Draw(void)
 	{
 	case 1:
 		Draw1();
+		if (NyaPosition::InScreen(main_.phandle_))
+			mode_ = 2;
 		break;
 	case 2:
 		Draw2();
-		if (main_.phandle_->health_ < 0)
+		if (main_.phandle_->health_ <= 0)
 			mode_ = 3;
+		if (FPS_MAX * 40 < count_frame_)
+			mode_ = 2;
 		break;
+	case 3:
+		return;
 	};
 }
 
@@ -190,7 +196,7 @@ void Target3Erwinia::Act2(void)
 		}
 	}
 
-	if (main_.phandle_->health_ < 0)
+	if (main_.phandle_->health_ <= 0)
 	{	// ‘Å‚¿•Ô‚µUŒ‚
 		double dpx_angle;
 		PositionHandle phandle_user;
@@ -221,11 +227,11 @@ void Target3Erwinia::Draw1(void)
 	// main •`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	if (count_frame_ % 20 == 0)
+	if (NyaInput::GetFrameCount() % 20 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
-
-	main_.lock_.Run(main_.phandle_);
+	// main ƒƒbƒN•`‰æ
+	main_.lock_->Run(main_.phandle_);
 }
 
 void Target3Erwinia::Draw2(void)
@@ -237,15 +243,13 @@ void Target3Erwinia::Draw2(void)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	// main ƒƒbƒN•`‰æ
-	main_.lock_.Run(main_.phandle_);
+	main_.lock_->Run(main_.phandle_);
 
-	if (main_.phandle_->health_ < 0)
+	if (main_.phandle_->health_ <= 0)
 	{	// ”š”­•`‰æ
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::TARGET_EFFECT1);
-		NyaSound::Play(main_.death_spx_);
-		NyaInterface::GetHandleSkill()->AddExp(10000);
 	}
 
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "NyaTarget.h"
-#include "TeemoLock.h"
+
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -37,12 +38,14 @@ class Target3BacillusMain
 {
 public:
 	Target3BacillusDeathDevice device2_;
+	const unsigned int exp_;
+	const unsigned int health_max_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;
 	HNLIB::GraphicPropertyX4* gpx_;
 	HNLIB::PositionHandle* phandle_;
-	TeemoLock lock_;
 	Target3BacillusMain();
 	~Target3BacillusMain();
 };

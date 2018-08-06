@@ -1,7 +1,8 @@
 #include "HNLIB.h"
+#include "Target3Bacillus.h"
 #include "TeemoEnum.h"
 #include "TeemoFactory.h"
-#include "Target3Bacillus.h"
+#include "TeemoLock.h"
 
 using namespace HNLIB;
 
@@ -40,7 +41,7 @@ Target3BacillusDeathDevice::Target3BacillusDeathDevice()
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackWhite5(dpx_, device_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackWhite6(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target3BacillusDeathDevice::~Target3BacillusDeathDevice()
@@ -55,31 +56,29 @@ Target3BacillusDeathDevice::~Target3BacillusDeathDevice()
 	effect_gpx_ = nullptr;
 }
 
-Target3BacillusMain::Target3BacillusMain()
+Target3BacillusMain::Target3BacillusMain(): exp_(2000), health_max_(100)
 {
+	lock_ = new TeemoLock(eLOCK::BACILLUS);
+
 	death_epx_ = new EffectPropertyX1;
 	death_gpx_ = new GraphicPropertyX4;
 	TeemoFactory::TargetDeath1(death_epx_, death_gpx_);
 
 	death_spx_ = new SoundPropertyX;
 	NyaSound::Load("sound/target_death1.wav", &death_spx_->file_);
-	NyaSound::ChangeVolume(&death_spx_->file_, 50);
+	NyaSound::ChangeVolume(&death_spx_->file_, TARGET_DEATH1_SOUND_VOLUME);
 
 	gpx_ = new GraphicPropertyX4;
 	gpx_->extend_rate_ = 1.5;
-	NyaGraphic::Load(4, 1, "img/target/target_bacillus.png", &gpx_->file_);
+	NyaGraphic::Load(4, 1, "img/target/main_bacillus.png", &gpx_->file_);
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->collision_power_ = 1;
-	phandle_->collision_range_ = 6;
-	phandle_->health_ = 100;
-
-	lock_.LoadGraphic("img/target/lock_bacillus.png");
+	phandle_->collision_range_ = 20;
+	phandle_->health_ = health_max_;
 }
 
 Target3BacillusMain::~Target3BacillusMain()
 {
-	NyaGraphic::Delete(&death_gpx_->file_);
 	NyaSound::Delete(&death_spx_->file_);
 	NyaGraphic::Delete(&gpx_->file_);
 
@@ -87,8 +86,11 @@ Target3BacillusMain::~Target3BacillusMain()
 	death_epx_ = nullptr;
 	delete death_gpx_;
 	death_gpx_ = nullptr;
+	delete death_spx_;
+	death_spx_ = nullptr;
 	delete gpx_;
 	gpx_ = nullptr;
+
 	NyaPosition::DeleteHandle(phandle_);
 }
 
@@ -115,8 +117,17 @@ void Target3Bacillus::Act(void)
 	{
 	case 1:
 		Act1();
+		if (main_.phandle_->health_ <= 0)
+		{
+			count_frame_ = 0;
+			NyaSound::Play(main_.death_spx_);
+			NyaInterface::GetHandleSkill()->AddExp(main_.exp_);
+		}
 		break;
+	case 2:
+		return;
 	};
+
 
 	count_frame_++;
 }
@@ -127,9 +138,13 @@ void Target3Bacillus::Draw(void)
 	{
 	case 1:
 		Draw1();
-		if (main_.phandle_->health_ < 0)
+		if (main_.phandle_->health_ <= 0)
+			mode_ = 2;
+		if (FPS_MAX * 20 < count_frame_)
 			mode_ = 2;
 		break;
+	case 2:
+		return;
 	};
 }
 
@@ -176,7 +191,7 @@ void Target3Bacillus::Act1(void)
 		NyaPosition::MoveSpeedMode(main_.phandle_, move_angle_, 5, FPS_MAX * 10);
 	}
 
-	if (main_.phandle_->health_ < 0)
+	if (main_.phandle_->health_ <= 0)
 	{	// ‘Å‚¿•Ô‚µUŒ‚
 		PositionHandle phandle_user;
 		NyaPosition::FindHandle("user", &phandle_user);
@@ -197,19 +212,17 @@ void Target3Bacillus::Draw1(void)
 	// main •`‰æ
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
-	if (count_frame_ % 30 == 0)
+	if (NyaInput::GetFrameCount() % 30 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;	
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
 	// main ƒƒbƒN•`‰æ
-	main_.lock_.Run(main_.phandle_);
+	main_.lock_->Run(main_.phandle_);
 
-	if (main_.phandle_->health_ < 0)
+	if (main_.phandle_->health_ <= 0)
 	{	// ”š”­•`‰æ
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::TARGET_EFFECT1);
-		NyaSound::Play(main_.death_spx_);
-		NyaInterface::GetHandleSkill()->AddExp(9000);
 	}
 
 }

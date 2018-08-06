@@ -73,11 +73,11 @@ void Target3Pseudomonad::Act(void)
 	case 1:
 		Act1();
 		break;
+	case 2:
+		return;
 	};
 
 	main_.phandle_->grid_y_ += MAP_SCROLL_PER_FRAME;
-	for (auto& e : main_collection_)
-		e.phandle_->grid_y_ += 0.2;
 	count_frame_++;
 }
 
@@ -87,7 +87,11 @@ void Target3Pseudomonad::Draw(void)
 	{
 	case 1:
 		Draw1();
+		if (FPS_MAX * 40 < count_frame_)
+			mode_ = 2;
 		break;
+	case 2:
+		return;
 	};
 }
 
@@ -136,7 +140,6 @@ void Target3Pseudomonad::Draw1(void)
 	main_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::TARGET1);
-
 	// main ÉçÉbÉNï`âÊ
 	main_.lock_.Run(main_.phandle_);
 }

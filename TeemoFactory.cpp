@@ -22,6 +22,14 @@ void TeemoFactory::TargetAttackBlue1(DevicePropertyX1* dpx, GraphicPropertyX4* g
 	NyaGraphic::Load("img/target/attack_blue1.png", &gpx->file_);
 }
 
+void TeemoFactory::TargetAttackBlue1(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
+	NyaGraphic::Load("img/target/attack_blue2.png", &gadget_gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
 void TeemoFactory::TargetAttackBlue2(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_BLUE2;
@@ -152,6 +160,14 @@ void TeemoFactory::TargetAttackRed5(DevicePropertyX1* dpx, GraphicPropertyX4* gp
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
+void TeemoFactory::TargetAttackRed19(DevicePropertyX1 * dpx, GraphicPropertyX4 * gadget_gpx, EffectPropertyX1 * epx, GraphicPropertyX4 * effect_gpx)
+{
+	dpx->collision_range_ = TARGET_ATTACK_RANGE_RED19;
+	NyaGraphic::Load("img/target/attack_red19.png", &gadget_gpx->file_);
+	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
+	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
+}
+
 void TeemoFactory::TargetAttackOrange5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_ORANGE5;
@@ -183,11 +199,11 @@ void TeemoFactory::TargetAttackPurple3(DevicePropertyX1* dpx, GraphicPropertyX4*
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }
 
-void TeemoFactory::TargetAttackWhite5(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1* epx, GraphicPropertyX4* effect_gpx)
+void TeemoFactory::TargetAttackWhite6(DevicePropertyX1* dpx, GraphicPropertyX4* gpx, EffectPropertyX1* epx, GraphicPropertyX4* effect_gpx)
 {
 	dpx->collision_range_ = TARGET_ATTACK_RANGE_WHITE5;
 	dpx->draw_angle_speed_deg_ = 2;
-	NyaGraphic::Load("img/target/attack_white5.png", &gpx->file_);
+	NyaGraphic::Load("img/target/attack_white6.png", &gpx->file_);
 	epx->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	NyaGraphic::Load("img/target/point.png", &effect_gpx->file_);
 }

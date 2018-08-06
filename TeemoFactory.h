@@ -15,6 +15,7 @@ public:
 	TeemoFactory();
 	~TeemoFactory();
 	static void TargetAttackBlue1(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx);
+	static void TargetAttackBlue1(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackBlue2(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackBlue2(HNLIB::DevicePropertyX3* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackBlue3(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
@@ -35,7 +36,8 @@ public:
 	static void TargetAttackPurple3(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackRed2(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackRed5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
-	static void TargetAttackWhite5(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
+	static void TargetAttackRed19(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
+	static void TargetAttackWhite6(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackYellow1(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetAttackYellow2(HNLIB::DevicePropertyX1* dpx, HNLIB::GraphicPropertyX4* device_gpx, HNLIB::EffectPropertyX1* epx, HNLIB::GraphicPropertyX4* effect_gpx);
 	static void TargetCube(HNLIB::GraphicPropertyX4* gpx);

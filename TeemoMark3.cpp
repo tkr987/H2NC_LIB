@@ -748,7 +748,6 @@ void TeemoMark3::Draw4(void)
 		main_.death2_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death2_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death2_epx_, main_.death2_gpx_, eOBJECT::TARGET_EFFECT1);
-		NyaSound::Play(main_.death2_spx_);
 		NyaGraphic::Swing();
 	}
 

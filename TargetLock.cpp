@@ -27,6 +27,12 @@ TeemoLock::TeemoLock(eLOCK type)
 	case eLOCK::AQUIFICAE:
 		NyaGraphic::Load("img/target/lock_aquificae.png", &gpx_->file_);
 		break;
+	case eLOCK::BACILLUS:
+		NyaGraphic::Load("img/target/lock_bacillus.png", &gpx_->file_);
+		break;
+	case eLOCK::BORDETELLA:
+		NyaGraphic::Load("img/target/lock_bordetella.png", &gpx_->file_);
+		break;
 	case eLOCK::CHLOROBI:
 		NyaGraphic::Load("img/target/lock_chlorobi.png", &gpx_->file_);
 		break;
@@ -38,6 +44,9 @@ TeemoLock::TeemoLock(eLOCK type)
 		break;
 	case eLOCK::ECTROMELIA:
 		NyaGraphic::Load("img/target/lock_ectromelia.png", &gpx_->file_);
+		break;
+	case eLOCK::ERWINIA:
+		NyaGraphic::Load("img/target/lock_erwinia.png", &gpx_->file_);
 		break;
 	case eLOCK::FIRMICUTES:
 		NyaGraphic::Load("img/target/lock_firmicutes.png", &gpx_->file_);
@@ -51,11 +60,17 @@ TeemoLock::TeemoLock(eLOCK type)
 	case eLOCK::POLYOMA:
 		NyaGraphic::Load("img/target/lock_polyoma.png", &gpx_->file_);
 		break;
+	case eLOCK::SHIGELLA:
+		NyaGraphic::Load("img/target/lock_shigella.png", &gpx_->file_);
+		break;
 	case eLOCK::SPIROCHAETE:
 		NyaGraphic::Load("img/target/lock_spirochaete.png", &gpx_->file_);
 		break;
 	case eLOCK::TENERICUTES:
-		NyaGraphic::Load("img/target/llock_tenericutes.png", &gpx_->file_);
+		NyaGraphic::Load("img/target/lock_tenericutes.png", &gpx_->file_);
+		break;
+	case eLOCK::VIBRIO:
+		NyaGraphic::Load("img/target/lock_vibrio.png", &gpx_->file_);
 		break;
 	case eLOCK::CUBE:
 		NyaGraphic::Load("img/target/lock_cube.png", &gpx_->file_);

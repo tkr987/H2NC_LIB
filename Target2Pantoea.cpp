@@ -97,6 +97,8 @@ void Target2Pantoea::Draw(void)
 		Draw1();
 		if (main_.phandle_->health_ <= 0)
 			mode_ = 2;
+		if (FPS_MAX * 20 < count_frame_)
+			mode_ = 2;
 		break;
 	case 2:
 		return;

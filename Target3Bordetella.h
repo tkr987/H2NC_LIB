@@ -1,7 +1,8 @@
 #pragma once
 #include <array>
 #include "NyaTarget.h"
-#include "TeemoLock.h"
+
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -27,7 +28,7 @@ class Target3BordetellaCube
 {
 public:
 	Target3BordetellaCubeDevice device_;
-	TeemoLock lock_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::GraphicPropertyX4* gpx_;
@@ -50,9 +51,10 @@ public:
 class Target3BordetellaMain
 {
 public:
-	unsigned int health_max_;
 	Target3BordetellaDevice device_;
-	TeemoLock lock_;
+	const unsigned int exp_;
+	const unsigned int health_max_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

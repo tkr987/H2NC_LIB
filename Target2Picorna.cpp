@@ -167,7 +167,6 @@ void Target2Picorna::Act(void)
 		return;
 	};
 
-
 	count_frame_++;
 }
 
@@ -207,6 +206,9 @@ void Target2Picorna::Act2(void)
 	cube_collection_[2].phandle_->grid_y_ = main_.phandle_->grid_y_ - 60;
 	cube_collection_[3].phandle_->grid_x_ = main_.phandle_->grid_x_ + 240;
 	cube_collection_[3].phandle_->grid_y_ = main_.phandle_->grid_y_ - 60;
+
+	if (!NyaPosition::InScreen(main_.phandle_))
+		return;
 
 	// 衝突判定　衝突ダメージだけ経験値を追加
 	NyaPosition::Collide(main_.phandle_, eOBJECT::TARGET1);

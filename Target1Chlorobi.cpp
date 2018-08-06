@@ -13,7 +13,7 @@ Target1ChlorobiMainDeathDevice::Target1ChlorobiMainDeathDevice()
 	epx_ = new EffectPropertyX1;
 	effect_gpx_ = new GraphicPropertyX4;
 	dpx_->move_speed_ = 4;
-	TeemoFactory::TargetAttackWhite5(dpx_, device_gpx_, epx_, effect_gpx_);
+	TeemoFactory::TargetAttackWhite6(dpx_, device_gpx_, epx_, effect_gpx_);
 }
 
 Target1ChlorobiMainDeathDevice::~Target1ChlorobiMainDeathDevice()

@@ -1,10 +1,8 @@
 #pragma once
-
-
-#pragma once
 #include <array>
 #include "NyaTarget.h"
-#include "TeemoLock.h"
+
+class TeemoLock;
 
 namespace HNLIB
 {
@@ -14,7 +12,6 @@ namespace HNLIB
 	class PositionHandle;
 	class SoundPropertyX;
 }
-
 
 class Target3ErwiniaDevice
 {
@@ -41,10 +38,11 @@ public:
 class Target3ErwiniaMain
 {
 public:
-	unsigned int health_max_;
 	Target3ErwiniaDevice device_;
 	Target3ErwiniaDeathDevice device2_;
-	TeemoLock lock_;
+	const unsigned int exp_;
+	const unsigned int health_max_;
+	TeemoLock* lock_;
 	HNLIB::EffectPropertyX1* death_epx_;
 	HNLIB::GraphicPropertyX4* death_gpx_;
 	HNLIB::SoundPropertyX* death_spx_;

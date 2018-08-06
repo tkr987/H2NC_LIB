@@ -308,8 +308,8 @@ UserAi::UserAi(void)
 	// interface スキル 初期化
 	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::Q)] = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::Q)];
 	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::W)] = NyaInterface::GetHandleSkill()->lv4_exp_[static_cast<int>(eSKILL::W)];
-	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)] = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::E)];
-	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::R)] = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::R)];
+	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)] = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)];
+	NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::R)] = NyaInterface::GetHandleSkill()->lv3_exp_[static_cast<int>(eSKILL::R)];
 
 	// interface スキル 初期化
 	//NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::Q)] = 0;

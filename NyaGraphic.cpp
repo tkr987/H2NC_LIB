@@ -11,8 +11,8 @@
 using namespace std;
 using namespace HNLIB;
 
-std::list<GraphicFile> NyaGraphic::file_collection_;
-std::vector<GraphicDrawSet> NyaGraphic::layer_collection_(static_cast<int>(eOBJECT::sizeof_enum));
+list<GraphicFile> NyaGraphic::file_collection_;
+array<GraphicDrawSet, static_cast<int>(eOBJECT::sizeof_enum)> NyaGraphic::layer_collection_;
 GraphicSwing NyaGraphic::swing_;
 
 //***************************
@@ -96,6 +96,25 @@ GraphicPropertyX3b::GraphicPropertyX3b()
 	flag_trans_ = true;
 }
 
+GraphicPropertyX4b::GraphicPropertyX4b()
+{
+	draw_angle_deg_ = 0;
+	extend_rate_ = 1.0;
+	file_div_ = 0;
+	flag_turn_ = false;
+	flag_trans_ = true;
+}
+
+GraphicPropertyX5b::GraphicPropertyX5b()
+{
+	draw_angle_deg_ = 0;
+	extend_rate_ = 1.0;
+	file_div_ = 0;
+	flag_turn_ = false;
+	flag_trans_ = true;
+}
+
+
 //**********************
 // class GraphicSwing
 //**********************
@@ -120,9 +139,9 @@ NyaGraphic::~NyaGraphic()
 	Clear();
 }
 
-//*************************************
-// NyaGraphic メンバ関数 (public)
-//*************************************
+//******************************************
+// class NyaGraphic メンバ関数(public)
+//******************************************
 
 /**
 @brief メモリにロードした画像を全てクリアする
@@ -470,6 +489,19 @@ void NyaGraphic::Draw(const GraphicPropertyX8b *gpx, eOBJECT layer)
 	layer_collection_[static_cast<int>(layer)].gpx8b_deque_.push_back(*gpx);
 }
 
+void NyaGraphic::Init(void)
+{
+	for (auto& e_file: file_collection_)
+	{
+		for (auto& e_div : e_file.div_collection_)
+			DeleteGraph(e_div);
+		e_file.div_collection_.clear();
+	}
+	file_collection_.clear();
+	for (auto&e : layer_collection_)
+		e.Clear();
+}
+
 /**
 @brief 全ての処理を実行する
 @note
@@ -653,7 +685,7 @@ void NyaGraphic::DrawAll(eOBJECT draw_layer)
 	while (!layer_collection_.at(layer).gpx4b_deque_.empty()) {
 		gpx4b = &layer_collection_.at(layer).gpx4b_deque_.front();
 		SetDrawBlendMode(gpx4b->blend_mode_, gpx4b->blend_alpha_);
-		DrawRotaGraph(gpx4b->pos_cx_ + swing_.grid_x_, gpx4b->pos_cy_, gpx4b->extend_rate_, NyaInput::AngleToRad(gpx4b->draw_angle_deg_),
+		DrawRotaGraph(gpx4b->grid_cx_ + swing_.grid_x_, gpx4b->grid_cy_, gpx4b->extend_rate_, NyaInput::AngleToRad(gpx4b->draw_angle_deg_),
 			gpx4b->file_.div_collection_[gpx4b->file_div_], gpx4b->flag_trans_, gpx4b->flag_turn_);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		layer_collection_.at(layer).gpx4b_deque_.pop_front();

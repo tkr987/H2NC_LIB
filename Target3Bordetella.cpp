@@ -259,7 +259,7 @@ void Target3Bordetella::Act2(void)
 		cube_dpx->create_x_ = cube_collection_[0].phandle_->grid_x_;
 		cube_dpx->create_y_ = cube_collection_[0].phandle_->grid_y_;
 		cube_dpx->move_angle_deg_ = NyaPosition::Angle(cube_collection_[0].phandle_, &phandle_user);
-		for (int delay = 0; delay < 30; delay += 3)
+		for (int delay = 0; delay < 21; delay += 3)
 		{
 			cube_dpx->delay_time_frame_ = delay;
 			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);
@@ -277,7 +277,7 @@ void Target3Bordetella::Act2(void)
 		cube_dpx->create_x_ = cube_collection_[1].phandle_->grid_x_;
 		cube_dpx->create_y_ = cube_collection_[1].phandle_->grid_y_;
 		cube_dpx->move_angle_deg_ = NyaPosition::Angle(cube_collection_[1].phandle_, &phandle_user);
-		for (int delay = 0; delay < 30; delay += 3)
+		for (int delay = 0; delay < 21; delay += 3)
 		{
 			cube_dpx->delay_time_frame_ = delay;
 			NyaDevice::Attack1414(cube_dpx, cube_gadget_gpx, cube_epx, cube_effect_gpx, eOBJECT::TARGET_ATTACK1, eOBJECT::TARGET_ATTACK_EFFECT1);

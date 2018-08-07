@@ -101,7 +101,7 @@ namespace HNLIB
 		double move_y_;
 		DevicePropertyX2* gadget_dpx_;
 		GraphicPropertyX4* device_gpx_;
-		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
 		DeviceGadget24();
 		~DeviceGadget24();
 	};
@@ -122,7 +122,7 @@ namespace HNLIB
 		double move_y_;
 		DevicePropertyX3* gadget_dpx_;
 		GraphicPropertyX4* device_gpx_;
-		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
 		DeviceGadget34();
 		~DeviceGadget34();
 	};
@@ -146,7 +146,7 @@ namespace HNLIB
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX1* gadget_dpx_;
 		GraphicPropertyX4* device_gpx_;
-		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
 		DeviceGadget1414();
 		~DeviceGadget1414();
 	};
@@ -170,7 +170,7 @@ namespace HNLIB
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX1* gadget_dpx_;
 		GraphicPropertyX4* device_gpx_;
-		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
 		DeviceGadget1424();
 		~DeviceGadget1424();
 	};
@@ -194,7 +194,7 @@ namespace HNLIB
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX2* gadget_dpx_;
 		GraphicPropertyX4* device_gpx_;
-		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
 		DeviceGadget2414();
 		~DeviceGadget2414();
 	};
@@ -242,7 +242,7 @@ namespace HNLIB
 		GraphicPropertyX4* effect_gpx_;
 		DevicePropertyX3* gadget_dpx_;
 		GraphicPropertyX4* device_gpx_;
-		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> gadget_phandle_collection_;
+		std::array<PositionHandle*, DEVICE_COLLISION_MAX_ACCURACY> phandle_collection_;
 		DeviceGadget3414();
 		~DeviceGadget3414();
 	};
@@ -284,6 +284,7 @@ namespace HNLIB
 		static void Attack2424(const DevicePropertyX2* dpx, const GraphicPropertyX4* device_gpx, const EffectPropertyX2* epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Attack3414(const DevicePropertyX3* dpx, const GraphicPropertyX4* device_gpx, const EffectPropertyX1* epx, const GraphicPropertyX4* effect_gpx, eOBJECT gadget_type, eOBJECT effect_type, unsigned int collision_accuracy = 1);
 		static void Clear(eOBJECT type);
+		static void Init(void);
 		static void Run(void);
 		static size_t Size(eOBJECT type);
 	private:

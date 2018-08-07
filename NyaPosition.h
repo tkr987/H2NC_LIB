@@ -26,17 +26,7 @@ namespace HNLIB
 		double grid_x_;								// オブジェクト（ハンドル）のX座標
 		double grid_y_;								// オブジェクト（ハンドル）のY座標
 		std::string name_;							// ハンドルの名前
-		PositionHandle()
-		{
-			collision_hit_damage_ = 0;
-			collision_hit_x_ = 0;
-			collision_hit_y_ = 0;
-			collision_power_ = 1;
-			collision_range_ = 10;
-			health_ = 1;
-			grid_x_ = -1000;
-			grid_y_ = -1000;
-		}
+		PositionHandle();
 	};
 
 	class PositionMove
@@ -59,10 +49,10 @@ namespace HNLIB
 		static void Collide(PositionHandle* handle, eOBJECT type);
 		static void CollisionPair(eOBJECT type1, eOBJECT type2);
 		static PositionHandle* CreateHandle(void);
-		static void CreateHandle(PositionHandle* new_handle);
 		static void DeleteHandle(PositionHandle* delete_handle);
 		static int FindHandle(std::string name, PositionHandle* handle);
 		static int FindHandle(std::string name, std::vector<PositionHandle>* handle_collection);
+		static void Init(void);
 		static bool InScreen(PositionHandle* handle, int gap = 0);
 		static void MoveGridMode(PositionHandle* handle, double end_x, double end_y, unsigned int max_frame);
 		static void MoveLengthMode(PositionHandle* handle, double angle, double length, unsigned int max_frame);

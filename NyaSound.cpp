@@ -55,6 +55,14 @@ void NyaSound::Delete(SoundFile* file)
 	}
 }
 
+void NyaSound::Init(void)
+{
+	for (auto& e: file_collection_)
+		DeleteSoundMem(e.id_);
+	file_collection_.clear();
+	play_collection_.clear();
+}
+
 void NyaSound::Load(std::string file_pass, SoundFile* file)
 {
 	list<SoundFile>::iterator it;

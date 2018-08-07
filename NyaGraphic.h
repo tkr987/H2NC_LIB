@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <deque>
 #include <iterator>
 #include <list>
@@ -214,16 +215,17 @@ namespace HNLIB
 	class GraphicPropertyX4b 
 	{
 	public:
-		GraphicFile file_;
-		int file_div_;
-		int pos_cx_;
-		int pos_cy_;
-		double draw_angle_deg_;
-		double extend_rate_;
-		bool flag_turn_;
-		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
+		double draw_angle_deg_;
+		double extend_rate_;
+		GraphicFile file_;
+		bool flag_turn_;
+		bool flag_trans_;
+		int file_div_;
+		int grid_cx_;
+		int grid_cy_;
+		GraphicPropertyX4b();
 	};
 
 	// DXLIB âÒì]ï`âÊä÷êîIIÇ…ëŒâû
@@ -244,6 +246,7 @@ namespace HNLIB
 		bool flag_trans_;
 		int blend_alpha_;
 		int blend_mode_;
+		GraphicPropertyX5b();
 	};
 
 	// DXLIB âÒì]ï`âÊä÷êîIIIÇ…ëŒâû
@@ -377,13 +380,14 @@ namespace HNLIB
 		static void Draw(const GraphicPropertyX6b* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX7b* gpx, eOBJECT layer);
 		static void Draw(const GraphicPropertyX8b* gpx, eOBJECT layer);
+		static void Init(void);
 		static void Load(std::string file_pass, GraphicFile* file);
 		static void Load(int div_x, int div_y, std::string file_pass, GraphicFile* file);
 		static void Run(void);
 		static void Swing(void);
 	private:
 		static std::list<GraphicFile> file_collection_;
-		static std::vector<GraphicDrawSet> layer_collection_;
+		static std::array<GraphicDrawSet, static_cast<int>(eOBJECT::sizeof_enum)> layer_collection_;
 		static GraphicSwing swing_;
 		static void CalculateSwing(void);
 		static void DrawAll(eOBJECT layer);

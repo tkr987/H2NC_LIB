@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <deque>
 #include <tuple>
@@ -12,13 +13,33 @@ vector<PositionHandle*> NyaPosition::collision_collection_[static_cast<int>(eOBJ
 list<PositionHandle*> NyaPosition::handle_collection_;
 list<PositionMove> NyaPosition::move_collection_;
 
-double HNLIB::NyaPosition::Angle(PositionHandle* handle1, PositionHandle* handle2)
+//***************************
+// class PositionHandle
+//***************************
+
+PositionHandle::PositionHandle()
+{
+	collision_hit_damage_ = 0;
+	collision_hit_x_ = 0;
+	collision_hit_y_ = 0;
+	collision_power_ = 1;
+	collision_range_ = 10;
+	health_ = 1;
+	grid_x_ = -1000;
+	grid_y_ = -1000;
+}
+
+//*************************************
+// NyaPosition メンバ関数(public)
+//*************************************
+
+double NyaPosition::Angle(PositionHandle* handle1, PositionHandle* handle2)
 {
 	return RadToAngle(atan2(handle2->grid_y_ - handle1->grid_y_, handle2->grid_x_ - handle1->grid_x_));
 }
 
 /**
- @brief 衝突判定処理するハンドルを登録する関数
+ @brief 衝突判定処理するハンドルを登録する
  @param phandle 衝突判定処理するハンドル
  @param type 衝突判定するハンドルのオブジェクトのタイプ
  @note
@@ -71,29 +92,18 @@ PositionHandle* NyaPosition::CreateHandle(void)
 }
 
 /**
-@brief ハンドル新規作成関数
-@note
- 動的生成したhandleを引数から渡して登録する方法で新規作成するときに使う
- nullptrのポインタを渡したときはハンドルを新規に作成して引数に格納される
-**/
-void NyaPosition::CreateHandle(PositionHandle* new_handle)
-{
-	if (new_handle == nullptr)
-		new_handle = new PositionHandle;
-
-	handle_collection_.push_back(new_handle);
-}
-
-/**
 @brief ハンドル削除関数
 @note
  引数で指定されたハンドルを削除する
 **/
 void HNLIB::NyaPosition::DeleteHandle(PositionHandle* delete_handle)
 {
-	handle_collection_.remove(delete_handle);
-	delete delete_handle;
-	delete_handle = nullptr;
+	if (find(handle_collection_.begin(), handle_collection_.end(), delete_handle) != handle_collection_.end())
+	{
+		handle_collection_.remove(delete_handle);
+		delete delete_handle;
+		delete_handle = nullptr;
+	}
 }
 
 /**
@@ -141,6 +151,26 @@ int NyaPosition::FindHandle(string name, vector<PositionHandle>* handle_collecti
 
 	return find;
 }
+
+/**
+@brief 初期化する
+@note
+ NyaPositionに登録された全要素がクリアされる。
+**/
+void NyaPosition::Init(void)
+{
+	collision_pair_collection_.clear();
+	for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
+		collision_collection_[static_cast<int>(type)].clear();
+	for (auto&e : handle_collection_)
+	{
+		delete e;
+		e = nullptr;
+	}
+	handle_collection_.clear();
+	move_collection_.clear();
+}
+
 
 /**
 @brief 移動関数
@@ -238,12 +268,6 @@ void NyaPosition::Run(eEVENT check_event)
 
 	switch(check_event)
 	{
-	case eEVENT::MISSION_CREATE:
-	case eEVENT::MISSION_REPLAY_CREATE:
-		for (eOBJECT type = eOBJECT::enum_zero; type != eOBJECT::sizeof_enum; ++type)
-			collision_collection_[static_cast<int>(type)].clear();
-		move_collection_.clear();
-		break;
 	case eEVENT::MISSION_RUN:
 	case eEVENT::MISSION_REPLAY_RUN:
 		// 衝突判定をする前に衝突ダメージを0クリアしておく
@@ -259,6 +283,10 @@ void NyaPosition::Run(eEVENT check_event)
 		break;
 	}
 }
+
+//*************************************
+// NyaPosition メンバ関数(private)
+//*************************************
 
 void NyaPosition::CalculateMove(void)
 {
@@ -315,6 +343,3 @@ void NyaPosition::JudgeCollision(eOBJECT type1, eOBJECT type2)
 		}
 	}
 }
-
-
-

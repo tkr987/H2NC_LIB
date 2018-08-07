@@ -14,7 +14,6 @@ UserAiBarrier::UserAiBarrier()
 	valid_ = false;
 
 	gpx_ = new GraphicPropertyX4;
-	gpx_->extend_rate_ = USER_BARRIER_EXTEND_MAX_RATE;
 	NyaGraphic::Load("img/user/barrier.png", &gpx_->file_);
 }
 
@@ -162,8 +161,8 @@ UserAiMain::UserAiMain()
 	ult_epx_->interval_time_frame_ = 3;
 
 	ult_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load(5, 2, "img/user/ult_effect.png", &ult_gpx_->file_);
 	ult_gpx_->extend_rate_ = 1.5;
+	NyaGraphic::Load(5, 2, "img/user/ult_effect.png", &ult_gpx_->file_);
 
 	for (auto& e : ult_spx_collection_)
 	{
@@ -173,8 +172,6 @@ UserAiMain::UserAiMain()
 	}
 
 	phandle_ = NyaPosition::CreateHandle();
-	phandle_->health_ = 1;
-	phandle_->collision_power_ = 1;
 	phandle_->collision_range_ = USER_MAIN_COLLISION_RANGE;
 	phandle_->grid_x_ = SCREEN_CENTER_X;
 	phandle_->grid_y_ = SCREEN_MAX_Y - 150;
@@ -186,6 +183,7 @@ UserAiMain::~UserAiMain()
 	NyaGraphic::Delete(&death_gpx_->file_);
 	NyaSound::Delete(&death_spx_->file_);
 	NyaGraphic::Delete(&gpx_->file_);
+	NyaGraphic::Delete(&ult_gpx_->file_);
 	for (auto& e: ult_spx_collection_)
 		NyaSound::Delete(&e->file_);
 
@@ -225,19 +223,6 @@ UserAiRange::~UserAiRange()
 
 UserSkill::UserSkill()
 {
-	spx_q_ = new SoundPropertyX;
-	NyaSound::Load("sound/user_skill_change.wav", &spx_q_->file_);
-	NyaSound::ChangeVolume(&spx_q_->file_, 30);
-	spx_w_ = new SoundPropertyX;
-	NyaSound::Load("sound/user_skill_change.wav", &spx_w_->file_);
-	NyaSound::ChangeVolume(&spx_w_->file_, 30);
-	spx_e_ = new SoundPropertyX;
-	NyaSound::Load("sound/user_skill_change.wav", &spx_e_->file_);
-	NyaSound::ChangeVolume(&spx_e_->file_, 30);
-	spx_r_ = new SoundPropertyX;
-	NyaSound::Load("sound/user_skill_change.wav", &spx_r_->file_);
-	NyaSound::ChangeVolume(&spx_r_->file_, 30);
-
 	gpx_q_ = new GraphicPropertyX4;
 	gpx_q_->extend_rate_ = 0.2;
 	NyaGraphic::Load("img/user/skill_q.png", &gpx_q_->file_);
@@ -250,6 +235,19 @@ UserSkill::UserSkill()
 	gpx_r_ = new GraphicPropertyX4;
 	gpx_r_->extend_rate_ = 0.2;
 	NyaGraphic::Load("img/user/skill_r.png", &gpx_r_->file_);
+
+	spx_q_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_q_->file_);
+	NyaSound::ChangeVolume(&spx_q_->file_, 30);
+	spx_w_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_w_->file_);
+	NyaSound::ChangeVolume(&spx_w_->file_, 30);
+	spx_e_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_e_->file_);
+	NyaSound::ChangeVolume(&spx_e_->file_, 30);
+	spx_r_ = new SoundPropertyX;
+	NyaSound::Load("sound/user_skill_change.wav", &spx_r_->file_);
+	NyaSound::ChangeVolume(&spx_r_->file_, 30);
 }
 
 UserSkill::~UserSkill()
@@ -319,7 +317,6 @@ UserAi::UserAi(void)
 
 	// interface 残機設定
 	NyaInterface::GetHandleLife()->value_ = 2;
-//	NyaInterface::GetHandleLife()->value_ = 3;
 
 	// 衝突判定設定
 	NyaPosition::CollisionPair(eOBJECT::USER_ATTACK1, eOBJECT::TARGET1);
@@ -348,10 +345,6 @@ void UserAi::Act(void)
 	Act_Collide();
 	// 移動処理
 	Act_Move();
-
-	// ライフがゼロならコンテニュー画面を表示する
-	if (NyaInterface::GetHandleLife()->value_ == 0)
-		NyaInterface::GetHandleContinue()->valid_ = true;
 
 	count_frame_++;
 }
@@ -875,6 +868,13 @@ void UserAi::Act_Collide(void)
 		NyaInterface::GetHandleSkill()->exp_[static_cast<int>(eSKILL::E)] = NyaInterface::GetHandleSkill()->lv1_exp_[static_cast<int>(eSKILL::E)];
 		NyaDevice::Clear(eOBJECT::TARGET_ATTACK1);
 		NyaSound::Play(main_.death_spx_);
+		// バリア有効化
+		// barrier 有効化
+		barrier_.count_frame_ = 0;
+		barrier_.valid_ = true;
+		// ウルト中に衝突したときの初期化(ウルト中でなくても影響は出ないので問題ない)
+		device_ex_.count_ult_frame_ = 0;
+		device_ex_.valid_ = false;
 	}
 
 	// バリア時の衝突判定変更
@@ -882,6 +882,10 @@ void UserAi::Act_Collide(void)
 		main_.phandle_->collision_range_ = USER_MAIN_COLLISION_RANGE + 15;
 	else
 		main_.phandle_->collision_range_ = USER_MAIN_COLLISION_RANGE;
+
+	// ライフがゼロならコンテニュー画面を表示する
+	if (NyaInterface::GetHandleLife()->value_ == 0)
+		NyaInterface::GetHandleContinue()->valid_ = true;
 }
 
 /**
@@ -1072,11 +1076,8 @@ void UserAi::Draw(void)
 	int lv3_exp_w = ihandle_mission_skill->lv3_exp_[static_cast<int>(eSKILL::W)];
 	int lv4_exp_w = ihandle_mission_skill->lv4_exp_[static_cast<int>(eSKILL::W)];
 
-	//*************
-	// skill 描画
-	//*************
 	if (!barrier_.valid_)
-	{
+	{	// スキル魔法陣描画
 		if (NyaInterface::GetHandleSkill()->select_ == eSKILL::Q)
 		{
 			skill_.gpx_q_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
@@ -1107,20 +1108,15 @@ void UserAi::Draw(void)
 		}
 	}
 
-	//*************
 	// main 描画
-	//*************
 	main_.gpx_->draw_grid_cx_ = (int)main_.phandle_->grid_x_;
 	main_.gpx_->draw_grid_cy_ = (int)main_.phandle_->grid_y_;
 	if (NyaInput::GetFrameCount() % 2 == 0)
 		main_.gpx_->file_div_ = ++main_.gpx_->file_div_ % main_.gpx_->file_.div_total_;
 	NyaGraphic::Draw(main_.gpx_, eOBJECT::USER1);
 
-	//*************
-	// bit 描画
-	//*************
 	if (!NyaInput::GetKeyStateNow(eINPUT::W))
-	{
+	{	// bit 描画
 		if (NyaInput::GetFrameCount() % 2 == 0)
 			device_.bit_gpx_->file_div_ = ++device_.bit_gpx_->file_div_ % device_.bit_gpx_->file_.div_total_;
 		if (lv1_exp_w <= exp_w)
@@ -1161,27 +1157,19 @@ void UserAi::Draw(void)
 		}	
 	}
 
-	//******************
-	// 衝突エフェクト
-	//******************
 	if (main_.phandle_->collision_hit_damage_ != 0 && !barrier_.valid_)
-	{
+	{	// 衝突エフェクト描画
 		main_.death_epx_->grid_x_ = main_.phandle_->grid_x_;
 		main_.death_epx_->grid_y_ = main_.phandle_->grid_y_;
 		NyaEffect::Draw(main_.death_epx_, main_.death_gpx_, eOBJECT::USER_EFFECT1);
-		// barrier 有効化
-		barrier_.count_frame_ = 0;
-		barrier_.valid_ = true;
-		barrier_.gpx_->extend_rate_ = USER_BARRIER_EXTEND_MAX_RATE;
 	}
 
-	//***********************
-	// barrier エフェクト
-	//***********************
 	if (barrier_.valid_)
-	{
+	{	// barrier エフェクト描画
+		if (barrier_.count_frame_ == 0)
+			barrier_.gpx_->extend_rate_ = USER_BARRIER_EXTEND_MAX_RATE;
 		barrier_.gpx_->draw_grid_cx_ = main_.phandle_->grid_x_;
-		barrier_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_ - 10;
+		barrier_.gpx_->draw_grid_cy_ = main_.phandle_->grid_y_ - 5;
 		barrier_.gpx_->draw_angle_deg_ += 2;
 		barrier_.gpx_->extend_rate_ -= 0.002;
 		NyaGraphic::Draw(barrier_.gpx_, eOBJECT::USER_EFFECT1);

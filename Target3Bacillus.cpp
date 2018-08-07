@@ -9,21 +9,16 @@ using namespace HNLIB;
 Target3BacillusDevice::Target3BacillusDevice()
 {
 	dpx_ = new DevicePropertyX1;
-	dpx_->collision_range_ = TARGET_ATTACK_RANGE_RED1;
-	dpx_->move_speed_ = 4;
 	device_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/attack_red1.png", &device_gpx_->file_);
 	epx_ = new EffectPropertyX1;
-	epx_->interval_time_frame_ = TARGET_DEVICE_EFFECT_INTERVAL;
 	effect_gpx_ = new GraphicPropertyX4;
-	NyaGraphic::Load("img/target/point.png", &effect_gpx_->file_);
+	dpx_->move_speed_ = 4;
+	TeemoFactory::TargetAttackBlue3(dpx_, device_gpx_, epx_, effect_gpx_);
 
 }
 
 Target3BacillusDevice::~Target3BacillusDevice()
 {
-	NyaGraphic::Delete(&device_gpx_->file_);
-	NyaGraphic::Delete(&effect_gpx_->file_);
 	delete dpx_;
 	dpx_ = nullptr;
 	delete device_gpx_;

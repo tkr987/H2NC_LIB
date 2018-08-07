@@ -37,6 +37,7 @@ namespace HNLIB
 		~NyaSound(){}
 		static void ChangeVolume(SoundFile* file, int volume);
 		static void Delete(SoundFile* file);
+		static void Init(void);
 		static void Load(std::string pass, SoundFile* file);
 		static void Play(const SoundPropertyX* sp);
 		static void Run(void);

@@ -20,12 +20,28 @@ WindowChild::WindowChild()
 	opening_ = nullptr;
 }
 
+WindowReplay::WindowReplay()
+{
+	existed_file_ = false;
+	new_file_ = false;
+}
+
+void WindowReplay::Clear(void)
+{
+	date_.clear();
+	existed_file_ = false;
+	new_file_ = false;
+	seed_.clear();
+	title_.clear();
+}
+
+
 NyaWindow::NyaWindow(string title)
 {
 	//******************
 	// DXLIB初期化
 	//******************
-	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v85");		// タイトル
+	SetMainWindowText("happy 2 nya C++ DXLIB STG wrapper v88");		// タイトル
 	ChangeWindowMode(true);											// ウィンドウモード
 	SetGraphMode(1280, 720, 32);									// 画面サイズ, 色数
 	DxLib_Init();													// 初期化
@@ -107,10 +123,6 @@ void NyaWindow::Run(void)
 	while (ProcessMessage() != -1 && CheckHitKey(KEY_INPUT_ESCAPE) != 1 && event_ != eEVENT::WINDOW_CLOSE)
 	{
 		// TODO
-		// タイトルでPositionHandleのクリアをする
-		// mission 実行前に mission clearを実行しておく
-		// コンテニュー時に無敵処理追加
-		// ウルト途中に死ぬ→ウルト終了(初期化)させる
 		// stage1
 		// new delete ok, collision range, stage1 main_img extend rate
 
@@ -430,135 +442,142 @@ void NyaWindow::Mission(void)
 }
 
 /**
- @param リプレイの保存をする関数
- @note
-  フォントはタイトル画面を流用
+@param リプレイの保存をする関数
+@note
+フォントはタイトル画面を流用
 **/
 void NyaWindow::SaveReplay(void)
 {
-	string pass;
 	int x, y;
-	string date, seed, title;
 	ifstream ifs;
-	tuple<int, int, int> white = make_tuple(255, 255, 255);
-	tuple<int, int, int> red = make_tuple(255, 0, 0);
-	static int select = 1;
+	tuple<int, int, int> color;
+	const tuple<int, int, int> white = make_tuple(255, 255, 255);
+	const tuple<int, int, int> red = make_tuple(255, 0, 0);
+	static int select = 0;
+	static bool first_call = true;		// trueならファイルの読み込みをおこなう
 
 	if (event_ != eEVENT::REPLAY_SAVE)
 		return;
 
-	// まず、インターフェースの初期化をしておく
-	NyaInterface::Init();
+	if (first_call)
+	{	// インターフェースの初期化とリプレイファイルの有無判定
+		NyaInterface::Init();
+		for (int replay_index = 0; replay_index < 4; replay_index++)
+		{
+			if (replay_index == 0)
+				ifs.open("replay/replay1.rep");
+			else if (replay_index == 1)
+				ifs.open("replay/replay2.rep");
+			else if (replay_index == 2)
+				ifs.open("replay/replay3.rep");
+			else
+				ifs.open("replay/replay4.rep");
+			if (ifs.is_open())
+			{
+				getline(ifs, replay_collection_[replay_index].seed_);
+				getline(ifs, replay_collection_[replay_index].date_);
+				getline(ifs, replay_collection_[replay_index].title_);
+				replay_collection_[replay_index].existed_file_ = true;
+			}
+			ifs.close();
+		}
+		first_call = false;
+	}
 
-	//************************************************
 	// カーソルキーの入力に応じて現在の選択を更新
-	//************************************************
 	if (NyaInput::IsPressKey(eINPUT::DOWN))
-		select = (select == 5) ? 1 : select + 1;
+		select = (select == 4) ? 0 : select + 1;
 	if (NyaInput::IsPressKey(eINPUT::UP))
-		select = (select == 1) ? 5 : select - 1;
+		select = (select == 0) ? 4 : select - 1;
 	x = 60;
-	y = 100 + select * 100;
+	y = 100 + (select + 1) * 100;
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
-	//****************************
 	// 現イベントの名前を表示
-	//****************************
 	x = 60;
 	y = 100;
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "SAVE REPLAY");
 
-	//*******************************************
-	// リプレイフォルダにあるファイルの表示
-	//*******************************************
-	y += 100;
-	ifs.open("replay/replay1.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
+	for (int replay_index = 0; replay_index < 4; replay_index++)
+	{	// リプレイフォルダにあるファイルの表示
+		y += 100;
+		NyaString::Write("window_title_font", white, x, y - 40, "☆");
+		if (replay_collection_[replay_index].new_file_)
+			color = red;
+		else
+			color = white;
+		if (replay_index == 0)
+			NyaString::Write("window_title_font", color, x + 70, y - 40, "replay1");
+		else if (replay_index == 1)
+			NyaString::Write("window_title_font", color, x + 70, y - 40, "replay2");
+		else if (replay_index == 2)
+			NyaString::Write("window_title_font", color, x + 70, y - 40, "replay3");
+		else
+			NyaString::Write("window_title_font", color, x + 70, y - 40, "replay4");
+		if (replay_collection_[replay_index].existed_file_)
+		{
+			NyaString::Write("window_title_font", color, x + 180, y - 40, "..." + replay_collection_[replay_index].title_);
+			if (replay_index == 0)
+				NyaString::Write("window_title_font", color, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay1.rep");
+			else if (replay_index == 1)
+				NyaString::Write("window_title_font", color, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay2.rep");
+			else if (replay_index == 2)
+				NyaString::Write("window_title_font", color, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay3.rep");
+			else
+				NyaString::Write("window_title_font", color, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay4.rep");
+		}
+		else
+			NyaString::Write("window_title_font", color, x + 70, y, "%s", "no_replay");
 	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
-	y += 100;
-	ifs.open("replay/replay2.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
-	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
-	y += 100;
-	ifs.open("replay/replay3.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
-	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	y += 100;
-	ifs.close();
-	ifs.open("replay/replay4.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
-	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
 
-	//**************************
 	// 終了の選択肢を表示
-	//**************************
 	y += 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
 
-	//****************************
-	// ファイルへの書き込み
-	//****************************
+	// 新しくリプレイファイルを出力する
+	// 書き込みしたあと表示を更新するため、first_callをtrueにする
+	// 次のSaveReplay()呼び出し時に再読込みするので、再読込み前にClear()しておく
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
 	{
-		if (select == 1)
+		if (select == 0)
+		{
 			NyaInput::OutputReplay("replay/replay1.rep");
-		if (select == 2)
+			first_call = true;
+			replay_collection_[0].Clear();
+			replay_collection_[0].new_file_ = true;
+		}
+		if (select == 1)
+		{
 			NyaInput::OutputReplay("replay/replay2.rep");
-		if (select == 3)
+			first_call = true;
+			replay_collection_[1].Clear();
+			replay_collection_[1].new_file_ = true;
+		}
+		if (select == 2)
+		{
 			NyaInput::OutputReplay("replay/replay3.rep");
-		if (select == 4)
+			first_call = true;
+			replay_collection_[2].Clear();
+			replay_collection_[2].new_file_ = true;
+		}
+		if (select == 3)
+		{
 			NyaInput::OutputReplay("replay/replay4.rep");
+			first_call = true;
+			replay_collection_[3].Clear();
+			replay_collection_[3].new_file_ = true;
+		}
 	}
 
-	//******************
-	// イベントの更新
-	//******************
-	if (NyaInput::IsPressKey(eINPUT::ENTER) && select == 5)
+	if (NyaInput::IsPressKey(eINPUT::ENTER) && select == 4)
+	{	// イベントの更新
+		first_call = true;
+		select = 0;
+		for (auto& e : replay_collection_)
+			e.Clear();
 		event_next_ = eEVENT::TITLE;
+	}
 }
 
 /**
@@ -622,26 +641,52 @@ void NyaWindow::Opening(void)
 	}
 }
 
-
 /**
- @brief タイトル画面の処理をする関数
+@brief タイトル画面の処理をする関数
 **/
 void NyaWindow::Title(void)
 {
 	int x, y;
-	string date, seed, title;
-	ifstream ifs;
 	tuple<int, int, int> white = make_tuple(255, 255, 255);
 	tuple<int, int, int> red = make_tuple(255, 0, 0);
 	static int select = 0;
-	InterfaceHandleSkill* ihandle_mission_skill = NyaInterface::GetHandleSkill();
+	static bool first_call = true;
 
 	if (event_ != eEVENT::TITLE)
 		return;
 
-	//******************
+	if (first_call)
+	{	// インターフェースの初期化とリプレイファイルの有無判定
+		ifstream ifs;
+		NyaDevice::Init();
+		NyaGraphic::Init();
+		NyaInterface::Init();
+		NyaPosition::Init();
+		NyaSound::Init();
+		for (int replay_index = 0; replay_index < 4; replay_index++)
+		{
+			replay_collection_[replay_index].Clear();
+			if (replay_index == 0)
+				ifs.open("replay/replay1.rep");
+			else if (replay_index == 1)
+				ifs.open("replay/replay2.rep");
+			else if (replay_index == 2)
+				ifs.open("replay/replay3.rep");
+			else
+				ifs.open("replay/replay4.rep");
+			if (ifs.is_open())
+			{
+				getline(ifs, replay_collection_[replay_index].seed_);
+				getline(ifs, replay_collection_[replay_index].date_);
+				getline(ifs, replay_collection_[replay_index].title_);
+				replay_collection_[replay_index].existed_file_ = true;
+			}
+			ifs.close();
+		}
+		first_call = false;
+	}
+
 	// 選択の表示
-	//******************
 	if (NyaInput::IsPressKey(eINPUT::DOWN))
 		select = (select == 5) ? 0 : select + 1;
 	if (NyaInput::IsPressKey(eINPUT::UP))
@@ -652,97 +697,53 @@ void NyaWindow::Title(void)
 		y += 40;
 	NyaString::Write("window_title_font", red, x, y - 40, "★");
 
-	//******************
 	// タイトルの表示
-	//******************
 	x = 60;
 	y = 100;
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission");
 	NyaString::Write("window_title_font", white, x + 180, y - 40, "%s", "..." + NyaInterface::GetHandleTitle()->name_.str());
 
-	//***********************
-	// リプレイの有無を表示
-	//***********************
-	y += 100;
-	ifs.open("replay/replay1.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
+	for (int replay_index = 0; replay_index < 4; replay_index++)
+	{	// リプレイフォルダにあるファイルの表示
+		y += 100;
+		NyaString::Write("window_title_font", white, x, y - 40, "☆");
+		if (replay_index == 0)
+			NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
+		else if (replay_index == 1)
+			NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
+		else if (replay_index == 2)
+			NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
+		else
+			NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
+		if (replay_collection_[replay_index].existed_file_)
+		{
+			NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + replay_collection_[replay_index].title_);
+			if (replay_index == 0)
+				NyaString::Write("window_title_font", white, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay1.rep");
+			else if (replay_index == 1)
+				NyaString::Write("window_title_font", white, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay2.rep");
+			else if (replay_index == 2)
+				NyaString::Write("window_title_font", white, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay3.rep");
+			else
+				NyaString::Write("window_title_font", white, x + 70, y, "%s", replay_collection_[replay_index].date_ + " replay4.rep");
+		}
+		else
+			NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
 	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
-	y += 100;
-	ifs.open("replay/replay2.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
-	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
-	y += 100;
-	ifs.open("replay/replay3.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
-	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
-	y += 100;
-	ifs.open("replay/replay4.rep");
-	NyaString::Write("window_title_font", white, x, y - 40, "☆");
-	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
-	if (ifs.is_open())
-	{
-		getline(ifs, seed);
-		getline(ifs, date);
-		getline(ifs, title);
-		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
-	}
-	else
-		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
-	ifs.close();
 
-	//******************
 	// 終了の表示
-	//******************
 	y += (100 + 40);
 	NyaString::Write("window_title_font", white, x, y - 40, "☆");
 	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
 
-	//***********************************************************************************
 	// 選択が決定された
 	// イベントを遷移させるが、選択したリプレイファイルが存在しないときは遷移しない
-	//***********************************************************************************
 	if (NyaInput::IsPressKey(eINPUT::ENTER))
-	{	
-		// スキルのUIをクリア
+	{
 		// 前回のミッション内容が残っていることもあるので
 		// NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡して全ミッションをクリアしておく
 		// child_.mission_collection_[0]からミッション開始するためindexを0にする
-		ihandle_mission_skill->Clear();	
 		for (auto& e : child_.mission_collection_)
 			e->Run(eEVENT::MISSION_DELETE);
 		child_.mission_index_ = 0;
@@ -750,34 +751,48 @@ void NyaWindow::Title(void)
 		// ミッションの開始なら乱数の初期化と時刻の取得をおこなう
 		// リプレイの開始ならリプレイファイルを読み込む
 		// (リプレイファイル読み込み関数内で乱数の初期化もされる)
+		// 次にタイトルに戻ってきたときのために予めfirst_callをtrueにしておく。
 		// イベントの更新をおこなう
 		switch (select)
 		{
 		case 0:
-			NyaInput::Init();	
+			NyaInput::Init();
+			first_call = true;
 			event_next_ = eEVENT::OPENING_LOAD;
 			break;
 		case 1:
 			if (NyaInput::InputReplay("replay/replay1.rep"))
+			{
+				first_call = true;
 				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			}
 			else
 				event_next_ = eEVENT::TITLE;
 			break;
 		case 2:
 			if (NyaInput::InputReplay("replay/replay2.rep"))
+			{
+				first_call = true;
 				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			}
 			else
 				event_next_ = eEVENT::TITLE;
 			break;
 		case 3:
 			if (NyaInput::InputReplay("replay/replay3.rep"))
+			{
+				first_call = true;
 				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			}
 			else
 				event_next_ = eEVENT::TITLE;
 			break;
 		case 4:
 			if (NyaInput::InputReplay("replay/replay4.rep"))
+			{
+				first_call = true;
 				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+			}
 			else
 				event_next_ = eEVENT::TITLE;
 			break;
@@ -787,6 +802,171 @@ void NyaWindow::Title(void)
 		}
 	}
 }
+
+/**
+ @brief タイトル画面の処理をする関数
+**/
+//void NyaWindow::Title(void)
+//{
+//	int x, y;
+//	string date, seed, title;
+//	ifstream ifs;
+//	tuple<int, int, int> white = make_tuple(255, 255, 255);
+//	tuple<int, int, int> red = make_tuple(255, 0, 0);
+//	static int select = 0;
+//	InterfaceHandleSkill* ihandle_mission_skill = NyaInterface::GetHandleSkill();
+//
+//	if (event_ != eEVENT::TITLE)
+//		return;
+//
+//	//******************
+//	// 選択の表示
+//	//******************
+//	if (NyaInput::IsPressKey(eINPUT::DOWN))
+//		select = (select == 5) ? 0 : select + 1;
+//	if (NyaInput::IsPressKey(eINPUT::UP))
+//		select = (select == 0) ? 5 : select - 1;
+//	x = 60;
+//	y = (select + 1) * 100;
+//	if (select == 5)
+//		y += 40;
+//	NyaString::Write("window_title_font", red, x, y - 40, "★");
+//
+//	//******************
+//	// タイトルの表示
+//	//******************
+//	x = 60;
+//	y = 100;
+//	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+//	NyaString::Write("window_title_font", white, x + 70, y - 40, "mission");
+//	NyaString::Write("window_title_font", white, x + 180, y - 40, "%s", "..." + NyaInterface::GetHandleTitle()->name_.str());
+//
+//	//***********************
+//	// リプレイの有無を表示
+//	//***********************
+//	y += 100;
+//	ifs.open("replay/replay1.rep");
+//	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+//	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay1");
+//	if (ifs.is_open())
+//	{
+//		getline(ifs, seed);
+//		getline(ifs, date);
+//		getline(ifs, title);
+//		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay1.rep");
+//	}
+//	else
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+//	ifs.close();
+//	y += 100;
+//	ifs.open("replay/replay2.rep");
+//	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+//	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay2");
+//	if (ifs.is_open())
+//	{
+//		getline(ifs, seed);
+//		getline(ifs, date);
+//		getline(ifs, title);
+//		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay2.rep");
+//	}
+//	else
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+//	ifs.close();
+//	y += 100;
+//	ifs.open("replay/replay3.rep");
+//	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+//	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay3");
+//	if (ifs.is_open())
+//	{
+//		getline(ifs, seed);
+//		getline(ifs, date);
+//		getline(ifs, title);
+//		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay3.rep");
+//	}
+//	else
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+//	ifs.close();
+//	y += 100;
+//	ifs.open("replay/replay4.rep");
+//	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+//	NyaString::Write("window_title_font", white, x + 70, y - 40, "replay4");
+//	if (ifs.is_open())
+//	{
+//		getline(ifs, seed);
+//		getline(ifs, date);
+//		getline(ifs, title);
+//		NyaString::Write("window_title_font", white, x + 180, y - 40, "..." + title);
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", date + " replay4.rep");
+//	}
+//	else
+//		NyaString::Write("window_title_font", white, x + 70, y, "%s", "no_replay");
+//	ifs.close();
+//
+//	//******************
+//	// 終了の表示
+//	//******************
+//	y += (100 + 40);
+//	NyaString::Write("window_title_font", white, x, y - 40, "☆");
+//	NyaString::Write("window_title_font", white, x + 70, y - 40, "END");
+//
+//	//***********************************************************************************
+//	// 選択が決定された
+//	// イベントを遷移させるが、選択したリプレイファイルが存在しないときは遷移しない
+//	//***********************************************************************************
+//	if (NyaInput::IsPressKey(eINPUT::ENTER))
+//	{	
+//		// スキルのUIをクリア
+//		// 前回のミッション内容が残っていることもあるので
+//		// NyaMission::Run()の引数にeEVENT::MISSION_DELETEを渡して全ミッションをクリアしておく
+//		// child_.mission_collection_[0]からミッション開始するためindexを0にする
+//		ihandle_mission_skill->Clear();	
+//		for (auto& e : child_.mission_collection_)
+//			e->Run(eEVENT::MISSION_DELETE);
+//		child_.mission_index_ = 0;
+//
+//		// ミッションの開始なら乱数の初期化と時刻の取得をおこなう
+//		// リプレイの開始ならリプレイファイルを読み込む
+//		// (リプレイファイル読み込み関数内で乱数の初期化もされる)
+//		// イベントの更新をおこなう
+//		switch (select)
+//		{
+//		case 0:
+//			NyaInput::Init();	
+//			event_next_ = eEVENT::OPENING_LOAD;
+//			break;
+//		case 1:
+//			if (NyaInput::InputReplay("replay/replay1.rep"))
+//				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+//			else
+//				event_next_ = eEVENT::TITLE;
+//			break;
+//		case 2:
+//			if (NyaInput::InputReplay("replay/replay2.rep"))
+//				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+//			else
+//				event_next_ = eEVENT::TITLE;
+//			break;
+//		case 3:
+//			if (NyaInput::InputReplay("replay/replay3.rep"))
+//				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+//			else
+//				event_next_ = eEVENT::TITLE;
+//			break;
+//		case 4:
+//			if (NyaInput::InputReplay("replay/replay4.rep"))
+//				event_next_ = eEVENT::MISSION_REPLAY_CREATE;
+//			else
+//				event_next_ = eEVENT::TITLE;
+//			break;
+//		case 5:
+//			event_next_ = eEVENT::WINDOW_CLOSE;
+//			break;
+//		}
+//	}
+//}
 
 
 /**
